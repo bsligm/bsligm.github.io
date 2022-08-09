@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="win10封装, 启明星辰">
+    <meta name="keywords" content="centos 8安装Zabbix, 启明星辰">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>win10封装 | 启明星辰</title>
+    <title>centos 8安装Zabbix | 启明星辰</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -288,12 +288,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">win10封装</h1>
+                    <h1 class="description center-align post-title">centos 8安装Zabbix</h1>
                 </div>
             </div>
         </div>
@@ -409,27 +409,18 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Windows/">
-                                <span class="chip bg-color">Windows</span>
+                            <a href="/tags/Linux/">
+                                <span class="chip bg-color">Linux</span>
                             </a>
                         
-                            <a href="/tags/%E6%95%99%E7%A8%8B/">
-                                <span class="chip bg-color">教程</span>
+                            <a href="/tags/%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/">
+                                <span class="chip bg-color">实验记录</span>
                             </a>
                         
                     </div>
                     
                 </div>
                 <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/%E9%A1%B9%E7%9B%AE%E6%95%99%E7%A8%8B/" class="post-category">
-                                项目教程
-                            </a>
-                        
-                    </div>
                     
                 </div>
             </div>
@@ -438,7 +429,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-05-20
+                    2021-12-09
                 </div>
                 
 
@@ -459,81 +450,23 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="WIN10封装过程，以及自定义方案"><a href="#WIN10封装过程，以及自定义方案" class="headerlink" title="WIN10封装过程，以及自定义方案"></a>WIN10封装过程，以及自定义方案</h1><p>工作中常常遇到批量部署，以及大量的环境安装，变量的设置，尤其是面对企业不同部门间的系统维护，大量的定制软件，以及专线环境，面对比较大量的数据传输，是个十分不效率的问题。可以采用自己缝状系统的方式来改善。将标准软件，环境，变量，本地策略等全部配置好后，直接进行打包，从而大幅度提高效率。</p>
-<h2 id="事先准备"><a href="#事先准备" class="headerlink" title="事先准备"></a>事先准备</h2><ol>
-<li><p><u><strong>WIN10最新版ISO文件</strong></u> 下载链接：<a target="_blank" rel="noopener" href="https://www.microsoft.com/zh-cn/software-download/windows10ISO">https://www.microsoft.com/zh-cn/software-download/windows10ISO</a></p>
+                <h1 id="Windows虚拟化hyper-v环境安装centos8部署zabbix"><a href="#Windows虚拟化hyper-v环境安装centos8部署zabbix" class="headerlink" title="Windows虚拟化hyper-v环境安装centos8部署zabbix"></a>Windows虚拟化hyper-v环境安装centos8部署zabbix</h1><p>因为自己的服务器是Windows server 2022，也没有单独购买vmware workstation/esx等，所以使用了hyper-v来实现搭建centos系统，其底层逻辑基本一致在后续迁移到其他平台或者转换成物理机，都可以无难度实现。所以选择了在hyper-v上进行实验。</p>
+<h2 id="hyper-v安装centos"><a href="#hyper-v安装centos" class="headerlink" title="hyper-v安装centos"></a>hyper-v安装centos</h2><ol>
+<li><p>前往centos官网下载系统镜像<a target="_blank" rel="noopener" href="https://www.centos.org/">https://www.centos.org/</a></p>
 </li>
-<li><p>NTlite系统镜像制作工具。 下载链接：<a target="_blank" rel="noopener" href="https://www.ntlite.com/download/">https://www.ntlite.com/download/</a></p>
+<li><p>hyper-v新建交换机</p>
+<p>2.1 新建交换机类型位外部</p>
 </li>
-<li><p>dism++系统精简工具。 下载链接：<a target="_blank" rel="noopener" href="http://www.chuyu.me/zh-Hans/">http://www.chuyu.me/zh-Hans/</a></p>
+<li><p>新建虚拟机，根据需要填写性能参数</p>
 </li>
-<li><p>优起通 IT天空·PE。下载链接：<a target="_blank" rel="noopener" href="https://www.itsk.com/thread-416919-1-1.html">https://www.itsk.com/thread-416919-1-1.html</a></p>
+<li><p>添加centos系统镜像</p>
 </li>
-<li><p>万能驱动 IT天空·驱动整合。 下载链接：<a target="_blank" rel="noopener" href="https://www.itsk.com/forum.php?mod=viewthread&amp;tid=416918&amp;highlight=%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD">https://www.itsk.com/forum.php?mod=viewthread&amp;tid=416918&amp;highlight=%CD%F2%C4%DC%C7%FD%B6%AF</a></p>
-</li>
-<li><p>虚拟机 hyper-v  vmware等皆可。</p>
-</li>
-</ol>
-<hr>
-<h2 id="系统安装"><a href="#系统安装" class="headerlink" title="系统安装"></a>系统安装</h2><ol>
-<li>首先部署虚拟机。<img src="/images/%E8%99%9A%E6%8B%9F%E6%9C%BA.png"></li>
-<li>安装系统<img src="/images/%E5%88%9B%E5%BB%BA%E8%99%9A%E6%8B%9F%E6%9C%BA.png"><img src="/images/%E7%B3%BB%E7%BB%9F%E5%B1%95%E5%BC%80.png"></li>
-<li>oobe设置<img src="/images/oobx%E8%AE%BE%E7%BD%AE.png"></li>
-<li>删除oobx创建的账户,并启用administrator。（<u><strong>重要千万不要忘记启用administrator</strong></u>）<img src="/images/%E7%AE%A1%E7%90%86.png"><img src="/images/%E5%88%A0%E9%99%A4oobx%E5%88%9B%E5%BB%BA%E7%9A%84%E8%B4%A6%E6%88%B7.png"><img src="/images/%E5%BC%80%E5%90%AFadmin.png"></li>
-<li>注销，以administrator登录<img src="/images/login.png"></li>
-</ol>
-<p><em><strong>安装系统结束</strong></em></p>
-<hr>
-<h2 id="标准软件安装，环境配置"><a href="#标准软件安装，环境配置" class="headerlink" title="标准软件安装，环境配置"></a>标准软件安装，环境配置</h2><ol>
-<li><p>电源计划：卓越性能 开启，使用CMD或者powershell 输入以下命令。</p>
-<p>``` MS DOS<br>powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61</p>
+<li><p>完成创建，开机进行系统安装。</p>
 </li>
 </ol>
-<p><img src="/images/%E5%8D%93%E8%B6%8A%E6%80%A7%E8%83%BD.png"></p>
-<p>然后在控制面板中打开电源计划，开启卓越性能<img src="/images/%E6%8E%A7%E5%88%B6%E9%9D%A2%E6%9D%BF%E5%8D%93%E8%B6%8A%E6%80%A7%E8%83%BD.png"></p>
-<ol start="2">
-<li>个性化设置，桌面右键，个性化，根据自己的需求设定主题，桌面图标，任务栏样式，等。<img src="/images/%E4%B8%AA%E6%80%A7%E5%8C%96%E8%AE%BE%E7%BD%AE.png"></li>
-<li>edge浏览器插件安装，我这里推荐使用adblock plus 和百度药丸，可以有效的屏蔽大部分广告。<img src="/images/edge%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85.png"><img src="/images/%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85.png"></li>
+<h3 id="初始环境安装"><a href="#初始环境安装" class="headerlink" title="初始环境安装"></a>初始环境安装</h3><ol>
+<li></li>
 </ol>
-<p>3.环境功能安装。因为我这镜像趋向于纯净安装，只添加net 3.5  smb协议。<img src="/images/%E5%8A%9F%E8%83%BD%E6%B7%BB%E5%8A%A0.png"></p>
-<ol start="4">
-<li>功能与本地策略设置（我倾向于开启存储感知）</li>
-</ol>
-<blockquote>
-<ul>
-<li>本地策略开启存储感知时效为每天<img src="/images/%E5%AD%98%E5%82%A8%E6%84%9F%E7%9F%A5.png"></li>
-<li><img src="/images/%E5%AD%98%E5%82%A8%E6%84%9F%E7%9F%A5%E8%8A%82%E5%A5%8F.png"></li>
-<li>存储感知全部开启，阈值设置为1.</li>
-</ul>
-</blockquote>
-<hr>
-<h2 id="清理，优化"><a href="#清理，优化" class="headerlink" title="清理，优化"></a>清理，优化</h2><p>使用Dism++根据自己的需求，清理 以及开启对应的功能<img src="/images/dism++%E4%BC%98%E5%8C%96.png"></p>
-<hr>
-<h2 id="封装系统"><a href="#封装系统" class="headerlink" title="封装系统"></a>封装系统</h2><p>使用Dism++的系统备份功能备份镜像,该功能可进行增量备份实现多个版本共同一个镜像文件。<img src="/images/%E7%B3%BB%E7%BB%9F%E5%A4%87%E4%BB%BD.png"></p>
-<ul>
-<li>总结做出的更改</li>
-</ul>
-<blockquote>
-<ol>
-<li>删除了oobe账户，开启administrator</li>
-<li>开启了卓越性能</li>
-<li>开启了每天清理一次的存储感知</li>
-<li>edge浏览器添加了2个广告屏蔽插件</li>
-<li>添加了net 3.5  以及smb1.0</li>
-</ol>
-</blockquote>
-<p>以上修改可根据自身需要设置，制作一个切合自己实际情况，最完美的方案。</p>
-<hr>
-<h2 id="ISO打包"><a href="#ISO打包" class="headerlink" title="ISO打包"></a>ISO打包</h2><p>打包成ISO需要用到Ntlite软件，首先将原母盘解压，将新封装好的ESD文件，改名install.ESD，然后在解压的ISO文件夹/sources替换原来的install.ESD</p>
-<p><img src="/images/ESD%E6%9B%BF%E6%8D%A2.png"></p>
-<p>打开NTlite，添加映像文件夹，打开解压的ISO文件夹<img src="/images/ntlite1.png"></p>
-<p><img src="/images/ntlite2.png"></p>
-<p>打开后，点击创建ISO。<img src="/images/%E5%88%9B%E5%BB%BAiso.png"></p>
-<p>创建完成<img src="/images/%E5%88%9B%E5%BB%BA%E5%AE%8C%E6%88%90.png"><img src="/images/%E5%88%9B%E5%BB%BA%E5%AE%8C%E6%88%901.png"></p>
-<hr>
-<h2 id="打包完成"><a href="#打包完成" class="headerlink" title="打包完成"></a>打包完成</h2><p>ISO创建完成可以正常用于系统安装，虚拟机vmware hyper-v等。但不可用与系统升级。</p>
-<p>安装系统建议配合IT天空的优起通PE/万能驱动。</p>
-<p>以上封装的ISO下载地址：复制这段内容后打开百度网盘App，操作更方便哦。 链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1He-2W9HDV0HHf_FeLVpvvg">https://pan.baidu.com/s/1He-2W9HDV0HHf_FeLVpvvg</a> 提取码：120z  –来自百度网盘超级会员v4的分享</p>
 
                 
             </div>
@@ -560,7 +493,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/05/20/win10%E5%B0%81%E8%A3%85/">http://example.com/2021/05/20/win10%E5%B0%81%E8%A3%85/</a>
+                    <a href="http://example.com/2021/12/09/zabbix%E9%83%A8%E7%BD%B2%E6%9C%AA%E5%86%99%E5%AE%8C/centos8%E5%AE%89%E8%A3%85Zabbix/">http://example.com/2021/12/09/zabbix%E9%83%A8%E7%BD%B2%E6%9C%AA%E5%86%99%E5%AE%8C/centos8%E5%AE%89%E8%A3%85Zabbix/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -598,12 +531,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Windows/">
-                                    <span class="chip bg-color">Windows</span>
+                                <a href="/tags/Linux/">
+                                    <span class="chip bg-color">Linux</span>
                                 </a>
                             
-                                <a href="/tags/%E6%95%99%E7%A8%8B/">
-                                    <span class="chip bg-color">教程</span>
+                                <a href="/tags/%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/">
+                                    <span class="chip bg-color">实验记录</span>
                                 </a>
                             
                         </div>
@@ -774,7 +707,7 @@
         repo: '',
         owner: '',
         admin: null,
-        id: '2021-05-20T09-06-01',
+        id: '2021-12-09T21-07-46',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -800,17 +733,18 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2021/05/20/%E6%99%BA%E8%83%BD%E5%AE%B6%E5%B1%85%E6%96%B9%E6%A1%88/">
+                <a href="/2021/12/09/zabbix%E9%83%A8%E7%BD%B2%E6%9C%AA%E5%86%99%E5%AE%8C/centos8%E5%AE%89%E8%A3%85Zabbix/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="智能家居方案">
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="centos 8安装Zabbix">
                         
-                        <span class="card-title">智能家居方案</span>
+                        <span class="card-title">centos 8安装Zabbix</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -820,30 +754,27 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-20
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-12-09
+                            </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E6%99%BA%E8%83%BD%E5%AE%B6%E5%B1%85/" class="post-category">
-                                    智能家居
-                                </a>
-                            
+                            <i class="fas fa-user fa-fw"></i>
+                            李广明
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%99%BA%E8%83%BD%E5%AE%B6%E5%B1%85/">
-                        <span class="chip bg-color">智能家居</span>
+                    <a href="/tags/Linux/">
+                        <span class="chip bg-color">Linux</span>
                     </a>
                     
-                    <a href="/tags/%E6%96%B9%E6%A1%88/">
-                        <span class="chip bg-color">方案</span>
+                    <a href="/tags/%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/">
+                        <span class="chip bg-color">实验记录</span>
                     </a>
                     
                 </div>
@@ -857,13 +788,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/05/10/%E7%A7%81%E6%9C%89%E4%BA%91%E6%96%B9%E6%A1%88/">
+                <a href="/2021/11/29/%E5%B7%A5%E4%BD%9C%E5%86%85%E5%AE%B9/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="私有云方案(未完结)">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="工作内容">
                         
-                        <span class="card-title">私有云方案(未完结)</span>
+                        <span class="card-title">工作内容</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -874,14 +805,14 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-10
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-11-29
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E7%90%86%E8%AE%BA%E5%AE%9E%E8%B7%B5/" class="post-category">
-                                    理论实践
+                            <a href="/categories/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/" class="post-category">
+                                    项目经历
                                 </a>
                             
                             
@@ -891,12 +822,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E9%A1%B9%E7%9B%AE/">
-                        <span class="chip bg-color">项目</span>
-                    </a>
-                    
-                    <a href="/tags/%E7%A7%81%E6%9C%89%E4%BA%91/">
-                        <span class="chip bg-color">私有云</span>
+                    <a href="/tags/%E5%B7%A5%E4%BD%9C%E5%86%85%E5%AE%B9/">
+                        <span class="chip bg-color">工作内容</span>
                     </a>
                     
                 </div>
