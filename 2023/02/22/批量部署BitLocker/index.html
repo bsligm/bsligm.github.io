@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="windows server 安装以及AD域服务搭建, 启明星辰">
+    <meta name="keywords" content="windows 域环境下批量部署bitlocker, 启明星辰">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>windows server 安装以及AD域服务搭建 | 启明星辰</title>
+    <title>windows 域环境下批量部署bitlocker | 启明星辰</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -288,12 +288,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">windows server 安装以及AD域服务搭建</h1>
+                    <h1 class="description center-align post-title">windows 域环境下批量部署bitlocker</h1>
                 </div>
             </div>
         </div>
@@ -413,8 +413,12 @@
                                 <span class="chip bg-color">Helpdesk</span>
                             </a>
                         
-                            <a href="/tags/Server/">
-                                <span class="chip bg-color">Server</span>
+                            <a href="/tags/AD-%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
+                                <span class="chip bg-color">AD 域控制器</span>
+                            </a>
+                        
+                            <a href="/tags/powershell/">
+                                <span class="chip bg-color">powershell</span>
                             </a>
                         
                     </div>
@@ -425,8 +429,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E6%A1%8C%E9%9D%A2%E7%BB%B4%E6%8A%A4/" class="post-category">
-                                桌面维护
+                            <a href="/categories/%E5%9F%BA%E7%A1%80%E8%AE%BE%E8%AE%A1/" class="post-category">
+                                基础设计
                             </a>
                         
                     </div>
@@ -438,7 +442,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-05-06
+                    2023-02-22
                 </div>
                 
 
@@ -459,34 +463,41 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="windows-server-安装以及AD域服务搭建"><a href="#windows-server-安装以及AD域服务搭建" class="headerlink" title="windows server 安装以及AD域服务搭建"></a>windows server 安装以及AD域服务搭建</h1><h2 id="OS安装"><a href="#OS安装" class="headerlink" title="OS安装"></a>OS安装</h2><p>基于服务器安装系统的方式有很多，常规使用U盘安装介质的形式安装系统，以及Idrac的形式等。</p>
-<ul>
-<li>使用U盘安装介质时，如果服务器有阵列卡，需要提前先到品牌官网下载好对应驱动，不然会无法识别到磁盘。</li>
-<li>以DELL为例，使用Idrac（IPMI接口，各家厂商名字不同）来安装，需要先在bios中配置好Idrac，并接入本地局域网便于日后管理，或者使用网线直连pc。</li>
-<li>DELL默认idrac 管理地址默认为 192.168.0.120。线缆连接完成后后在bios中配置 地址以及管理密码</li>
-</ul>
-<h3 id="服务器开机从镜像启动"><a href="#服务器开机从镜像启动" class="headerlink" title="服务器开机从镜像启动"></a>服务器开机从镜像启动<img src="/images/server2019%E5%AE%89%E8%A3%851.png" alt="系统安装"></h3><p><img src="/images/server2019%E5%AE%89%E8%A3%852.png"></p>
-<p><img src="/images/%E5%AE%8C%E6%88%90%E5%AE%89%E8%A3%85.png" alt="完成安装"></p>
-<hr>
-<h2 id="域服务安装与配置"><a href="#域服务安装与配置" class="headerlink" title="域服务安装与配置"></a>域服务安装与配置</h2><ol>
-<li>更改计算机名和固定ip地址，然后重启应用。<img src="/images/%E6%9B%B4%E6%94%B9%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%90%8D.png" alt="更改计算机名"></li>
+                <h1 id="批量部署BitLocker"><a href="#批量部署BitLocker" class="headerlink" title="批量部署BitLocker"></a>批量部署BitLocker</h1><hr>
+<p><em><strong><u>本方案仅在具有TPM2.0芯片的PC生效</u></strong></em></p>
+<h2 id="DC开启BitLocker组件"><a href="#DC开启BitLocker组件" class="headerlink" title="DC开启BitLocker组件"></a>DC开启BitLocker组件</h2><p>DC服务器管理器中添加角色功能——BitLocker网络解锁</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221113330078.png" alt="image-20230221113330078"></p>
+<h2 id="脚本编写"><a href="#脚本编写" class="headerlink" title="脚本编写"></a>脚本编写</h2><p>因ps脚本使用组策略推送无法实现管理员身份运行，则需要以bat批处理的形式运行ps1脚本来执行关机脚本。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="keyword">for</span> /f <span class="string">&quot;delims=:&quot;</span> %%i <span class="keyword">in</span> (<span class="string">&#x27;findstr /n &quot;^:ps1$&quot; &quot;%~f0&quot;&#x27;</span>) <span class="keyword">do</span> (</span><br><span class="line">	more +%%i <span class="string">&quot;%~f0&quot;</span> &gt; <span class="string">&quot;%temp%\bitlocker.ps1&quot;</span></span><br><span class="line">)</span><br><span class="line">powershell <span class="literal">-executionpolicy</span> remotesigned <span class="operator">-file</span> <span class="string">&quot;%temp%\bitlocker.ps1&quot;</span></span><br><span class="line">goto :eof</span><br><span class="line"></span><br><span class="line">:ps1</span><br><span class="line"><span class="built_in">get-bitlockervolume</span> | find `&quot;Off`&quot;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$</span>? <span class="operator">-eq</span> <span class="variable">$true</span>) &#123;</span><br><span class="line">    net use \\UNC路径 <span class="string">&quot;password&quot;</span> /user:domain\username  </span><br><span class="line">    manage<span class="literal">-bde</span> <span class="literal">-on</span> C: <span class="literal">-RecoveryPassword</span> &gt;&gt; \\UNC路径\<span class="variable">$env:COMPUTERNAME</span>.txt</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">exit</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><u><strong>（上述脚本为批处理代码）</strong></u></p>
+<h2 id="组策略设定"><a href="#组策略设定" class="headerlink" title="组策略设定"></a>组策略设定</h2><ol>
+<li>DC组策略编辑器创建BitLocker组合设定的GPO</li>
 </ol>
-<p><img src="/images/%E5%9B%BA%E5%AE%9Aip%E5%9C%B0%E5%9D%80.png" alt="固定IP地址"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221110312204.png" alt="image-20230221110312204"></p>
 <ol start="2">
-<li><p>添加角色功能 ad域服务功能，以及DHCP服务（如果由交换机 路由器防火墙等分配可忽略）<img src="/images/%E6%B7%BB%E5%8A%A0%E5%9F%9F%E6%9C%8D%E5%8A%A1%E5%8A%9F%E8%83%BD.png" alt="添加域服务功能"></p>
+<li><p>GPO—计算机配置—策略—管理模板—Windows组件—BitLocker驱动器加密 —将BitLocker恢复信息储存在active directory域服务中改为<strong>已启用</strong> 。</p>
 </li>
-<li><p>域服务确认安装<img src="/images/%E5%9F%9F%E6%9C%8D%E5%8A%A1%E7%A1%AE%E8%AE%A4%E5%AE%89%E8%A3%85.png"></p>
+<li><p>GPO—计算机配置—策略—管理模板—Windows组件—BitLocker驱动器加密—操作系统驱动器—选择如何才能恢复BitLocker保护的操作系统驱动器改为<strong>已启用</strong><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221111148766.png" alt="image-20230221111148766"></p>
+</li>
+<li><p>新建一个关机执行脚本GPO执行写好的脚本</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221112332612.png" alt="image-20230221112332612"></p>
+<h2 id="实施"><a href="#实施" class="headerlink" title="实施"></a>实施</h2><ol>
+<li><p>将需上述两条GPO链接到需要开启BitLocker的OU</p>
+</li>
+<li><p>客户端执行gpupdate /force更新组策略</p>
+</li>
+<li><p>执行关机/重启</p>
+</li>
+<li><p>查看UNC路径下是否存在以计算机命名的txt文本文件，恢复密钥是否重定向</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221112816203.png" alt="image-20230221112816203"></p>
+</li>
+<li><p>检查DC PC账户是否已经备份BitLocker 恢复密钥</p>
+</li>
+<li><p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221113029252.png" alt="image-20230221113029252"></p>
 </li>
 </ol>
-<h3 id="配置域控"><a href="#配置域控" class="headerlink" title="配置域控"></a>配置域控</h3><h4 id="将服务器提升为域控服务器"><a href="#将服务器提升为域控服务器" class="headerlink" title="将服务器提升为域控服务器"></a>将服务器提升为域控服务器</h4><p>1.点击提示-部署后配置-将服务器提升为域控制器<img src="/images/ad%E9%83%A8%E7%BD%B2%E5%90%8E%E9%85%8D%E7%BD%AE.png"></p>
-<ol start="2">
-<li>部署新域与域名<img src="/images/ad%E9%83%A8%E7%BD%B21.png"></li>
-<li>配置域控与dns服务选项<img src="/images/ad%E9%83%A8%E7%BD%B22.png"></li>
-<li>其他选项及安装<img src="/images/ad%E9%83%A8%E7%BD%B23.png"></li>
-<li><img src="/images/ad%E9%83%A8%E7%BD%B24.png"></li>
-<li><img src="/images/ad%E9%83%A8%E7%BD%B25.png"></li>
-<li><img src="/images/ad%E9%83%A8%E7%BD%B26.png"></li>
-<li>安装完成后重启 域控部署完成。<img src="/images/ad%E9%83%A8%E7%BD%B2%E5%AE%8C%E6%88%90.png"></li>
+</li>
 </ol>
 
                 
@@ -514,7 +525,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/05/06/AD%E6%90%AD%E5%BB%BA/">http://example.com/2021/05/06/AD%E6%90%AD%E5%BB%BA/</a>
+                    <a href="http://example.com/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/">http://example.com/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -556,8 +567,12 @@
                                     <span class="chip bg-color">Helpdesk</span>
                                 </a>
                             
-                                <a href="/tags/Server/">
-                                    <span class="chip bg-color">Server</span>
+                                <a href="/tags/AD-%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
+                                    <span class="chip bg-color">AD 域控制器</span>
+                                </a>
+                            
+                                <a href="/tags/powershell/">
+                                    <span class="chip bg-color">powershell</span>
                                 </a>
                             
                         </div>
@@ -728,7 +743,7 @@
         repo: '',
         owner: '',
         admin: null,
-        id: '2021-05-06T11-00-00',
+        id: '2023-02-22T11-00-00',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -754,9 +769,68 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="windows 域环境下批量部署bitlocker">
+                        
+                        <span class="card-title">windows 域环境下批量部署bitlocker</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-02-22
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%9F%BA%E7%A1%80%E8%AE%BE%E8%AE%A1/" class="post-category">
+                                    基础设计
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Helpdesk/">
+                        <span class="chip bg-color">Helpdesk</span>
+                    </a>
+                    
+                    <a href="/tags/AD-%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
+                        <span class="chip bg-color">AD 域控制器</span>
+                    </a>
+                    
+                    <a href="/tags/powershell/">
+                        <span class="chip bg-color">powershell</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
             <div class="card">
                 <a href="/2021/05/20/win10%E5%B0%81%E8%A3%85/">
                     <div class="card-image">
@@ -774,9 +848,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-20
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-20
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -798,59 +872,6 @@
                     
                     <a href="/tags/%E6%95%99%E7%A8%8B/">
                         <span class="chip bg-color">教程</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2021/05/04/edge%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="edge无法打开网页 提示&#39;兼容性问题&#39;">
-                        
-                        <span class="card-title">edge无法打开网页 提示&#39;兼容性问题&#39;</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-04
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E6%A1%8C%E9%9D%A2%E7%BB%B4%E6%8A%A4/" class="post-category">
-                                    桌面维护
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/Helpdesk/">
-                        <span class="chip bg-color">Helpdesk</span>
-                    </a>
-                    
-                    <a href="/tags/Windows/">
-                        <span class="chip bg-color">Windows</span>
                     </a>
                     
                 </div>
