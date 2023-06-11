@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Windows沙盒 sandbox 实际应用案例, 启明星辰">
+    <meta name="keywords" content="Chromium浏览器 内核113 STATUS_STACK_BUFFER_OVERRUN解决方案, 启明星辰">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Windows沙盒 sandbox 实际应用案例 | 启明星辰</title>
+    <title>Chromium浏览器 内核113 STATUS_STACK_BUFFER_OVERRUN解决方案 | 启明星辰</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -288,12 +288,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Windows沙盒 sandbox 实际应用案例</h1>
+                    <h1 class="description center-align post-title">Chromium浏览器 内核113 STATUS_STACK_BUFFER_OVERRUN解决方案</h1>
                 </div>
             </div>
         </div>
@@ -413,8 +413,8 @@
                                 <span class="chip bg-color">Helpdesk</span>
                             </a>
                         
-                            <a href="/tags/Windows-11/">
-                                <span class="chip bg-color">Windows 11</span>
+                            <a href="/tags/AD-%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
+                                <span class="chip bg-color">AD 域控制器</span>
                             </a>
                         
                     </div>
@@ -438,7 +438,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-03-04
+                    2023-05-18
                 </div>
                 
 
@@ -459,23 +459,29 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Windows沙盒-sandbox-实际应用案例"><a href="#Windows沙盒-sandbox-实际应用案例" class="headerlink" title="Windows沙盒 sandbox 实际应用案例"></a>Windows沙盒 sandbox 实际应用案例</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">背景：</span><br><span class="line">打印机联机认证服务为 理光的格兰林，删除已注册的IC卡，需要使用IE访问后台，但是需要flash player支持。目前flash player已经全面停止支持，且含有大量捆绑软件，不适用于安装在物理机上。</span><br></pre></td></tr></table></figure>
-
-<p>综合实际情况使用Windows自动的沙盒app，可以完美的解决该问题。</p>
-<h2 id="微软文档"><a href="#微软文档" class="headerlink" title="微软文档"></a>微软文档</h2><p>参照微软 学习中心文档 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/security/threat-protection/windows-sandbox/windows-sandbox-configure-using-wsb-file">Windows 沙盒配置 | Microsoft Learn</a></p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230303131900199.png" alt="image-20230303131900199"></p>
-<h2 id="编写批处理"><a href="#编写批处理" class="headerlink" title="编写批处理"></a>编写批处理</h2><p>先编写批处理文件用于登录执行安装flash player</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line">net use \\UNC路径 <span class="string">&quot;你的密码&quot;</span> /user:你的域名\你的用户名</span><br><span class="line">xcopy \\UNC路径\flashplayer.exe C:\users\WDAGUtilityAccount\Downloads\</span><br><span class="line">C:\users\WDAGUtilityAccount\Downloads\flashplayer.exe /verysilent /suppressmsgboxes</span><br></pre></td></tr></table></figure>
-
-<p>将批处理文件放于C:\SandboxScripts下</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230303134422839.png" alt="image-20230303134422839"></p>
-<h2 id="编写沙盒配置文件"><a href="#编写沙盒配置文件" class="headerlink" title="编写沙盒配置文件"></a>编写沙盒配置文件</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">MappedFolders</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">MappedFolder</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">HostFolder</span>&gt;</span>C:\SandboxScripts<span class="tag">&lt;/<span class="name">HostFolder</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">SandboxFolder</span>&gt;</span>C:\Users\WDAGUtilityAccount\Downloads\sandbox<span class="tag">&lt;/<span class="name">SandboxFolder</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">ReadOnly</span>&gt;</span>true<span class="tag">&lt;/<span class="name">ReadOnly</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">MappedFolder</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">MappedFolders</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">LogonCommand</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Command</span>&gt;</span>C:\Users\WDAGUtilityAccount\Downloads\sandbox\flashplayer.bat<span class="tag">&lt;/<span class="name">Command</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">LogonCommand</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>将文件保存为.wsb 格式的文件</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230303133712953.png" alt="image-20230303133712953"></p>
-<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><p>双击执行flashplayer.wsb运行Windows沙盒，测试配置是否成功</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230303142847558.png" alt="image-20230303142847558"></p>
-<p>验证成功</p>
+                <h1 id="Chromium浏览器-内核113-STATUS-STACK-BUFFER-OVERRUN解决方案"><a href="#Chromium浏览器-内核113-STATUS-STACK-BUFFER-OVERRUN解决方案" class="headerlink" title="Chromium浏览器 内核113 STATUS_STACK_BUFFER_OVERRUN解决方案"></a>Chromium浏览器 内核113 STATUS_STACK_BUFFER_OVERRUN解决方案</h1><p>2023年5月 chromium内核更新到了v113，导致部分chrome/edge浏览器打不开。报错内容为“喔唷，崩溃了”或者为STATUS_STACK_BUFFER_OVERRUN 错误代码，根据查询微软论坛得出原因是“堆栈溢出”</p>
+<p><a target="_blank" rel="noopener" href="https://answers.microsoft.com/zh-hans/microsoftedge/forum/all/microsoft/8007f833-2959-419a-8408-e0cc0bfcbd5d">Microsoft - Microsoft Community</a></p>
+<p>方案为：    Windows安全中心-应用和浏览器控制- Exploit Protection-程序设置-添加chrome.exe-硬件强制实施的堆栈保护-替代系统设置-仅审核</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230607114706037.png" alt="image-20230607114706037"><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230607114725430.png" alt="image-20230607114725430"></p>
+<p>设置完成后，经过测试问题解决。</p>
+<h2 id="批量设定"><a href="#批量设定" class="headerlink" title="批量设定"></a>批量设定</h2><p>因为集团内部出现了大量的STATUS_STACK_BUFFER_OVERRUN报错导致业务严重收到影响，需要批量解决方案。</p>
+<p>故采用AD 组策略解决该报错。</p>
+<ol>
+<li><p>新建组策略链接到PC OU<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230607115112741.png" alt="image-20230607115112741"></p>
+</li>
+<li><p>设定组策略，计算机配置——首选项——Windows设置——首选项——注册表</p>
+<blockquote>
+<p>2.1新建REG_SZ类型 ，默认值EAFModules，注册表项路径 SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\chrome.exe</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230607115401671.png" alt="image-20230607115401671"></p>
+<p>2.2新建REG_BINARY，数值数据000000000000000000000000000000100000000000000000，默认值MitigationAuditOptions ，注册表项路径 SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\chrome.exe</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230607115714897.png" alt="image-20230607115714897"></p>
+<p>2.3 新建 REG_BINARY ,数值数据000000000000000000000000000000100000000000000000 ，默认值MitigationOptions，注册表项路径 SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\chrome.exe</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230607115944451.png" alt="image-20230607115944451"></p>
+</blockquote>
+</li>
+<li><p>组策略设定完成后，在客户端更新组策略，经过测试chrome可以正常启动</p>
+</li>
+</ol>
 
                 
             </div>
@@ -502,7 +508,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2023/03/04/Windows%E6%B2%99%E7%9B%92%20sandbox%20%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B/">http://example.com/2023/03/04/Windows%E6%B2%99%E7%9B%92%20sandbox%20%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B/</a>
+                    <a href="http://example.com/2023/05/18/Chromium%E6%B5%8F%E8%A7%88%E5%99%A8%20%E5%86%85%E6%A0%B8113%20STATUS_STACK_BUFFER_OVERRUN%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">http://example.com/2023/05/18/Chromium%E6%B5%8F%E8%A7%88%E5%99%A8%20%E5%86%85%E6%A0%B8113%20STATUS_STACK_BUFFER_OVERRUN%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -544,8 +550,8 @@
                                     <span class="chip bg-color">Helpdesk</span>
                                 </a>
                             
-                                <a href="/tags/Windows-11/">
-                                    <span class="chip bg-color">Windows 11</span>
+                                <a href="/tags/AD-%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
+                                    <span class="chip bg-color">AD 域控制器</span>
                                 </a>
                             
                         </div>
@@ -716,7 +722,7 @@
         repo: '',
         owner: '',
         admin: null,
-        id: '2023-03-04T11-00-00',
+        id: '2023-05-18T11-00-00',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -742,9 +748,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2023/05/18/Chromium%E6%B5%8F%E8%A7%88%E5%99%A8%20%E5%86%85%E6%A0%B8113%20STATUS_STACK_BUFFER_OVERRUN%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
                     <div class="card-image">
@@ -762,9 +769,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-05-18
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-05-18
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -777,6 +784,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -799,13 +807,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/">
+                <a href="/2023/03/04/Windows%E6%B2%99%E7%9B%92%20sandbox%20%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="windows 域环境下批量部署bitlocker">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="Windows沙盒 sandbox 实际应用案例">
                         
-                        <span class="card-title">windows 域环境下批量部署bitlocker</span>
+                        <span class="card-title">Windows沙盒 sandbox 实际应用案例</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -816,7 +824,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-02-22
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-03-04
                             </span>
                         <span class="publish-author">
                             
@@ -837,12 +845,8 @@
                         <span class="chip bg-color">Helpdesk</span>
                     </a>
                     
-                    <a href="/tags/AD-%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
-                        <span class="chip bg-color">AD 域控制器</span>
-                    </a>
-                    
-                    <a href="/tags/powershell/">
-                        <span class="chip bg-color">powershell</span>
+                    <a href="/tags/Windows-11/">
+                        <span class="chip bg-color">Windows 11</span>
                     </a>
                     
                 </div>
