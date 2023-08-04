@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Chromium浏览器 内核113 STATUS_STACK_BUFFER_OVERRUN解决方案, 启明星辰">
+    <meta name="keywords" content="PowerStore 3.x的升级手顺, 启明星辰">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Chromium浏览器 内核113 STATUS_STACK_BUFFER_OVERRUN解决方案 | 启明星辰</title>
+    <title>PowerStore 3.x的升级手顺 | 启明星辰</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -288,12 +288,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Chromium浏览器 内核113 STATUS_STACK_BUFFER_OVERRUN解决方案</h1>
+                    <h1 class="description center-align post-title">PowerStore 3.x的升级手顺</h1>
                 </div>
             </div>
         </div>
@@ -409,12 +409,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Helpdesk/">
-                                <span class="chip bg-color">Helpdesk</span>
+                            <a href="/tags/Server/">
+                                <span class="chip bg-color">Server</span>
                             </a>
                         
-                            <a href="/tags/AD-%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
-                                <span class="chip bg-color">AD 域控制器</span>
+                            <a href="/tags/%E5%AD%98%E5%82%A8/">
+                                <span class="chip bg-color">存储</span>
                             </a>
                         
                     </div>
@@ -425,8 +425,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/" class="post-category">
-                                基础设施
+                            <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/" class="post-category">
+                                系统运维
                             </a>
                         
                     </div>
@@ -438,7 +438,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-05-18
+                    2023-08-04
                 </div>
                 
 
@@ -459,29 +459,120 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Chromium浏览器-内核113-STATUS-STACK-BUFFER-OVERRUN解决方案"><a href="#Chromium浏览器-内核113-STATUS-STACK-BUFFER-OVERRUN解决方案" class="headerlink" title="Chromium浏览器 内核113 STATUS_STACK_BUFFER_OVERRUN解决方案"></a>Chromium浏览器 内核113 STATUS_STACK_BUFFER_OVERRUN解决方案</h1><p>2023年5月 chromium内核更新到了v113，导致部分chrome/edge浏览器打不开。报错内容为“喔唷，崩溃了”或者为STATUS_STACK_BUFFER_OVERRUN 错误代码，根据查询微软论坛得出原因是“堆栈溢出”</p>
-<p><a target="_blank" rel="noopener" href="https://answers.microsoft.com/zh-hans/microsoftedge/forum/all/microsoft/8007f833-2959-419a-8408-e0cc0bfcbd5d">Microsoft - Microsoft Community</a></p>
-<p>方案为：    Windows安全中心-应用和浏览器控制- Exploit Protection-程序设置-添加chrome.exe-硬件强制实施的堆栈保护-替代系统设置-仅审核</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230607114706037.png" alt="image-20230607114706037"><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230607114725430.png" alt="image-20230607114725430"></p>
-<p>设置完成后，经过测试问题解决。</p>
-<h2 id="批量设定"><a href="#批量设定" class="headerlink" title="批量设定"></a>批量设定</h2><p>因为集团内部出现了大量的STATUS_STACK_BUFFER_OVERRUN报错导致业务严重收到影响，需要批量解决方案。</p>
-<p>故采用AD 组策略解决该报错。</p>
-<ol>
-<li><p>新建组策略链接到PC OU<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230607115112741.png" alt="image-20230607115112741"></p>
-</li>
-<li><p>设定组策略，计算机配置——首选项——Windows设置——首选项——注册表</p>
+                <h1 id="PowerStore-3-x的升级手顺"><a href="#PowerStore-3-x的升级手顺" class="headerlink" title="PowerStore 3.x的升级手顺"></a>PowerStore 3.x的升级手顺</h1><hr>
+<h2 id="驱动器固件升级"><a href="#驱动器固件升级" class="headerlink" title="驱动器固件升级"></a>驱动器固件升级</h2><p>手动禁用通知，以防止在软件升级期间向支持部门发送 Call Home 警报。</p>
+<p><strong>关于此任务</strong></p>
 <blockquote>
-<p>2.1新建REG_SZ类型 ，默认值EAFModules，注册表项路径 SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\chrome.exe</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230607115401671.png" alt="image-20230607115401671"></p>
-<p>2.2新建REG_BINARY，数值数据000000000000000000000000000000100000000000000000，默认值MitigationAuditOptions ，注册表项路径 SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\chrome.exe</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230607115714897.png" alt="image-20230607115714897"></p>
-<p>2.3 新建 REG_BINARY ,数值数据000000000000000000000000000000100000000000000000 ，默认值MitigationOptions，注册表项路径 SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\chrome.exe</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230607115944451.png" alt="image-20230607115944451"></p>
+<p>注: 对于从任何 3.0.x 和 3.2.0.x PowerStoreOS 版本的升级，系统不会在软件升级期间自动禁用 Call Home 警报。必须手动为每个 设备禁用 Call Home 警报。有关详细信息，请参阅 PowerStoreOS 的 PowerStore 发行说明。</p>
 </blockquote>
+<p>关闭步骤：</p>
+<ol>
+<li><p>在设置页面上，选择支持部分中的禁用支持通知。</p>
 </li>
-<li><p>组策略设定完成后，在客户端更新组策略，经过测试chrome可以正常启动</p>
+<li><p>选择要为其暂停通知的设备，然后单击修改。</p>
+</li>
+<li><p>在修改维护模式滑出面板中，选中启用维护模式选项，并在维护窗口持续时间字段中指定小时数。</p>
+<p>对于 PowerStore T 型号群集，指定 2 小时以在升级窗口期间暂停通知。</p>
+<p>指定的窗口结束后，支持通知会自动重新启用。</p>
+</li>
+<li><p>单击应用。(可选)在表中查看维护模式的结束时间 (群集时间)。</p>
+</li>
+<li><p>对群集中的任何其他设备重复此过程。</p>
 </li>
 </ol>
+<p><strong>更新power storage集群上的驱动器固件</strong></p>
+<p><strong>步骤</strong></p>
+<ol>
+<li><p>从DELL支持网站下载最新的驱动器固件更新包（驱动器固件更新包包含 PowerStore 群集中驱动器的固件更新。有关下载 PowerStore 升级程序包的说明，请参阅下载PowerStore 升级程序包。）</p>
+</li>
+<li><p>选择 Settings 图标，然后选择 Cluster 部分中的 Upgrades。</p>
+</li>
+<li><p>选择上传程序包。<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202307280941821.png" alt="image-20230728094111161"><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202307280941330.png" alt="image-20230728094140839"></p>
+<blockquote>
+<p>注: 对于具有 支持连接 并启用自动下载的群集，适用的新驱动器固件程序包将自动下载到您的系统，并显示在升级页面上。 将显示选择要上传的文件对话框。</p>
+</blockquote>
+</li>
+<li><p>选择驱动器固件更新程序包，然后选择打开。 驱动器固件更新程序包将上传并显示在软件包表中。(将驱动器更新包上传到PowerStore Manager 时，请勿关闭或刷新浏览器。)</p>
+</li>
+<li><p>在软件包表中选择驱动器固件更新程序包，然后选择升级。</p>
+</li>
+</ol>
+<p><strong>结果</strong> </p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202307280942493.png" alt="image-20230728094207867"></p>
+<p>● 要验证系统上当前安装的驱动器固件程序包版本，请使用以下方法之一:</p>
+<p>○ 运行以下 REST API 调用:curl -kv –user admin:xxxxx -X GET https://<appliance ip>:443/api/rest/software_package?select=* | python -mjson.tool</appliance></p>
+<p>○ 运行以下 CLI 命令:$ pstcli -d xx.xx.xx.xx -u <user> -p <password> software_package show-output nvp |egrep “name|software_package_type|release_version”</password></user></p>
+<p>● 要验证 PowerStore 群集中各个驱动器的驱动器固件版本，请转至 PowerStore Manager 中的硬件 &gt; 设备 &gt; appliance &gt; 组件 &gt; 驱 动器页面。</p>
+<p>● 要验证 PowerStore 群集中所有驱动器的驱动器固件版本，请运行服务命令 svc_diag list –show_drives。有关更多信 息，请参见 PowerStore 服务脚本指南。</p>
+<hr>
+<h2 id="PowerStore-无中断软件升级"><a href="#PowerStore-无中断软件升级" class="headerlink" title="PowerStore 无中断软件升级"></a>PowerStore 无中断软件升级</h2><p><strong>升级准备</strong></p>
+<ol>
+<li><p>获取最新 PowerStoreOS 并将其上传到系统(如果未启用自动下载)。</p>
+</li>
+<li><p>查看发行说明。</p>
+</li>
+<li><p>运行升级前运行状况检查和其他必要的系统运行状况检查工具。</p>
+</li>
+<li><p>确保两个节点的主机连接都有备用连接。</p>
+</li>
+<li><p>在升级之前完成配置更改或管理操作，因为在进行升级时这些更改或管理操作不可用。</p>
+<blockquote>
+<p>这些管理操作包括 vVol 虚拟机任务，例如创建虚拟机、重新启动虚拟机、将虚拟机迁移到其他 ESXi 主机以及创建虚拟 机快照。</p>
+</blockquote>
+</li>
+</ol>
+<p><strong>自动下载升级程序包</strong></p>
+<p>对于已启用 支持连接 的系统，当更新程序包在支持网站上推出时，可以自动将其下载到系统。更新包将通过 支持连接 安全隧道安 全地传输到您的系统。自动下载适用于软件更新程序包、驱动器固件更新程序包、适用的语言包和兼容的运行状况检查程序包。此 功能使您无需从支持网站手动搜索和下载最新的升级程序包。</p>
+<p>当各种更新程序包类型(PowerStoreOS、运行状况检查程序包、语言包和驱动器固件)都可使用较新的兼容程序包时，最新自动下 载的程序包会覆盖在升级页面上的软件程序包下面先前已准备好安装的任何较旧程序包。当您的系统上有新的升级程序包可用时， 您会在 PowerStore Manager 中收到警报通知。</p>
+<p>要启用自动下载，请选择设置图标，然后在群集部分选择升级。启用自动下载。未配置 支持连接 时，状态显示为自动下载已禁用。</p>
+<blockquote>
+<p>注: 自动下载不会在系统上安装任何更新程序包，它只会将它们从支持网站下载到您的系统上，以供手动安装。您必须选择特定</p>
+<p>的下载程序包，然后选择升级按钮以安装它。</p>
+</blockquote>
+<hr>
+<h2 id="PowerStore-T-软件升级"><a href="#PowerStore-T-软件升级" class="headerlink" title="PowerStore T 软件升级"></a>PowerStore T 软件升级</h2><p><strong>步骤</strong></p>
+<ol>
+<li><p>手动关闭通知，以防止在软件升级期间向支持部门发送 Call Home 警报。</p>
+</li>
+<li><p>从支持网站下载最新的 PowerStore T 升级程序包。</p>
+</li>
+<li><p>将软件升级包上传到 PowerStore Manager。</p>
+<p>a. 在 PowerStore Manager 中，选择设置图标，然后选择群集部分中的升级。</p>
+<p>b. 选择上传程序包。</p>
+<p>c. 选择要上传的 PowerStore T 型号 升级程序包，然后选择打开。</p>
+</li>
+<li><p>在升级 PowerStore T 型号 群集之前，请仔细查看并执行知识库文章 000183630 如何准备 PowerStore 无中断升级 (NDU) 中的步 骤。</p>
+</li>
+<li><p>执行 升级 PowerStore T 型号 群集上的软件 中的步骤。</p>
+<p>每个设备的 PowerStore T 型号 软件升级需要大约一个小时到一个半小时才能完成。</p>
+</li>
+<li><p>成功升级 PowerStoreOS 软件后，请在新固件捆绑包可用时升级驱动器固件。</p>
+</li>
+</ol>
+<p><strong>结果</strong></p>
+<p>如果软件升级过程失败，请查看并解决群集上的所有关键警报，然后重试升级。</p>
+<hr>
+<h2 id="升级-PowerStore-T-型号-群集上的软件"><a href="#升级-PowerStore-T-型号-群集上的软件" class="headerlink" title="升级 PowerStore T 型号 群集上的软件"></a>升级 PowerStore T 型号 群集上的软件</h2><p>使用 PowerStore Manager 来升级 PowerStore T 型号 群集上的节点固件和 PowerStoreOS。</p>
+<p><strong>步骤</strong></p>
+<ol>
+<li><p>打开 PowerStore Manager。</p>
+</li>
+<li><p>选择 Settings 图标，然后选择 Cluster 部分中的 Upgrades。</p>
+</li>
+<li><p>如果尚未将 PowerStore T 型号 软件升级程序包上传到 PowerStore Manager:</p>
+<p>a. 选择上传程序包。 将显示选择要上传的文件对话框。</p>
+<p>b. 选择 PowerStore T 型号 软件升级程序包，然后选择打开。</p>
+<p>PowerStore T 型号 软件升级程序包会上传到 PowerStore Manager 并显示在软件包表中。</p>
+</li>
+<li><p>在软件包表中选择 PowerStore T 型号 软件升级程序包，然后选择升级。</p>
+<p>每个设备的 PowerStore T 型号 软件升级需要大约一个小时到一个半小时才能完成。软件升级所需的时间长度取决于升级期间是 否应用了节点固件升级。</p>
+</li>
+<li><p>返回登录屏幕后，关闭浏览器会话并打开新会话，然后再次登录以刷新 UI。</p>
+</li>
+</ol>
+<p><strong>结果</strong></p>
+<p>在软件升级过程中，主设备的主节点将故障切换到设备的辅助节点，并且您将从 PowerStore Manager 断开连接。在故障切换过程完 成后，您可以重新登录到 PowerStore Manager。</p>
+<p>安装新版本的 PowerStoreOS 时，PowerStore Manager 表中的列布局设置将重置为其默认布局。升级 PowerStoreOS 时，对 PowerStore Manager 中的列布局设置的更改不会保留。</p>
 
                 
             </div>
@@ -508,7 +599,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2023/05/18/Chromium%E6%B5%8F%E8%A7%88%E5%99%A8%20%E5%86%85%E6%A0%B8113%20STATUS_STACK_BUFFER_OVERRUN%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">http://example.com/2023/05/18/Chromium%E6%B5%8F%E8%A7%88%E5%99%A8%20%E5%86%85%E6%A0%B8113%20STATUS_STACK_BUFFER_OVERRUN%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</a>
+                    <a href="http://example.com/2023/08/04/PowerStore%203.x%E7%9A%84%E5%8D%87%E7%BA%A7%E6%89%8B%E9%A1%BA/">http://example.com/2023/08/04/PowerStore%203.x%E7%9A%84%E5%8D%87%E7%BA%A7%E6%89%8B%E9%A1%BA/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -546,12 +637,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Helpdesk/">
-                                    <span class="chip bg-color">Helpdesk</span>
+                                <a href="/tags/Server/">
+                                    <span class="chip bg-color">Server</span>
                                 </a>
                             
-                                <a href="/tags/AD-%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
-                                    <span class="chip bg-color">AD 域控制器</span>
+                                <a href="/tags/%E5%AD%98%E5%82%A8/">
+                                    <span class="chip bg-color">存储</span>
                                 </a>
                             
                         </div>
@@ -722,7 +813,7 @@
         repo: '',
         owner: '',
         admin: null,
-        id: '2023-05-18T11-00-00',
+        id: '2023-08-04T08-00-00',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -748,9 +839,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2023/08/04/PowerStore%203.x%E7%9A%84%E5%8D%87%E7%BA%A7%E6%89%8B%E9%A1%BA/">
                     <div class="card-image">
@@ -768,9 +860,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-08-04
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-04
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -783,6 +875,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -805,13 +898,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/03/04/Windows%E6%B2%99%E7%9B%92%20sandbox%20%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B/">
+                <a href="/2023/05/18/Chromium%E6%B5%8F%E8%A7%88%E5%99%A8%20%E5%86%85%E6%A0%B8113%20STATUS_STACK_BUFFER_OVERRUN%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="Windows沙盒 sandbox 实际应用案例">
+                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="Chromium浏览器 内核113 STATUS_STACK_BUFFER_OVERRUN解决方案">
                         
-                        <span class="card-title">Windows沙盒 sandbox 实际应用案例</span>
+                        <span class="card-title">Chromium浏览器 内核113 STATUS_STACK_BUFFER_OVERRUN解决方案</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -822,7 +915,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-03-04
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-05-18
                             </span>
                         <span class="publish-author">
                             
@@ -843,8 +936,8 @@
                         <span class="chip bg-color">Helpdesk</span>
                     </a>
                     
-                    <a href="/tags/Windows-11/">
-                        <span class="chip bg-color">Windows 11</span>
+                    <a href="/tags/AD-%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
+                        <span class="chip bg-color">AD 域控制器</span>
                     </a>
                     
                 </div>
