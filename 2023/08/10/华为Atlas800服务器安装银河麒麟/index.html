@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="PowerStore 3.x的升级手顺, 启明星辰">
+    <meta name="keywords" content="华为Atlas800服务器安装银河麒麟, 启明星辰">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>PowerStore 3.x的升级手顺 | 启明星辰</title>
+    <title>华为Atlas800服务器安装银河麒麟 | 启明星辰</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -288,12 +288,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">PowerStore 3.x的升级手顺</h1>
+                    <h1 class="description center-align post-title">华为Atlas800服务器安装银河麒麟</h1>
                 </div>
             </div>
         </div>
@@ -409,12 +409,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Server/">
-                                <span class="chip bg-color">Server</span>
+                            <a href="/tags/%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/">
+                                <span class="chip bg-color">银河麒麟</span>
                             </a>
                         
-                            <a href="/tags/%E5%AD%98%E5%82%A8/">
-                                <span class="chip bg-color">存储</span>
+                            <a href="/tags/Linux/">
+                                <span class="chip bg-color">Linux</span>
                             </a>
                         
                     </div>
@@ -438,7 +438,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-08-04
+                    2023-08-10
                 </div>
                 
 
@@ -459,120 +459,48 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="PowerStore-3-x的升级手顺"><a href="#PowerStore-3-x的升级手顺" class="headerlink" title="PowerStore 3.x的升级手顺"></a>PowerStore 3.x的升级手顺</h1><hr>
-<h2 id="驱动器固件升级"><a href="#驱动器固件升级" class="headerlink" title="驱动器固件升级"></a>驱动器固件升级</h2><p>手动禁用通知，以防止在软件升级期间向支持部门发送 Call Home 警报。</p>
-<p><strong>关于此任务</strong></p>
-<blockquote>
-<p>注: 对于从任何 3.0.x 和 3.2.0.x PowerStoreOS 版本的升级，系统不会在软件升级期间自动禁用 Call Home 警报。必须手动为每个 设备禁用 Call Home 警报。有关详细信息，请参阅 PowerStoreOS 的 PowerStore 发行说明。</p>
-</blockquote>
-<p>关闭步骤：</p>
-<ol>
-<li><p>在设置页面上，选择支持部分中的禁用支持通知。</p>
-</li>
-<li><p>选择要为其暂停通知的设备，然后单击修改。</p>
-</li>
-<li><p>在修改维护模式滑出面板中，选中启用维护模式选项，并在维护窗口持续时间字段中指定小时数。</p>
-<p>对于 PowerStore T 型号群集，指定 2 小时以在升级窗口期间暂停通知。</p>
-<p>指定的窗口结束后，支持通知会自动重新启用。</p>
-</li>
-<li><p>单击应用。(可选)在表中查看维护模式的结束时间 (群集时间)。</p>
-</li>
-<li><p>对群集中的任何其他设备重复此过程。</p>
-</li>
-</ol>
-<p><strong>更新power storage集群上的驱动器固件</strong></p>
-<p><strong>步骤</strong></p>
-<ol>
-<li><p>从DELL支持网站下载最新的驱动器固件更新包（驱动器固件更新包包含 PowerStore 群集中驱动器的固件更新。有关下载 PowerStore 升级程序包的说明，请参阅下载PowerStore 升级程序包。）</p>
-</li>
-<li><p>选择 Settings 图标，然后选择 Cluster 部分中的 Upgrades。</p>
-</li>
-<li><p>选择上传程序包。<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202307280941821.png" alt="image-20230728094111161"><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202307280941330.png" alt="image-20230728094140839"></p>
-<blockquote>
-<p>注: 对于具有 支持连接 并启用自动下载的群集，适用的新驱动器固件程序包将自动下载到您的系统，并显示在升级页面上。 将显示选择要上传的文件对话框。</p>
-</blockquote>
-</li>
-<li><p>选择驱动器固件更新程序包，然后选择打开。 驱动器固件更新程序包将上传并显示在软件包表中。(将驱动器更新包上传到PowerStore Manager 时，请勿关闭或刷新浏览器。)</p>
-</li>
-<li><p>在软件包表中选择驱动器固件更新程序包，然后选择升级。</p>
-</li>
-</ol>
-<p><strong>结果</strong> </p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202307280942493.png" alt="image-20230728094207867"></p>
-<p>● 要验证系统上当前安装的驱动器固件程序包版本，请使用以下方法之一:</p>
-<p>○ 运行以下 REST API 调用:curl -kv –user admin:xxxxx -X GET https://<appliance ip>:443/api/rest/software_package?select=* | python -mjson.tool</appliance></p>
-<p>○ 运行以下 CLI 命令:$ pstcli -d xx.xx.xx.xx -u <user> -p <password> software_package show-output nvp |egrep “name|software_package_type|release_version”</password></user></p>
-<p>● 要验证 PowerStore 群集中各个驱动器的驱动器固件版本，请转至 PowerStore Manager 中的硬件 &gt; 设备 &gt; appliance &gt; 组件 &gt; 驱 动器页面。</p>
-<p>● 要验证 PowerStore 群集中所有驱动器的驱动器固件版本，请运行服务命令 svc_diag list –show_drives。有关更多信 息，请参见 PowerStore 服务脚本指南。</p>
+                <h1 id="华为Atlas800服务器安装银河麒麟"><a href="#华为Atlas800服务器安装银河麒麟" class="headerlink" title="华为Atlas800服务器安装银河麒麟"></a>华为Atlas800服务器安装银河麒麟</h1><h2 id="通过IBMC安装银河麒麟"><a href="#通过IBMC安装银河麒麟" class="headerlink" title="通过IBMC安装银河麒麟"></a>通过IBMC安装银河麒麟</h2><hr>
+<p>默认IBMC地址：192.168.2.100</p>
+<p>子网掩码：255.255.255.0</p>
+<p>用户名：Administrator</p>
+<p>密码Admin@9000</p>
 <hr>
-<h2 id="PowerStore-无中断软件升级"><a href="#PowerStore-无中断软件升级" class="headerlink" title="PowerStore 无中断软件升级"></a>PowerStore 无中断软件升级</h2><p><strong>升级准备</strong></p>
 <ol>
-<li><p>获取最新 PowerStoreOS 并将其上传到系统(如果未启用自动下载)。</p>
-</li>
-<li><p>查看发行说明。</p>
-</li>
-<li><p>运行升级前运行状况检查和其他必要的系统运行状况检查工具。</p>
-</li>
-<li><p>确保两个节点的主机连接都有备用连接。</p>
-</li>
-<li><p>在升级之前完成配置更改或管理操作，因为在进行升级时这些更改或管理操作不可用。</p>
-<blockquote>
-<p>这些管理操作包括 vVol 虚拟机任务，例如创建虚拟机、重新启动虚拟机、将虚拟机迁移到其他 ESXi 主机以及创建虚拟 机快照。</p>
-</blockquote>
-</li>
+<li>浏览器访问192.168.2.100<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202308071622732.png" alt="image-20230807162025226"></li>
+<li>配置IBMC网络<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202308071622724.png" alt="image-20230807162153330"></li>
+<li>使用虚拟控制台载入镜像文件，并设定从CD- DVD启动![image-20230807162539720](/Users/liguangming/Library/Application Support/typora-user-images/image-20230807162539720.png)<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202308071624116.png" alt="image-20230807162404712"><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202308071624431.png" alt="image-20230807162448709"></li>
+<li>参照<a target="_blank" rel="noopener" href="https://support.huawei.com/enterprise/zh/doc/EDOC1100311722/426cffd9">https://support.huawei.com/enterprise/zh/doc/EDOC1100311722/426cffd9</a> 完成银河麒麟的安装</li>
 </ol>
-<p><strong>自动下载升级程序包</strong></p>
-<p>对于已启用 支持连接 的系统，当更新程序包在支持网站上推出时，可以自动将其下载到系统。更新包将通过 支持连接 安全隧道安 全地传输到您的系统。自动下载适用于软件更新程序包、驱动器固件更新程序包、适用的语言包和兼容的运行状况检查程序包。此 功能使您无需从支持网站手动搜索和下载最新的升级程序包。</p>
-<p>当各种更新程序包类型(PowerStoreOS、运行状况检查程序包、语言包和驱动器固件)都可使用较新的兼容程序包时，最新自动下 载的程序包会覆盖在升级页面上的软件程序包下面先前已准备好安装的任何较旧程序包。当您的系统上有新的升级程序包可用时， 您会在 PowerStore Manager 中收到警报通知。</p>
-<p>要启用自动下载，请选择设置图标，然后在群集部分选择升级。启用自动下载。未配置 支持连接 时，状态显示为自动下载已禁用。</p>
-<blockquote>
-<p>注: 自动下载不会在系统上安装任何更新程序包，它只会将它们从支持网站下载到您的系统上，以供手动安装。您必须选择特定</p>
-<p>的下载程序包，然后选择升级按钮以安装它。</p>
-</blockquote>
 <hr>
-<h2 id="PowerStore-T-软件升级"><a href="#PowerStore-T-软件升级" class="headerlink" title="PowerStore T 软件升级"></a>PowerStore T 软件升级</h2><p><strong>步骤</strong></p>
-<ol>
-<li><p>手动关闭通知，以防止在软件升级期间向支持部门发送 Call Home 警报。</p>
-</li>
-<li><p>从支持网站下载最新的 PowerStore T 升级程序包。</p>
-</li>
-<li><p>将软件升级包上传到 PowerStore Manager。</p>
-<p>a. 在 PowerStore Manager 中，选择设置图标，然后选择群集部分中的升级。</p>
-<p>b. 选择上传程序包。</p>
-<p>c. 选择要上传的 PowerStore T 型号 升级程序包，然后选择打开。</p>
-</li>
-<li><p>在升级 PowerStore T 型号 群集之前，请仔细查看并执行知识库文章 000183630 如何准备 PowerStore 无中断升级 (NDU) 中的步 骤。</p>
-</li>
-<li><p>执行 升级 PowerStore T 型号 群集上的软件 中的步骤。</p>
-<p>每个设备的 PowerStore T 型号 软件升级需要大约一个小时到一个半小时才能完成。</p>
-</li>
-<li><p>成功升级 PowerStoreOS 软件后，请在新固件捆绑包可用时升级驱动器固件。</p>
-</li>
+<h2 id="NPU驱动安装"><a href="#NPU驱动安装" class="headerlink" title="NPU驱动安装"></a>NPU驱动安装</h2><ol>
+<li>获取驱动与固件，登录<a target="_blank" rel="noopener" href="https://support.huawei.com/enterprise/zh/ascend-computing/ascend-hdk-pid-252764743/software">Ascend HDK</a>的软件页签</li>
+<li>选择Ascend HDK 22.0.0系列版本。</li>
+<li>根据产品系统架构在“软件分类”中勾选“910-aarch64”或“910-x86_64”。</li>
+<li>单击Ascend-hdk-910-npu-driver_XXXXXX.run以及Ascend-hdk-910-npu-firmwarer_XXXXXX.run软件包后面的<img src="https://download.huawei.com/mdl/image/download?uuid=f598bf45bd23494d8c4810a76ea83022" alt="img">、<img src="https://download.huawei.com/mdl/image/download?uuid=fd9337deb3194f18b54fd5fdf6b602f9" alt="img">或<img src="https://download.huawei.com/mdl/image/download?uuid=75263da7eaff4ad09bed5d720c25a787" alt="img">，获取所需软件包及签名文件。</li>
 </ol>
-<p><strong>结果</strong></p>
-<p>如果软件升级过程失败，请查看并解决群集上的所有关键警报，然后重试升级。</p>
 <hr>
-<h2 id="升级-PowerStore-T-型号-群集上的软件"><a href="#升级-PowerStore-T-型号-群集上的软件" class="headerlink" title="升级 PowerStore T 型号 群集上的软件"></a>升级 PowerStore T 型号 群集上的软件</h2><p>使用 PowerStore Manager 来升级 PowerStore T 型号 群集上的节点固件和 PowerStoreOS。</p>
-<p><strong>步骤</strong></p>
-<ol>
-<li><p>打开 PowerStore Manager。</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202308071635608.png" alt="img"></p>
+<p>请获取同一版本下的驱动包、芯片固件包。</p>
+<hr>
+<ol start="5">
+<li><p>通过IBMC或者SCP获取其他共享路径将固件与驱动传输到银河麒麟操作系统。</p>
 </li>
-<li><p>选择 Settings 图标，然后选择 Cluster 部分中的 Upgrades。</p>
-</li>
-<li><p>如果尚未将 PowerStore T 型号 软件升级程序包上传到 PowerStore Manager:</p>
-<p>a. 选择上传程序包。 将显示选择要上传的文件对话框。</p>
-<p>b. 选择 PowerStore T 型号 软件升级程序包，然后选择打开。</p>
-<p>PowerStore T 型号 软件升级程序包会上传到 PowerStore Manager 并显示在软件包表中。</p>
-</li>
-<li><p>在软件包表中选择 PowerStore T 型号 软件升级程序包，然后选择升级。</p>
-<p>每个设备的 PowerStore T 型号 软件升级需要大约一个小时到一个半小时才能完成。软件升级所需的时间长度取决于升级期间是 否应用了节点固件升级。</p>
-</li>
-<li><p>返回登录屏幕后，关闭浏览器会话并打开新会话，然后再次登录以刷新 UI。</p>
-</li>
+<li><p>因驱动需要以HwHiAIUser的身份运行，需要创建一个HwHiAiUser的用户</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$:useradd HwHiAIUser          <span class="comment">#创建HwHiAIUser用户</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$:passwd HwHiAIUser         <span class="comment">#为HwHiAIUser创建密码</span></span><br></pre></td></tr></table></figure></li>
+<li><p>安装驱动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$:<span class="built_in">cd</span>  <span class="variable">$path</span>                             <span class="comment">#打驱动与固件目录</span></span><br><span class="line">$:chmod +x Ascend-hdk-910-npu-driver_XXXXXX.run      <span class="comment">#添加可执行权限</span></span><br><span class="line">$:chmod +x  Ascend-hdk-910-npu-firmwarer_XXXXXX.run</span><br><span class="line">$: ./Ascend-hdk-910-npu-driver_XXXXXX.run --FULL      <span class="comment">#执行驱动完整安装</span></span><br><span class="line">$: reboot			<span class="comment">#安装完成后进行重启</span></span><br><span class="line">$:npu-smi info	<span class="comment">#查看驱动是否安装成功</span></span><br><span class="line">$:./Ascend-hdk-910-npu-firmwarer_XXXXXX.run --FULL 		<span class="comment">#执行固件安装</span></span><br><span class="line">$:reboot		<span class="comment">#执行重启</span></span><br></pre></td></tr></table></figure></li>
 </ol>
-<p><strong>结果</strong></p>
-<p>在软件升级过程中，主设备的主节点将故障切换到设备的辅助节点，并且您将从 PowerStore Manager 断开连接。在故障切换过程完 成后，您可以重新登录到 PowerStore Manager。</p>
-<p>安装新版本的 PowerStoreOS 时，PowerStore Manager 表中的列布局设置将重置为其默认布局。升级 PowerStoreOS 时，对 PowerStore Manager 中的列布局设置的更改不会保留。</p>
+<hr>
+<h2 id="CANN框架安装"><a href="#CANN框架安装" class="headerlink" title="CANN框架安装"></a>CANN框架安装</h2><ol>
+<li><p><a target="_blank" rel="noopener" href="https://support.huawei.com/enterprise/zh/ascend-computing/cann-pid-251168373/software%E4%B8%8B%E8%BD%BDCANN%E6%A1%86%E6%9E%B6">https://support.huawei.com/enterprise/zh/ascend-computing/cann-pid-251168373/software下载CANN框架</a></p>
+</li>
+<li><p>将CANN安装包复制到麒麟操作系统路径$path</p>
+</li>
+<li><p>安装python3与python-pip</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$:sudo yum install python3			<span class="comment">#安装python</span></span><br><span class="line">$:sudo yum install python-pip			<span class="comment">#安装pip</span></span><br><span class="line">$:chmod +x <span class="variable">$path</span>/Ascend-cann-nnae_xxxxxx_linux-aarch64.run		<span class="comment">#添加可执行权限</span></span><br><span class="line">$:<span class="variable">$path</span>/Ascend-cann-nnae_xxxxxx_linux-aarch64.run --FULL			<span class="comment">#执行安装</span></span><br><span class="line">$:reboot			<span class="comment">#重启安装成功</span></span><br></pre></td></tr></table></figure></li>
+</ol>
 
                 
             </div>
@@ -599,7 +527,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2023/08/04/PowerStore%203.x%E7%9A%84%E5%8D%87%E7%BA%A7%E6%89%8B%E9%A1%BA/">http://example.com/2023/08/04/PowerStore%203.x%E7%9A%84%E5%8D%87%E7%BA%A7%E6%89%8B%E9%A1%BA/</a>
+                    <a href="http://example.com/2023/08/10/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/">http://example.com/2023/08/10/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -637,12 +565,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Server/">
-                                    <span class="chip bg-color">Server</span>
+                                <a href="/tags/%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/">
+                                    <span class="chip bg-color">银河麒麟</span>
                                 </a>
                             
-                                <a href="/tags/%E5%AD%98%E5%82%A8/">
-                                    <span class="chip bg-color">存储</span>
+                                <a href="/tags/Linux/">
+                                    <span class="chip bg-color">Linux</span>
                                 </a>
                             
                         </div>
@@ -813,7 +741,7 @@
         repo: '',
         owner: '',
         admin: null,
-        id: '2023-08-04T08-00-00',
+        id: '2023-08-10T11-40-00',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -839,9 +767,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2023/08/10/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/">
                     <div class="card-image">
@@ -859,9 +788,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-08-10
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-10
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -874,6 +803,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -896,13 +826,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/05/18/Chromium%E6%B5%8F%E8%A7%88%E5%99%A8%20%E5%86%85%E6%A0%B8113%20STATUS_STACK_BUFFER_OVERRUN%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
+                <a href="/2023/08/04/PowerStore%203.x%E7%9A%84%E5%8D%87%E7%BA%A7%E6%89%8B%E9%A1%BA/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="Chromium浏览器 内核113 STATUS_STACK_BUFFER_OVERRUN解决方案">
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="PowerStore 3.x的升级手顺">
                         
-                        <span class="card-title">Chromium浏览器 内核113 STATUS_STACK_BUFFER_OVERRUN解决方案</span>
+                        <span class="card-title">PowerStore 3.x的升级手顺</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -913,14 +843,14 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-05-18
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-04
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/" class="post-category">
-                                    基础设施
+                            <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/" class="post-category">
+                                    系统运维
                                 </a>
                             
                             
@@ -930,12 +860,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Helpdesk/">
-                        <span class="chip bg-color">Helpdesk</span>
+                    <a href="/tags/Server/">
+                        <span class="chip bg-color">Server</span>
                     </a>
                     
-                    <a href="/tags/AD-%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
-                        <span class="chip bg-color">AD 域控制器</span>
+                    <a href="/tags/%E5%AD%98%E5%82%A8/">
+                        <span class="chip bg-color">存储</span>
                     </a>
                     
                 </div>
