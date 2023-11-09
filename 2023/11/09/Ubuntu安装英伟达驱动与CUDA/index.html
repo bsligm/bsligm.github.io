@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Jump server单节点无外置数据库部署, 启明星辰">
+    <meta name="keywords" content="Ubuntu安装英伟达驱动与CUDA, 启明星辰">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Jump server单节点无外置数据库部署 | 启明星辰</title>
+    <title>Ubuntu安装英伟达驱动与CUDA | 启明星辰</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -288,12 +288,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Jump server单节点无外置数据库部署</h1>
+                    <h1 class="description center-align post-title">Ubuntu安装英伟达驱动与CUDA</h1>
                 </div>
             </div>
         </div>
@@ -409,12 +409,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/">
-                                <span class="chip bg-color">基础设施</span>
+                            <a href="/tags/Ubuntu/">
+                                <span class="chip bg-color">Ubuntu</span>
                             </a>
                         
-                            <a href="/tags/%E5%A0%A1%E5%9E%92%E6%9C%BA/">
-                                <span class="chip bg-color">堡垒机</span>
+                            <a href="/tags/Linux/">
+                                <span class="chip bg-color">Linux</span>
                             </a>
                         
                     </div>
@@ -438,7 +438,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-10-18
+                    2023-11-09
                 </div>
                 
 
@@ -459,53 +459,65 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Jump-server单节点无外置数据库部署"><a href="#Jump-server单节点无外置数据库部署" class="headerlink" title="Jump server单节点无外置数据库部署"></a>Jump server单节点无外置数据库部署</h1><h2 id="基础设施"><a href="#基础设施" class="headerlink" title="基础设施"></a>基础设施</h2><ol>
-<li>Linux主机环境</li>
-<li>可访问外网的网络环境</li>
-</ol>
-<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><p>环境要求</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$: sudo apt install wget curl tar gettext iptables</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li><p><a target="_blank" rel="noopener" href="https://community.fit2cloud.com/#/download/jumpserver/v3-7-2">https://community.fit2cloud.com/#/download/jumpserver/v3-7-2</a> 根据Linux主机CPU架构下载离线安装包</p>
+                <h1 id="Ubuntu安装英伟达驱动与CUDA"><a href="#Ubuntu安装英伟达驱动与CUDA" class="headerlink" title="Ubuntu安装英伟达驱动与CUDA"></a>Ubuntu安装英伟达驱动与CUDA</h1><h2 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h2><ol>
+<li><p>准备好英伟达GPU驱动</p>
+<p><a target="_blank" rel="noopener" href="https://www.nvidia.cn/Download/index.aspx?lang=cn">https://www.nvidia.cn/Download/index.aspx?lang=cn</a></p>
 </li>
-<li><p>~~~bash<br>$:mv jumpserver-offline-installer-v*.tar.gz  /opt<br>$:tar -xf jumpserver-offline-installer-v*.tar.gz<br>$: cd jumpserver-offline-installer-v*</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">3. 根据实际情况配置config,也可以不做任何修改</span><br><span class="line"></span><br><span class="line">   ~~~bash</span><br><span class="line">   $:sudo vim config-example.txt</span><br></pre></td></tr></table></figure>
-
-<hr>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># JumpServer configuration file example.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 如果不了解用途可以跳过修改此配置文件, 系统会自动填入</span></span><br><span class="line"><span class="comment"># 完整参数文档 https://docs.jumpserver.org/zh/master/admin-guide/env/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################## 镜像配置 ###################################</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 国内连接 docker.io 会超时或下载速度较慢, 开启此选项使用华为云镜像加速</span></span><br><span class="line"><span class="comment"># 取代旧版本 DOCKER_IMAGE_PREFIX</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># DOCKER_IMAGE_MIRROR=1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################## 安装配置 ###################################</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># JumpServer 数据库持久化目录, 默认情况下录像、任务日志都在此目录</span></span><br><span class="line"><span class="comment"># 请根据实际情况修改, 升级时备份的数据库文件(.sql)和配置文件也会保存到该目录</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">VOLUME_DIR=/data/jumpserver</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加密密钥, 迁移请保证 SECRET_KEY 与旧环境一致, 请勿使用特殊字符串</span></span><br><span class="line"><span class="comment"># (*) Warning: Keep this value secret.</span></span><br><span class="line"><span class="comment"># (*) 勿向任何人泄露 SECRET_KEY</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">SECRET_KEY=</span><br><span class="line"></span><br><span class="line"><span class="comment"># 组件向 core 注册使用的 token, 迁移请保持 BOOTSTRAP_TOKEN 与旧环境一致,</span></span><br><span class="line"><span class="comment"># 请勿使用特殊字符串</span></span><br><span class="line"><span class="comment"># (*) Warning: Keep this value secret.</span></span><br><span class="line"><span class="comment"># (*) 勿向任何人泄露 BOOTSTRAP_TOKEN</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">BOOTSTRAP_TOKEN=</span><br><span class="line"></span><br><span class="line"><span class="comment"># 日志等级 INFO, WARN, ERROR</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">LOG_LEVEL=ERROR</span><br><span class="line"></span><br><span class="line"><span class="comment"># JumpServer 容器使用的网段, 请勿与现有的网络冲突, 根据实际情况自行修改</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">DOCKER_SUBNET=192.168.250.0/24</span><br><span class="line"></span><br><span class="line"><span class="comment"># ipv6 nat, 正常情况下无需开启</span></span><br><span class="line"><span class="comment"># 如果宿主不支持 ipv6 开启此选项将会导致无法获取真实的客户端 ip 地址</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">USE_IPV6=0</span><br><span class="line">DOCKER_SUBNET_IPV6=fc00:1010:1111:200::/64</span><br><span class="line"></span><br><span class="line"><span class="comment">################################# MySQL 配置 ##################################</span></span><br><span class="line"><span class="comment"># 外置 MySQL 需要输入正确的 MySQL 信息, 内置 MySQL 系统会自动处理</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">DB_HOST=mysql</span><br><span class="line">DB_PORT=3306</span><br><span class="line">DB_USER=root</span><br><span class="line">DB_PASSWORD=</span><br><span class="line">DB_NAME=jumpserver</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果外置 MySQL 需要开启 TLS/SSL 连接, 参考 https://docs.jumpserver.org/zh/master/install/install_security/#ssl</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># DB_USE_SSL=True</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################# Redis 配置 ##################################</span></span><br><span class="line"><span class="comment"># 外置 Redis 需要请输入正确的 Redis 信息, 内置 Redis 系统会自动处理</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">REDIS_HOST=redis</span><br><span class="line">REDIS_PORT=6379</span><br><span class="line">REDIS_PASSWORD=</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果使用外置 Redis Sentinel, 请手动填写下面内容</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># REDIS_SENTINEL_HOSTS=mymaster/192.168.100.1:26379,192.168.100.1:26380,192.168.100.1:26381</span></span><br><span class="line"><span class="comment"># REDIS_SENTINEL_PASSWORD=your_sentinel_password</span></span><br><span class="line"><span class="comment"># REDIS_PASSWORD=your_redis_password</span></span><br><span class="line"><span class="comment"># REDIS_SENTINEL_SOCKET_TIMEOUT=5</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果外置 Redis 需要开启 TLS/SSL 连接, 参考 https://docs.jumpserver.org/zh/master/install/install_security/#redis-ssl</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># REDIS_USE_SSL=True</span></span><br><span class="line"></span><br><span class="line"><span class="comment">################################## 访问配置 ###################################</span></span><br><span class="line"><span class="comment"># 对外提供服务端口, 如果与现有服务冲突请自行修改</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">HTTP_PORT=80</span><br><span class="line">SSH_PORT=2222</span><br><span class="line">MAGNUS_MYSQL_PORT=33061</span><br><span class="line">MAGNUS_MARIADB_PORT=33062</span><br><span class="line">MAGNUS_REDIS_PORT=63790</span><br><span class="line"></span><br><span class="line"><span class="comment">################################# HTTPS 配置 #################################</span></span><br><span class="line"><span class="comment"># 参考 https://docs.jumpserver.org/zh/master/admin-guide/proxy/ 配置</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># HTTPS_PORT=443</span></span><br><span class="line"><span class="comment"># SERVER_NAME=your_domain_name</span></span><br><span class="line"><span class="comment"># SSL_CERTIFICATE=your_cert</span></span><br><span class="line"><span class="comment"># SSL_CERTIFICATE_KEY=your_cert_key</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Nginx 文件上传下载大小限制</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">CLIENT_MAX_BODY_SIZE=4096m</span><br><span class="line"></span><br><span class="line"><span class="comment">################################## 组件配置 ###################################</span></span><br><span class="line"><span class="comment"># 组件注册使用, 默认情况下向 core 容器注册, 集群环境需要修改为集群 vip 地址</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">CORE_HOST=http://core:8080</span><br><span class="line">PERIOD_TASK_ENABLED=True</span><br><span class="line"></span><br><span class="line"><span class="comment"># Core Session 定义,</span></span><br><span class="line"><span class="comment"># SESSION_COOKIE_AGE 表示闲置多少秒后 session 过期,</span></span><br><span class="line"><span class="comment"># SESSION_EXPIRE_AT_BROWSER_CLOSE=true 表示关闭浏览器即 session 过期</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># SESSION_COOKIE_AGE=86400</span></span><br><span class="line">SESSION_EXPIRE_AT_BROWSER_CLOSE=True</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可信任 DOMAINS 定义,</span></span><br><span class="line"><span class="comment"># 定义可信任的访问 IP, 请根据实际情况修改, 如果是公网 IP 请改成对应的公网 IP,</span></span><br><span class="line"><span class="comment"># DOMAINS=&quot;demo.jumpserver.org&quot;</span></span><br><span class="line"><span class="comment"># DOMAINS=&quot;172.17.200.191&quot;</span></span><br><span class="line"><span class="comment"># DOMAINS=&quot;demo.jumpserver.org,172.17.200.191&quot;</span></span><br><span class="line">DOMAINS=</span><br><span class="line"></span><br><span class="line"><span class="comment"># Lion 开启字体平滑, 优化体验</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">JUMPSERVER_ENABLE_FONT_SMOOTHING=True</span><br><span class="line"></span><br><span class="line"><span class="comment">################################# XPack 配置 #################################</span></span><br><span class="line"><span class="comment"># XPack 包, 开源版本设置无效</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">RDP_PORT=3389</span><br><span class="line">MAGNUS_POSTGRESQL_PORT=54320</span><br><span class="line">MAGNUS_ORACLE_PORTS=30000-30030</span><br><span class="line"></span><br><span class="line"><span class="comment">################################## 其他配置 ##################################</span></span><br><span class="line"><span class="comment"># 终端使用宿主 HOSTNAME 标识, 首次安装自动生成</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">SERVER_HOSTNAME=<span class="variable">$&#123;HOSTNAME&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 当前运行的 JumpServer 版本号, 安装和升级完成后自动生成</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">CURRENT_VERSION=</span><br></pre></td></tr></table></figure></li>
-<li><pre><code class="bash"># 安装
-$:./jmsctl.sh install         #单节点，无外置数据部署 全部选择n
-
-# 启动
-$:./jmsctl.sh start
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">5. **安装完成后 JumpServer 配置文件路径为： &#x2F;opt&#x2F;jumpserver&#x2F;config&#x2F;config.txt**</span><br><span class="line"></span><br><span class="line">6. &#96;&#96;&#96;bash</span><br><span class="line">   $:cd &#x2F;opt&#x2F;jumpserver-offline-release-v3.7.2-amd64</span><br><span class="line">   </span><br><span class="line">   # 启动</span><br><span class="line">   .&#x2F;jmsctl.sh start</span><br><span class="line">   </span><br><span class="line">   # 停止</span><br><span class="line">   .&#x2F;jmsctl.sh down</span><br><span class="line">   </span><br><span class="line">   # 卸载</span><br><span class="line">   .&#x2F;jmsctl.sh uninstall</span><br><span class="line">   </span><br><span class="line">   # 帮助</span><br><span class="line">   .&#x2F;jmsctl.sh -h</span><br><span class="line">   </span><br><span class="line">   &#96;&#96;&#96;</span><br><span class="line"></span><br><span class="line">7. **安装成功后，通过浏览器访问登录 JumpServer**</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-地址: http://&lt;JumpServer服务器IP地址&gt;:&lt;服务运行端口&gt;
-用户名: admin
-密码: admin
-</code></pre>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181002748.png" alt="image-20231018100222176"></p>
+<li><p>确认需要的驱动<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091122261.png" alt="image-20231109112214578"></p>
 </li>
 </ol>
-<h2 id="设定"><a href="#设定" class="headerlink" title="设定"></a>设定</h2><p>部署完成后需要配置资产，用户，对接LDAP活动目录，以及配置安全策略资产权限等</p>
-<hr>
-<h3 id="LDAP对接"><a href="#LDAP对接" class="headerlink" title="LDAP对接"></a>LDAP对接</h3><ol>
-<li><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181007029.png" alt="image-20231018100702001"></li>
-<li><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181007281.png" alt="image-20231018100745243"></li>
+<h2 id="安装驱动"><a href="#安装驱动" class="headerlink" title="安装驱动"></a>安装驱动</h2><ol>
+<li>首先安装前，需要确认Ubuntu有安装gcc g++ make</li>
 </ol>
-<h3 id="资产配置"><a href="#资产配置" class="headerlink" title="资产配置"></a>资产配置</h3><ol>
-<li>点击控制台——资产管理——资产列表</li>
-<li>创建资产信息<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181010659.png" alt="image-20231018101029632"></li>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install gcc g++ make</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>将驱动上传到Ubuntu</li>
+<li>给驱动添加可执行权限</li>
 </ol>
-<h3 id="用户与用户组"><a href="#用户与用户组" class="headerlink" title="用户与用户组"></a>用户与用户组</h3><ol>
-<li><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181014686.png" alt="image-20231018101435654"></li>
-<li><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181014272.png" alt="image-20231018101457243"></li>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x NVIDIA-Linux-*.run</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>安装驱动</li>
 </ol>
-<h3 id="资产权限分配"><a href="#资产权限分配" class="headerlink" title="资产权限分配"></a>资产权限分配</h3><ol>
-<li>控制台——权限管理——资产授权</li>
-<li>根据需求对资产文件夹OU或者单个资产对用户或者用户组授权<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181017807.png" alt="image-20231018101724775"></li>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./NVIDIA-Linux-*.run</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>安装完成后，reboot 重启Ubuntu，验证安装</li>
 </ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvidia-smi</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091238068.png" alt="image-20231109123803349"></p>
+<h2 id="安装CUDA"><a href="#安装CUDA" class="headerlink" title="安装CUDA"></a>安装CUDA</h2><ol>
+<li><p>访问英伟达CUDA官网<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-toolkit-archive">https://developer.nvidia.com/cuda-toolkit-archive</a></p>
+</li>
+<li><p>通过Nvidia-smi 确认CUDA对应版本<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091241712.png" alt="image-20231109124103674"></p>
+</li>
+<li><p>选择对应的cuda版本<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091241098.png" alt="image-20231109124156432"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091243683.png" alt="image-20231109124306992"></p>
+</li>
+<li><p>使用官网提供的runfile方法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://developer.download.nvidia.com/compute/cuda/12.2.2/local_installers/cuda_12.2.2_535.104.05_linux.run      <span class="comment">#下载run文件</span></span><br><span class="line">sudo sh cuda_12.2.2_535.104.05_linux.run      <span class="comment">#运行run文件安装cuda</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091258885.png" alt="image-20231109125804385"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091254187.png" alt="image-20231109125314996"></p>
+<ol start="5">
+<li>编辑环境变量</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<p>在文件末尾添加</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#/usr/local/cuda-12.2视 真实环境为准</span></span><br><span class="line"><span class="built_in">export</span> PATH=/usr/<span class="built_in">local</span>/cuda-12.2/bin<span class="variable">$&#123;PATH:+:<span class="variable">$&#123;PATH&#125;</span>&#125;</span></span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=/usr/<span class="built_in">local</span>/cuda-12.2/lib64<span class="variable">$&#123;LD_LIBRARY_PATH:+:<span class="variable">$&#123;LD_LIBRARY_PATH&#125;</span>&#125;</span></span><br><span class="line"><span class="built_in">export</span> CUDA_HOME=/usr/<span class="built_in">local</span>/cuda-12.2</span><br></pre></td></tr></table></figure>
+
+<p>更新系统环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>验证安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc -V</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091305908.png" alt="image-20231109130552044"></p>
 
                 
             </div>
@@ -532,7 +544,7 @@ $:./jmsctl.sh start
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/">http://example.com/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/</a>
+                    <a href="http://example.com/2023/11/09/Ubuntu%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E9%A9%B1%E5%8A%A8%E4%B8%8ECUDA/">http://example.com/2023/11/09/Ubuntu%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E9%A9%B1%E5%8A%A8%E4%B8%8ECUDA/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -570,12 +582,12 @@ $:./jmsctl.sh start
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/">
-                                    <span class="chip bg-color">基础设施</span>
+                                <a href="/tags/Ubuntu/">
+                                    <span class="chip bg-color">Ubuntu</span>
                                 </a>
                             
-                                <a href="/tags/%E5%A0%A1%E5%9E%92%E6%9C%BA/">
-                                    <span class="chip bg-color">堡垒机</span>
+                                <a href="/tags/Linux/">
+                                    <span class="chip bg-color">Linux</span>
                                 </a>
                             
                         </div>
@@ -746,7 +758,7 @@ $:./jmsctl.sh start
         repo: '',
         owner: '',
         admin: null,
-        id: '2023-10-18T13-40-00',
+        id: '2023-11-09T11-40-00',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -772,9 +784,10 @@ $:./jmsctl.sh start
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2023/11/09/Ubuntu%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E9%A9%B1%E5%8A%A8%E4%B8%8ECUDA/">
                     <div class="card-image">
@@ -792,9 +805,9 @@ $:./jmsctl.sh start
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-11-09
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-09
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -807,6 +820,7 @@ $:./jmsctl.sh start
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -829,13 +843,13 @@ $:./jmsctl.sh start
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/08/10/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/">
+                <a href="/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="华为Atlas800服务器安装银河麒麟">
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="Jump server单节点无外置数据库部署">
                         
-                        <span class="card-title">华为Atlas800服务器安装银河麒麟</span>
+                        <span class="card-title">Jump server单节点无外置数据库部署</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -846,7 +860,7 @@ $:./jmsctl.sh start
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-10
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-10-18
                             </span>
                         <span class="publish-author">
                             
@@ -863,12 +877,12 @@ $:./jmsctl.sh start
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Linux/">
-                        <span class="chip bg-color">Linux</span>
+                    <a href="/tags/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/">
+                        <span class="chip bg-color">基础设施</span>
                     </a>
                     
-                    <a href="/tags/%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/">
-                        <span class="chip bg-color">银河麒麟</span>
+                    <a href="/tags/%E5%A0%A1%E5%9E%92%E6%9C%BA/">
+                        <span class="chip bg-color">堡垒机</span>
                     </a>
                     
                 </div>
