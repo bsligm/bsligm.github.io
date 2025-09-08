@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="win10封装, 启明星辰">
-    <meta name="description" content="">
+    <meta name="keywords" content="Win10封装, 系统部署, 批量部署, 镜像制作, NTlite, Dism++, 系统优化">
+    <meta name="description" content="Windows 10系统封装详细教程在企业IT运维工作中，常常需要面对批量部署和大量环境安装的需求。尤其是在处理不同部门间的系统维护时，需要安装大量定制软件和配置特定环境变量，如果每次都手动安装配置，会耗费大量时间和精力。通过系统封装的方式">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,24 +13,42 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;http://127.0.0.1:4000/2023/09/08/win10%E5%B0%81%E8%A3%85/&#34;},&#34;headline&#34;:&#34;Windows 10系统封装详细教程&#34;,&#34;description&#34;:&#34;Windows 10系统封装详细教程在企业IT运维工作中，常常需要面对批量部署和大量环境安装的需求。尤其是在处理不同部门间的系统维护时，需要安装大量定制软件和配置特定环境变量，如果每次都手动安装配置，会耗费大量时间和精力。通过系统封装的方式&#34;,&#34;datePublished&#34;:&#34;2023-09-08T07:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2023-09-08T07:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;http://127.0.0.1:4000/medias/logo.png&#34;}}}</script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>win10封装 | 启明星辰</title>
-    <link rel="icon" type="image/png" href="/favicon.png">
+    <!-- Baidu Analytics -->
 
-    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <!-- Baidu Push -->
 
-    <script src="/libs/jquery/jquery.min.js"></script>
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
 
+    <title>Windows 10系统封装详细教程 | 127.0.0.1</title>
+    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/my.css">
+
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/jquery/jquery.min.js"></script>
+    <link rel="alternate" href="/atom.xml" title="127.0.0.1" type="application/atom+xml">
 <meta name="generator" content="Hexo 5.4.0"></head>
-
 
 
 
@@ -41,9 +59,9 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">启明星辰</span>
+                    <span class="logo-span">127.0.0.1</span>
                 </a>
             </div>
             
@@ -129,12 +147,12 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">启明星辰</div>
+        <div class="logo-name">127.0.0.1</div>
         <div class="logo-desc">
             
-            Never really desperate, only the lost of the soul.
+            李广明的技术博客，专注于Windows服务器、网络技术、系统集成等IT领域知识分享
             
         </div>
     </div>
@@ -212,7 +230,7 @@
         
         <li><div class="divider"></div></li>
         <li>
-            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+            <a href="https://github.com/bsligm/bsligm.github.io" class="waves-effect waves-light" target="_blank">
                 <i class="fab fa-github-square fa-fw"></i>Fork Me
             </a>
         </li>
@@ -269,7 +287,7 @@
     }
 </style>
 
-<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+<a href="https://github.com/bsligm/bsligm.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
    data-tooltip="Fork Me" data-position="left" data-delay="50">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
@@ -288,12 +306,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/22.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">win10封装</h1>
+                    <h1 class="description center-align post-title">Windows 10系统封装详细教程</h1>
                 </div>
             </div>
         </div>
@@ -306,7 +324,7 @@
 <main class="post-container content">
 
     
-    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/tocbot/tocbot.css">
 <style>
     #articleContent h1::before,
     #articleContent h2::before,
@@ -413,8 +431,12 @@
                                 <span class="chip bg-color">Windows</span>
                             </a>
                         
-                            <a href="/tags/%E6%95%99%E7%A8%8B/">
-                                <span class="chip bg-color">教程</span>
+                            <a href="/tags/%E5%B0%81%E8%A3%85/">
+                                <span class="chip bg-color">封装</span>
+                            </a>
+                        
+                            <a href="/tags/%E7%B3%BB%E7%BB%9F%E9%83%A8%E7%BD%B2/">
+                                <span class="chip bg-color">系统部署</span>
                             </a>
                         
                     </div>
@@ -425,8 +447,12 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E9%A1%B9%E7%9B%AE%E6%95%99%E7%A8%8B/" class="post-category">
-                                项目教程
+                            <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/" class="post-category">
+                                系统运维
+                            </a>
+                        
+                            <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/" class="post-category">
+                                基础设施
                             </a>
                         
                     </div>
@@ -438,17 +464,37 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-05-20
+                    2023-09-08
                 </div>
                 
 
                 
-
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2023-09-08
+                </div>
                 
 
                 
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    1.2k
+                </div>
+                
 
                 
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    4 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
             </div>
         </div>
         <hr class="clearfix">
@@ -459,81 +505,136 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="WIN10封装过程，以及自定义方案"><a href="#WIN10封装过程，以及自定义方案" class="headerlink" title="WIN10封装过程，以及自定义方案"></a>WIN10封装过程，以及自定义方案</h1><p>工作中常常遇到批量部署，以及大量的环境安装，变量的设置，尤其是面对企业不同部门间的系统维护，大量的定制软件，以及专线环境，面对比较大量的数据传输，是个十分不效率的问题。可以采用自己缝状系统的方式来改善。将标准软件，环境，变量，本地策略等全部配置好后，直接进行打包，从而大幅度提高效率。</p>
-<h2 id="事先准备"><a href="#事先准备" class="headerlink" title="事先准备"></a>事先准备</h2><ol>
-<li><p><u><strong>WIN10最新版ISO文件</strong></u> 下载链接：<a target="_blank" rel="noopener" href="https://www.microsoft.com/zh-cn/software-download/windows10ISO">https://www.microsoft.com/zh-cn/software-download/windows10ISO</a></p>
-</li>
-<li><p>NTlite系统镜像制作工具。 下载链接：<a target="_blank" rel="noopener" href="https://www.ntlite.com/download/">https://www.ntlite.com/download/</a></p>
-</li>
-<li><p>dism++系统精简工具。 下载链接：<a target="_blank" rel="noopener" href="http://www.chuyu.me/zh-Hans/">http://www.chuyu.me/zh-Hans/</a></p>
-</li>
-<li><p>优起通 IT天空·PE。下载链接：<a target="_blank" rel="noopener" href="https://www.itsk.com/thread-416919-1-1.html">https://www.itsk.com/thread-416919-1-1.html</a></p>
-</li>
-<li><p>万能驱动 IT天空·驱动整合。 下载链接：<a target="_blank" rel="noopener" href="https://www.itsk.com/forum.php?mod=viewthread&amp;tid=416918&amp;highlight=%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD">https://www.itsk.com/forum.php?mod=viewthread&amp;tid=416918&amp;highlight=%CD%F2%C4%DC%C7%FD%B6%AF</a></p>
-</li>
-<li><p>虚拟机 hyper-v  vmware等皆可。</p>
-</li>
-</ol>
-<hr>
-<h2 id="系统安装"><a href="#系统安装" class="headerlink" title="系统安装"></a>系统安装</h2><ol>
-<li>首先部署虚拟机。<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081513580.png"></li>
-<li>安装系统<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081513034.png"><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081513216.png"></li>
-<li>oobe设置<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514271.png"></li>
-<li>删除oobx创建的账户,并启用administrator。（<u><strong>重要千万不要忘记启用administrator</strong></u>）<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514423.png"><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514417.png"><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514093.png"></li>
-<li>注销，以administrator登录<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514774.png"></li>
-</ol>
-<p><em><strong>安装系统结束</strong></em></p>
-<hr>
-<h2 id="标准软件安装，环境配置"><a href="#标准软件安装，环境配置" class="headerlink" title="标准软件安装，环境配置"></a>标准软件安装，环境配置</h2><ol>
-<li><p>电源计划：卓越性能 开启，使用CMD或者powershell 输入以下命令。</p>
-<p>``` MS DOS<br>powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61</p>
-</li>
-</ol>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514835.png"></p>
-<p>然后在控制面板中打开电源计划，开启卓越性能<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514681.png"></p>
-<ol start="2">
-<li>个性化设置，桌面右键，个性化，根据自己的需求设定主题，桌面图标，任务栏样式，等。<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514582.png"></li>
-<li>edge浏览器插件安装，我这里推荐使用adblock plus 和百度药丸，可以有效的屏蔽大部分广告。<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514393.png"><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514234.png"></li>
-</ol>
-<p>3.环境功能安装。因为我这镜像趋向于纯净安装，只添加net 3.5  smb协议。<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514895.png"></p>
-<ol start="4">
-<li>功能与本地策略设置（我倾向于开启存储感知）</li>
-</ol>
-<blockquote>
-<ul>
-<li>本地策略开启存储感知时效为每天<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514146.png"></li>
-<li><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514301.png"></li>
-<li>存储感知全部开启，阈值设置为1.</li>
+                <h1 id="Windows-10系统封装详细教程"><a href="#Windows-10系统封装详细教程" class="headerlink" title="Windows 10系统封装详细教程"></a>Windows 10系统封装详细教程</h1><p>在企业IT运维工作中，常常需要面对批量部署和大量环境安装的需求。尤其是在处理不同部门间的系统维护时，需要安装大量定制软件和配置特定环境变量，如果每次都手动安装配置，会耗费大量时间和精力。通过系统封装的方式，可以将标准软件、环境配置、系统变量、本地策略等全部预配置好后打包，从而大幅度提高部署效率。</p>
+<h2 id="事前准备"><a href="#事前准备" class="headerlink" title="事前准备"></a>事前准备</h2><p>在开始封装之前，需要准备以下工具和资源：</p>
+<h3 id="1-系统镜像"><a href="#1-系统镜像" class="headerlink" title="1. 系统镜像"></a>1. 系统镜像</h3><p><a target="_blank" rel="noopener" href="https://www.microsoft.com/zh-cn/software-download/windows10ISO">Windows 10最新版ISO文件</a></p>
+<h3 id="2-封装工具"><a href="#2-封装工具" class="headerlink" title="2. 封装工具"></a>2. 封装工具</h3><ul>
+<li><strong>NTlite</strong>：系统镜像制作工具<br><a target="_blank" rel="noopener" href="https://www.ntlite.com/download/">NTlite下载链接</a></li>
+<li>**Dism++**：系统精简和优化工具<br><a target="_blank" rel="noopener" href="http://www.chuyu.me/zh-Hans/">Dism++下载链接</a></li>
 </ul>
+<h3 id="3-辅助工具"><a href="#3-辅助工具" class="headerlink" title="3. 辅助工具"></a>3. 辅助工具</h3><ul>
+<li><strong>优起通PE</strong>：IT天空PE启动盘<br><a target="_blank" rel="noopener" href="https://www.itsk.com/thread-416919-1-1.html">优起通下载链接</a></li>
+<li><strong>万能驱动</strong>：IT天空驱动整合包<br><a target="_blank" rel="noopener" href="https://www.itsk.com/forum.php?mod=viewthread&tid=416918&highlight=%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD">万能驱动下载链接</a></li>
+</ul>
+<h3 id="4-虚拟化环境"><a href="#4-虚拟化环境" class="headerlink" title="4. 虚拟化环境"></a>4. 虚拟化环境</h3><ul>
+<li>Hyper-V、VMware或其他虚拟化软件</li>
+</ul>
+<h2 id="系统安装过程"><a href="#系统安装过程" class="headerlink" title="系统安装过程"></a>系统安装过程</h2><h3 id="1-部署虚拟机环境"><a href="#1-部署虚拟机环境" class="headerlink" title="1. 部署虚拟机环境"></a>1. 部署虚拟机环境</h3><p>创建新的虚拟机用于系统封装：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081513580.png" alt="虚拟机创建" title="创建虚拟机"></p>
+<h3 id="2-安装Windows-10系统"><a href="#2-安装Windows-10系统" class="headerlink" title="2. 安装Windows 10系统"></a>2. 安装Windows 10系统</h3><p>执行Windows 10系统安装：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081513034.png" alt="系统安装界面1" title="系统安装界面"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081513216.png" alt="系统安装界面2" title="分区设置"></p>
+<h3 id="3-OOBE设置"><a href="#3-OOBE设置" class="headerlink" title="3. OOBE设置"></a>3. OOBE设置</h3><p>完成初始设置向导（Out of Box Experience）：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514271.png" alt="OOBE设置" title="初始设置向导"></p>
+<h3 id="4-用户账户配置"><a href="#4-用户账户配置" class="headerlink" title="4. 用户账户配置"></a>4. 用户账户配置</h3><p>删除OOBE创建的用户账户，并启用Administrator账户：</p>
+<blockquote>
+<p><strong>重要提示</strong>：千万不要忘记启用Administrator账户</p>
 </blockquote>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514423.png" alt="删除用户账户" title="删除默认用户"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514417.png" alt="启用Administrator" title="启用管理员账户"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514093.png" alt="账户管理" title="账户设置"></p>
+<h3 id="5-登录Administrator账户"><a href="#5-登录Administrator账户" class="headerlink" title="5. 登录Administrator账户"></a>5. 登录Administrator账户</h3><p>注销当前用户，使用Administrator账户登录：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514774.png" alt="登录Administrator" title="管理员登录"></p>
 <hr>
-<h2 id="清理，优化"><a href="#清理，优化" class="headerlink" title="清理，优化"></a>清理，优化</h2><p>使用Dism++根据自己的需求，清理 以及开启对应的功能<img src="/images/dism++%E4%BC%98%E5%8C%96.png"></p>
-<hr>
-<h2 id="封装系统"><a href="#封装系统" class="headerlink" title="封装系统"></a>封装系统</h2><p>使用Dism++的系统备份功能备份镜像,该功能可进行增量备份实现多个版本共同一个镜像文件。<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514056.png"></p>
+<h2 id="标准软件安装与环境配置"><a href="#标准软件安装与环境配置" class="headerlink" title="标准软件安装与环境配置"></a>标准软件安装与环境配置</h2><h3 id="1-电源计划优化"><a href="#1-电源计划优化" class="headerlink" title="1. 电源计划优化"></a>1. 电源计划优化</h3><p>启用Windows的”卓越性能”电源计划：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powercfg -duplicatescheme e9a42b02-d5df-<span class="number">448</span>d-aa00-<span class="number">03</span>f14749eb61</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514835.png" alt="启用卓越性能命令" title="命令执行"></p>
+<p>在控制面板中打开电源计划，开启卓越性能：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514681.png" alt="电源计划设置" title="电源计划配置"></p>
+<h3 id="2-个性化设置"><a href="#2-个性化设置" class="headerlink" title="2. 个性化设置"></a>2. 个性化设置</h3><p>根据需求设定桌面个性化配置：</p>
 <ul>
-<li>总结做出的更改</li>
+<li>桌面右键 → 个性化</li>
+<li>设置主题、桌面图标、任务栏样式等</li>
 </ul>
-<blockquote>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514582.png" alt="个性化设置" title="个性化配置"></p>
+<h3 id="3-Edge浏览器插件安装"><a href="#3-Edge浏览器插件安装" class="headerlink" title="3. Edge浏览器插件安装"></a>3. Edge浏览器插件安装</h3><p>推荐安装以下实用插件：</p>
+<ul>
+<li><strong>Adblock Plus</strong>：广告屏蔽插件</li>
+<li><strong>百度药丸</strong>：优化百度搜索体验</li>
+</ul>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514393.png" alt="Adblock Plus安装" title="Adblock Plus"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514234.png" alt="百度药丸安装" title="百度药丸"></p>
+<h3 id="4-环境功能安装"><a href="#4-环境功能安装" class="headerlink" title="4. 环境功能安装"></a>4. 环境功能安装</h3><p>根据镜像需求安装必要功能组件：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514895.png" alt="功能安装" title="功能组件安装"></p>
+<h3 id="5-功能与本地策略设置"><a href="#5-功能与本地策略设置" class="headerlink" title="5. 功能与本地策略设置"></a>5. 功能与本地策略设置</h3><p>推荐开启存储感知功能以优化磁盘空间：</p>
+<h4 id="本地策略设置"><a href="#本地策略设置" class="headerlink" title="本地策略设置"></a>本地策略设置</h4><ul>
+<li>开启存储感知，设置时效为每天执行</li>
+</ul>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514146.png" alt="存储感知策略设置" title="组策略配置"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514301.png" alt="存储感知设置" title="存储感知配置"></p>
+<ul>
+<li>存储感知全部开启，阈值设置为1</li>
+</ul>
+<hr>
+<h2 id="系统清理与优化"><a href="#系统清理与优化" class="headerlink" title="系统清理与优化"></a>系统清理与优化</h2><p>使用Dism++根据实际需求进行系统清理和功能优化：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514056.png" alt="Dism++优化" title="Dism++优化界面"></p>
+<hr>
+<h2 id="系统封装"><a href="#系统封装" class="headerlink" title="系统封装"></a>系统封装</h2><p>使用Dism++的系统备份功能创建系统镜像：</p>
+<p>该功能支持增量备份，可实现多个版本共用一个镜像文件。</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514056.png" alt="Dism++系统备份" title="系统备份功能"></p>
+<hr>
+<h2 id="封装总结"><a href="#封装总结" class="headerlink" title="封装总结"></a>封装总结</h2><p>本次封装主要进行了以下更改：</p>
 <ol>
-<li>删除了oobe账户，开启administrator</li>
-<li>开启了卓越性能</li>
-<li>开启了每天清理一次的存储感知</li>
-<li>edge浏览器添加了2个广告屏蔽插件</li>
-<li>添加了net 3.5  以及smb1.0</li>
+<li>删除了OOBE账户，启用Administrator账户</li>
+<li>开启了卓越性能电源计划</li>
+<li>配置了每天执行的存储感知功能</li>
+<li>在Edge浏览器中安装了2个广告屏蔽插件</li>
+<li>添加了.NET Framework 3.5和SMB 1.0协议</li>
 </ol>
+<p>以上修改可根据实际需求进行调整，制作出最符合自身情况的完美方案。</p>
+<hr>
+<h2 id="ISO镜像打包"><a href="#ISO镜像打包" class="headerlink" title="ISO镜像打包"></a>ISO镜像打包</h2><p>将封装好的系统打包成ISO镜像文件，便于分发和部署。</p>
+<h3 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1. 准备工作"></a>1. 准备工作</h3><p>使用NTlite软件进行ISO打包：</p>
+<ol>
+<li>将原版ISO镜像解压</li>
+<li>将新封装好的ESD文件重命名为<code>install.esd</code></li>
+<li>在解压的ISO文件夹中，将<code>sources</code>目录下的原<code>install.esd</code>文件替换为新的ESD文件</li>
+</ol>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514703.png" alt="ESD文件替换" title="文件替换"></p>
+<h3 id="2-使用NTlite创建ISO"><a href="#2-使用NTlite创建ISO" class="headerlink" title="2. 使用NTlite创建ISO"></a>2. 使用NTlite创建ISO</h3><ol>
+<li><p>打开NTlite，添加映像文件夹，选择解压的ISO文件夹</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514600.png" alt="添加映像文件夹" title="添加映像"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514596.png" alt="映像加载" title="映像加载"></p>
+</li>
+<li><p>点击创建ISO按钮</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081515838.png" alt="创建ISO" title="创建ISO"></p>
+</li>
+<li><p>等待创建完成</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081515760.png" alt="创建进度" title="创建进度"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081515657.png" alt="创建完成" title="创建完成"></p>
+</li>
+</ol>
+<hr>
+<h2 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h2><p>创建完成的ISO镜像可用于以下场景：</p>
+<ul>
+<li>物理机系统安装</li>
+<li>虚拟机部署（VMware、Hyper-V等）</li>
+<li>批量部署工具集成</li>
+</ul>
+<blockquote>
+<p><strong>注意</strong>：封装的ISO镜像不可用于系统升级，仅适用于全新安装。</p>
 </blockquote>
-<p>以上修改可根据自身需要设置，制作一个切合自己实际情况，最完美的方案。</p>
+<h3 id="部署建议"><a href="#部署建议" class="headerlink" title="部署建议"></a>部署建议</h3><p>安装系统时建议配合以下工具使用：</p>
+<ul>
+<li>IT天空的优起通PE</li>
+<li>万能驱动工具</li>
+</ul>
 <hr>
-<h2 id="ISO打包"><a href="#ISO打包" class="headerlink" title="ISO打包"></a>ISO打包</h2><p>打包成ISO需要用到Ntlite软件，首先将原母盘解压，将新封装好的ESD文件，改名install.ESD，然后在解压的ISO文件夹/sources替换原来的install.ESD</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514703.png"></p>
-<p>打开NTlite，添加映像文件夹，打开解压的ISO文件夹<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514600.png"></p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514596.png"></p>
-<p>打开后，点击创建ISO。<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081515838.png"></p>
-<p>创建完成<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081515760.png"><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081515657.png"></p>
-<hr>
-<h2 id="打包完成"><a href="#打包完成" class="headerlink" title="打包完成"></a>打包完成</h2><p>ISO创建完成可以正常用于系统安装，虚拟机vmware hyper-v等。但不可用与系统升级。</p>
-<p>安装系统建议配合IT天空的优起通PE/万能驱动。</p>
-<p>以上封装的ISO下载地址：复制这段内容后打开百度网盘App，操作更方便哦。 链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1He-2W9HDV0HHf_FeLVpvvg">https://pan.baidu.com/s/1He-2W9HDV0HHf_FeLVpvvg</a> 提取码：120z  –来自百度网盘超级会员v4的分享</p>
+<h2 id="安全与合规提醒"><a href="#安全与合规提醒" class="headerlink" title="安全与合规提醒"></a>安全与合规提醒</h2><ol>
+<li><strong>授权合规</strong>：确保使用的Windows 10镜像具有合法授权</li>
+<li><strong>软件许可</strong>：封装的软件应符合相关许可协议</li>
+<li><strong>企业策略</strong>：遵循企业的安全策略和合规要求</li>
+<li><strong>备份恢复</strong>：在批量部署前进行充分测试</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过系统封装，可以显著提高企业IT运维效率，特别是在需要批量部署相同配置的场景下。本文介绍的封装流程涵盖了从系统安装到最终ISO打包的完整过程，可根据实际需求进行调整和优化。</p>
+<p>建议在实际应用中：</p>
+<ol>
+<li>建立标准化的封装流程</li>
+<li>定期更新封装镜像以包含最新的安全补丁</li>
+<li>建立完善的测试机制确保封装质量</li>
+<li>做好版本管理和文档记录</li>
+</ol>
 
                 
             </div>
@@ -560,7 +661,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/05/20/win10%E5%B0%81%E8%A3%85/">http://example.com/2021/05/20/win10%E5%B0%81%E8%A3%85/</a>
+                    <a href="http://127.0.0.1:4000/2023/09/08/win10%E5%B0%81%E8%A3%85/">http://127.0.0.1:4000/2023/09/08/win10%E5%B0%81%E8%A3%85/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -602,20 +703,24 @@
                                     <span class="chip bg-color">Windows</span>
                                 </a>
                             
-                                <a href="/tags/%E6%95%99%E7%A8%8B/">
-                                    <span class="chip bg-color">教程</span>
+                                <a href="/tags/%E5%B0%81%E8%A3%85/">
+                                    <span class="chip bg-color">封装</span>
+                                </a>
+                            
+                                <a href="/tags/%E7%B3%BB%E7%BB%9F%E9%83%A8%E7%BD%B2/">
+                                    <span class="chip bg-color">系统部署</span>
                                 </a>
                             
                         </div>
                     
                 </div>
                 <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/share/css/share.min.css">
 <div id="article-share">
 
     
     <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="/libs/share/js/social-share.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/share/js/social-share.min.js"></script>
     
 
     
@@ -625,138 +730,12 @@
                 </div>
             </div>
             
-                <style>
-    #reward {
-        margin: 40px 0;
-        text-align: center;
-    }
-
-    #reward .reward-link {
-        font-size: 1.4rem;
-        line-height: 38px;
-    }
-
-    #reward .btn-floating:hover {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    #rewardModal {
-        width: 320px;
-        height: 350px;
-    }
-
-    #rewardModal .reward-title {
-        margin: 15px auto;
-        padding-bottom: 5px;
-    }
-
-    #rewardModal .modal-content {
-        padding: 10px;
-    }
-
-    #rewardModal .close {
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        color: rgba(0, 0, 0, 0.5);
-        font-size: 1.3rem;
-        line-height: 20px;
-        cursor: pointer;
-    }
-
-    #rewardModal .close:hover {
-        color: #ef5350;
-        transform: scale(1.3);
-        -moz-transform:scale(1.3);
-        -webkit-transform:scale(1.3);
-        -o-transform:scale(1.3);
-    }
-
-    #rewardModal .reward-tabs {
-        margin: 0 auto;
-        width: 210px;
-    }
-
-    .reward-tabs .tabs {
-        height: 38px;
-        margin: 10px auto;
-        padding-left: 0;
-    }
-
-    .reward-content ul {
-        padding-left: 0 !important;
-    }
-
-    .reward-tabs .tabs .tab {
-        height: 38px;
-        line-height: 38px;
-    }
-
-    .reward-tabs .tab a {
-        color: #fff;
-        background-color: #ccc;
-    }
-
-    .reward-tabs .tab a:hover {
-        background-color: #ccc;
-        color: #fff;
-    }
-
-    .reward-tabs .wechat-tab .active {
-        color: #fff !important;
-        background-color: #22AB38 !important;
-    }
-
-    .reward-tabs .alipay-tab .active {
-        color: #fff !important;
-        background-color: #019FE8 !important;
-    }
-
-    .reward-tabs .reward-img {
-        width: 210px;
-        height: 210px;
-    }
-</style>
-
-<div id="reward">
-    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
-
-    <!-- Modal Structure -->
-    <div id="rewardModal" class="modal">
-        <div class="modal-content">
-            <a class="close modal-close"><i class="fas fa-times"></i></a>
-            <h4 class="reward-title">你的赏识是我前进的动力</h4>
-            <div class="reward-content">
-                <div class="reward-tabs">
-                    <ul class="tabs row">
-                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
-                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
-                    </ul>
-                    <div id="alipay">
-                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
-                    </div>
-                    <div id="wechat">
-                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $(function () {
-        $('.tabs').tabs();
-    });
-</script>
-
-            
         </div>
     </div>
 
     
-        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
-<link rel="stylesheet" href="/css/my-gitalk.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/my-gitalk.css">
 
 <div class="card gitalk-card" data-aos="fade-up">
     <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
@@ -766,15 +745,15 @@
     <div id="gitalk-container" class="card-content"></div>
 </div>
 
-<script src="/libs/gitalk/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/gitalk/gitalk.min.js"></script>
 <script>
     let gitalk = new Gitalk({
-        clientID: '',
-        clientSecret: '',
-        repo: '',
-        owner: '',
-        admin: null,
-        id: '2021-05-20T09-06-01',
+        clientID: 'Ov23liWZgseSe42ZYLbk',
+        clientSecret: '2c994858e1b7678f92b060716b0390bf71cdc01b',
+        repo: 'bsligm.github.io',
+        owner: 'bsligm',
+        admin: ["bsligm"],
+        id: '2023-09-08T15-00-00',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -804,13 +783,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/">
+                <a href="/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="windows 域环境下批量部署bitlocker">
+                        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/6.jpg" class="responsive-img" alt="Jump server单节点无外置数据库部署">
                         
-                        <span class="card-title">windows 域环境下批量部署bitlocker</span>
+                        <span class="card-title">Jump server单节点无外置数据库部署</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -821,14 +800,18 @@
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-02-22
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-10-18
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/" class="post-category">
-                                    基础设施
+                            <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/" class="post-category">
+                                    系统运维
+                                </a>
+                            
+                            <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86/" class="post-category">
+                                    安全管理
                                 </a>
                             
                             
@@ -838,16 +821,16 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/AD-%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
-                        <span class="chip bg-color">AD 域控制器</span>
+                    <a href="/tags/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/">
+                        <span class="chip bg-color">基础设施</span>
                     </a>
                     
-                    <a href="/tags/Helpdesk/">
-                        <span class="chip bg-color">Helpdesk</span>
+                    <a href="/tags/%E5%A0%A1%E5%9E%92%E6%9C%BA/">
+                        <span class="chip bg-color">堡垒机</span>
                     </a>
                     
-                    <a href="/tags/powershell/">
-                        <span class="chip bg-color">powershell</span>
+                    <a href="/tags/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/">
+                        <span class="chip bg-color">系统运维</span>
                     </a>
                     
                 </div>
@@ -861,13 +844,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/05/06/AD%E6%90%AD%E5%BB%BA/">
+                <a href="/2023/08/07/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="windows server 安装以及AD域服务搭建">
+                        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/7.jpg" class="responsive-img" alt="华为Atlas800服务器安装银河麒麟">
                         
-                        <span class="card-title">windows server 安装以及AD域服务搭建</span>
+                        <span class="card-title">华为Atlas800服务器安装银河麒麟</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -878,14 +861,18 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-06
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-07
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%A1%8C%E9%9D%A2%E7%BB%B4%E6%8A%A4/" class="post-category">
-                                    桌面维护
+                            <a href="/categories/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/" class="post-category">
+                                    基础设施
+                                </a>
+                            
+                            <a href="/categories/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/" class="post-category">
+                                    服务器管理
                                 </a>
                             
                             
@@ -895,12 +882,20 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Helpdesk/">
-                        <span class="chip bg-color">Helpdesk</span>
+                    <a href="/tags/%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/">
+                        <span class="chip bg-color">银河麒麟</span>
                     </a>
                     
-                    <a href="/tags/Server/">
-                        <span class="chip bg-color">Server</span>
+                    <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/">
+                        <span class="chip bg-color">服务器</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                        <span class="chip bg-color">华为</span>
+                    </a>
+                    
+                    <a href="/tags/Atlas800/">
+                        <span class="chip bg-color">Atlas800</span>
                     </a>
                     
                 </div>
@@ -941,7 +936,7 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: 启明星辰<br />'
+            + '来源: 127.0.0.1<br />'
             + '文章作者: 李广明<br />'
             + '文章链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
@@ -953,21 +948,21 @@
 
 
 <!-- 代码块功能依赖 -->
-<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeBlockFuction.js"></script>
 
 <!-- 代码语言 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeLang.js"></script>
 
 
 <!-- 代码块复制 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeCopy.js"></script>
 
 
 <!-- 代码块收缩 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeShrink.js"></script>
 
 
     </div>
@@ -988,14 +983,14 @@
 </div>
 
 
-<script src="/libs/tocbot/tocbot.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/tocbot/tocbot.min.js"></script>
 <script>
     $(function () {
         tocbot.init({
             tocSelector: '#toc-content',
             contentSelector: '#articleContent',
             headingsOffset: -($(window).height() * 0.4 - 45),
-            collapseDepth: Number('0'),
+            collapseDepth: Number('2'),
             headingSelector: 'h2, h3, h4'
         });
 
@@ -1073,71 +1068,20 @@
 
     <footer class="page-footer bg-color">
     
-        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
-<style>
-    .aplayer .aplayer-lrc p {
-        
-        display: none;
-        
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 16px !important;
-    }
-
-    .aplayer .aplayer-lrc p.aplayer-lrc-current {
-        
-        display: none;
-        
-        font-size: 15px;
-        color: #42b983;
-    }
-
-    
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
-        left: -66px !important;
-    }
-
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
-        left: 0px !important;
-    }
-
-    
-</style>
-<div class="">
-    
-    <div class="row">
-        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
-                   server="netease"
-                   type="playlist"
-                   id="6732654392"
-                   fixed='true'
-                   autoplay='true'
-                   theme='#42b983'
-                   loop='all'
-                   order='random'
-                   preload='auto'
-                   volume='0.7'
-                   list-folded='true'
-        >
-        </meting-js>
-    </div>
-</div>
-
-<script src="/libs/aplayer/APlayer.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
-
-    
-    <div class="container row center-align" style="margin-bottom: 0px !important;">
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2025</span>
+                <span id="year">2021-2025</span>
             
-            <span id="year">2019</span>
+            <span id="year">2021</span>
             <a href="/about" target="_blank">李广明</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">12.5k</span>&nbsp;字
             
             
             
@@ -1156,6 +1100,50 @@
             </span>
             
             <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2021";
+                    var startMonth = "5";
+                    var startDate = "6";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
             
             <br>
             
@@ -1186,6 +1174,10 @@
 
 
 
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
 
 </div>
     </div>
@@ -1306,12 +1298,12 @@ $(function () {
 </div>
 
 
-    <script src="/libs/materialize/materialize.min.js"></script>
-    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="/libs/aos/aos.js"></script>
-    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="/js/matery.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/js/matery.js"></script>
 
     <!-- Baidu Analytics -->
 
@@ -1332,10 +1324,8 @@ $(function () {
 </script>
 
     
-    <script src="/libs/others/clicklove.js" async="async"></script>
     
-    
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    <script async src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/others/busuanzi.pure.mini.js"></script>
     
 
     
@@ -1350,7 +1340,7 @@ $(function () {
     
 
     
-    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>

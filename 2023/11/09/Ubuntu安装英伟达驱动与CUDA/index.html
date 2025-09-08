@@ -4,8 +4,9 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Ubuntu安装英伟达驱动与CUDA, 启明星辰">
-    <meta name="description" content="">
+    <meta name="keywords" content="Ubuntu, 英伟达驱动, CUDA, GPU, Linux驱动安装">
+    <meta name="description" content="Ubuntu安装英伟达驱动与CUDA在深度学习、科学计算和图形处理等领域，英伟达GPU发挥着重要作用。要在Ubuntu系统中充分发挥GPU的性能，需要正确安装英伟达驱动和CUDA工具包。本文将详细介绍完整的安装过程。
+准备阶段在开始安装之前">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,24 +14,42 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;http://127.0.0.1:4000/2023/11/09/Ubuntu%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E9%A9%B1%E5%8A%A8%E4%B8%8ECUDA/&#34;},&#34;headline&#34;:&#34;Ubuntu安装英伟达驱动与CUDA&#34;,&#34;description&#34;:&#34;Ubuntu安装英伟达驱动与CUDA在深度学习、科学计算和图形处理等领域，英伟达GPU发挥着重要作用。要在Ubuntu系统中充分发挥GPU的性能，需要正确安装英伟达驱动和CUDA工具包。本文将详细介绍完整的安装过程。\n准备阶段在开始安装之前&#34;,&#34;datePublished&#34;:&#34;2023-11-09T03:40:00.000Z&#34;,&#34;dateModified&#34;:&#34;2023-11-09T03:40:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;http://127.0.0.1:4000/medias/logo.png&#34;}}}</script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Ubuntu安装英伟达驱动与CUDA | 启明星辰</title>
-    <link rel="icon" type="image/png" href="/favicon.png">
+    <!-- Baidu Analytics -->
 
-    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <!-- Baidu Push -->
 
-    <script src="/libs/jquery/jquery.min.js"></script>
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
 
+    <title>Ubuntu安装英伟达驱动与CUDA | 127.0.0.1</title>
+    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/my.css">
+
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/jquery/jquery.min.js"></script>
+    <link rel="alternate" href="/atom.xml" title="127.0.0.1" type="application/atom+xml">
 <meta name="generator" content="Hexo 5.4.0"></head>
-
 
 
 
@@ -41,9 +60,9 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">启明星辰</span>
+                    <span class="logo-span">127.0.0.1</span>
                 </a>
             </div>
             
@@ -129,12 +148,12 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">启明星辰</div>
+        <div class="logo-name">127.0.0.1</div>
         <div class="logo-desc">
             
-            Never really desperate, only the lost of the soul.
+            李广明的技术博客，专注于Windows服务器、网络技术、系统集成等IT领域知识分享
             
         </div>
     </div>
@@ -212,7 +231,7 @@
         
         <li><div class="divider"></div></li>
         <li>
-            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+            <a href="https://github.com/bsligm/bsligm.github.io" class="waves-effect waves-light" target="_blank">
                 <i class="fab fa-github-square fa-fw"></i>Fork Me
             </a>
         </li>
@@ -269,7 +288,7 @@
     }
 </style>
 
-<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+<a href="https://github.com/bsligm/bsligm.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
    data-tooltip="Fork Me" data-position="left" data-delay="50">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
@@ -288,7 +307,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/23.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -306,7 +325,7 @@
 <main class="post-container content">
 
     
-    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/tocbot/tocbot.css">
 <style>
     #articleContent h1::before,
     #articleContent h2::before,
@@ -443,12 +462,32 @@
                 
 
                 
-
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2023-11-09
+                </div>
                 
 
                 
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    858
+                </div>
+                
 
                 
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    3 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
             </div>
         </div>
         <hr class="clearfix">
@@ -459,65 +498,72 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Ubuntu安装英伟达驱动与CUDA"><a href="#Ubuntu安装英伟达驱动与CUDA" class="headerlink" title="Ubuntu安装英伟达驱动与CUDA"></a>Ubuntu安装英伟达驱动与CUDA</h1><h2 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h2><ol>
-<li><p>准备好英伟达GPU驱动</p>
-<p><a target="_blank" rel="noopener" href="https://www.nvidia.cn/Download/index.aspx?lang=cn">https://www.nvidia.cn/Download/index.aspx?lang=cn</a></p>
-</li>
-<li><p>确认需要的驱动<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091122261.png" alt="image-20231109112214578"></p>
-</li>
-</ol>
-<h2 id="安装驱动"><a href="#安装驱动" class="headerlink" title="安装驱动"></a>安装驱动</h2><ol>
-<li>首先安装前，需要确认Ubuntu有安装gcc g++ make</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install gcc g++ make</span><br></pre></td></tr></table></figure>
+                <h1 id="Ubuntu安装英伟达驱动与CUDA"><a href="#Ubuntu安装英伟达驱动与CUDA" class="headerlink" title="Ubuntu安装英伟达驱动与CUDA"></a>Ubuntu安装英伟达驱动与CUDA</h1><p>在深度学习、科学计算和图形处理等领域，英伟达GPU发挥着重要作用。要在Ubuntu系统中充分发挥GPU的性能，需要正确安装英伟达驱动和CUDA工具包。本文将详细介绍完整的安装过程。</p>
+<h2 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h2><p>在开始安装之前，需要做好以下准备工作：</p>
+<h3 id="1-确认硬件兼容性"><a href="#1-确认硬件兼容性" class="headerlink" title="1. 确认硬件兼容性"></a>1. 确认硬件兼容性</h3><p>访问英伟达官网确认您的GPU型号支持的驱动版本：<br><a target="_blank" rel="noopener" href="https://www.nvidia.cn/Download/index.aspx?lang=cn">NVIDIA驱动下载页面</a></p>
+<h3 id="2-检查系统依赖"><a href="#2-检查系统依赖" class="headerlink" title="2. 检查系统依赖"></a>2. 检查系统依赖</h3><p>确保Ubuntu系统已安装必要的编译工具：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install gcc g++ make</span><br></pre></td></tr></table></figure>
 
-<ol start="2">
-<li>将驱动上传到Ubuntu</li>
-<li>给驱动添加可执行权限</li>
-</ol>
+<h3 id="3-下载驱动文件"><a href="#3-下载驱动文件" class="headerlink" title="3. 下载驱动文件"></a>3. 下载驱动文件</h3><p>从英伟达官网下载适用于您GPU型号的驱动程序文件。</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091122261.png" alt="NVIDIA驱动下载页面示例" title="NVIDIA驱动下载页面示例"></p>
+<h2 id="安装英伟达驱动"><a href="#安装英伟达驱动" class="headerlink" title="安装英伟达驱动"></a>安装英伟达驱动</h2><p>按照以下步骤安装英伟达显卡驱动：</p>
+<h3 id="1-上传驱动文件"><a href="#1-上传驱动文件" class="headerlink" title="1. 上传驱动文件"></a>1. 上传驱动文件</h3><p>将下载的驱动文件上传到Ubuntu系统中。</p>
+<h3 id="2-添加执行权限"><a href="#2-添加执行权限" class="headerlink" title="2. 添加执行权限"></a>2. 添加执行权限</h3><p>为驱动文件添加执行权限：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x NVIDIA-Linux-*.run</span><br></pre></td></tr></table></figure>
 
-<ol start="4">
-<li>安装驱动</li>
-</ol>
+<h3 id="3-执行驱动安装"><a href="#3-执行驱动安装" class="headerlink" title="3. 执行驱动安装"></a>3. 执行驱动安装</h3><p>运行驱动安装程序：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./NVIDIA-Linux-*.run</span><br></pre></td></tr></table></figure>
 
-<ol start="5">
-<li>安装完成后，reboot 重启Ubuntu，验证安装</li>
-</ol>
+<p>安装过程中按照提示进行操作，通常需要：</p>
+<ul>
+<li>接受许可协议</li>
+<li>选择安装组件</li>
+<li>确认安装路径</li>
+</ul>
+<h3 id="4-验证安装结果"><a href="#4-验证安装结果" class="headerlink" title="4. 验证安装结果"></a>4. 验证安装结果</h3><p>重启系统后，验证驱动是否安装成功：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvidia-smi</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091238068.png" alt="image-20231109123803349"></p>
-<h2 id="安装CUDA"><a href="#安装CUDA" class="headerlink" title="安装CUDA"></a>安装CUDA</h2><ol>
-<li><p>访问英伟达CUDA官网<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-toolkit-archive">https://developer.nvidia.com/cuda-toolkit-archive</a></p>
-</li>
-<li><p>通过Nvidia-smi 确认CUDA对应版本<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091241712.png" alt="image-20231109124103674"></p>
-</li>
-<li><p>选择对应的cuda版本<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091241098.png" alt="image-20231109124156432"></p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091243683.png" alt="image-20231109124306992"></p>
-</li>
-<li><p>使用官网提供的runfile方法</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://developer.download.nvidia.com/compute/cuda/12.2.2/local_installers/cuda_12.2.2_535.104.05_linux.run      <span class="comment">#下载run文件</span></span><br><span class="line">sudo sh cuda_12.2.2_535.104.05_linux.run      <span class="comment">#运行run文件安装cuda</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091258885.png" alt="image-20231109125804385"></p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091254187.png" alt="image-20231109125314996"></p>
-<ol start="5">
-<li>编辑环境变量</li>
-</ol>
+<p>如果安装成功，将显示GPU信息和驱动版本：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091238068.png" alt="nvidia-smi命令输出示例" title="nvidia-smi命令输出示例"></p>
+<h2 id="安装CUDA工具包"><a href="#安装CUDA工具包" class="headerlink" title="安装CUDA工具包"></a>安装CUDA工具包</h2><p>CUDA是英伟达提供的并行计算平台和编程模型，用于开发GPU加速应用程序。</p>
+<h3 id="1-确认CUDA版本兼容性"><a href="#1-确认CUDA版本兼容性" class="headerlink" title="1. 确认CUDA版本兼容性"></a>1. 确认CUDA版本兼容性</h3><p>通过<code>nvidia-smi</code>命令确认支持的CUDA版本：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091241712.png" alt="CUDA版本兼容性检查" title="CUDA版本兼容性检查"></p>
+<h3 id="2-下载CUDA安装包"><a href="#2-下载CUDA安装包" class="headerlink" title="2. 下载CUDA安装包"></a>2. 下载CUDA安装包</h3><p>访问CUDA官方归档页面选择合适的版本：<br><a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-toolkit-archive">CUDA Toolkit Archive</a></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091241098.png" alt="CUDA版本选择页面" title="CUDA版本选择页面"></p>
+<h3 id="3-下载并安装CUDA"><a href="#3-下载并安装CUDA" class="headerlink" title="3. 下载并安装CUDA"></a>3. 下载并安装CUDA</h3><p>使用runfile方式安装CUDA：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载run文件</span></span><br><span class="line">wget https://developer.download.nvidia.com/compute/cuda/12.2.2/local_installers/cuda_12.2.2_535.104.05_linux.run</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行安装程序</span></span><br><span class="line">sudo sh cuda_12.2.2_535.104.05_linux.run</span><br></pre></td></tr></table></figure>
+
+<p>安装过程中注意：</p>
+<ul>
+<li>取消驱动程序的安装（如果已安装最新驱动）</li>
+<li>选择需要的组件进行安装</li>
+</ul>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091258885.png" alt="CUDA安装界面示例" title="CUDA安装界面示例"></p>
+<h3 id="4-配置环境变量"><a href="#4-配置环境变量" class="headerlink" title="4. 配置环境变量"></a>4. 配置环境变量</h3><p>编辑bash配置文件：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim ~/.bashrc</span><br></pre></td></tr></table></figure>
 
-<p>在文件末尾添加</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#/usr/local/cuda-12.2视 真实环境为准</span></span><br><span class="line"><span class="built_in">export</span> PATH=/usr/<span class="built_in">local</span>/cuda-12.2/bin<span class="variable">$&#123;PATH:+:<span class="variable">$&#123;PATH&#125;</span>&#125;</span></span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=/usr/<span class="built_in">local</span>/cuda-12.2/lib64<span class="variable">$&#123;LD_LIBRARY_PATH:+:<span class="variable">$&#123;LD_LIBRARY_PATH&#125;</span>&#125;</span></span><br><span class="line"><span class="built_in">export</span> CUDA_HOME=/usr/<span class="built_in">local</span>/cuda-12.2</span><br></pre></td></tr></table></figure>
+<p>在文件末尾添加以下环境变量（路径根据实际安装情况调整）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># CUDA环境变量配置（请根据实际安装路径调整）</span></span><br><span class="line"><span class="built_in">export</span> PATH=/usr/<span class="built_in">local</span>/cuda-12.2/bin<span class="variable">$&#123;PATH:+:<span class="variable">$&#123;PATH&#125;</span>&#125;</span></span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=/usr/<span class="built_in">local</span>/cuda-12.2/lib64<span class="variable">$&#123;LD_LIBRARY_PATH:+:<span class="variable">$&#123;LD_LIBRARY_PATH&#125;</span>&#125;</span></span><br><span class="line"><span class="built_in">export</span> CUDA_HOME=/usr/<span class="built_in">local</span>/cuda-12.2</span><br></pre></td></tr></table></figure>
 
-<p>更新系统环境</p>
+<p>使配置生效：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure>
 
-<ol start="6">
-<li>验证安装</li>
-</ol>
+<h3 id="5-验证CUDA安装"><a href="#5-验证CUDA安装" class="headerlink" title="5. 验证CUDA安装"></a>5. 验证CUDA安装</h3><p>检查CUDA编译器版本：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc -V</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091305908.png" alt="image-20231109130552044"></p>
+<p>成功安装后将显示CUDA编译器版本信息：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091305908.png" alt="nvcc命令输出示例" title="nvcc命令输出示例"></p>
+<h2 id="常见问题及解决方案"><a href="#常见问题及解决方案" class="headerlink" title="常见问题及解决方案"></a>常见问题及解决方案</h2><h3 id="1-驱动安装失败"><a href="#1-驱动安装失败" class="headerlink" title="1. 驱动安装失败"></a>1. 驱动安装失败</h3><p>如果驱动安装失败，可能的原因包括：</p>
+<ul>
+<li>Secure Boot启用：需要在BIOS中禁用Secure Boot</li>
+<li>内核模块冲突：卸载开源nouveau驱动</li>
+</ul>
+<p>卸载nouveau驱动：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt remove --purge nvidia-*</span><br><span class="line">sudo apt autoremove</span><br><span class="line">sudo apt autoclean</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-CUDA版本不匹配"><a href="#2-CUDA版本不匹配" class="headerlink" title="2. CUDA版本不匹配"></a>2. CUDA版本不匹配</h3><p>确保CUDA版本与驱动版本兼容，必要时升级驱动或降级CUDA。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过以上步骤，您已经成功在Ubuntu系统中安装了英伟达驱动和CUDA工具包。现在您可以开始进行GPU加速的开发工作了。</p>
+<p>建议定期检查并更新驱动程序，以获得最佳性能和新功能支持。在生产环境中使用时，建议先在测试环境中验证安装过程。</p>
 
                 
             </div>
@@ -544,7 +590,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2023/11/09/Ubuntu%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E9%A9%B1%E5%8A%A8%E4%B8%8ECUDA/">http://example.com/2023/11/09/Ubuntu%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E9%A9%B1%E5%8A%A8%E4%B8%8ECUDA/</a>
+                    <a href="http://127.0.0.1:4000/2023/11/09/Ubuntu%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E9%A9%B1%E5%8A%A8%E4%B8%8ECUDA/">http://127.0.0.1:4000/2023/11/09/Ubuntu%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E9%A9%B1%E5%8A%A8%E4%B8%8ECUDA/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -594,12 +640,12 @@
                     
                 </div>
                 <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/share/css/share.min.css">
 <div id="article-share">
 
     
     <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="/libs/share/js/social-share.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/share/js/social-share.min.js"></script>
     
 
     
@@ -609,138 +655,12 @@
                 </div>
             </div>
             
-                <style>
-    #reward {
-        margin: 40px 0;
-        text-align: center;
-    }
-
-    #reward .reward-link {
-        font-size: 1.4rem;
-        line-height: 38px;
-    }
-
-    #reward .btn-floating:hover {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    #rewardModal {
-        width: 320px;
-        height: 350px;
-    }
-
-    #rewardModal .reward-title {
-        margin: 15px auto;
-        padding-bottom: 5px;
-    }
-
-    #rewardModal .modal-content {
-        padding: 10px;
-    }
-
-    #rewardModal .close {
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        color: rgba(0, 0, 0, 0.5);
-        font-size: 1.3rem;
-        line-height: 20px;
-        cursor: pointer;
-    }
-
-    #rewardModal .close:hover {
-        color: #ef5350;
-        transform: scale(1.3);
-        -moz-transform:scale(1.3);
-        -webkit-transform:scale(1.3);
-        -o-transform:scale(1.3);
-    }
-
-    #rewardModal .reward-tabs {
-        margin: 0 auto;
-        width: 210px;
-    }
-
-    .reward-tabs .tabs {
-        height: 38px;
-        margin: 10px auto;
-        padding-left: 0;
-    }
-
-    .reward-content ul {
-        padding-left: 0 !important;
-    }
-
-    .reward-tabs .tabs .tab {
-        height: 38px;
-        line-height: 38px;
-    }
-
-    .reward-tabs .tab a {
-        color: #fff;
-        background-color: #ccc;
-    }
-
-    .reward-tabs .tab a:hover {
-        background-color: #ccc;
-        color: #fff;
-    }
-
-    .reward-tabs .wechat-tab .active {
-        color: #fff !important;
-        background-color: #22AB38 !important;
-    }
-
-    .reward-tabs .alipay-tab .active {
-        color: #fff !important;
-        background-color: #019FE8 !important;
-    }
-
-    .reward-tabs .reward-img {
-        width: 210px;
-        height: 210px;
-    }
-</style>
-
-<div id="reward">
-    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
-
-    <!-- Modal Structure -->
-    <div id="rewardModal" class="modal">
-        <div class="modal-content">
-            <a class="close modal-close"><i class="fas fa-times"></i></a>
-            <h4 class="reward-title">你的赏识是我前进的动力</h4>
-            <div class="reward-content">
-                <div class="reward-tabs">
-                    <ul class="tabs row">
-                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
-                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
-                    </ul>
-                    <div id="alipay">
-                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
-                    </div>
-                    <div id="wechat">
-                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $(function () {
-        $('.tabs').tabs();
-    });
-</script>
-
-            
         </div>
     </div>
 
     
-        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
-<link rel="stylesheet" href="/css/my-gitalk.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/my-gitalk.css">
 
 <div class="card gitalk-card" data-aos="fade-up">
     <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
@@ -750,14 +670,14 @@
     <div id="gitalk-container" class="card-content"></div>
 </div>
 
-<script src="/libs/gitalk/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/gitalk/gitalk.min.js"></script>
 <script>
     let gitalk = new Gitalk({
-        clientID: '',
-        clientSecret: '',
-        repo: '',
-        owner: '',
-        admin: null,
+        clientID: 'Ov23liWZgseSe42ZYLbk',
+        clientSecret: '2c994858e1b7678f92b060716b0390bf71cdc01b',
+        repo: 'bsligm.github.io',
+        owner: 'bsligm',
+        admin: ["bsligm"],
         id: '2023-11-09T11-40-00',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
@@ -793,7 +713,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="Ubuntu安装英伟达驱动与CUDA">
+                        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/23.jpg" class="responsive-img" alt="Ubuntu安装英伟达驱动与CUDA">
                         
                         <span class="card-title">Ubuntu安装英伟达驱动与CUDA</span>
                     </div>
@@ -847,7 +767,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="Jump server单节点无外置数据库部署">
+                        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/6.jpg" class="responsive-img" alt="Jump server单节点无外置数据库部署">
                         
                         <span class="card-title">Jump server单节点无外置数据库部署</span>
                     </div>
@@ -870,6 +790,10 @@
                                     系统运维
                                 </a>
                             
+                            <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86/" class="post-category">
+                                    安全管理
+                                </a>
+                            
                             
                         </span>
                     </div>
@@ -883,6 +807,10 @@
                     
                     <a href="/tags/%E5%A0%A1%E5%9E%92%E6%9C%BA/">
                         <span class="chip bg-color">堡垒机</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/">
+                        <span class="chip bg-color">系统运维</span>
                     </a>
                     
                 </div>
@@ -923,7 +851,7 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: 启明星辰<br />'
+            + '来源: 127.0.0.1<br />'
             + '文章作者: 李广明<br />'
             + '文章链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
@@ -935,21 +863,21 @@
 
 
 <!-- 代码块功能依赖 -->
-<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeBlockFuction.js"></script>
 
 <!-- 代码语言 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeLang.js"></script>
 
 
 <!-- 代码块复制 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeCopy.js"></script>
 
 
 <!-- 代码块收缩 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeShrink.js"></script>
 
 
     </div>
@@ -970,14 +898,14 @@
 </div>
 
 
-<script src="/libs/tocbot/tocbot.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/tocbot/tocbot.min.js"></script>
 <script>
     $(function () {
         tocbot.init({
             tocSelector: '#toc-content',
             contentSelector: '#articleContent',
             headingsOffset: -($(window).height() * 0.4 - 45),
-            collapseDepth: Number('0'),
+            collapseDepth: Number('2'),
             headingSelector: 'h2, h3, h4'
         });
 
@@ -1055,71 +983,20 @@
 
     <footer class="page-footer bg-color">
     
-        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
-<style>
-    .aplayer .aplayer-lrc p {
-        
-        display: none;
-        
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 16px !important;
-    }
-
-    .aplayer .aplayer-lrc p.aplayer-lrc-current {
-        
-        display: none;
-        
-        font-size: 15px;
-        color: #42b983;
-    }
-
-    
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
-        left: -66px !important;
-    }
-
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
-        left: 0px !important;
-    }
-
-    
-</style>
-<div class="">
-    
-    <div class="row">
-        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
-                   server="netease"
-                   type="playlist"
-                   id="6732654392"
-                   fixed='true'
-                   autoplay='true'
-                   theme='#42b983'
-                   loop='all'
-                   order='random'
-                   preload='auto'
-                   volume='0.7'
-                   list-folded='true'
-        >
-        </meting-js>
-    </div>
-</div>
-
-<script src="/libs/aplayer/APlayer.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
-
-    
-    <div class="container row center-align" style="margin-bottom: 0px !important;">
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2025</span>
+                <span id="year">2021-2025</span>
             
-            <span id="year">2019</span>
+            <span id="year">2021</span>
             <a href="/about" target="_blank">李广明</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">12.5k</span>&nbsp;字
             
             
             
@@ -1138,6 +1015,50 @@
             </span>
             
             <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2021";
+                    var startMonth = "5";
+                    var startDate = "6";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
             
             <br>
             
@@ -1168,6 +1089,10 @@
 
 
 
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
 
 </div>
     </div>
@@ -1288,12 +1213,12 @@ $(function () {
 </div>
 
 
-    <script src="/libs/materialize/materialize.min.js"></script>
-    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="/libs/aos/aos.js"></script>
-    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="/js/matery.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/js/matery.js"></script>
 
     <!-- Baidu Analytics -->
 
@@ -1314,10 +1239,8 @@ $(function () {
 </script>
 
     
-    <script src="/libs/others/clicklove.js" async="async"></script>
     
-    
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    <script async src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/others/busuanzi.pure.mini.js"></script>
     
 
     
@@ -1332,7 +1255,7 @@ $(function () {
     
 
     
-    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>

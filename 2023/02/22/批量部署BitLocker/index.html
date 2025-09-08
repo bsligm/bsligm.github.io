@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="windows 域环境下批量部署bitlocker, 启明星辰">
-    <meta name="description" content="">
+    <meta name="keywords" content="BitLocker, 批量部署, AD域, 组策略, TPM, 数据加密, 安全管理">
+    <meta name="description" content="Windows域环境下批量部署BitLockerBitLocker是Windows系统提供的全盘加密功能，能够有效保护存储在硬盘上的数据安全。在企业环境中，通过组策略可以实现BitLocker的批量部署和统一管理。本文将详细介绍在Windo">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,24 +13,42 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;http://127.0.0.1:4000/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/&#34;},&#34;headline&#34;:&#34;Windows域环境下批量部署BitLocker&#34;,&#34;description&#34;:&#34;Windows域环境下批量部署BitLockerBitLocker是Windows系统提供的全盘加密功能，能够有效保护存储在硬盘上的数据安全。在企业环境中，通过组策略可以实现BitLocker的批量部署和统一管理。本文将详细介绍在Windo&#34;,&#34;datePublished&#34;:&#34;2023-02-22T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2023-02-22T03:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;http://127.0.0.1:4000/medias/logo.png&#34;}}}</script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>windows 域环境下批量部署bitlocker | 启明星辰</title>
-    <link rel="icon" type="image/png" href="/favicon.png">
+    <!-- Baidu Analytics -->
 
-    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <!-- Baidu Push -->
 
-    <script src="/libs/jquery/jquery.min.js"></script>
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
 
+    <title>Windows域环境下批量部署BitLocker | 127.0.0.1</title>
+    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/my.css">
+
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/jquery/jquery.min.js"></script>
+    <link rel="alternate" href="/atom.xml" title="127.0.0.1" type="application/atom+xml">
 <meta name="generator" content="Hexo 5.4.0"></head>
-
 
 
 
@@ -41,9 +59,9 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">启明星辰</span>
+                    <span class="logo-span">127.0.0.1</span>
                 </a>
             </div>
             
@@ -129,12 +147,12 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">启明星辰</div>
+        <div class="logo-name">127.0.0.1</div>
         <div class="logo-desc">
             
-            Never really desperate, only the lost of the soul.
+            李广明的技术博客，专注于Windows服务器、网络技术、系统集成等IT领域知识分享
             
         </div>
     </div>
@@ -212,7 +230,7 @@
         
         <li><div class="divider"></div></li>
         <li>
-            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+            <a href="https://github.com/bsligm/bsligm.github.io" class="waves-effect waves-light" target="_blank">
                 <i class="fab fa-github-square fa-fw"></i>Fork Me
             </a>
         </li>
@@ -269,7 +287,7 @@
     }
 </style>
 
-<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+<a href="https://github.com/bsligm/bsligm.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
    data-tooltip="Fork Me" data-position="left" data-delay="50">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
@@ -288,12 +306,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/2.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">windows 域环境下批量部署bitlocker</h1>
+                    <h1 class="description center-align post-title">Windows域环境下批量部署BitLocker</h1>
                 </div>
             </div>
         </div>
@@ -306,7 +324,7 @@
 <main class="post-container content">
 
     
-    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/tocbot/tocbot.css">
 <style>
     #articleContent h1::before,
     #articleContent h2::before,
@@ -409,16 +427,20 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/AD-%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
-                                <span class="chip bg-color">AD 域控制器</span>
+                            <a href="/tags/AD%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
+                                <span class="chip bg-color">AD域控制器</span>
                             </a>
                         
                             <a href="/tags/Helpdesk/">
                                 <span class="chip bg-color">Helpdesk</span>
                             </a>
                         
-                            <a href="/tags/powershell/">
-                                <span class="chip bg-color">powershell</span>
+                            <a href="/tags/%E5%AE%89%E5%85%A8/">
+                                <span class="chip bg-color">安全</span>
+                            </a>
+                        
+                            <a href="/tags/PowerShell/">
+                                <span class="chip bg-color">PowerShell</span>
                             </a>
                         
                     </div>
@@ -431,6 +453,10 @@
                         
                             <a href="/categories/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/" class="post-category">
                                 基础设施
+                            </a>
+                        
+                            <a href="/categories/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86/" class="post-category">
+                                安全管理
                             </a>
                         
                     </div>
@@ -447,12 +473,32 @@
                 
 
                 
-
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2023-02-22
+                </div>
                 
 
                 
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    1.2k
+                </div>
+                
 
                 
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    4 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
             </div>
         </div>
         <hr class="clearfix">
@@ -463,41 +509,97 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="批量部署BitLocker"><a href="#批量部署BitLocker" class="headerlink" title="批量部署BitLocker"></a>批量部署BitLocker</h1><hr>
-<p><em><strong><u>本方案仅在具有TPM2.0芯片的PC生效</u></strong></em></p>
-<h2 id="DC开启BitLocker组件"><a href="#DC开启BitLocker组件" class="headerlink" title="DC开启BitLocker组件"></a>DC开启BitLocker组件</h2><p>DC服务器管理器中添加角色功能——BitLocker网络解锁</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221113330078.png" alt="image-20230221113330078"></p>
-<h2 id="脚本编写"><a href="#脚本编写" class="headerlink" title="脚本编写"></a>脚本编写</h2><p>因ps脚本使用组策略推送无法实现管理员身份运行，则需要以bat批处理的形式运行ps1脚本来执行关机脚本。</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="keyword">for</span> /f <span class="string">&quot;delims=:&quot;</span> %%i <span class="keyword">in</span> (<span class="string">&#x27;findstr /n &quot;^:ps1$&quot; &quot;%~f0&quot;&#x27;</span>) <span class="keyword">do</span> (</span><br><span class="line">	more +%%i <span class="string">&quot;%~f0&quot;</span> &gt; <span class="string">&quot;%temp%\bitlocker.ps1&quot;</span></span><br><span class="line">)</span><br><span class="line">powershell <span class="literal">-executionpolicy</span> remotesigned <span class="operator">-file</span> <span class="string">&quot;%temp%\bitlocker.ps1&quot;</span></span><br><span class="line">goto :eof</span><br><span class="line"></span><br><span class="line">:ps1</span><br><span class="line"><span class="built_in">get-bitlockervolume</span> | find `&quot;Off`&quot;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$</span>? <span class="operator">-eq</span> <span class="variable">$true</span>) &#123;</span><br><span class="line">    net use \\UNC路径 <span class="string">&quot;password&quot;</span> /user:domain\username  </span><br><span class="line">    manage<span class="literal">-bde</span> <span class="literal">-on</span> C: <span class="literal">-RecoveryPassword</span> &gt;&gt; \\UNC路径\<span class="variable">$env:COMPUTERNAME</span>.txt</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">exit</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+                <h1 id="Windows域环境下批量部署BitLocker"><a href="#Windows域环境下批量部署BitLocker" class="headerlink" title="Windows域环境下批量部署BitLocker"></a>Windows域环境下批量部署BitLocker</h1><p>BitLocker是Windows系统提供的全盘加密功能，能够有效保护存储在硬盘上的数据安全。在企业环境中，通过组策略可以实现BitLocker的批量部署和统一管理。本文将详细介绍在Windows域环境下批量部署BitLocker的完整方案。</p>
+<blockquote>
+<p><strong>重要提示</strong>：本方案仅适用于具有TPM 2.0芯片的PC设备。</p>
+</blockquote>
+<h2 id="域控制器配置"><a href="#域控制器配置" class="headerlink" title="域控制器配置"></a>域控制器配置</h2><h3 id="1-启用BitLocker网络解锁功能"><a href="#1-启用BitLocker网络解锁功能" class="headerlink" title="1. 启用BitLocker网络解锁功能"></a>1. 启用BitLocker网络解锁功能</h3><p>在域控制器服务器管理器中添加BitLocker网络解锁角色功能：</p>
+<ol>
+<li>打开”服务器管理器”</li>
+<li>选择”管理” → “添加角色和功能”</li>
+<li>在功能选择中勾选”BitLocker驱动器加密”和”BitLocker网络解锁”</li>
+<li>完成安装并向导</li>
+</ol>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221113330078.png" alt="DC添加BitLocker组件" title="添加BitLocker网络解锁功能"></p>
+<h2 id="脚本编写"><a href="#脚本编写" class="headerlink" title="脚本编写"></a>脚本编写</h2><p>由于PowerShell脚本通过组策略推送时无法以管理员身份运行，因此需要通过批处理文件来执行PowerShell脚本。</p>
+<h3 id="1-批处理脚本"><a href="#1-批处理脚本" class="headerlink" title="1. 批处理脚本"></a>1. 批处理脚本</h3><p>创建批处理文件来调用PowerShell脚本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">REM 提取并执行PowerShell脚本部分</span><br><span class="line">for &#x2F;f &quot;delims&#x3D;:&quot; %%i in (&#39;findstr &#x2F;n &quot;^:ps1$&quot; &quot;%~f0&quot;&#39;) do (</span><br><span class="line">    more +%%i &quot;%~f0&quot; &gt; &quot;%temp%\bitlocker.ps1&quot;</span><br><span class="line">)</span><br><span class="line">powershell -executionpolicy remotesigned -file &quot;%temp%\bitlocker.ps1&quot;</span><br><span class="line">goto :eof</span><br><span class="line"></span><br><span class="line">:ps1</span><br><span class="line"># PowerShell脚本部分</span><br><span class="line"># 检查BitLocker状态</span><br><span class="line">get-bitlockervolume | find &quot;Off&quot;</span><br><span class="line">if ($? -eq $true) &#123;</span><br><span class="line">    # 连接网络共享路径</span><br><span class="line">    net use \\UNC路径 &quot;password&quot; &#x2F;user:domain\username  </span><br><span class="line">    # 启用BitLocker并保存恢复密钥到网络共享</span><br><span class="line">    manage-bde -on C: -RecoveryPassword &gt;&gt; \\UNC路径\$env:COMPUTERNAME.txt</span><br><span class="line">&#125;</span><br><span class="line">else &#123;</span><br><span class="line">    exit</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><u><strong>（上述脚本为批处理代码）</strong></u></p>
-<h2 id="组策略设定"><a href="#组策略设定" class="headerlink" title="组策略设定"></a>组策略设定</h2><ol>
-<li>DC组策略编辑器创建BitLocker组合设定的GPO</li>
+<blockquote>
+<p><strong>说明</strong>：上述脚本为批处理代码，其中包含了PowerShell脚本部分。</p>
+</blockquote>
+<h3 id="2-脚本功能说明"><a href="#2-脚本功能说明" class="headerlink" title="2. 脚本功能说明"></a>2. 脚本功能说明</h3><p>该脚本的主要功能包括：</p>
+<ol>
+<li>检查当前系统C盘的BitLocker状态</li>
+<li>如果未启用，则连接到指定的网络共享路径</li>
+<li>启用C盘的BitLocker加密</li>
+<li>将恢复密钥保存到网络共享路径下的以计算机名命名的文本文件中</li>
 </ol>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221110312204.png" alt="image-20230221110312204"></p>
-<ol start="2">
-<li><p>GPO—计算机配置—策略—管理模板—Windows组件—BitLocker驱动器加密 —将BitLocker恢复信息储存在active directory域服务中改为<strong>已启用</strong> 。</p>
-</li>
-<li><p>GPO—计算机配置—策略—管理模板—Windows组件—BitLocker驱动器加密—操作系统驱动器—选择如何才能恢复BitLocker保护的操作系统驱动器改为<strong>已启用</strong><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221111148766.png" alt="image-20230221111148766"></p>
-</li>
-<li><p>新建一个关机执行脚本GPO执行写好的脚本</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221112332612.png" alt="image-20230221112332612"></p>
-<h2 id="实施"><a href="#实施" class="headerlink" title="实施"></a>实施</h2><ol>
-<li><p>将需上述两条GPO链接到需要开启BitLocker的OU</p>
-</li>
-<li><p>客户端执行gpupdate /force更新组策略</p>
-</li>
-<li><p>执行关机/重启</p>
-</li>
-<li><p>查看UNC路径下是否存在以计算机命名的txt文本文件，恢复密钥是否重定向</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221112816203.png" alt="image-20230221112816203"></p>
-</li>
-<li><p>检查DC PC账户是否已经备份BitLocker 恢复密钥</p>
-</li>
-<li><p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221113029252.png" alt="image-20230221113029252"></p>
-</li>
+<h2 id="组策略配置"><a href="#组策略配置" class="headerlink" title="组策略配置"></a>组策略配置</h2><h3 id="1-创建BitLocker组策略对象"><a href="#1-创建BitLocker组策略对象" class="headerlink" title="1. 创建BitLocker组策略对象"></a>1. 创建BitLocker组策略对象</h3><ol>
+<li>打开”组策略管理编辑器”</li>
+<li>创建新的组策略对象（GPO）用于BitLocker配置</li>
 </ol>
-</li>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221110312204.png" alt="创建BitLocker GPO" title="创建BitLocker组策略对象"></p>
+<h3 id="2-配置BitLocker恢复信息存储"><a href="#2-配置BitLocker恢复信息存储" class="headerlink" title="2. 配置BitLocker恢复信息存储"></a>2. 配置BitLocker恢复信息存储</h3><p>导航到：<code>计算机配置</code> → <code>策略</code> → <code>管理模板</code> → <code>Windows组件</code> → <code>BitLocker驱动器加密</code></p>
+<p>将”将BitLocker恢复信息储存在active directory域服务中”设置为<strong>已启用</strong>。</p>
+<h3 id="3-配置操作系统驱动器加密策略"><a href="#3-配置操作系统驱动器加密策略" class="headerlink" title="3. 配置操作系统驱动器加密策略"></a>3. 配置操作系统驱动器加密策略</h3><p>导航到：<code>计算机配置</code> → <code>策略</code> → <code>管理模板</code> → <code>Windows组件</code> → <code>BitLocker驱动器加密</code> → <code>操作系统驱动器</code></p>
+<p>将”选择如何才能恢复BitLocker保护的操作系统驱动器”设置为<strong>已启用</strong>。</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221111148766.png" alt="BitLocker驱动器加密配置" title="操作系统驱动器加密设置"></p>
+<h3 id="4-配置关机脚本"><a href="#4-配置关机脚本" class="headerlink" title="4. 配置关机脚本"></a>4. 配置关机脚本</h3><p>创建另一个组策略对象用于执行关机脚本：</p>
+<ol>
+<li>创建新的GPO用于关机脚本执行</li>
+<li>导航到：<code>计算机配置</code> → <code>Windows设置</code> → <code>脚本(启动/关机)</code> → <code>关机</code></li>
+<li>添加之前创建的批处理脚本</li>
+</ol>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221112332612.png" alt="关机脚本配置" title="关机脚本设置"></p>
+<h2 id="实施步骤"><a href="#实施步骤" class="headerlink" title="实施步骤"></a>实施步骤</h2><p>按照以下步骤实施BitLocker批量部署：</p>
+<h3 id="1-链接组策略对象"><a href="#1-链接组策略对象" class="headerlink" title="1. 链接组策略对象"></a>1. 链接组策略对象</h3><p>将上述两条GPO链接到需要开启BitLocker的组织单位（OU）。</p>
+<h3 id="2-更新组策略"><a href="#2-更新组策略" class="headerlink" title="2. 更新组策略"></a>2. 更新组策略</h3><p>在客户端执行以下命令强制更新组策略：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpupdate /force</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-执行重启"><a href="#3-执行重启" class="headerlink" title="3. 执行重启"></a>3. 执行重启</h3><p>重启客户端计算机以触发BitLocker加密过程。</p>
+<h3 id="4-验证部署结果"><a href="#4-验证部署结果" class="headerlink" title="4. 验证部署结果"></a>4. 验证部署结果</h3><ol>
+<li>检查网络共享路径下是否存在以计算机名命名的文本文件</li>
+<li>确认恢复密钥已成功重定向保存</li>
+</ol>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221112816203.png" alt="恢复密钥文件" title="恢复密钥文件"></p>
+<h3 id="5-验证AD备份"><a href="#5-验证AD备份" class="headerlink" title="5. 验证AD备份"></a>5. 验证AD备份</h3><p>检查域控制器中计算机账户是否已备份BitLocker恢复密钥：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221113029252.png" alt="AD中BitLocker密钥备份" title="AD中密钥备份"></p>
+<h2 id="安全建议"><a href="#安全建议" class="headerlink" title="安全建议"></a>安全建议</h2><ol>
+<li><strong>TPM芯片</strong>：确保所有目标设备都配备TPM 2.0芯片</li>
+<li><strong>网络共享安全</strong>：保护存储恢复密钥的网络共享路径</li>
+<li><strong>备份策略</strong>：定期备份AD中的BitLocker恢复信息</li>
+<li><strong>用户培训</strong>：向用户说明BitLocker的作用和注意事项</li>
+<li><strong>监控告警</strong>：建立BitLocker状态监控机制</li>
+</ol>
+<h2 id="故障排除"><a href="#故障排除" class="headerlink" title="故障排除"></a>故障排除</h2><h3 id="1-脚本执行失败"><a href="#1-脚本执行失败" class="headerlink" title="1. 脚本执行失败"></a>1. 脚本执行失败</h3><ul>
+<li>检查PowerShell执行策略</li>
+<li>验证网络共享路径访问权限</li>
+<li>确认脚本路径正确</li>
+</ul>
+<h3 id="2-BitLocker启用失败"><a href="#2-BitLocker启用失败" class="headerlink" title="2. BitLocker启用失败"></a>2. BitLocker启用失败</h3><ul>
+<li>检查TPM状态</li>
+<li>确认系统满足BitLocker要求</li>
+<li>查看系统事件日志</li>
+</ul>
+<h3 id="3-恢复密钥未保存"><a href="#3-恢复密钥未保存" class="headerlink" title="3. 恢复密钥未保存"></a>3. 恢复密钥未保存</h3><ul>
+<li>验证组策略配置</li>
+<li>检查网络连接</li>
+<li>确认AD权限设置</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过本文介绍的方案，可以在Windows域环境中实现BitLocker的批量部署和统一管理。该方案具有以下优势：</p>
+<ol>
+<li><strong>自动化程度高</strong>：通过组策略实现无人值守部署</li>
+<li><strong>安全性强</strong>：恢复密钥自动备份到AD和网络共享</li>
+<li><strong>管理便捷</strong>：集中管理加密策略</li>
+<li><strong>可扩展性好</strong>：适用于大规模部署场景</li>
+</ol>
+<p>建议在生产环境中部署前：</p>
+<ol>
+<li>在测试环境中充分验证</li>
+<li>制定详细的回滚计划</li>
+<li>建立完善的监控机制</li>
+<li>做好用户沟通和培训</li>
 </ol>
 
                 
@@ -525,7 +627,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/">http://example.com/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/</a>
+                    <a href="http://127.0.0.1:4000/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/">http://127.0.0.1:4000/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -563,28 +665,32 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/AD-%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
-                                    <span class="chip bg-color">AD 域控制器</span>
+                                <a href="/tags/AD%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
+                                    <span class="chip bg-color">AD域控制器</span>
                                 </a>
                             
                                 <a href="/tags/Helpdesk/">
                                     <span class="chip bg-color">Helpdesk</span>
                                 </a>
                             
-                                <a href="/tags/powershell/">
-                                    <span class="chip bg-color">powershell</span>
+                                <a href="/tags/%E5%AE%89%E5%85%A8/">
+                                    <span class="chip bg-color">安全</span>
+                                </a>
+                            
+                                <a href="/tags/PowerShell/">
+                                    <span class="chip bg-color">PowerShell</span>
                                 </a>
                             
                         </div>
                     
                 </div>
                 <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/share/css/share.min.css">
 <div id="article-share">
 
     
     <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="/libs/share/js/social-share.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/share/js/social-share.min.js"></script>
     
 
     
@@ -594,138 +700,12 @@
                 </div>
             </div>
             
-                <style>
-    #reward {
-        margin: 40px 0;
-        text-align: center;
-    }
-
-    #reward .reward-link {
-        font-size: 1.4rem;
-        line-height: 38px;
-    }
-
-    #reward .btn-floating:hover {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    #rewardModal {
-        width: 320px;
-        height: 350px;
-    }
-
-    #rewardModal .reward-title {
-        margin: 15px auto;
-        padding-bottom: 5px;
-    }
-
-    #rewardModal .modal-content {
-        padding: 10px;
-    }
-
-    #rewardModal .close {
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        color: rgba(0, 0, 0, 0.5);
-        font-size: 1.3rem;
-        line-height: 20px;
-        cursor: pointer;
-    }
-
-    #rewardModal .close:hover {
-        color: #ef5350;
-        transform: scale(1.3);
-        -moz-transform:scale(1.3);
-        -webkit-transform:scale(1.3);
-        -o-transform:scale(1.3);
-    }
-
-    #rewardModal .reward-tabs {
-        margin: 0 auto;
-        width: 210px;
-    }
-
-    .reward-tabs .tabs {
-        height: 38px;
-        margin: 10px auto;
-        padding-left: 0;
-    }
-
-    .reward-content ul {
-        padding-left: 0 !important;
-    }
-
-    .reward-tabs .tabs .tab {
-        height: 38px;
-        line-height: 38px;
-    }
-
-    .reward-tabs .tab a {
-        color: #fff;
-        background-color: #ccc;
-    }
-
-    .reward-tabs .tab a:hover {
-        background-color: #ccc;
-        color: #fff;
-    }
-
-    .reward-tabs .wechat-tab .active {
-        color: #fff !important;
-        background-color: #22AB38 !important;
-    }
-
-    .reward-tabs .alipay-tab .active {
-        color: #fff !important;
-        background-color: #019FE8 !important;
-    }
-
-    .reward-tabs .reward-img {
-        width: 210px;
-        height: 210px;
-    }
-</style>
-
-<div id="reward">
-    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
-
-    <!-- Modal Structure -->
-    <div id="rewardModal" class="modal">
-        <div class="modal-content">
-            <a class="close modal-close"><i class="fas fa-times"></i></a>
-            <h4 class="reward-title">你的赏识是我前进的动力</h4>
-            <div class="reward-content">
-                <div class="reward-tabs">
-                    <ul class="tabs row">
-                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
-                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
-                    </ul>
-                    <div id="alipay">
-                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
-                    </div>
-                    <div id="wechat">
-                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $(function () {
-        $('.tabs').tabs();
-    });
-</script>
-
-            
         </div>
     </div>
 
     
-        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
-<link rel="stylesheet" href="/css/my-gitalk.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/my-gitalk.css">
 
 <div class="card gitalk-card" data-aos="fade-up">
     <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
@@ -735,14 +715,14 @@
     <div id="gitalk-container" class="card-content"></div>
 </div>
 
-<script src="/libs/gitalk/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/gitalk/gitalk.min.js"></script>
 <script>
     let gitalk = new Gitalk({
-        clientID: '',
-        clientSecret: '',
-        repo: '',
-        owner: '',
-        admin: null,
+        clientID: 'Ov23liWZgseSe42ZYLbk',
+        clientSecret: '2c994858e1b7678f92b060716b0390bf71cdc01b',
+        repo: 'bsligm.github.io',
+        owner: 'bsligm',
+        admin: ["bsligm"],
         id: '2023-02-22T11-00-00',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
@@ -777,7 +757,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="Windows沙盒 sandbox 实际应用案例">
+                        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/21.jpg" class="responsive-img" alt="Windows沙盒 sandbox 实际应用案例">
                         
                         <span class="card-title">Windows沙盒 sandbox 实际应用案例</span>
                     </div>
@@ -800,6 +780,10 @@
                                     基础设施
                                 </a>
                             
+                            <a href="/categories/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86/" class="post-category">
+                                    安全管理
+                                </a>
+                            
                             
                         </span>
                     </div>
@@ -815,6 +799,10 @@
                         <span class="chip bg-color">Windows 11</span>
                     </a>
                     
+                    <a href="/tags/%E5%AE%89%E5%85%A8/">
+                        <span class="chip bg-color">安全</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -826,13 +814,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/05/20/win10%E5%B0%81%E8%A3%85/">
+                <a href="/2021/05/06/AD%E6%90%AD%E5%BB%BA/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="win10封装">
+                        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/4.jpg" class="responsive-img" alt="Windows Server安装以及AD域服务搭建">
                         
-                        <span class="card-title">win10封装</span>
+                        <span class="card-title">Windows Server安装以及AD域服务搭建</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -843,14 +831,18 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-20
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-06
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%A1%B9%E7%9B%AE%E6%95%99%E7%A8%8B/" class="post-category">
-                                    项目教程
+                            <a href="/categories/%E6%A1%8C%E9%9D%A2%E7%BB%B4%E6%8A%A4/" class="post-category">
+                                    桌面维护
+                                </a>
+                            
+                            <a href="/categories/%E6%A1%8C%E9%9D%A2%E7%BB%B4%E6%8A%A4/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/" class="post-category">
+                                    服务器管理
                                 </a>
                             
                             
@@ -864,8 +856,12 @@
                         <span class="chip bg-color">Windows</span>
                     </a>
                     
-                    <a href="/tags/%E6%95%99%E7%A8%8B/">
-                        <span class="chip bg-color">教程</span>
+                    <a href="/tags/Helpdesk/">
+                        <span class="chip bg-color">Helpdesk</span>
+                    </a>
+                    
+                    <a href="/tags/Server/">
+                        <span class="chip bg-color">Server</span>
                     </a>
                     
                 </div>
@@ -906,7 +902,7 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: 启明星辰<br />'
+            + '来源: 127.0.0.1<br />'
             + '文章作者: 李广明<br />'
             + '文章链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
@@ -918,21 +914,21 @@
 
 
 <!-- 代码块功能依赖 -->
-<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeBlockFuction.js"></script>
 
 <!-- 代码语言 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeLang.js"></script>
 
 
 <!-- 代码块复制 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeCopy.js"></script>
 
 
 <!-- 代码块收缩 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeShrink.js"></script>
 
 
     </div>
@@ -953,14 +949,14 @@
 </div>
 
 
-<script src="/libs/tocbot/tocbot.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/tocbot/tocbot.min.js"></script>
 <script>
     $(function () {
         tocbot.init({
             tocSelector: '#toc-content',
             contentSelector: '#articleContent',
             headingsOffset: -($(window).height() * 0.4 - 45),
-            collapseDepth: Number('0'),
+            collapseDepth: Number('2'),
             headingSelector: 'h2, h3, h4'
         });
 
@@ -1038,71 +1034,20 @@
 
     <footer class="page-footer bg-color">
     
-        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
-<style>
-    .aplayer .aplayer-lrc p {
-        
-        display: none;
-        
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 16px !important;
-    }
-
-    .aplayer .aplayer-lrc p.aplayer-lrc-current {
-        
-        display: none;
-        
-        font-size: 15px;
-        color: #42b983;
-    }
-
-    
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
-        left: -66px !important;
-    }
-
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
-        left: 0px !important;
-    }
-
-    
-</style>
-<div class="">
-    
-    <div class="row">
-        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
-                   server="netease"
-                   type="playlist"
-                   id="6732654392"
-                   fixed='true'
-                   autoplay='true'
-                   theme='#42b983'
-                   loop='all'
-                   order='random'
-                   preload='auto'
-                   volume='0.7'
-                   list-folded='true'
-        >
-        </meting-js>
-    </div>
-</div>
-
-<script src="/libs/aplayer/APlayer.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
-
-    
-    <div class="container row center-align" style="margin-bottom: 0px !important;">
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2025</span>
+                <span id="year">2021-2025</span>
             
-            <span id="year">2019</span>
+            <span id="year">2021</span>
             <a href="/about" target="_blank">李广明</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">12.5k</span>&nbsp;字
             
             
             
@@ -1121,6 +1066,50 @@
             </span>
             
             <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2021";
+                    var startMonth = "5";
+                    var startDate = "6";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
             
             <br>
             
@@ -1151,6 +1140,10 @@
 
 
 
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
 
 </div>
     </div>
@@ -1271,12 +1264,12 @@ $(function () {
 </div>
 
 
-    <script src="/libs/materialize/materialize.min.js"></script>
-    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="/libs/aos/aos.js"></script>
-    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="/js/matery.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/js/matery.js"></script>
 
     <!-- Baidu Analytics -->
 
@@ -1297,10 +1290,8 @@ $(function () {
 </script>
 
     
-    <script src="/libs/others/clicklove.js" async="async"></script>
     
-    
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    <script async src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/others/busuanzi.pure.mini.js"></script>
     
 
     
@@ -1315,7 +1306,7 @@ $(function () {
     
 
     
-    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>

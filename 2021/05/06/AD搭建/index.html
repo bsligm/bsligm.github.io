@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="windows server 安装以及AD域服务搭建, 启明星辰">
-    <meta name="description" content="">
+    <meta name="keywords" content="Windows Server, AD域, 服务器安装, 域控制器, Active Directory">
+    <meta name="description" content="Windows Server安装以及AD域服务搭建在企业网络环境中，Windows Server作为核心服务器操作系统，承担着重要的角色。其中，Active Directory（AD）域服务是Windows Server中最核心的服务之一，">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,24 +13,42 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;http://127.0.0.1:4000/2021/05/06/AD%E6%90%AD%E5%BB%BA/&#34;},&#34;headline&#34;:&#34;Windows Server安装以及AD域服务搭建&#34;,&#34;description&#34;:&#34;Windows Server安装以及AD域服务搭建在企业网络环境中，Windows Server作为核心服务器操作系统，承担着重要的角色。其中，Active Directory（AD）域服务是Windows Server中最核心的服务之一，&#34;,&#34;datePublished&#34;:&#34;2021-05-06T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2021-05-06T03:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;http://127.0.0.1:4000/medias/logo.png&#34;}}}</script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>windows server 安装以及AD域服务搭建 | 启明星辰</title>
-    <link rel="icon" type="image/png" href="/favicon.png">
+    <!-- Baidu Analytics -->
 
-    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <!-- Baidu Push -->
 
-    <script src="/libs/jquery/jquery.min.js"></script>
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
 
+    <title>Windows Server安装以及AD域服务搭建 | 127.0.0.1</title>
+    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/my.css">
+
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/jquery/jquery.min.js"></script>
+    <link rel="alternate" href="/atom.xml" title="127.0.0.1" type="application/atom+xml">
 <meta name="generator" content="Hexo 5.4.0"></head>
-
 
 
 
@@ -41,9 +59,9 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">启明星辰</span>
+                    <span class="logo-span">127.0.0.1</span>
                 </a>
             </div>
             
@@ -129,12 +147,12 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">启明星辰</div>
+        <div class="logo-name">127.0.0.1</div>
         <div class="logo-desc">
             
-            Never really desperate, only the lost of the soul.
+            李广明的技术博客，专注于Windows服务器、网络技术、系统集成等IT领域知识分享
             
         </div>
     </div>
@@ -212,7 +230,7 @@
         
         <li><div class="divider"></div></li>
         <li>
-            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+            <a href="https://github.com/bsligm/bsligm.github.io" class="waves-effect waves-light" target="_blank">
                 <i class="fab fa-github-square fa-fw"></i>Fork Me
             </a>
         </li>
@@ -269,7 +287,7 @@
     }
 </style>
 
-<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+<a href="https://github.com/bsligm/bsligm.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
    data-tooltip="Fork Me" data-position="left" data-delay="50">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
@@ -288,12 +306,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/4.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">windows server 安装以及AD域服务搭建</h1>
+                    <h1 class="description center-align post-title">Windows Server安装以及AD域服务搭建</h1>
                 </div>
             </div>
         </div>
@@ -306,7 +324,7 @@
 <main class="post-container content">
 
     
-    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/tocbot/tocbot.css">
 <style>
     #articleContent h1::before,
     #articleContent h2::before,
@@ -409,6 +427,10 @@
                     
                     <div class="article-tag">
                         
+                            <a href="/tags/Windows/">
+                                <span class="chip bg-color">Windows</span>
+                            </a>
+                        
                             <a href="/tags/Helpdesk/">
                                 <span class="chip bg-color">Helpdesk</span>
                             </a>
@@ -429,6 +451,10 @@
                                 桌面维护
                             </a>
                         
+                            <a href="/categories/%E6%A1%8C%E9%9D%A2%E7%BB%B4%E6%8A%A4/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/" class="post-category">
+                                服务器管理
+                            </a>
+                        
                     </div>
                     
                 </div>
@@ -443,12 +469,32 @@
                 
 
                 
-
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2021-05-06
+                </div>
                 
 
                 
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    1k
+                </div>
+                
 
                 
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    3 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
             </div>
         </div>
         <hr class="clearfix">
@@ -459,35 +505,74 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="windows-server-安装以及AD域服务搭建"><a href="#windows-server-安装以及AD域服务搭建" class="headerlink" title="windows server 安装以及AD域服务搭建"></a>windows server 安装以及AD域服务搭建</h1><h2 id="OS安装"><a href="#OS安装" class="headerlink" title="OS安装"></a>OS安装</h2><p>基于服务器安装系统的方式有很多，常规使用U盘安装介质的形式安装系统，以及Idrac的形式等。</p>
+                <h1 id="Windows-Server安装以及AD域服务搭建"><a href="#Windows-Server安装以及AD域服务搭建" class="headerlink" title="Windows Server安装以及AD域服务搭建"></a>Windows Server安装以及AD域服务搭建</h1><p>在企业网络环境中，Windows Server作为核心服务器操作系统，承担着重要的角色。其中，Active Directory（AD）域服务是Windows Server中最核心的服务之一，它提供了集中式的用户和资源管理功能。本文将详细介绍Windows Server系统的安装过程以及AD域服务的配置步骤。</p>
+<h2 id="系统安装准备"><a href="#系统安装准备" class="headerlink" title="系统安装准备"></a>系统安装准备</h2><p>基于服务器安装系统的方式有很多，常规使用U盘安装介质的形式安装系统，以及Idrac的形式等。</p>
+<h3 id="1-U盘安装方式"><a href="#1-U盘安装方式" class="headerlink" title="1. U盘安装方式"></a>1. U盘安装方式</h3><p>使用U盘安装介质时需要注意以下事项：</p>
 <ul>
-<li>使用U盘安装介质时，如果服务器有阵列卡，需要提前先到品牌官网下载好对应驱动，不然会无法识别到磁盘。</li>
-<li>以DELL为例，使用Idrac（IPMI接口，各家厂商名字不同）来安装，需要先在bios中配置好Idrac，并接入本地局域网便于日后管理，或者使用网线直连pc。</li>
-<li>DELL默认idrac 管理地址默认为 192.168.0.120。线缆连接完成后后在bios中配置 地址以及管理密码</li>
+<li>如果服务器有阵列卡，需要提前到品牌官网下载对应驱动，否则可能无法识别磁盘</li>
+<li>准备好Windows Server安装镜像文件和可启动的U盘</li>
 </ul>
-<h3 id="服务器开机从镜像启动"><a href="#服务器开机从镜像启动" class="headerlink" title="服务器开机从镜像启动"></a>服务器开机从镜像启动<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509096.png" alt="系统安装"></h3><p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509385.png"></p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509728.png" alt="完成安装"></p>
-<hr>
-<h2 id="域服务安装与配置"><a href="#域服务安装与配置" class="headerlink" title="域服务安装与配置"></a>域服务安装与配置</h2><ol>
-<li>更改计算机名和固定ip地址，然后重启应用。<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509513.png" alt="更改计算机名"></li>
+<h3 id="2-远程管理安装方式"><a href="#2-远程管理安装方式" class="headerlink" title="2. 远程管理安装方式"></a>2. 远程管理安装方式</h3><p>以DELL服务器为例，使用Idrac（IPMI接口，各家厂商名称不同）进行安装：</p>
+<ul>
+<li>在BIOS中配置好Idrac，并接入本地局域网便于日后管理，或者使用网线直连PC</li>
+<li>DELL默认idrac管理地址为192.168.0.120</li>
+<li>线缆连接完成后在BIOS中配置地址以及管理密码</li>
+</ul>
+<h3 id="3-服务器开机从镜像启动"><a href="#3-服务器开机从镜像启动" class="headerlink" title="3. 服务器开机从镜像启动"></a>3. 服务器开机从镜像启动</h3><p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509096.png" alt="系统安装" title="系统安装界面"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509385.png" alt="安装过程" title="安装过程界面"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509728.png" alt="完成安装" title="安装完成界面"></p>
+<h2 id="系统基础配置"><a href="#系统基础配置" class="headerlink" title="系统基础配置"></a>系统基础配置</h2><p>在安装完成Windows Server系统后，需要进行一些基础配置：</p>
+<h3 id="1-更改计算机名和固定IP地址"><a href="#1-更改计算机名和固定IP地址" class="headerlink" title="1. 更改计算机名和固定IP地址"></a>1. 更改计算机名和固定IP地址</h3><ul>
+<li>更改计算机名为易于识别的名称</li>
+<li>配置静态IP地址以确保服务稳定性</li>
+<li>完成配置后重启服务器使设置生效</li>
+</ul>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509513.png" alt="更改计算机名" title="更改计算机名界面"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509381.png" alt="固定IP地址" title="配置静态IP地址界面"></p>
+<h2 id="域服务安装与配置"><a href="#域服务安装与配置" class="headerlink" title="域服务安装与配置"></a>域服务安装与配置</h2><h3 id="1-添加角色功能"><a href="#1-添加角色功能" class="headerlink" title="1. 添加角色功能"></a>1. 添加角色功能</h3><p>添加AD域服务功能以及DHCP服务（如果由交换机、路由器、防火墙等分配可忽略）：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509842.png" alt="添加域服务功能" title="添加AD域服务角色"></p>
+<p>确认域服务安装：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509441.png" alt="域服务确认安装" title="域服务安装确认"></p>
+<h3 id="2-配置域控制器"><a href="#2-配置域控制器" class="headerlink" title="2. 配置域控制器"></a>2. 配置域控制器</h3><p>将服务器提升为域控制器：</p>
+<h4 id="步骤1：启动域控制器部署向导"><a href="#步骤1：启动域控制器部署向导" class="headerlink" title="步骤1：启动域控制器部署向导"></a>步骤1：启动域控制器部署向导</h4><p>点击提示中的”部署后配置”，选择”将服务器提升为域控制器”：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509594.png" alt="启动域控制器部署" title="启动域控制器部署向导"></p>
+<h4 id="步骤2：部署新域与域名"><a href="#步骤2：部署新域与域名" class="headerlink" title="步骤2：部署新域与域名"></a>步骤2：部署新域与域名</h4><p>配置新域和域名信息：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510494.png" alt="部署新域与域名" title="配置域名信息"></p>
+<h4 id="步骤3：配置域控制器与DNS服务"><a href="#步骤3：配置域控制器与DNS服务" class="headerlink" title="步骤3：配置域控制器与DNS服务"></a>步骤3：配置域控制器与DNS服务</h4><p>设置域控制器和DNS服务选项：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510311.png" alt="配置域控与DNS服务" title="配置域控制器和DNS服务"></p>
+<h4 id="步骤4：其他选项及安装"><a href="#步骤4：其他选项及安装" class="headerlink" title="步骤4：其他选项及安装"></a>步骤4：其他选项及安装</h4><p>配置其他安装选项：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510564.png" alt="其他选项及安装" title="其他安装选项"></p>
+<h4 id="步骤5：设置目录服务还原模式密码"><a href="#步骤5：设置目录服务还原模式密码" class="headerlink" title="步骤5：设置目录服务还原模式密码"></a>步骤5：设置目录服务还原模式密码</h4><p>为目录服务还原模式设置密码：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510798.png" alt="设置DSRM密码" title="设置DSRM密码"></p>
+<h4 id="步骤6：确认配置选项"><a href="#步骤6：确认配置选项" class="headerlink" title="步骤6：确认配置选项"></a>步骤6：确认配置选项</h4><p>检查并确认所有配置选项：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510256.png" alt="确认配置选项" title="确认配置选项"></p>
+<h4 id="步骤7：预安装检查"><a href="#步骤7：预安装检查" class="headerlink" title="步骤7：预安装检查"></a>步骤7：预安装检查</h4><p>执行预安装检查以确保所有要求都满足：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510759.png" alt="预安装检查" title="预安装检查"></p>
+<h4 id="步骤8：完成安装"><a href="#步骤8：完成安装" class="headerlink" title="步骤8：完成安装"></a>步骤8：完成安装</h4><p>安装完成后重启服务器，域控制器部署完成：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510752.png" alt="安装完成" title="安装完成界面"></p>
+<h2 id="验证域控制器功能"><a href="#验证域控制器功能" class="headerlink" title="验证域控制器功能"></a>验证域控制器功能</h2><p>安装完成后，通过以下方式验证域控制器功能是否正常：</p>
+<ol>
+<li>打开”服务器管理器”，查看”通知”区域是否有错误信息</li>
+<li>使用”Active Directory 用户和计算机”管理工具查看域结构</li>
+<li>在客户端计算机上尝试加入域</li>
 </ol>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509381.png" alt="固定IP地址"></p>
-<ol start="2">
-<li><p>添加角色功能 ad域服务功能，以及DHCP服务（如果由交换机 路由器防火墙等分配可忽略）<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509842.png" alt="添加域服务功能"></p>
-</li>
-<li><p>域服务确认安装<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509441.png"></p>
-</li>
-</ol>
-<h3 id="配置域控"><a href="#配置域控" class="headerlink" title="配置域控"></a>配置域控</h3><h4 id="将服务器提升为域控服务器"><a href="#将服务器提升为域控服务器" class="headerlink" title="将服务器提升为域控服务器"></a>将服务器提升为域控服务器</h4><p>1.点击提示-部署后配置-将服务器提升为域控制器<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509594.png"></p>
-<ol start="2">
-<li>部署新域与域名<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510494.png"></li>
-<li>配置域控与dns服务选项<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510311.png"></li>
-<li>其他选项及安装<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510564.png"></li>
-<li><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510798.png"></li>
-<li><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510256.png"></li>
-<li><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510759.png"></li>
-<li>安装完成后重启 域控部署完成。<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510752.png"></li>
-</ol>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>在部署域控制器时需要注意以下重要事项：</p>
+<ul>
+<li>在生产环境中部署域控制器前，建议先在测试环境中进行验证</li>
+<li>确保DNS设置正确，域控制器通常也是DNS服务器</li>
+<li>建议配置静态IP地址以确保域服务的稳定性</li>
+<li>定期备份AD域数据，防止意外情况导致数据丢失</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过以上步骤，我们完成了Windows Server系统的安装以及AD域服务的配置。AD域服务的部署是构建企业网络环境的重要基础，掌握其安装和配置方法对于系统管理员来说至关重要。</p>
+<p>在实际应用中，还需要根据具体需求进行更详细的配置，如：</p>
+<ul>
+<li>组织单位（OU）结构设计</li>
+<li>组策略配置</li>
+<li>用户和计算机账户管理</li>
+<li>信任关系配置</li>
+<li>备份和恢复策略制定</li>
+</ul>
+<p>建议在正式部署前制定详细的规划文档，并在测试环境中充分验证后再应用到生产环境。</p>
 
                 
             </div>
@@ -514,7 +599,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/05/06/AD%E6%90%AD%E5%BB%BA/">http://example.com/2021/05/06/AD%E6%90%AD%E5%BB%BA/</a>
+                    <a href="http://127.0.0.1:4000/2021/05/06/AD%E6%90%AD%E5%BB%BA/">http://127.0.0.1:4000/2021/05/06/AD%E6%90%AD%E5%BB%BA/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -552,6 +637,10 @@
                     
                         <div class="article-tag">
                             
+                                <a href="/tags/Windows/">
+                                    <span class="chip bg-color">Windows</span>
+                                </a>
+                            
                                 <a href="/tags/Helpdesk/">
                                     <span class="chip bg-color">Helpdesk</span>
                                 </a>
@@ -564,12 +653,12 @@
                     
                 </div>
                 <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/share/css/share.min.css">
 <div id="article-share">
 
     
     <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="/libs/share/js/social-share.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/share/js/social-share.min.js"></script>
     
 
     
@@ -579,138 +668,12 @@
                 </div>
             </div>
             
-                <style>
-    #reward {
-        margin: 40px 0;
-        text-align: center;
-    }
-
-    #reward .reward-link {
-        font-size: 1.4rem;
-        line-height: 38px;
-    }
-
-    #reward .btn-floating:hover {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    #rewardModal {
-        width: 320px;
-        height: 350px;
-    }
-
-    #rewardModal .reward-title {
-        margin: 15px auto;
-        padding-bottom: 5px;
-    }
-
-    #rewardModal .modal-content {
-        padding: 10px;
-    }
-
-    #rewardModal .close {
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        color: rgba(0, 0, 0, 0.5);
-        font-size: 1.3rem;
-        line-height: 20px;
-        cursor: pointer;
-    }
-
-    #rewardModal .close:hover {
-        color: #ef5350;
-        transform: scale(1.3);
-        -moz-transform:scale(1.3);
-        -webkit-transform:scale(1.3);
-        -o-transform:scale(1.3);
-    }
-
-    #rewardModal .reward-tabs {
-        margin: 0 auto;
-        width: 210px;
-    }
-
-    .reward-tabs .tabs {
-        height: 38px;
-        margin: 10px auto;
-        padding-left: 0;
-    }
-
-    .reward-content ul {
-        padding-left: 0 !important;
-    }
-
-    .reward-tabs .tabs .tab {
-        height: 38px;
-        line-height: 38px;
-    }
-
-    .reward-tabs .tab a {
-        color: #fff;
-        background-color: #ccc;
-    }
-
-    .reward-tabs .tab a:hover {
-        background-color: #ccc;
-        color: #fff;
-    }
-
-    .reward-tabs .wechat-tab .active {
-        color: #fff !important;
-        background-color: #22AB38 !important;
-    }
-
-    .reward-tabs .alipay-tab .active {
-        color: #fff !important;
-        background-color: #019FE8 !important;
-    }
-
-    .reward-tabs .reward-img {
-        width: 210px;
-        height: 210px;
-    }
-</style>
-
-<div id="reward">
-    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
-
-    <!-- Modal Structure -->
-    <div id="rewardModal" class="modal">
-        <div class="modal-content">
-            <a class="close modal-close"><i class="fas fa-times"></i></a>
-            <h4 class="reward-title">你的赏识是我前进的动力</h4>
-            <div class="reward-content">
-                <div class="reward-tabs">
-                    <ul class="tabs row">
-                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
-                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
-                    </ul>
-                    <div id="alipay">
-                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
-                    </div>
-                    <div id="wechat">
-                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $(function () {
-        $('.tabs').tabs();
-    });
-</script>
-
-            
         </div>
     </div>
 
     
-        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
-<link rel="stylesheet" href="/css/my-gitalk.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/my-gitalk.css">
 
 <div class="card gitalk-card" data-aos="fade-up">
     <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
@@ -720,14 +683,14 @@
     <div id="gitalk-container" class="card-content"></div>
 </div>
 
-<script src="/libs/gitalk/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/gitalk/gitalk.min.js"></script>
 <script>
     let gitalk = new Gitalk({
-        clientID: '',
-        clientSecret: '',
-        repo: '',
-        owner: '',
-        admin: null,
+        clientID: 'Ov23liWZgseSe42ZYLbk',
+        clientSecret: '2c994858e1b7678f92b060716b0390bf71cdc01b',
+        repo: 'bsligm.github.io',
+        owner: 'bsligm',
+        admin: ["bsligm"],
         id: '2021-05-06T11-00-00',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
@@ -758,13 +721,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/05/20/win10%E5%B0%81%E8%A3%85/">
+                <a href="/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="win10封装">
+                        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/2.jpg" class="responsive-img" alt="Windows域环境下批量部署BitLocker">
                         
-                        <span class="card-title">win10封装</span>
+                        <span class="card-title">Windows域环境下批量部署BitLocker</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -775,14 +738,18 @@
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-20
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-02-22
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%A1%B9%E7%9B%AE%E6%95%99%E7%A8%8B/" class="post-category">
-                                    项目教程
+                            <a href="/categories/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/" class="post-category">
+                                    基础设施
+                                </a>
+                            
+                            <a href="/categories/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86/" class="post-category">
+                                    安全管理
                                 </a>
                             
                             
@@ -792,12 +759,20 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Windows/">
-                        <span class="chip bg-color">Windows</span>
+                    <a href="/tags/AD%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
+                        <span class="chip bg-color">AD域控制器</span>
                     </a>
                     
-                    <a href="/tags/%E6%95%99%E7%A8%8B/">
-                        <span class="chip bg-color">教程</span>
+                    <a href="/tags/Helpdesk/">
+                        <span class="chip bg-color">Helpdesk</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%AE%89%E5%85%A8/">
+                        <span class="chip bg-color">安全</span>
+                    </a>
+                    
+                    <a href="/tags/PowerShell/">
+                        <span class="chip bg-color">PowerShell</span>
                     </a>
                     
                 </div>
@@ -815,9 +790,9 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="edge无法打开网页 提示&#39;兼容性问题&#39;">
+                        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/15.jpg" class="responsive-img" alt="Edge浏览器无法打开网页提示兼容性问题的解决方案">
                         
-                        <span class="card-title">edge无法打开网页 提示&#39;兼容性问题&#39;</span>
+                        <span class="card-title">Edge浏览器无法打开网页提示兼容性问题的解决方案</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -838,6 +813,10 @@
                                     桌面维护
                                 </a>
                             
+                            <a href="/categories/%E6%A1%8C%E9%9D%A2%E7%BB%B4%E6%8A%A4/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/" class="post-category">
+                                    系统运维
+                                </a>
+                            
                             
                         </span>
                     </div>
@@ -845,12 +824,16 @@
                 
                 <div class="card-action article-tags">
                     
+                    <a href="/tags/Windows/">
+                        <span class="chip bg-color">Windows</span>
+                    </a>
+                    
                     <a href="/tags/Helpdesk/">
                         <span class="chip bg-color">Helpdesk</span>
                     </a>
                     
-                    <a href="/tags/Windows/">
-                        <span class="chip bg-color">Windows</span>
+                    <a href="/tags/Edge%E6%B5%8F%E8%A7%88%E5%99%A8/">
+                        <span class="chip bg-color">Edge浏览器</span>
                     </a>
                     
                 </div>
@@ -891,7 +874,7 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: 启明星辰<br />'
+            + '来源: 127.0.0.1<br />'
             + '文章作者: 李广明<br />'
             + '文章链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
@@ -903,21 +886,21 @@
 
 
 <!-- 代码块功能依赖 -->
-<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeBlockFuction.js"></script>
 
 <!-- 代码语言 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeLang.js"></script>
 
 
 <!-- 代码块复制 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeCopy.js"></script>
 
 
 <!-- 代码块收缩 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeShrink.js"></script>
 
 
     </div>
@@ -938,14 +921,14 @@
 </div>
 
 
-<script src="/libs/tocbot/tocbot.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/tocbot/tocbot.min.js"></script>
 <script>
     $(function () {
         tocbot.init({
             tocSelector: '#toc-content',
             contentSelector: '#articleContent',
             headingsOffset: -($(window).height() * 0.4 - 45),
-            collapseDepth: Number('0'),
+            collapseDepth: Number('2'),
             headingSelector: 'h2, h3, h4'
         });
 
@@ -1023,71 +1006,20 @@
 
     <footer class="page-footer bg-color">
     
-        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
-<style>
-    .aplayer .aplayer-lrc p {
-        
-        display: none;
-        
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 16px !important;
-    }
-
-    .aplayer .aplayer-lrc p.aplayer-lrc-current {
-        
-        display: none;
-        
-        font-size: 15px;
-        color: #42b983;
-    }
-
-    
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
-        left: -66px !important;
-    }
-
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
-        left: 0px !important;
-    }
-
-    
-</style>
-<div class="">
-    
-    <div class="row">
-        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
-                   server="netease"
-                   type="playlist"
-                   id="6732654392"
-                   fixed='true'
-                   autoplay='true'
-                   theme='#42b983'
-                   loop='all'
-                   order='random'
-                   preload='auto'
-                   volume='0.7'
-                   list-folded='true'
-        >
-        </meting-js>
-    </div>
-</div>
-
-<script src="/libs/aplayer/APlayer.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
-
-    
-    <div class="container row center-align" style="margin-bottom: 0px !important;">
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2025</span>
+                <span id="year">2021-2025</span>
             
-            <span id="year">2019</span>
+            <span id="year">2021</span>
             <a href="/about" target="_blank">李广明</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">12.5k</span>&nbsp;字
             
             
             
@@ -1106,6 +1038,50 @@
             </span>
             
             <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2021";
+                    var startMonth = "5";
+                    var startDate = "6";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
             
             <br>
             
@@ -1136,6 +1112,10 @@
 
 
 
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
 
 </div>
     </div>
@@ -1256,12 +1236,12 @@ $(function () {
 </div>
 
 
-    <script src="/libs/materialize/materialize.min.js"></script>
-    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="/libs/aos/aos.js"></script>
-    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="/js/matery.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/js/matery.js"></script>
 
     <!-- Baidu Analytics -->
 
@@ -1282,10 +1262,8 @@ $(function () {
 </script>
 
     
-    <script src="/libs/others/clicklove.js" async="async"></script>
     
-    
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    <script async src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/others/busuanzi.pure.mini.js"></script>
     
 
     
@@ -1300,7 +1278,7 @@ $(function () {
     
 
     
-    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>

@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="PowerStore 3.x的升级手顺, 启明星辰">
-    <meta name="description" content="">
+    <meta name="keywords" content="Atlas800, 银河麒麟, 服务器安装, 华为服务器, NPU驱动, CANN框架">
+    <meta name="description" content="华为Atlas800服务器安装银河麒麟华为Atlas 800推理服务器是基于昇腾AI处理器的高性能AI推理服务器，广泛应用于图像识别、语音识别、自然语言处理等AI场景。本文将详细介绍在Atlas 800服务器上安装银河麒麟操作系统的完整过程">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,24 +13,42 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;http://127.0.0.1:4000/2023/08/07/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/&#34;},&#34;headline&#34;:&#34;华为Atlas800服务器安装银河麒麟&#34;,&#34;description&#34;:&#34;华为Atlas800服务器安装银河麒麟华为Atlas 800推理服务器是基于昇腾AI处理器的高性能AI推理服务器，广泛应用于图像识别、语音识别、自然语言处理等AI场景。本文将详细介绍在Atlas 800服务器上安装银河麒麟操作系统的完整过程&#34;,&#34;datePublished&#34;:&#34;2023-08-07T08:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2023-08-07T08:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;http://127.0.0.1:4000/medias/logo.png&#34;}}}</script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>PowerStore 3.x的升级手顺 | 启明星辰</title>
-    <link rel="icon" type="image/png" href="/favicon.png">
+    <!-- Baidu Analytics -->
 
-    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <!-- Baidu Push -->
 
-    <script src="/libs/jquery/jquery.min.js"></script>
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
 
+    <title>华为Atlas800服务器安装银河麒麟 | 127.0.0.1</title>
+    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/my.css">
+
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/jquery/jquery.min.js"></script>
+    <link rel="alternate" href="/atom.xml" title="127.0.0.1" type="application/atom+xml">
 <meta name="generator" content="Hexo 5.4.0"></head>
-
 
 
 
@@ -41,9 +59,9 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">启明星辰</span>
+                    <span class="logo-span">127.0.0.1</span>
                 </a>
             </div>
             
@@ -129,12 +147,12 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">启明星辰</div>
+        <div class="logo-name">127.0.0.1</div>
         <div class="logo-desc">
             
-            Never really desperate, only the lost of the soul.
+            李广明的技术博客，专注于Windows服务器、网络技术、系统集成等IT领域知识分享
             
         </div>
     </div>
@@ -212,7 +230,7 @@
         
         <li><div class="divider"></div></li>
         <li>
-            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+            <a href="https://github.com/bsligm/bsligm.github.io" class="waves-effect waves-light" target="_blank">
                 <i class="fab fa-github-square fa-fw"></i>Fork Me
             </a>
         </li>
@@ -269,7 +287,7 @@
     }
 </style>
 
-<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+<a href="https://github.com/bsligm/bsligm.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
    data-tooltip="Fork Me" data-position="left" data-delay="50">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
@@ -288,12 +306,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/7.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">PowerStore 3.x的升级手顺</h1>
+                    <h1 class="description center-align post-title">华为Atlas800服务器安装银河麒麟</h1>
                 </div>
             </div>
         </div>
@@ -306,7 +324,7 @@
 <main class="post-container content">
 
     
-    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/tocbot/tocbot.css">
 <style>
     #articleContent h1::before,
     #articleContent h2::before,
@@ -409,12 +427,20 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Server/">
-                                <span class="chip bg-color">Server</span>
+                            <a href="/tags/%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/">
+                                <span class="chip bg-color">银河麒麟</span>
                             </a>
                         
-                            <a href="/tags/%E5%AD%98%E5%82%A8/">
-                                <span class="chip bg-color">存储</span>
+                            <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/">
+                                <span class="chip bg-color">服务器</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                                <span class="chip bg-color">华为</span>
+                            </a>
+                        
+                            <a href="/tags/Atlas800/">
+                                <span class="chip bg-color">Atlas800</span>
                             </a>
                         
                     </div>
@@ -425,8 +451,12 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/" class="post-category">
-                                系统运维
+                            <a href="/categories/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/" class="post-category">
+                                基础设施
+                            </a>
+                        
+                            <a href="/categories/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/" class="post-category">
+                                服务器管理
                             </a>
                         
                     </div>
@@ -438,17 +468,37 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-08-04
+                    2023-08-07
                 </div>
                 
 
                 
-
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2023-08-07
+                </div>
                 
 
                 
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    1.1k
+                </div>
+                
 
                 
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    4 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
             </div>
         </div>
         <hr class="clearfix">
@@ -459,120 +509,86 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="PowerStore-3-x的升级手顺"><a href="#PowerStore-3-x的升级手顺" class="headerlink" title="PowerStore 3.x的升级手顺"></a>PowerStore 3.x的升级手顺</h1><hr>
-<h2 id="驱动器固件升级"><a href="#驱动器固件升级" class="headerlink" title="驱动器固件升级"></a>驱动器固件升级</h2><p>手动禁用通知，以防止在软件升级期间向支持部门发送 Call Home 警报。</p>
-<p><strong>关于此任务</strong></p>
+                <h1 id="华为Atlas800服务器安装银河麒麟"><a href="#华为Atlas800服务器安装银河麒麟" class="headerlink" title="华为Atlas800服务器安装银河麒麟"></a>华为Atlas800服务器安装银河麒麟</h1><p>华为Atlas 800推理服务器是基于昇腾AI处理器的高性能AI推理服务器，广泛应用于图像识别、语音识别、自然语言处理等AI场景。本文将详细介绍在Atlas 800服务器上安装银河麒麟操作系统的完整过程。</p>
+<h2 id="通过IBMC安装银河麒麟"><a href="#通过IBMC安装银河麒麟" class="headerlink" title="通过IBMC安装银河麒麟"></a>通过IBMC安装银河麒麟</h2><p>iBMC（integrated Baseboard Management Controller）是华为服务器的集成基板管理控制器，用于远程管理和监控服务器硬件。</p>
+<h3 id="1-默认iBMC配置信息"><a href="#1-默认iBMC配置信息" class="headerlink" title="1. 默认iBMC配置信息"></a>1. 默认iBMC配置信息</h3><ul>
+<li>默认IP地址：192.168.2.100</li>
+<li>子网掩码：255.255.255.0</li>
+<li>默认用户名：Administrator</li>
+<li>默认密码：Admin@9000</li>
+</ul>
+<h3 id="2-安装步骤"><a href="#2-安装步骤" class="headerlink" title="2. 安装步骤"></a>2. 安装步骤</h3><h4 id="步骤1：访问iBMC管理界面"><a href="#步骤1：访问iBMC管理界面" class="headerlink" title="步骤1：访问iBMC管理界面"></a>步骤1：访问iBMC管理界面</h4><p>使用浏览器访问iBMC默认地址：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202308071622732.png" alt="iBMC登录界面" title="iBMC登录界面"></p>
+<h4 id="步骤2：配置iBMC网络"><a href="#步骤2：配置iBMC网络" class="headerlink" title="步骤2：配置iBMC网络"></a>步骤2：配置iBMC网络</h4><p>根据实际网络环境配置iBMC的网络参数：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202308101158988.png" alt="iBMC网络配置" title="iBMC网络配置界面"></p>
+<h4 id="步骤3：挂载系统镜像"><a href="#步骤3：挂载系统镜像" class="headerlink" title="步骤3：挂载系统镜像"></a>步骤3：挂载系统镜像</h4><ol>
+<li>进入”虚拟控制台” → “镜像文件”</li>
+<li>上传银河麒麟系统ISO镜像文件</li>
+<li>设置从CD/DVD启动</li>
+</ol>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202308101159890.png" alt="挂载镜像文件" title="镜像文件管理"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202308071624116.png" alt="设置启动项" title="启动项设置"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202308071624431.png" alt="虚拟控制台" title="虚拟控制台界面"></p>
+<h4 id="步骤4：执行系统安装"><a href="#步骤4：执行系统安装" class="headerlink" title="步骤4：执行系统安装"></a>步骤4：执行系统安装</h4><p>参照华为官方文档完成银河麒麟系统的安装：<br><a target="_blank" rel="noopener" href="https://support.huawei.com/enterprise/zh/doc/EDOC1100311722/426cffd9">华为Atlas 800安装指南</a></p>
+<h2 id="NPU驱动安装"><a href="#NPU驱动安装" class="headerlink" title="NPU驱动安装"></a>NPU驱动安装</h2><p>NPU（Neural Processing Unit）是昇腾AI处理器的核心组件，需要安装相应的驱动程序才能正常使用。</p>
+<h3 id="1-获取驱动与固件"><a href="#1-获取驱动与固件" class="headerlink" title="1. 获取驱动与固件"></a>1. 获取驱动与固件</h3><ol>
+<li>登录<a target="_blank" rel="noopener" href="https://support.huawei.com/enterprise/zh/ascend-computing/ascend-hdk-pid-252764743/software">Ascend HDK</a>软件下载页面</li>
+<li>选择Ascend HDK 22.0.0系列版本</li>
+<li>根据产品系统架构在”软件分类”中勾选”910-aarch64”或”910-x86_64”</li>
+<li>下载以下软件包：<ul>
+<li>Ascend-hdk-910-npu-driver_XXXXXX.run（驱动包）</li>
+<li>Ascend-hdk-910-npu-firmwarer_XXXXXX.run（固件包）</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202308071635608.png" alt="Ascend HDK软件下载" title="Ascend HDK软件下载"></p>
 <blockquote>
-<p>注: 对于从任何 3.0.x 和 3.2.0.x PowerStoreOS 版本的升级，系统不会在软件升级期间自动禁用 Call Home 警报。必须手动为每个 设备禁用 Call Home 警报。有关详细信息，请参阅 PowerStoreOS 的 PowerStore 发行说明。</p>
+<p><strong>重要提示</strong>：请确保获取同一版本下的驱动包和芯片固件包。</p>
 </blockquote>
-<p>关闭步骤：</p>
+<h3 id="2-传输软件包"><a href="#2-传输软件包" class="headerlink" title="2. 传输软件包"></a>2. 传输软件包</h3><p>通过以下方式将驱动和固件传输到银河麒麟操作系统：</p>
+<ul>
+<li>通过iBMC远程管理</li>
+<li>通过SCP协议</li>
+<li>通过其他共享路径</li>
+</ul>
+<h3 id="3-创建专用用户"><a href="#3-创建专用用户" class="headerlink" title="3. 创建专用用户"></a>3. 创建专用用户</h3><p>驱动需要以HwHiAIUser身份运行，需要创建该用户：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建HwHiAIUser用户</span></span><br><span class="line">sudo useradd HwHiAIUser</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为HwHiAIUser设置密码</span></span><br><span class="line">sudo passwd HwHiAIUser</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-安装驱动程序"><a href="#4-安装驱动程序" class="headerlink" title="4. 安装驱动程序"></a>4. 安装驱动程序</h3><p>执行以下命令安装NPU驱动：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入驱动与固件目录</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$path</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 为驱动和固件文件添加可执行权限</span></span><br><span class="line">chmod +x Ascend-hdk-910-npu-driver_XXXXXX.run</span><br><span class="line">chmod +x Ascend-hdk-910-npu-firmwarer_XXXXXX.run</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行驱动完整安装</span></span><br><span class="line">./Ascend-hdk-910-npu-driver_XXXXXX.run --FULL</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装完成后重启系统</span></span><br><span class="line">sudo reboot</span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证驱动安装是否成功</span></span><br><span class="line">npu-smi info</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行固件安装</span></span><br><span class="line">./Ascend-hdk-910-npu-firmwarer_XXXXXX.run --FULL</span><br><span class="line"></span><br><span class="line"><span class="comment"># 再次重启系统</span></span><br><span class="line">sudo reboot</span><br></pre></td></tr></table></figure>
+
+<h2 id="CANN框架安装"><a href="#CANN框架安装" class="headerlink" title="CANN框架安装"></a>CANN框架安装</h2><p>CANN（Compute Architecture for Neural Networks）是华为昇腾AI处理器的异构计算架构，提供完整的AI开发和推理能力。</p>
+<h3 id="1-下载CANN框架"><a href="#1-下载CANN框架" class="headerlink" title="1. 下载CANN框架"></a>1. 下载CANN框架</h3><p>访问华为官方下载页面获取CANN框架：<br><a target="_blank" rel="noopener" href="https://support.huawei.com/enterprise/zh/ascend-computing/cann-pid-251168373/software">CANN框架下载</a></p>
+<h3 id="2-传输安装包"><a href="#2-传输安装包" class="headerlink" title="2. 传输安装包"></a>2. 传输安装包</h3><p>将CANN安装包复制到银河麒麟操作系统的指定路径<code>$path</code></p>
+<h3 id="3-安装依赖环境"><a href="#3-安装依赖环境" class="headerlink" title="3. 安装依赖环境"></a>3. 安装依赖环境</h3><p>安装Python 3和pip工具：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装Python 3</span></span><br><span class="line">sudo yum install python3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装pip</span></span><br><span class="line">sudo yum install python-pip</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-安装CANN框架"><a href="#4-安装CANN框架" class="headerlink" title="4. 安装CANN框架"></a>4. 安装CANN框架</h3><p>执行以下命令安装CANN框架：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 为安装包添加可执行权限</span></span><br><span class="line">chmod +x <span class="variable">$path</span>/Ascend-cann-nnae_xxxxxx_linux-aarch64.run</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行完整安装</span></span><br><span class="line"><span class="variable">$path</span>/Ascend-cann-nnae_xxxxxx_linux-aarch64.run --FULL</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装完成后重启系统</span></span><br><span class="line">sudo reboot</span><br></pre></td></tr></table></figure>
+
+<h2 id="验证安装结果"><a href="#验证安装结果" class="headerlink" title="验证安装结果"></a>验证安装结果</h2><p>安装完成后，可以通过以下方式验证系统是否正常工作：</p>
 <ol>
-<li><p>在设置页面上，选择支持部分中的禁用支持通知。</p>
-</li>
-<li><p>选择要为其暂停通知的设备，然后单击修改。</p>
-</li>
-<li><p>在修改维护模式滑出面板中，选中启用维护模式选项，并在维护窗口持续时间字段中指定小时数。</p>
-<p>对于 PowerStore T 型号群集，指定 2 小时以在升级窗口期间暂停通知。</p>
-<p>指定的窗口结束后，支持通知会自动重新启用。</p>
-</li>
-<li><p>单击应用。(可选)在表中查看维护模式的结束时间 (群集时间)。</p>
-</li>
-<li><p>对群集中的任何其他设备重复此过程。</p>
-</li>
+<li><p>检查NPU状态：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npu-smi info</span><br></pre></td></tr></table></figure></li>
+<li><p>验证CANN框架：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -c <span class="string">&quot;import torch; print(torch.__version__)&quot;</span></span><br></pre></td></tr></table></figure></li>
 </ol>
-<p><strong>更新power storage集群上的驱动器固件</strong></p>
-<p><strong>步骤</strong></p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
+<li><strong>版本兼容性</strong>：确保驱动、固件和CANN框架版本相互兼容</li>
+<li><strong>权限管理</strong>：严格按照要求使用专用用户执行相关操作</li>
+<li><strong>备份策略</strong>：在安装前做好系统备份</li>
+<li><strong>网络配置</strong>：确保服务器网络连接稳定</li>
+<li><strong>硬件检查</strong>：安装前后检查硬件状态</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过以上步骤，您已经成功在华为Atlas 800服务器上安装了银河麒麟操作系统，并配置了NPU驱动和CANN框架。这套环境可以用于AI推理、模型训练等高性能计算任务。</p>
+<p>建议在生产环境中部署时：</p>
 <ol>
-<li><p>从DELL支持网站下载最新的驱动器固件更新包（驱动器固件更新包包含 PowerStore 群集中驱动器的固件更新。有关下载 PowerStore 升级程序包的说明，请参阅下载PowerStore 升级程序包。）</p>
-</li>
-<li><p>选择 Settings 图标，然后选择 Cluster 部分中的 Upgrades。</p>
-</li>
-<li><p>选择上传程序包。<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202307280941821.png" alt="image-20230728094111161"><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202307280941330.png" alt="image-20230728094140839"></p>
-<blockquote>
-<p>注: 对于具有 支持连接 并启用自动下载的群集，适用的新驱动器固件程序包将自动下载到您的系统，并显示在升级页面上。 将显示选择要上传的文件对话框。</p>
-</blockquote>
-</li>
-<li><p>选择驱动器固件更新程序包，然后选择打开。 驱动器固件更新程序包将上传并显示在软件包表中。(将驱动器更新包上传到PowerStore Manager 时，请勿关闭或刷新浏览器。)</p>
-</li>
-<li><p>在软件包表中选择驱动器固件更新程序包，然后选择升级。</p>
-</li>
+<li>制定详细的安装计划和回滚方案</li>
+<li>充分测试驱动和框架的稳定性</li>
+<li>配置完善的监控和告警机制</li>
+<li>定期更新驱动和框架版本</li>
+<li>建立完整的文档记录</li>
 </ol>
-<p><strong>结果</strong> </p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202307280942493.png" alt="image-20230728094207867"></p>
-<p>● 要验证系统上当前安装的驱动器固件程序包版本，请使用以下方法之一:</p>
-<p>○ 运行以下 REST API 调用:curl -kv –user admin:xxxxx -X GET https://<appliance ip>:443/api/rest/software_package?select=* | python -mjson.tool</appliance></p>
-<p>○ 运行以下 CLI 命令:$ pstcli -d xx.xx.xx.xx -u <user> -p <password> software_package show-output nvp |egrep “name|software_package_type|release_version”</password></user></p>
-<p>● 要验证 PowerStore 群集中各个驱动器的驱动器固件版本，请转至 PowerStore Manager 中的硬件 &gt; 设备 &gt; appliance &gt; 组件 &gt; 驱 动器页面。</p>
-<p>● 要验证 PowerStore 群集中所有驱动器的驱动器固件版本，请运行服务命令 svc_diag list –show_drives。有关更多信 息，请参见 PowerStore 服务脚本指南。</p>
-<hr>
-<h2 id="PowerStore-无中断软件升级"><a href="#PowerStore-无中断软件升级" class="headerlink" title="PowerStore 无中断软件升级"></a>PowerStore 无中断软件升级</h2><p><strong>升级准备</strong></p>
-<ol>
-<li><p>获取最新 PowerStoreOS 并将其上传到系统(如果未启用自动下载)。</p>
-</li>
-<li><p>查看发行说明。</p>
-</li>
-<li><p>运行升级前运行状况检查和其他必要的系统运行状况检查工具。</p>
-</li>
-<li><p>确保两个节点的主机连接都有备用连接。</p>
-</li>
-<li><p>在升级之前完成配置更改或管理操作，因为在进行升级时这些更改或管理操作不可用。</p>
-<blockquote>
-<p>这些管理操作包括 vVol 虚拟机任务，例如创建虚拟机、重新启动虚拟机、将虚拟机迁移到其他 ESXi 主机以及创建虚拟 机快照。</p>
-</blockquote>
-</li>
-</ol>
-<p><strong>自动下载升级程序包</strong></p>
-<p>对于已启用 支持连接 的系统，当更新程序包在支持网站上推出时，可以自动将其下载到系统。更新包将通过 支持连接 安全隧道安 全地传输到您的系统。自动下载适用于软件更新程序包、驱动器固件更新程序包、适用的语言包和兼容的运行状况检查程序包。此 功能使您无需从支持网站手动搜索和下载最新的升级程序包。</p>
-<p>当各种更新程序包类型(PowerStoreOS、运行状况检查程序包、语言包和驱动器固件)都可使用较新的兼容程序包时，最新自动下 载的程序包会覆盖在升级页面上的软件程序包下面先前已准备好安装的任何较旧程序包。当您的系统上有新的升级程序包可用时， 您会在 PowerStore Manager 中收到警报通知。</p>
-<p>要启用自动下载，请选择设置图标，然后在群集部分选择升级。启用自动下载。未配置 支持连接 时，状态显示为自动下载已禁用。</p>
-<blockquote>
-<p>注: 自动下载不会在系统上安装任何更新程序包，它只会将它们从支持网站下载到您的系统上，以供手动安装。您必须选择特定</p>
-<p>的下载程序包，然后选择升级按钮以安装它。</p>
-</blockquote>
-<hr>
-<h2 id="PowerStore-T-软件升级"><a href="#PowerStore-T-软件升级" class="headerlink" title="PowerStore T 软件升级"></a>PowerStore T 软件升级</h2><p><strong>步骤</strong></p>
-<ol>
-<li><p>手动关闭通知，以防止在软件升级期间向支持部门发送 Call Home 警报。</p>
-</li>
-<li><p>从支持网站下载最新的 PowerStore T 升级程序包。</p>
-</li>
-<li><p>将软件升级包上传到 PowerStore Manager。</p>
-<p>a. 在 PowerStore Manager 中，选择设置图标，然后选择群集部分中的升级。</p>
-<p>b. 选择上传程序包。</p>
-<p>c. 选择要上传的 PowerStore T 型号 升级程序包，然后选择打开。</p>
-</li>
-<li><p>在升级 PowerStore T 型号 群集之前，请仔细查看并执行知识库文章 000183630 如何准备 PowerStore 无中断升级 (NDU) 中的步 骤。</p>
-</li>
-<li><p>执行 升级 PowerStore T 型号 群集上的软件 中的步骤。</p>
-<p>每个设备的 PowerStore T 型号 软件升级需要大约一个小时到一个半小时才能完成。</p>
-</li>
-<li><p>成功升级 PowerStoreOS 软件后，请在新固件捆绑包可用时升级驱动器固件。</p>
-</li>
-</ol>
-<p><strong>结果</strong></p>
-<p>如果软件升级过程失败，请查看并解决群集上的所有关键警报，然后重试升级。</p>
-<hr>
-<h2 id="升级-PowerStore-T-型号-群集上的软件"><a href="#升级-PowerStore-T-型号-群集上的软件" class="headerlink" title="升级 PowerStore T 型号 群集上的软件"></a>升级 PowerStore T 型号 群集上的软件</h2><p>使用 PowerStore Manager 来升级 PowerStore T 型号 群集上的节点固件和 PowerStoreOS。</p>
-<p><strong>步骤</strong></p>
-<ol>
-<li><p>打开 PowerStore Manager。</p>
-</li>
-<li><p>选择 Settings 图标，然后选择 Cluster 部分中的 Upgrades。</p>
-</li>
-<li><p>如果尚未将 PowerStore T 型号 软件升级程序包上传到 PowerStore Manager:</p>
-<p>a. 选择上传程序包。 将显示选择要上传的文件对话框。</p>
-<p>b. 选择 PowerStore T 型号 软件升级程序包，然后选择打开。</p>
-<p>PowerStore T 型号 软件升级程序包会上传到 PowerStore Manager 并显示在软件包表中。</p>
-</li>
-<li><p>在软件包表中选择 PowerStore T 型号 软件升级程序包，然后选择升级。</p>
-<p>每个设备的 PowerStore T 型号 软件升级需要大约一个小时到一个半小时才能完成。软件升级所需的时间长度取决于升级期间是 否应用了节点固件升级。</p>
-</li>
-<li><p>返回登录屏幕后，关闭浏览器会话并打开新会话，然后再次登录以刷新 UI。</p>
-</li>
-</ol>
-<p><strong>结果</strong></p>
-<p>在软件升级过程中，主设备的主节点将故障切换到设备的辅助节点，并且您将从 PowerStore Manager 断开连接。在故障切换过程完 成后，您可以重新登录到 PowerStore Manager。</p>
-<p>安装新版本的 PowerStoreOS 时，PowerStore Manager 表中的列布局设置将重置为其默认布局。升级 PowerStoreOS 时，对 PowerStore Manager 中的列布局设置的更改不会保留。</p>
 
                 
             </div>
@@ -599,7 +615,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2023/08/04/PowerStore%203.x%E7%9A%84%E5%8D%87%E7%BA%A7%E6%89%8B%E9%A1%BA/">http://example.com/2023/08/04/PowerStore%203.x%E7%9A%84%E5%8D%87%E7%BA%A7%E6%89%8B%E9%A1%BA/</a>
+                    <a href="http://127.0.0.1:4000/2023/08/07/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/">http://127.0.0.1:4000/2023/08/07/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -637,24 +653,32 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Server/">
-                                    <span class="chip bg-color">Server</span>
+                                <a href="/tags/%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/">
+                                    <span class="chip bg-color">银河麒麟</span>
                                 </a>
                             
-                                <a href="/tags/%E5%AD%98%E5%82%A8/">
-                                    <span class="chip bg-color">存储</span>
+                                <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/">
+                                    <span class="chip bg-color">服务器</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%8D%8E%E4%B8%BA/">
+                                    <span class="chip bg-color">华为</span>
+                                </a>
+                            
+                                <a href="/tags/Atlas800/">
+                                    <span class="chip bg-color">Atlas800</span>
                                 </a>
                             
                         </div>
                     
                 </div>
                 <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/share/css/share.min.css">
 <div id="article-share">
 
     
     <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="/libs/share/js/social-share.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/share/js/social-share.min.js"></script>
     
 
     
@@ -664,138 +688,12 @@
                 </div>
             </div>
             
-                <style>
-    #reward {
-        margin: 40px 0;
-        text-align: center;
-    }
-
-    #reward .reward-link {
-        font-size: 1.4rem;
-        line-height: 38px;
-    }
-
-    #reward .btn-floating:hover {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    #rewardModal {
-        width: 320px;
-        height: 350px;
-    }
-
-    #rewardModal .reward-title {
-        margin: 15px auto;
-        padding-bottom: 5px;
-    }
-
-    #rewardModal .modal-content {
-        padding: 10px;
-    }
-
-    #rewardModal .close {
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        color: rgba(0, 0, 0, 0.5);
-        font-size: 1.3rem;
-        line-height: 20px;
-        cursor: pointer;
-    }
-
-    #rewardModal .close:hover {
-        color: #ef5350;
-        transform: scale(1.3);
-        -moz-transform:scale(1.3);
-        -webkit-transform:scale(1.3);
-        -o-transform:scale(1.3);
-    }
-
-    #rewardModal .reward-tabs {
-        margin: 0 auto;
-        width: 210px;
-    }
-
-    .reward-tabs .tabs {
-        height: 38px;
-        margin: 10px auto;
-        padding-left: 0;
-    }
-
-    .reward-content ul {
-        padding-left: 0 !important;
-    }
-
-    .reward-tabs .tabs .tab {
-        height: 38px;
-        line-height: 38px;
-    }
-
-    .reward-tabs .tab a {
-        color: #fff;
-        background-color: #ccc;
-    }
-
-    .reward-tabs .tab a:hover {
-        background-color: #ccc;
-        color: #fff;
-    }
-
-    .reward-tabs .wechat-tab .active {
-        color: #fff !important;
-        background-color: #22AB38 !important;
-    }
-
-    .reward-tabs .alipay-tab .active {
-        color: #fff !important;
-        background-color: #019FE8 !important;
-    }
-
-    .reward-tabs .reward-img {
-        width: 210px;
-        height: 210px;
-    }
-</style>
-
-<div id="reward">
-    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
-
-    <!-- Modal Structure -->
-    <div id="rewardModal" class="modal">
-        <div class="modal-content">
-            <a class="close modal-close"><i class="fas fa-times"></i></a>
-            <h4 class="reward-title">你的赏识是我前进的动力</h4>
-            <div class="reward-content">
-                <div class="reward-tabs">
-                    <ul class="tabs row">
-                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
-                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
-                    </ul>
-                    <div id="alipay">
-                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
-                    </div>
-                    <div id="wechat">
-                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $(function () {
-        $('.tabs').tabs();
-    });
-</script>
-
-            
         </div>
     </div>
 
     
-        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
-<link rel="stylesheet" href="/css/my-gitalk.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/my-gitalk.css">
 
 <div class="card gitalk-card" data-aos="fade-up">
     <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
@@ -805,15 +703,15 @@
     <div id="gitalk-container" class="card-content"></div>
 </div>
 
-<script src="/libs/gitalk/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/gitalk/gitalk.min.js"></script>
 <script>
     let gitalk = new Gitalk({
-        clientID: '',
-        clientSecret: '',
-        repo: '',
-        owner: '',
-        admin: null,
-        id: '2023-08-04T08-00-00',
+        clientID: 'Ov23liWZgseSe42ZYLbk',
+        clientSecret: '2c994858e1b7678f92b060716b0390bf71cdc01b',
+        repo: 'bsligm.github.io',
+        owner: 'bsligm',
+        admin: ["bsligm"],
+        id: '2023-08-07T16-00-00',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -843,13 +741,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/08/10/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/">
+                <a href="/2023/09/08/win10%E5%B0%81%E8%A3%85/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="华为Atlas800服务器安装银河麒麟">
+                        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/22.jpg" class="responsive-img" alt="Windows 10系统封装详细教程">
                         
-                        <span class="card-title">华为Atlas800服务器安装银河麒麟</span>
+                        <span class="card-title">Windows 10系统封装详细教程</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -860,7 +758,7 @@
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-08-10
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-09-08
                         </span>
                         <span class="publish-author">
                             
@@ -870,6 +768,10 @@
                                     系统运维
                                 </a>
                             
+                            <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/" class="post-category">
+                                    基础设施
+                                </a>
+                            
                             
                         </span>
                     </div>
@@ -877,12 +779,16 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Linux/">
-                        <span class="chip bg-color">Linux</span>
+                    <a href="/tags/Windows/">
+                        <span class="chip bg-color">Windows</span>
                     </a>
                     
-                    <a href="/tags/%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/">
-                        <span class="chip bg-color">银河麒麟</span>
+                    <a href="/tags/%E5%B0%81%E8%A3%85/">
+                        <span class="chip bg-color">封装</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%B3%BB%E7%BB%9F%E9%83%A8%E7%BD%B2/">
+                        <span class="chip bg-color">系统部署</span>
                     </a>
                     
                 </div>
@@ -896,13 +802,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/05/18/Chromium%E6%B5%8F%E8%A7%88%E5%99%A8%20%E5%86%85%E6%A0%B8113%20STATUS_STACK_BUFFER_OVERRUN%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
+                <a href="/2023/07/28/PowerStore%203.x%E7%9A%84%E5%8D%87%E7%BA%A7%E6%89%8B%E9%A1%BA/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="Chromium浏览器 内核113 STATUS_STACK_BUFFER_OVERRUN解决方案">
+                        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/22.jpg" class="responsive-img" alt="PowerStore 3.x的升级手顺">
                         
-                        <span class="card-title">Chromium浏览器 内核113 STATUS_STACK_BUFFER_OVERRUN解决方案</span>
+                        <span class="card-title">PowerStore 3.x的升级手顺</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -913,7 +819,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-05-18
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-28
                             </span>
                         <span class="publish-author">
                             
@@ -930,12 +836,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/AD-%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
-                        <span class="chip bg-color">AD 域控制器</span>
+                    <a href="/tags/%E5%AD%98%E5%82%A8/">
+                        <span class="chip bg-color">存储</span>
                     </a>
                     
-                    <a href="/tags/Helpdesk/">
-                        <span class="chip bg-color">Helpdesk</span>
+                    <a href="/tags/PowerStore/">
+                        <span class="chip bg-color">PowerStore</span>
                     </a>
                     
                 </div>
@@ -976,7 +882,7 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: 启明星辰<br />'
+            + '来源: 127.0.0.1<br />'
             + '文章作者: 李广明<br />'
             + '文章链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
@@ -988,21 +894,21 @@
 
 
 <!-- 代码块功能依赖 -->
-<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeBlockFuction.js"></script>
 
 <!-- 代码语言 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeLang.js"></script>
 
 
 <!-- 代码块复制 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeCopy.js"></script>
 
 
 <!-- 代码块收缩 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeShrink.js"></script>
 
 
     </div>
@@ -1023,14 +929,14 @@
 </div>
 
 
-<script src="/libs/tocbot/tocbot.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/tocbot/tocbot.min.js"></script>
 <script>
     $(function () {
         tocbot.init({
             tocSelector: '#toc-content',
             contentSelector: '#articleContent',
             headingsOffset: -($(window).height() * 0.4 - 45),
-            collapseDepth: Number('0'),
+            collapseDepth: Number('2'),
             headingSelector: 'h2, h3, h4'
         });
 
@@ -1108,71 +1014,20 @@
 
     <footer class="page-footer bg-color">
     
-        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
-<style>
-    .aplayer .aplayer-lrc p {
-        
-        display: none;
-        
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 16px !important;
-    }
-
-    .aplayer .aplayer-lrc p.aplayer-lrc-current {
-        
-        display: none;
-        
-        font-size: 15px;
-        color: #42b983;
-    }
-
-    
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
-        left: -66px !important;
-    }
-
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
-        left: 0px !important;
-    }
-
-    
-</style>
-<div class="">
-    
-    <div class="row">
-        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
-                   server="netease"
-                   type="playlist"
-                   id="6732654392"
-                   fixed='true'
-                   autoplay='true'
-                   theme='#42b983'
-                   loop='all'
-                   order='random'
-                   preload='auto'
-                   volume='0.7'
-                   list-folded='true'
-        >
-        </meting-js>
-    </div>
-</div>
-
-<script src="/libs/aplayer/APlayer.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
-
-    
-    <div class="container row center-align" style="margin-bottom: 0px !important;">
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2025</span>
+                <span id="year">2021-2025</span>
             
-            <span id="year">2019</span>
+            <span id="year">2021</span>
             <a href="/about" target="_blank">李广明</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">12.5k</span>&nbsp;字
             
             
             
@@ -1191,6 +1046,50 @@
             </span>
             
             <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2021";
+                    var startMonth = "5";
+                    var startDate = "6";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
             
             <br>
             
@@ -1221,6 +1120,10 @@
 
 
 
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
 
 </div>
     </div>
@@ -1341,12 +1244,12 @@ $(function () {
 </div>
 
 
-    <script src="/libs/materialize/materialize.min.js"></script>
-    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="/libs/aos/aos.js"></script>
-    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="/js/matery.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/js/matery.js"></script>
 
     <!-- Baidu Analytics -->
 
@@ -1367,10 +1270,8 @@ $(function () {
 </script>
 
     
-    <script src="/libs/others/clicklove.js" async="async"></script>
     
-    
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    <script async src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/others/busuanzi.pure.mini.js"></script>
     
 
     
@@ -1385,7 +1286,7 @@ $(function () {
     
 
     
-    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>
