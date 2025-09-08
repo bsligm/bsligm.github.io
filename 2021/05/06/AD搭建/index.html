@@ -409,12 +409,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Server/">
-                                <span class="chip bg-color">Server</span>
-                            </a>
-                        
                             <a href="/tags/Helpdesk/">
                                 <span class="chip bg-color">Helpdesk</span>
+                            </a>
+                        
+                            <a href="/tags/Server/">
+                                <span class="chip bg-color">Server</span>
                             </a>
                         
                     </div>
@@ -465,28 +465,28 @@
 <li>以DELL为例，使用Idrac（IPMI接口，各家厂商名字不同）来安装，需要先在bios中配置好Idrac，并接入本地局域网便于日后管理，或者使用网线直连pc。</li>
 <li>DELL默认idrac 管理地址默认为 192.168.0.120。线缆连接完成后后在bios中配置 地址以及管理密码</li>
 </ul>
-<h3 id="服务器开机从镜像启动"><a href="#服务器开机从镜像启动" class="headerlink" title="服务器开机从镜像启动"></a>服务器开机从镜像启动<img src="/images/server2019%E5%AE%89%E8%A3%851.png" alt="系统安装"></h3><p><img src="/images/server2019%E5%AE%89%E8%A3%852.png"></p>
-<p><img src="/images/%E5%AE%8C%E6%88%90%E5%AE%89%E8%A3%85.png" alt="完成安装"></p>
+<h3 id="服务器开机从镜像启动"><a href="#服务器开机从镜像启动" class="headerlink" title="服务器开机从镜像启动"></a>服务器开机从镜像启动<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509096.png" alt="系统安装"></h3><p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509385.png"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509728.png" alt="完成安装"></p>
 <hr>
 <h2 id="域服务安装与配置"><a href="#域服务安装与配置" class="headerlink" title="域服务安装与配置"></a>域服务安装与配置</h2><ol>
-<li>更改计算机名和固定ip地址，然后重启应用。<img src="/images/%E6%9B%B4%E6%94%B9%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%90%8D.png" alt="更改计算机名"></li>
+<li>更改计算机名和固定ip地址，然后重启应用。<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509513.png" alt="更改计算机名"></li>
 </ol>
-<p><img src="/images/%E5%9B%BA%E5%AE%9Aip%E5%9C%B0%E5%9D%80.png" alt="固定IP地址"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509381.png" alt="固定IP地址"></p>
 <ol start="2">
-<li><p>添加角色功能 ad域服务功能，以及DHCP服务（如果由交换机 路由器防火墙等分配可忽略）<img src="/images/%E6%B7%BB%E5%8A%A0%E5%9F%9F%E6%9C%8D%E5%8A%A1%E5%8A%9F%E8%83%BD.png" alt="添加域服务功能"></p>
+<li><p>添加角色功能 ad域服务功能，以及DHCP服务（如果由交换机 路由器防火墙等分配可忽略）<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509842.png" alt="添加域服务功能"></p>
 </li>
-<li><p>域服务确认安装<img src="/images/%E5%9F%9F%E6%9C%8D%E5%8A%A1%E7%A1%AE%E8%AE%A4%E5%AE%89%E8%A3%85.png"></p>
+<li><p>域服务确认安装<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509441.png"></p>
 </li>
 </ol>
-<h3 id="配置域控"><a href="#配置域控" class="headerlink" title="配置域控"></a>配置域控</h3><h4 id="将服务器提升为域控服务器"><a href="#将服务器提升为域控服务器" class="headerlink" title="将服务器提升为域控服务器"></a>将服务器提升为域控服务器</h4><p>1.点击提示-部署后配置-将服务器提升为域控制器<img src="/images/ad%E9%83%A8%E7%BD%B2%E5%90%8E%E9%85%8D%E7%BD%AE.png"></p>
+<h3 id="配置域控"><a href="#配置域控" class="headerlink" title="配置域控"></a>配置域控</h3><h4 id="将服务器提升为域控服务器"><a href="#将服务器提升为域控服务器" class="headerlink" title="将服务器提升为域控服务器"></a>将服务器提升为域控服务器</h4><p>1.点击提示-部署后配置-将服务器提升为域控制器<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509594.png"></p>
 <ol start="2">
-<li>部署新域与域名<img src="/images/ad%E9%83%A8%E7%BD%B21.png"></li>
-<li>配置域控与dns服务选项<img src="/images/ad%E9%83%A8%E7%BD%B22.png"></li>
-<li>其他选项及安装<img src="/images/ad%E9%83%A8%E7%BD%B23.png"></li>
-<li><img src="/images/ad%E9%83%A8%E7%BD%B24.png"></li>
-<li><img src="/images/ad%E9%83%A8%E7%BD%B25.png"></li>
-<li><img src="/images/ad%E9%83%A8%E7%BD%B26.png"></li>
-<li>安装完成后重启 域控部署完成。<img src="/images/ad%E9%83%A8%E7%BD%B2%E5%AE%8C%E6%88%90.png"></li>
+<li>部署新域与域名<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510494.png"></li>
+<li>配置域控与dns服务选项<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510311.png"></li>
+<li>其他选项及安装<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510564.png"></li>
+<li><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510798.png"></li>
+<li><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510256.png"></li>
+<li><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510759.png"></li>
+<li>安装完成后重启 域控部署完成。<img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510752.png"></li>
 </ol>
 
                 
@@ -552,12 +552,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Server/">
-                                    <span class="chip bg-color">Server</span>
-                                </a>
-                            
                                 <a href="/tags/Helpdesk/">
                                     <span class="chip bg-color">Helpdesk</span>
+                                </a>
+                            
+                                <a href="/tags/Server/">
+                                    <span class="chip bg-color">Server</span>
                                 </a>
                             
                         </div>
@@ -1081,7 +1081,7 @@
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2023</span>
+                <span id="year">2019-2025</span>
             
             <span id="year">2019</span>
             <a href="/about" target="_blank">李广明</a>
