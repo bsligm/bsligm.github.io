@@ -14,7 +14,26 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;http://127.0.0.1:4000/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/&#34;},&#34;headline&#34;:&#34;Jump server单节点无外置数据库部署&#34;,&#34;description&#34;:&#34;Jump server单节点无外置数据库部署JumpServer是全球首款完全开源、符合4A规范的运维安全审计系统，提供了身份验证、账号管理、授权控制和安全审计等功能。本文将详细介绍JumpServer单节点无外置数据库的部署过程。\n基础设&#34;,&#34;datePublished&#34;:&#34;2023-10-18T05:40:00.000Z&#34;,&#34;dateModified&#34;:&#34;2023-10-18T05:40:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;http://127.0.0.1:4000/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/&#34;},&#34;headline&#34;:&#34;Jump server单节点无外置数据库部署&#34;,&#34;description&#34;:&#34;Jump server单节点无外置数据库部署JumpServer是全球首款完全开源、符合4A规范的运维安全审计系统，提供了身份验证、账号管理、授权控制和安全审计等功能。本文将详细介绍JumpServer单节点无外置数据库的部署过程。\n基础设&#34;,&#34;datePublished&#34;:&#34;2023-10-18T05:40:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T05:40:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    
+    
+    
+    <link rel="canonical" href="https://bsligm.zone/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Jump server单节点无外置数据库部署 | 李广明的技术博客">
+    <meta property="og:url" content="https://bsligm.zone/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/">
+    <meta property="og:site_name" content="李广明的技术博客">
+    <meta property="og:description" content="Jump server单节点无外置数据库部署JumpServer是全球首款完全开源、符合4A规范的运维安全审计系统，提供了身份验证、账号管理、授权控制和安全审计等功能。本文将详细介绍JumpServer单节点无外置数据库的部署过程。
+基础设">
+    
+    <meta property="og:image" content="https://bsligm.zone/medias/featureimages/4.jpg">
+    
+    
+    <meta property="article:published_time" content="2023-10-18T05:40:00.000Z">
+    
+    
+    <meta property="article:modified_time" content="2026-11-19T05:40:00.000Z">
+    
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
@@ -36,20 +55,21 @@
     })();
 </script>
 
-    <title>Jump server单节点无外置数据库部署 | 127.0.0.1</title>
-    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/favicon.png">
+    <title>Jump server单节点无外置数据库部署 | 李广明的技术博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/my.css">
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
 
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/jquery/jquery.min.js"></script>
-    <link rel="alternate" href="/atom.xml" title="127.0.0.1" type="application/atom+xml">
+    <script src="/libs/jquery/jquery.min.js"></script>
+    <link rel="alternate" href="/atom.xml" title="李广明的技术博客" type="application/atom+xml">
 <meta name="generator" content="Hexo 5.4.0"></head>
+
 
 
 
@@ -60,9 +80,9 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">127.0.0.1</span>
+                    <span class="logo-span">李广明的技术博客</span>
                 </a>
             </div>
             
@@ -148,9 +168,9 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">127.0.0.1</div>
+        <div class="logo-name">李广明的技术博客</div>
         <div class="logo-desc">
             
             李广明的技术博客，专注于Windows服务器、网络技术、系统集成等IT领域知识分享
@@ -231,7 +251,7 @@
         
         <li><div class="divider"></div></li>
         <li>
-            <a href="https://github.com/bsligm/bsligm.github.io" class="waves-effect waves-light" target="_blank">
+            <a href="https://github.com/bsligm/bsligm.github.io" class="waves-effect waves-light" target="_blank" rel="noopener noreferrer">
                 <i class="fab fa-github-square fa-fw"></i>Fork Me
             </a>
         </li>
@@ -289,7 +309,7 @@
 </style>
 
 <a href="https://github.com/bsligm/bsligm.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
-   data-tooltip="Fork Me" data-position="left" data-delay="50">
+   data-tooltip="Fork Me" data-position="left" data-delay="50" rel="noopener noreferrer">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
         <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
@@ -307,7 +327,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/6.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -325,7 +345,7 @@
 <main class="post-container content">
 
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
 <style>
     #articleContent h1::before,
     #articleContent h2::before,
@@ -472,7 +492,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-10-18
+                    2026-11-19
                 </div>
                 
 
@@ -523,7 +543,7 @@
 
 <h2 id="部署过程"><a href="#部署过程" class="headerlink" title="部署过程"></a>部署过程</h2><h3 id="1-下载安装包"><a href="#1-下载安装包" class="headerlink" title="1. 下载安装包"></a>1. 下载安装包</h3><p>访问JumpServer官方下载页面，根据Linux主机CPU架构下载对应的离线安装包：</p>
 <p><a target="_blank" rel="noopener" href="https://community.fit2cloud.com/#/download/jumpserver/v3-7-2">JumpServer下载页面</a></p>
-<h3 id="2-安装包处理"><a href="#2-安装包处理" class="headerlink" title="2. 安装包处理"></a>2. 安装包处理</h3><p>将下载的安装包移动到<a href="file:///Users/liguangming/blog/bsligm/themes/matery/source/js">/opt</a>目录并解压：</p>
+<h3 id="2-安装包处理"><a href="#2-安装包处理" class="headerlink" title="2. 安装包处理"></a>2. 安装包处理</h3><p>将下载的安装包移动到<code>/opt</code>目录并解压：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 移动安装包到/opt目录</span></span><br><span class="line">mv jumpserver-offline-installer-v*.tar.gz /opt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入/opt目录并解压</span></span><br><span class="line"><span class="built_in">cd</span> /opt</span><br><span class="line">tar -xf jumpserver-offline-installer-v*.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入解压后的目录</span></span><br><span class="line"><span class="built_in">cd</span> jumpserver-offline-installer-v*</span><br></pre></td></tr></table></figure>
 
 <h3 id="3-配置文件修改"><a href="#3-配置文件修改" class="headerlink" title="3. 配置文件修改"></a>3. 配置文件修改</h3><p>根据实际情况配置config文件，也可以不做任何修改使用默认配置：</p>
@@ -534,14 +554,14 @@
 <h3 id="4-执行安装"><a href="#4-执行安装" class="headerlink" title="4. 执行安装"></a>4. 执行安装</h3><p>安装JumpServer（单节点，无外置数据库部署，全部选择n）：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">./jmsctl.sh install</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动</span></span><br><span class="line">./jmsctl.sh start</span><br></pre></td></tr></table></figure>
 
-<h3 id="5-验证安装"><a href="#5-验证安装" class="headerlink" title="5. 验证安装"></a>5. 验证安装</h3><p>安装完成后，JumpServer配置文件路径为：<a href="file:///Users/liguangming/blog/bsligm/config-example.txt">/opt/jumpserver/config/config.txt</a></p>
+<h3 id="5-验证安装"><a href="#5-验证安装" class="headerlink" title="5. 验证安装"></a>5. 验证安装</h3><p>安装完成后，JumpServer配置文件路径为：<code>/opt/jumpserver/config/config.txt</code></p>
 <p>常用管理命令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/jumpserver-offline-release-v3.7.2-amd64</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动</span></span><br><span class="line">./jmsctl.sh start</span><br><span class="line"></span><br><span class="line"><span class="comment"># 停止</span></span><br><span class="line">./jmsctl.sh down</span><br><span class="line"></span><br><span class="line"><span class="comment"># 卸载</span></span><br><span class="line">./jmsctl.sh uninstall</span><br><span class="line"></span><br><span class="line"><span class="comment"># 帮助</span></span><br><span class="line">./jmsctl.sh -h</span><br></pre></td></tr></table></figure>
 
 <h3 id="6-访问JumpServer"><a href="#6-访问JumpServer" class="headerlink" title="6. 访问JumpServer"></a>6. 访问JumpServer</h3><p>安装成功后，通过浏览器访问JumpServer：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">地址: http:&#x2F;&#x2F;&lt;JumpServer服务器IP地址&gt;:&lt;服务运行端口&gt;</span><br><span class="line">用户名: admin</span><br><span class="line">密码: admin</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181002748.png" alt="JumpServer登录界面" title="JumpServer登录界面"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181002748.png" alt="JumpServer登录界面" title="JumpServer登录界面" decoding="async" loading="lazy"></p>
 <blockquote>
 <p><strong>重要提示</strong>：首次登录后请立即修改默认密码，确保系统安全。</p>
 </blockquote>
@@ -552,34 +572,34 @@
 <li>进入”系统设置” → “认证设置” → “LDAP设置”</li>
 <li>配置LDAP服务器信息</li>
 </ol>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181007029.png" alt="LDAP设置步骤1" title="LDAP设置界面"></p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181007281.png" alt="LDAP设置步骤2" title="LDAP同步设置"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181007029.png" alt="LDAP设置步骤1" title="LDAP设置界面" decoding="async" loading="lazy"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181007281.png" alt="LDAP设置步骤2" title="LDAP同步设置" decoding="async" loading="lazy"></p>
 <h3 id="2-资产配置"><a href="#2-资产配置" class="headerlink" title="2. 资产配置"></a>2. 资产配置</h3><p>添加需要管理的服务器资产：</p>
 <ol>
 <li>点击”控制台” → “资产管理” → “资产列表”</li>
 <li>点击”创建”按钮添加新资产</li>
 <li>填写资产信息，包括IP地址、协议、端口等</li>
 </ol>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181010659.png" alt="创建资产信息" title="资产创建界面"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181010659.png" alt="创建资产信息" title="资产创建界面" decoding="async" loading="lazy"></p>
 <h3 id="3-用户与用户组管理"><a href="#3-用户与用户组管理" class="headerlink" title="3. 用户与用户组管理"></a>3. 用户与用户组管理</h3><p>创建用户和用户组以便进行权限分配：</p>
 <ol>
 <li>进入”用户管理” → “用户列表”</li>
 <li>创建用户或从LDAP同步用户</li>
 <li>创建用户组并分配用户</li>
 </ol>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181014686.png" alt="用户管理" title="用户列表"></p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181014272.png" alt="用户组管理" title="用户组列表"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181014686.png" alt="用户管理" title="用户列表" decoding="async" loading="lazy"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181014272.png" alt="用户组管理" title="用户组列表" decoding="async" loading="lazy"></p>
 <h3 id="4-资产权限分配"><a href="#4-资产权限分配" class="headerlink" title="4. 资产权限分配"></a>4. 资产权限分配</h3><p>根据业务需求对资产进行权限分配：</p>
 <ol>
 <li>进入”控制台” → “权限管理” → “资产授权”</li>
 <li>根据需求对资产文件夹、OU或单个资产对用户或用户组进行授权</li>
 </ol>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181017807.png" alt="资产权限分配" title="资产授权界面"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202310181017807.png" alt="资产权限分配" title="资产授权界面" decoding="async" loading="lazy"></p>
 <h2 id="安全建议"><a href="#安全建议" class="headerlink" title="安全建议"></a>安全建议</h2><ol>
 <li><strong>密码安全</strong>：定期更换管理员密码，使用复杂密码策略</li>
 <li><strong>访问控制</strong>：严格控制访问JumpServer的IP范围</li>
 <li><strong>日志审计</strong>：定期检查操作日志，发现异常行为</li>
-<li><strong>备份策略</strong>：定期备份<a href="file:///data/jumpserver">/data/jumpserver</a>目录下的数据</li>
+<li><strong>备份策略</strong>：定期备份<code>/data/jumpserver</code>目录下的数据</li>
 <li><strong>版本更新</strong>：关注JumpServer官方更新，及时升级到最新稳定版本</li>
 </ol>
 <h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="1-端口冲突"><a href="#1-端口冲突" class="headerlink" title="1. 端口冲突"></a>1. 端口冲突</h3><p>如果默认端口被占用，需要修改config-example.txt中的端口配置。</p>
@@ -619,7 +639,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://127.0.0.1:4000/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/">http://127.0.0.1:4000/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/</a>
+                    <a href="https://bsligm.zone/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/">https://bsligm.zone/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -630,9 +650,9 @@
                 </span>
                 <span class="reprint-info">
                     本博客所有文章除特別声明外，均采用
-                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer noopener noreferrer" target="_blank">CC BY 4.0</a>
                     许可协议。转载请注明来源
-                    <a href="/about" target="_blank">李广明</a>
+                    <a href="/about" target="_blank" rel="noopener noreferrer">李广明</a>
                     !
                 </span>
             </div>
@@ -673,12 +693,12 @@
                     
                 </div>
                 <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/share/css/share.min.css">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
 <div id="article-share">
 
     
     <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/share/js/social-share.min.js"></script>
+    <script src="/libs/share/js/social-share.min.js"></script>
     
 
     
@@ -692,8 +712,8 @@
     </div>
 
     
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/gitalk/gitalk.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/my-gitalk.css">
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
 
 <div class="card gitalk-card" data-aos="fade-up">
     <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
@@ -703,7 +723,7 @@
     <div id="gitalk-container" class="card-content"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/gitalk/gitalk.min.js"></script>
+<script src="/libs/gitalk/gitalk.min.js"></script>
 <script>
     let gitalk = new Gitalk({
         clientID: 'Ov23liWZgseSe42ZYLbk',
@@ -744,8 +764,7 @@
                 <a href="/2023/11/09/Ubuntu%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E9%A9%B1%E5%8A%A8%E4%B8%8ECUDA/">
                     <div class="card-image">
                         
-                        
-                        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/23.jpg" class="responsive-img" alt="Ubuntu安装英伟达驱动与CUDA">
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Ubuntu安装英伟达驱动与CUDA" decoding="async" loading="lazy">
                         
                         <span class="card-title">Ubuntu安装英伟达驱动与CUDA</span>
                     </div>
@@ -797,8 +816,7 @@
                 <a href="/2023/09/08/win10%E5%B0%81%E8%A3%85/">
                     <div class="card-image">
                         
-                        
-                        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/22.jpg" class="responsive-img" alt="Windows 10系统封装详细教程">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Windows 10系统封装详细教程" decoding="async" loading="lazy">
                         
                         <span class="card-title">Windows 10系统封装详细教程</span>
                     </div>
@@ -882,7 +900,7 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: 127.0.0.1<br />'
+            + '来源: 李广明的技术博客<br />'
             + '文章作者: 李广明<br />'
             + '文章链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
@@ -894,21 +912,21 @@
 
 
 <!-- 代码块功能依赖 -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeBlockFuction.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
 
 <!-- 代码语言 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeLang.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
 
 
 <!-- 代码块复制 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
 
 
 <!-- 代码块收缩 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeShrink.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
 
 
     </div>
@@ -929,7 +947,7 @@
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/tocbot/tocbot.min.js"></script>
+<script src="/libs/tocbot/tocbot.min.js"></script>
 <script>
     $(function () {
         tocbot.init({
@@ -1018,16 +1036,16 @@
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2021-2025</span>
+                <span id="year">2021-2026</span>
             
             <span id="year">2021</span>
-            <a href="/about" target="_blank">李广明</a>
-            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
-            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <a href="/about" target="_blank" rel="noopener noreferrer">李广明</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank" rel="noopener noreferrer">Matery</a>
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">17.9k</span>&nbsp;字
+                class="white-color">18.2k</span>&nbsp;字
             
             
             
@@ -1095,13 +1113,13 @@
             
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://github.com/bsligm" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+    <a href="https://github.com/bsligm" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50" rel="noopener noreferrer">
         <i class="fab fa-github"></i>
     </a>
 
 
 
-    <a href="mailto:bsligm@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+    <a href="mailto:bsligm@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50" rel="noopener noreferrer">
         <i class="fas fa-envelope-open"></i>
     </a>
 
@@ -1111,7 +1129,7 @@
 
 
 
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1055537871" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1055537871" data-position="top" data-delay="50">
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1055537871" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1055537871" data-position="top" data-delay="50" rel="noopener noreferrer">
         <i class="fab fa-qq"></i>
     </a>
 
@@ -1121,7 +1139,7 @@
 
 
 
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50" rel="noopener noreferrer">
         <i class="fas fa-rss"></i>
     </a>
 
@@ -1244,12 +1262,12 @@ $(function () {
 </div>
 
 
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/materialize/materialize.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/aos/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/js/matery.js"></script>
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
 
     <!-- Baidu Analytics -->
 
@@ -1271,7 +1289,7 @@ $(function () {
 
     
     
-    <script async src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/others/busuanzi.pure.mini.js"></script>
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
     
 
     
@@ -1286,7 +1304,7 @@ $(function () {
     
 
     
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>

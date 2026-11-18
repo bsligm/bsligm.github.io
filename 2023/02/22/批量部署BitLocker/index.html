@@ -13,7 +13,25 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;http://127.0.0.1:4000/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/&#34;},&#34;headline&#34;:&#34;Windows域环境下批量部署BitLocker&#34;,&#34;description&#34;:&#34;Windows域环境下批量部署BitLockerBitLocker是Windows系统提供的全盘加密功能，能够有效保护存储在硬盘上的数据安全。在企业环境中，通过组策略可以实现BitLocker的批量部署和统一管理。本文将详细介绍在Windo&#34;,&#34;datePublished&#34;:&#34;2023-02-22T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2023-02-22T03:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;http://127.0.0.1:4000/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/&#34;},&#34;headline&#34;:&#34;Windows域环境下批量部署BitLocker&#34;,&#34;description&#34;:&#34;Windows域环境下批量部署BitLockerBitLocker是Windows系统提供的全盘加密功能，能够有效保护存储在硬盘上的数据安全。在企业环境中，通过组策略可以实现BitLocker的批量部署和统一管理。本文将详细介绍在Windo&#34;,&#34;datePublished&#34;:&#34;2023-02-22T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2023-02-22T03:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    
+    
+    
+    <link rel="canonical" href="https://bsligm.zone/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Windows域环境下批量部署BitLocker | 李广明的技术博客">
+    <meta property="og:url" content="https://bsligm.zone/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/">
+    <meta property="og:site_name" content="李广明的技术博客">
+    <meta property="og:description" content="Windows域环境下批量部署BitLockerBitLocker是Windows系统提供的全盘加密功能，能够有效保护存储在硬盘上的数据安全。在企业环境中，通过组策略可以实现BitLocker的批量部署和统一管理。本文将详细介绍在Windo">
+    
+    <meta property="og:image" content="https://bsligm.zone/medias/featureimages/6.jpg">
+    
+    
+    <meta property="article:published_time" content="2023-02-22T03:00:00.000Z">
+    
+    
+    <meta property="article:modified_time" content="2023-02-22T03:00:00.000Z">
+    
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
@@ -35,20 +53,21 @@
     })();
 </script>
 
-    <title>Windows域环境下批量部署BitLocker | 127.0.0.1</title>
-    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/favicon.png">
+    <title>Windows域环境下批量部署BitLocker | 李广明的技术博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/my.css">
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
 
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/jquery/jquery.min.js"></script>
-    <link rel="alternate" href="/atom.xml" title="127.0.0.1" type="application/atom+xml">
+    <script src="/libs/jquery/jquery.min.js"></script>
+    <link rel="alternate" href="/atom.xml" title="李广明的技术博客" type="application/atom+xml">
 <meta name="generator" content="Hexo 5.4.0"></head>
+
 
 
 
@@ -59,9 +78,9 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">127.0.0.1</span>
+                    <span class="logo-span">李广明的技术博客</span>
                 </a>
             </div>
             
@@ -147,9 +166,9 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">127.0.0.1</div>
+        <div class="logo-name">李广明的技术博客</div>
         <div class="logo-desc">
             
             李广明的技术博客，专注于Windows服务器、网络技术、系统集成等IT领域知识分享
@@ -230,7 +249,7 @@
         
         <li><div class="divider"></div></li>
         <li>
-            <a href="https://github.com/bsligm/bsligm.github.io" class="waves-effect waves-light" target="_blank">
+            <a href="https://github.com/bsligm/bsligm.github.io" class="waves-effect waves-light" target="_blank" rel="noopener noreferrer">
                 <i class="fab fa-github-square fa-fw"></i>Fork Me
             </a>
         </li>
@@ -288,7 +307,7 @@
 </style>
 
 <a href="https://github.com/bsligm/bsligm.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
-   data-tooltip="Fork Me" data-position="left" data-delay="50">
+   data-tooltip="Fork Me" data-position="left" data-delay="50" rel="noopener noreferrer">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
         <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
@@ -306,7 +325,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -324,7 +343,7 @@
 <main class="post-container content">
 
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
 <style>
     #articleContent h1::before,
     #articleContent h2::before,
@@ -427,12 +446,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/AD%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
-                                <span class="chip bg-color">AD域控制器</span>
-                            </a>
-                        
                             <a href="/tags/Helpdesk/">
                                 <span class="chip bg-color">Helpdesk</span>
+                            </a>
+                        
+                            <a href="/tags/AD%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
+                                <span class="chip bg-color">AD域控制器</span>
                             </a>
                         
                             <a href="/tags/%E5%AE%89%E5%85%A8/">
@@ -520,7 +539,7 @@
 <li>在功能选择中勾选”BitLocker驱动器加密”和”BitLocker网络解锁”</li>
 <li>完成安装并向导</li>
 </ol>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221113330078.png" alt="DC添加BitLocker组件" title="添加BitLocker网络解锁功能"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221113330078.png" alt="DC添加BitLocker组件" title="添加BitLocker网络解锁功能" decoding="async" loading="lazy"></p>
 <h2 id="脚本编写"><a href="#脚本编写" class="headerlink" title="脚本编写"></a>脚本编写</h2><p>由于PowerShell脚本通过组策略推送时无法以管理员身份运行，因此需要通过批处理文件来执行PowerShell脚本。</p>
 <h3 id="1-批处理脚本"><a href="#1-批处理脚本" class="headerlink" title="1. 批处理脚本"></a>1. 批处理脚本</h3><p>创建批处理文件来调用PowerShell脚本：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">REM 提取并执行PowerShell脚本部分</span><br><span class="line">for &#x2F;f &quot;delims&#x3D;:&quot; %%i in (&#39;findstr &#x2F;n &quot;^:ps1$&quot; &quot;%~f0&quot;&#39;) do (</span><br><span class="line">    more +%%i &quot;%~f0&quot; &gt; &quot;%temp%\bitlocker.ps1&quot;</span><br><span class="line">)</span><br><span class="line">powershell -executionpolicy remotesigned -file &quot;%temp%\bitlocker.ps1&quot;</span><br><span class="line">goto :eof</span><br><span class="line"></span><br><span class="line">:ps1</span><br><span class="line"># PowerShell脚本部分</span><br><span class="line"># 检查BitLocker状态</span><br><span class="line">get-bitlockervolume | find &quot;Off&quot;</span><br><span class="line">if ($? -eq $true) &#123;</span><br><span class="line">    # 连接网络共享路径</span><br><span class="line">    net use \\UNC路径 &quot;password&quot; &#x2F;user:domain\username  </span><br><span class="line">    # 启用BitLocker并保存恢复密钥到网络共享</span><br><span class="line">    manage-bde -on C: -RecoveryPassword &gt;&gt; \\UNC路径\$env:COMPUTERNAME.txt</span><br><span class="line">&#125;</span><br><span class="line">else &#123;</span><br><span class="line">    exit</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -539,19 +558,19 @@
 <li>打开”组策略管理编辑器”</li>
 <li>创建新的组策略对象（GPO）用于BitLocker配置</li>
 </ol>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221110312204.png" alt="创建BitLocker GPO" title="创建BitLocker组策略对象"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221110312204.png" alt="创建BitLocker GPO" title="创建BitLocker组策略对象" decoding="async" loading="lazy"></p>
 <h3 id="2-配置BitLocker恢复信息存储"><a href="#2-配置BitLocker恢复信息存储" class="headerlink" title="2. 配置BitLocker恢复信息存储"></a>2. 配置BitLocker恢复信息存储</h3><p>导航到：<code>计算机配置</code> → <code>策略</code> → <code>管理模板</code> → <code>Windows组件</code> → <code>BitLocker驱动器加密</code></p>
 <p>将”将BitLocker恢复信息储存在active directory域服务中”设置为<strong>已启用</strong>。</p>
 <h3 id="3-配置操作系统驱动器加密策略"><a href="#3-配置操作系统驱动器加密策略" class="headerlink" title="3. 配置操作系统驱动器加密策略"></a>3. 配置操作系统驱动器加密策略</h3><p>导航到：<code>计算机配置</code> → <code>策略</code> → <code>管理模板</code> → <code>Windows组件</code> → <code>BitLocker驱动器加密</code> → <code>操作系统驱动器</code></p>
 <p>将”选择如何才能恢复BitLocker保护的操作系统驱动器”设置为<strong>已启用</strong>。</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221111148766.png" alt="BitLocker驱动器加密配置" title="操作系统驱动器加密设置"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221111148766.png" alt="BitLocker驱动器加密配置" title="操作系统驱动器加密设置" decoding="async" loading="lazy"></p>
 <h3 id="4-配置关机脚本"><a href="#4-配置关机脚本" class="headerlink" title="4. 配置关机脚本"></a>4. 配置关机脚本</h3><p>创建另一个组策略对象用于执行关机脚本：</p>
 <ol>
 <li>创建新的GPO用于关机脚本执行</li>
 <li>导航到：<code>计算机配置</code> → <code>Windows设置</code> → <code>脚本(启动/关机)</code> → <code>关机</code></li>
 <li>添加之前创建的批处理脚本</li>
 </ol>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221112332612.png" alt="关机脚本配置" title="关机脚本设置"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221112332612.png" alt="关机脚本配置" title="关机脚本设置" decoding="async" loading="lazy"></p>
 <h2 id="实施步骤"><a href="#实施步骤" class="headerlink" title="实施步骤"></a>实施步骤</h2><p>按照以下步骤实施BitLocker批量部署：</p>
 <h3 id="1-链接组策略对象"><a href="#1-链接组策略对象" class="headerlink" title="1. 链接组策略对象"></a>1. 链接组策略对象</h3><p>将上述两条GPO链接到需要开启BitLocker的组织单位（OU）。</p>
 <h3 id="2-更新组策略"><a href="#2-更新组策略" class="headerlink" title="2. 更新组策略"></a>2. 更新组策略</h3><p>在客户端执行以下命令强制更新组策略：</p>
@@ -562,9 +581,9 @@
 <li>检查网络共享路径下是否存在以计算机名命名的文本文件</li>
 <li>确认恢复密钥已成功重定向保存</li>
 </ol>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221112816203.png" alt="恢复密钥文件" title="恢复密钥文件"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221112816203.png" alt="恢复密钥文件" title="恢复密钥文件" decoding="async" loading="lazy"></p>
 <h3 id="5-验证AD备份"><a href="#5-验证AD备份" class="headerlink" title="5. 验证AD备份"></a>5. 验证AD备份</h3><p>检查域控制器中计算机账户是否已备份BitLocker恢复密钥：</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221113029252.png" alt="AD中BitLocker密钥备份" title="AD中密钥备份"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221113029252.png" alt="AD中BitLocker密钥备份" title="AD中密钥备份" decoding="async" loading="lazy"></p>
 <h2 id="安全建议"><a href="#安全建议" class="headerlink" title="安全建议"></a>安全建议</h2><ol>
 <li><strong>TPM芯片</strong>：确保所有目标设备都配备TPM 2.0芯片</li>
 <li><strong>网络共享安全</strong>：保护存储恢复密钥的网络共享路径</li>
@@ -627,7 +646,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://127.0.0.1:4000/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/">http://127.0.0.1:4000/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/</a>
+                    <a href="https://bsligm.zone/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/">https://bsligm.zone/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -638,9 +657,9 @@
                 </span>
                 <span class="reprint-info">
                     本博客所有文章除特別声明外，均采用
-                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer noopener noreferrer" target="_blank">CC BY 4.0</a>
                     许可协议。转载请注明来源
-                    <a href="/about" target="_blank">李广明</a>
+                    <a href="/about" target="_blank" rel="noopener noreferrer">李广明</a>
                     !
                 </span>
             </div>
@@ -665,12 +684,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/AD%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
-                                    <span class="chip bg-color">AD域控制器</span>
-                                </a>
-                            
                                 <a href="/tags/Helpdesk/">
                                     <span class="chip bg-color">Helpdesk</span>
+                                </a>
+                            
+                                <a href="/tags/AD%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
+                                    <span class="chip bg-color">AD域控制器</span>
                                 </a>
                             
                                 <a href="/tags/%E5%AE%89%E5%85%A8/">
@@ -685,12 +704,12 @@
                     
                 </div>
                 <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/share/css/share.min.css">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
 <div id="article-share">
 
     
     <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/share/js/social-share.min.js"></script>
+    <script src="/libs/share/js/social-share.min.js"></script>
     
 
     
@@ -704,8 +723,8 @@
     </div>
 
     
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/gitalk/gitalk.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/css/my-gitalk.css">
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
 
 <div class="card gitalk-card" data-aos="fade-up">
     <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
@@ -715,7 +734,7 @@
     <div id="gitalk-container" class="card-content"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/gitalk/gitalk.min.js"></script>
+<script src="/libs/gitalk/gitalk.min.js"></script>
 <script>
     let gitalk = new Gitalk({
         clientID: 'Ov23liWZgseSe42ZYLbk',
@@ -756,8 +775,7 @@
                 <a href="/2023/03/04/Windows%E6%B2%99%E7%9B%92%20sandbox%20%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B/">
                     <div class="card-image">
                         
-                        
-                        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/21.jpg" class="responsive-img" alt="Windows沙盒 sandbox 实际应用案例">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Windows沙盒 sandbox 实际应用案例" decoding="async" loading="lazy">
                         
                         <span class="card-title">Windows沙盒 sandbox 实际应用案例</span>
                     </div>
@@ -817,8 +835,7 @@
                 <a href="/2021/05/06/AD%E6%90%AD%E5%BB%BA/">
                     <div class="card-image">
                         
-                        
-                        <img src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/medias/featureimages/4.jpg" class="responsive-img" alt="Windows Server安装以及AD域服务搭建">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Windows Server安装以及AD域服务搭建" decoding="async" loading="lazy">
                         
                         <span class="card-title">Windows Server安装以及AD域服务搭建</span>
                     </div>
@@ -852,16 +869,16 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Windows/">
-                        <span class="chip bg-color">Windows</span>
+                    <a href="/tags/Server/">
+                        <span class="chip bg-color">Server</span>
                     </a>
                     
                     <a href="/tags/Helpdesk/">
                         <span class="chip bg-color">Helpdesk</span>
                     </a>
                     
-                    <a href="/tags/Server/">
-                        <span class="chip bg-color">Server</span>
+                    <a href="/tags/Windows/">
+                        <span class="chip bg-color">Windows</span>
                     </a>
                     
                 </div>
@@ -902,7 +919,7 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: 127.0.0.1<br />'
+            + '来源: 李广明的技术博客<br />'
             + '文章作者: 李广明<br />'
             + '文章链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
@@ -914,21 +931,21 @@
 
 
 <!-- 代码块功能依赖 -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeBlockFuction.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
 
 <!-- 代码语言 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeLang.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
 
 
 <!-- 代码块复制 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
 
 
 <!-- 代码块收缩 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/codeBlock/codeShrink.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
 
 
     </div>
@@ -949,7 +966,7 @@
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/tocbot/tocbot.min.js"></script>
+<script src="/libs/tocbot/tocbot.min.js"></script>
 <script>
     $(function () {
         tocbot.init({
@@ -1038,16 +1055,16 @@
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2021-2025</span>
+                <span id="year">2021-2026</span>
             
             <span id="year">2021</span>
-            <a href="/about" target="_blank">李广明</a>
-            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
-            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <a href="/about" target="_blank" rel="noopener noreferrer">李广明</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank" rel="noopener noreferrer">Matery</a>
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">17.9k</span>&nbsp;字
+                class="white-color">18.2k</span>&nbsp;字
             
             
             
@@ -1115,13 +1132,13 @@
             
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://github.com/bsligm" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+    <a href="https://github.com/bsligm" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50" rel="noopener noreferrer">
         <i class="fab fa-github"></i>
     </a>
 
 
 
-    <a href="mailto:bsligm@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+    <a href="mailto:bsligm@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50" rel="noopener noreferrer">
         <i class="fas fa-envelope-open"></i>
     </a>
 
@@ -1131,7 +1148,7 @@
 
 
 
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1055537871" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1055537871" data-position="top" data-delay="50">
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1055537871" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1055537871" data-position="top" data-delay="50" rel="noopener noreferrer">
         <i class="fab fa-qq"></i>
     </a>
 
@@ -1141,7 +1158,7 @@
 
 
 
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50" rel="noopener noreferrer">
         <i class="fas fa-rss"></i>
     </a>
 
@@ -1264,12 +1281,12 @@ $(function () {
 </div>
 
 
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/materialize/materialize.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/aos/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/js/matery.js"></script>
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
 
     <!-- Baidu Analytics -->
 
@@ -1291,7 +1308,7 @@ $(function () {
 
     
     
-    <script async src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/others/busuanzi.pure.mini.js"></script>
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
     
 
     
@@ -1306,7 +1323,7 @@ $(function () {
     
 
     
-    <script src="https://cdn.jsdelivr.net/gh/bsligm/bsligm.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>
