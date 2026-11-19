@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2026/11/19/PVE%E5%8F%8C%E5%AE%BF%E4%B8%BB%E6%9C%BA%E4%B8%8EGPU%E5%88%87%E5%88%86%E5%AE%9E%E5%BD%95/&#34;},&#34;headline&#34;:&#34;PVE 双宿主机落地实录：网络平面隔离、ZFS 容量陷阱、vGPU 切分与推理延迟实测&#34;,&#34;description&#34;:&#34;公司机房的虚拟化底座是两台 PVE 宿主机：一台老一些，单张 L40S，跑身份服务和桌面；一台新一些，八张 RTX PRO 6000，跑推理。两台机器版本要对齐、GPU 要给研发切着用、容量要在告警前看见，事情就多了。这篇按网络、存储、模板&#34;,&#34;datePublished&#34;:&#34;2026-11-19T12:40:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T15:05:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2026/11/19/PVE%E5%8F%8C%E5%AE%BF%E4%B8%BB%E6%9C%BA%E4%B8%8EGPU%E5%88%87%E5%88%86%E5%AE%9E%E5%BD%95/&#34;},&#34;headline&#34;:&#34;PVE 双宿主机落地实录：网络平面隔离、ZFS 容量陷阱、vGPU 切分与推理延迟实测&#34;,&#34;description&#34;:&#34;公司机房的虚拟化底座是两台 PVE 宿主机：一台老一些，单张 L40S，跑身份服务和桌面；一台新一些，八张 RTX PRO 6000，跑推理。两台机器版本要对齐、GPU 要给研发切着用、容量要在告警前看见，事情就多了。这篇按网络、存储、模板&#34;,&#34;datePublished&#34;:&#34;2026-11-19T12:40:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T15:35:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -30,7 +30,7 @@
     <meta property="article:published_time" content="2026-11-19T12:40:00.000Z">
     
     
-    <meta property="article:modified_time" content="2026-11-19T15:05:00.000Z">
+    <meta property="article:modified_time" content="2026-11-19T15:35:00.000Z">
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
@@ -505,14 +505,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    7.4k
+                    7.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    28 分
+                    29 分
                 </div>
                 
 
@@ -671,7 +671,7 @@
 <td>4</td>
 </tr>
 </tbody></table>
-<p><strong>普通 DC-24Q 不是 MIG。</strong> 它固定的是显存档位，计算单元靠时间片调度共享。真正的 MIG 分区在 profile 名里带 <code>DC-1-*</code>（我们用的是 <code>DC-1-24Q</code>，对应 MIG 的 <code>1g.24gb+gfx</code>，GPU Instance Profile ID 47，23.12 GiB、46 个 SM），这类 profile 才是 MIG 派生的 vGPU。日常沟通里”用 MIG 切了一卡四”这种说法我听过太多次，<strong>普通 24Q 不要叫 MIG</strong>，两者的运维动作和故障面完全不同。</p>
+<p><strong>普通 DC-24Q 不是 MIG。</strong> 它固定的是显存档位，计算单元靠时间片调度共享。真正的 MIG 分区在 profile 名里带 <code>DC-1-*</code>（我们用的是 <code>DC-1-24Q</code>，对应 MIG 的 <code>1g.24gb+gfx</code>，GPU Instance Profile ID 47，驱动枚举给出 46 个 SM、可用 23.12 GiB），这类 profile 才是 MIG 派生的 vGPU。日常沟通里”用 MIG 切了一卡四”这种说法我听过太多次，<strong>普通 24Q 不要叫 MIG</strong>，两者的运维动作和故障面完全不同。</p>
 <p>另一件容易搞错的事：<strong>MIG 支持是按 SKU 给的，不是”计算能力够就有”。</strong> L40S 是 Ada、计算能力 8.9，不在官方 MIG 支持列表里；RTX PRO 6000 Blackwell Server Edition 在。所以八卡机上我们才既能用 vGPU 时间片、也能用 MIG，而 L40S 只有 vGPU。顺带一句，只有 Server Edition 支持 vGPU，Workstation 和 Max-Q 版本不支持，买卡时这是个真金白银的差别。</p>
 <p>最后一条是观念上的：<strong>密度不等于性能</strong>。驱动列出四个实例的能力，不代表低延迟达标，没有受控并发数据之前不许把单实例吞吐乘四。而且五个 24Q 塞不进一张 96 GiB 的卡，四个是上限。</p>
 <h2 id="边缘推理机-601-608：负载画像"><a href="#边缘推理机-601-608：负载画像" class="headerlink" title="边缘推理机 601-608：负载画像"></a>边缘推理机 601-608：负载画像</h2><p>研发那批边缘推理虚拟机是这样长出来的。601 是原实例，602-604 是从它完整克隆出来的三台（不是链接克隆，<code>origin</code> 为空、<code>refreservation=0</code>），每台 8 vCPU、200 GiB 系统盘、各一张 DC-96Q，来宾驱动与许可正常，跑 PyTorch 2.7.1 加 CUDA 12.8。内存从 16 GiB 起步，后来扩到 32 GiB——起因不是容量不够，而是 VFIO 锁页撞上节点本地内存不足，触发大页整理之后连带把同池另一台一起带挂过一次。</p>
@@ -722,7 +722,7 @@
 <h3 id="第二轮：绑到固定物理核，没有收益"><a href="#第二轮：绑到固定物理核，没有收益" class="headerlink" title="第二轮：绑到固定物理核，没有收益"></a>第二轮：绑到固定物理核，没有收益</h3><p>第一轮做的是”限制在 node0 的 CPU 池里”，vCPU 在池内仍会迁移（30 秒采样里改后两轮迁移约 85/78 次）。所以下一步很自然：把每个 vCPU 钉死到具体物理核。</p>
 <p>结论是<strong>没赢</strong>。同一 QEMU 下 CPU 池与固定核交替四轮：固定核 mean 慢 0.5956 ms（0.3079%）、P95 慢 0.7167 ms；只有 P99 低 15.46 ms、max 低 66.75 ms，而样本量不足以支撑尾延迟结论。迁移次数按预期归零（对照组 81/80 次），但均值和 P95 都没换来东西。</p>
 <p><strong>所以这个配置没有固化，已回滚。</strong> 顺带澄清一个常被夸大的说法：来宾里 <code>taskset -c 0-7</code> 只约束这 8 个 vCPU，不证明独占物理核、不证明固定、也不证明没和其他 VM 共享 SMT 兄弟核。<code>isolcpus</code>、<code>nohz_full</code>、关 <code>irqbalance</code> 改 GPU 中断亲和这些我们都没做，属于未验证区域。</p>
-<h3 id="第三轮：普通-24Q-换-MIG-硬分区，并发下差距明显"><a href="#第三轮：普通-24Q-换-MIG-硬分区，并发下差距明显" class="headerlink" title="第三轮：普通 24Q 换 MIG 硬分区，并发下差距明显"></a>第三轮：普通 24Q 换 MIG 硬分区，并发下差距明显</h3><p>这一轮的对象是共享同一张卡的四个实例。同一张卡先切成四个普通 <code>DC-24Q</code>（时间片共享），再切成四个 <code>DC-1-24Q</code> MIG 硬分区（46 SM、可见显存约 23.69 GiB），来宾都是 16 vCPU、32 GiB。模型、权重、输入、线程契约完全冻结，换的只有切分方式。</p>
+<h3 id="第三轮：普通-24Q-换-MIG-硬分区，并发下差距明显"><a href="#第三轮：普通-24Q-换-MIG-硬分区，并发下差距明显" class="headerlink" title="第三轮：普通 24Q 换 MIG 硬分区，并发下差距明显"></a>第三轮：普通 24Q 换 MIG 硬分区，并发下差距明显</h3><p>这一轮的对象是共享同一张卡的四个实例。同一张卡先切成四个普通 <code>DC-24Q</code>（时间片共享），再切成四个 <code>DC-1-24Q</code> MIG 硬分区，来宾都是 16 vCPU、32 GiB。模型、权重、输入、线程契约完全冻结，换的只有切分方式。顺带又是口径那一套：同一块分区，驱动枚举说可用 23.12 GiB，CUDA 看到约 23.69 GiB，来宾 <code>nvidia-smi</code> 报 24576 MiB——三个数都真，各答各的问题。</p>
 <p>MIG 后的四路结果，两种工况分开记，不混表（单位 ms，n 为有效样本）：</p>
 <table>
 <thead>
@@ -749,8 +749,9 @@
 <td align="right">176.553-193.202</td>
 </tr>
 </tbody></table>
-<p><strong>同一套模型、同一工况下，普通 24Q 的四路均值是 204.4-204.8 ms</strong>（每台 508 个共窗样本）。换成分区之后掉到 115 ms 上下，四路同时跑的时候，硬分区把时间片排队整个消掉了，这才是 MIG 在这里的价值来源。更早做密度评估时的判断是”四个普通 24Q 可创建，不等于四路还保得住卡级延迟”，据此拒绝过准入；这轮实测把那条判断坐实了，也正是它促成了切分方式的更换。</p>
-<p>同步发起那一组还留了个副产品：两台 120.4/126.9 ms，另外两台 121.2/121.3 ms。慢的那两台 CPU 池绑在 node0，而那张卡（连同它的四个分区）在 node1；不慢的两台 CPU 池就在 node1。<strong>第一轮那个跨节点访存的结论，在另一批机器、另一种切分下复现了。</strong> 同批复验做了 2048 个样本，均值 119.8-122.9、P95 124.2-145.4，全部低于 200 ms。</p>
+<p><strong>同一套模型、同一工况下，普通 24Q 的四路均值是 204.4-204.8 ms</strong>（每台 508 到 510 个共窗样本）。换成分区之后掉到 115 ms 上下，四路同时跑的时候，硬分区把时间片排队整个消掉了，这才是 MIG 在这里的价值来源。更早做密度评估时的判断是”四个普通 24Q 可创建，不等于四路还保得住卡级延迟”，据此拒绝过准入；这轮实测把那条判断坐实了，也正是它促成了切分方式的更换。</p>
+<p>同步发起那一组还留了个反例，我起初把它读成了第一轮结论的延续，对着逐台数据重算才发现读反了。四台按 CPU 池分两类：605/606 在 node1（和卡同侧），内存跨两节点交错；607/608 在 node0（跨节点访问那张卡），内存 <code>bind</code> 在 node0。实测均值是 607 120.4、606 121.2、605 121.3、608 126.9 ms，608 的 P95 148.2 ms，另外三台 125.8-128.6 ms。跨节点那一类的组内均值确实高 2.4 ms，但<strong>同一绑法内部差了 6.5 ms，比两类之间的差距大一倍多，而且最快和最慢都出自跨节点那一类</strong>。这点信号撑不起”复现”两个字，我只把它记成方向一致、量级不可信。同一天的另一轮复验（四台各 512 个节拍样本，合计 2048）排序一样：607 最快 119.75、608 最慢 122.86，整体均值 119.8-122.9、P95 124.2-145.4，全部低于 200 ms。</p>
+<p>所以这一轮我能说出口的只有两件事：硬分区把 204 ms 的时间片排队整个消掉，这个换机器换切分都复现了；剩下那几毫秒的分布解释不了。这批机器的内存策略、CPU 池和切分方式在同一个窗口里连着改过，变量没拆干净，608 那个 193.2 ms 的尾点到现在也没有归因。<strong>第一轮那次”搬内存”的收益同理——内存本地性和 CPU 范围是一起改的，我一直没敢单独归功给谁，这第三批数据更像是把它往反方向拽了一下。</strong></p>
 <p>接下来这套别和上面混：<strong>同一个 MIG 布局，换成抓球模型（四摄像头输入、无 CUDA Graph）跑真实节拍</strong>，四路并发按 640 ms 提交，3760 次节拍调用里超过 640 ms 的 0 次；节拍延迟 mean 206.5-210.4 ms，max 287.6-307.8 ms；连续 300 秒口径 mean 199.9-203.0 ms，共 9710 次有效调用。峰值显存 5.28 GiB（预留 5.40），worker 最大常驻集 16.28 GiB。</p>
 <p>这组数字跟普通 24Q 的 204 ms 挨在一起，纯属巧合，<strong>不是同一套模型，不能拿来当 MIG 的对照基线</strong>。同理，那台独享 96Q 的生产机历史上 104.86 ms 是动态业务日志、没有同条件的权重哈希，只能当参考，不能签”非劣”。要拿 MIG 去替代独卡，得在自己的模型和输入上重测。</p>
 <p>还有一条容易被忽略的代价：从普通 24Q 换成 MIG，原始动作张量在可比点上的最大绝对差是 0.015625。这个量级算不算可接受的物理控制误差，得由研发按实际控制量和轨迹容差判，我这边只报数，不替它签字。</p>
@@ -813,6 +814,7 @@
 <li><strong>“bond 存在”不是冗余，”备份有文件”不是可恢复，”进程起来了”不是服务健康</strong>，”虚拟机 running”不是业务正常。每一句都要往前多走一步找判据。</li>
 <li><strong>对齐不等于一致</strong>：两台机器可以同名同配置，底层一块是 RAID 逻辑卷、一块是裸盘。</li>
 <li>优化要有反例：绑核这一轮明确没赢，把它写出来比只写 NUMA 那一轮有用。</li>
+<li>解释不了的数据就标成解释不了。我在 MIG 那一轮差点把四台的均值差写成第一轮的延续，对着逐台数据重算才发现归因方向是反的——先有结论再找证据，比没有结论更容易出错。</li>
 </ul>
 <p>所有毫秒数都是离线模型层的数字，相机采集、网络传输、动作平滑和机器人派发没有纳入测量。把这套配置搬到别的负载之前，请先按自己的并发、输入长度和节拍重测一遍。</p>
 
@@ -1279,7 +1281,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">45.6k</span>&nbsp;字
+                class="white-color">46k</span>&nbsp;字
             
             
             
