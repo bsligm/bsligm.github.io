@@ -329,7 +329,7 @@
             <div class="description center-align">
                 
                 <span id="subtitle"></span>
-                <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
+                <script src="/libs/typed/typed.min.js"></script>
                 <script>
                     var typed = new Typed("#subtitle", {
                         strings: ['欢迎来到我的技术博客','分享Windows服务器与网络技术经验'],
@@ -485,7 +485,7 @@
                         <div class="card-content article-content">
                             <div class="summary block-with-text">
                                 
-                                    Windows Server安装以及AD域服务搭建在企业网络环境中，Windows Server作为核心服务器操作系统，承担着重要的角色。其中，Active Directory（AD）域服务是Windows Server中最核心的服务之一，
+                                    Active Directory（AD）域服务提供集中式的身份认证、账号与资源管理能力，是 Windows 域环境的基石。本文记录从裸机安装 Windows Server 到完成域控制器（DC）部署的完整流程：安装方式选择 → 系统基础配置
                                 
                             </div>
                             <div class="publish-info">
@@ -543,15 +543,16 @@
                         <a href="/2021/05/04/edge%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80/">
                             <div class="card-image">
                                 
-                                <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="Edge浏览器无法打开网页提示兼容性问题的解决方案" decoding="async" loading="lazy">
+                                <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="Edge 浏览器无法打开网页提示兼容性问题的解决方案" decoding="async" loading="lazy">
                                 
-                                <span class="card-title">Edge浏览器无法打开网页提示兼容性问题的解决方案</span>
+                                <span class="card-title">Edge 浏览器无法打开网页提示兼容性问题的解决方案</span>
                             </div>
                         </a>
                         <div class="card-content article-content">
                             <div class="summary block-with-text">
                                 
-                                    Edge浏览器无法打开网页提示兼容性问题的解决方案Microsoft Edge是Windows 10/11系统默认的浏览器，但在某些情况下可能会出现无法打开网页并提示兼容性问题的故障。本文将详细介绍该问题的解决方案，包括单机修复和企业批量部
+                                    Windows 10/11 上的 Microsoft Edge 在部分终端启动后，任意网页都无法加载，页面统一提示兼容性问题。该故障与站点内容无关，影响整机 Edge 实例，在刚推送安全更新或部署了第三方安全软件的终端上更集中。
+处置分两条
                                 
                             </div>
                             <div class="publish-info">
@@ -614,15 +615,15 @@
                         <a href="/2021/04/29/mac%20app%E6%8D%9F%E5%9D%8F/">
                             <div class="card-image">
                                 
-                                <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="MacOS提示&#34;App已损坏你应该将它移到废纸篓&#34;的多种解决方法" decoding="async" loading="lazy">
+                                <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="macOS 提示&#34;App 已损坏，无法打开&#34;的多种解决方法" decoding="async" loading="lazy">
                                 
-                                <span class="card-title">MacOS提示&#34;App已损坏你应该将它移到废纸篓&#34;的多种解决方法</span>
+                                <span class="card-title">macOS 提示&#34;App 已损坏，无法打开&#34;的多种解决方法</span>
                             </div>
                         </a>
                         <div class="card-content article-content">
                             <div class="summary block-with-text">
                                 
-                                    MacOS提示”App已损坏你应该将它移到废纸篓”的多种解决方法在MacOS系统中安装软件时，用户可能会遇到”XXXX软件已损坏，打不开，您应该将它移到废纸篓”的提示。这是macOS安全机制的一部分，旨在保护用户免受恶意软件的侵害。然而，有
+                                    在 macOS 上安装软件时，可能出现”XXXX 已损坏，无法打开。你应该将它移到废纸篓。”的提示，应用被直接拒绝启动。这是 Gatekeeper 与隔离属性（quarantine）机制的共同结果，本意是阻止未公证来源的可执行文件运行，但也
                                 
                             </div>
                             <div class="publish-info">
@@ -684,7 +685,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">18.2k</span>&nbsp;字
+                class="white-color">24.2k</span>&nbsp;字
             
             
             

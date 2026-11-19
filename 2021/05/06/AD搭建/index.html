@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Windows Server, AD域, 服务器安装, 域控制器, Active Directory">
-    <meta name="description" content="Windows Server安装以及AD域服务搭建在企业网络环境中，Windows Server作为核心服务器操作系统，承担着重要的角色。其中，Active Directory（AD）域服务是Windows Server中最核心的服务之一，">
+    <meta name="description" content="Active Directory（AD）域服务提供集中式的身份认证、账号与资源管理能力，是 Windows 域环境的基石。本文记录从裸机安装 Windows Server 到完成域控制器（DC）部署的完整流程：安装方式选择 → 系统基础配置">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2021/05/06/AD%E6%90%AD%E5%BB%BA/&#34;},&#34;headline&#34;:&#34;Windows Server安装以及AD域服务搭建&#34;,&#34;description&#34;:&#34;Windows Server安装以及AD域服务搭建在企业网络环境中，Windows Server作为核心服务器操作系统，承担着重要的角色。其中，Active Directory（AD）域服务是Windows Server中最核心的服务之一，&#34;,&#34;datePublished&#34;:&#34;2021-05-06T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T03:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2021/05/06/AD%E6%90%AD%E5%BB%BA/&#34;},&#34;headline&#34;:&#34;Windows Server安装以及AD域服务搭建&#34;,&#34;description&#34;:&#34;Active Directory（AD）域服务提供集中式的身份认证、账号与资源管理能力，是 Windows 域环境的基石。本文记录从裸机安装 Windows Server 到完成域控制器（DC）部署的完整流程：安装方式选择 → 系统基础配置&#34;,&#34;datePublished&#34;:&#34;2021-05-06T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T03:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -22,7 +22,7 @@
     <meta property="og:title" content="Windows Server安装以及AD域服务搭建 | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2021/05/06/AD%E6%90%AD%E5%BB%BA/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="Windows Server安装以及AD域服务搭建在企业网络环境中，Windows Server作为核心服务器操作系统，承担着重要的角色。其中，Active Directory（AD）域服务是Windows Server中最核心的服务之一，">
+    <meta property="og:description" content="Active Directory（AD）域服务提供集中式的身份认证、账号与资源管理能力，是 Windows 域环境的基石。本文记录从裸机安装 Windows Server 到完成域控制器（DC）部署的完整流程：安装方式选择 → 系统基础配置">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/0.jpg">
     
@@ -497,14 +497,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.1k
+                    1.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    4 分
                 </div>
                 
 
@@ -524,50 +524,55 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Windows-Server安装以及AD域服务搭建"><a href="#Windows-Server安装以及AD域服务搭建" class="headerlink" title="Windows Server安装以及AD域服务搭建"></a>Windows Server安装以及AD域服务搭建</h1><p>在企业网络环境中，Windows Server作为核心服务器操作系统，承担着重要的角色。其中，Active Directory（AD）域服务是Windows Server中最核心的服务之一，它提供了集中式的用户和资源管理功能。本文将详细介绍Windows Server系统的安装过程以及AD域服务的配置步骤。</p>
-<h2 id="系统安装准备"><a href="#系统安装准备" class="headerlink" title="系统安装准备"></a>系统安装准备</h2><p>安装服务器系统的方式有很多，除常规的U盘安装介质外，也可以通过 iDRAC 等带外管理接口挂载镜像远程安装。</p>
-<h3 id="1-U盘安装方式"><a href="#1-U盘安装方式" class="headerlink" title="1. U盘安装方式"></a>1. U盘安装方式</h3><p>使用U盘安装介质时需要注意以下事项：</p>
+                <p>Active Directory（AD）域服务提供集中式的身份认证、账号与资源管理能力，是 Windows 域环境的基石。本文记录从裸机安装 Windows Server 到完成域控制器（DC）部署的完整流程：安装方式选择 → 系统基础配置 → 添加 AD 角色 → 提升为域控制器 → 结果验证。</p>
+<p>适用于新建小型域环境，或为现有域增补域控的场景。执行前需具备 Windows Server 安装镜像，以及服务器物理访问权限或带外管理接口访问权限。</p>
+<h2 id="系统安装准备"><a href="#系统安装准备" class="headerlink" title="系统安装准备"></a>系统安装准备</h2><p>安装服务器系统的方式有很多，除常规的 U 盘安装介质外，也可以通过 iDRAC 等带外管理接口挂载镜像远程安装。</p>
+<h3 id="1-U-盘安装方式"><a href="#1-U-盘安装方式" class="headerlink" title="1. U 盘安装方式"></a>1. U 盘安装方式</h3><p>使用 U 盘安装介质时需要注意以下事项：</p>
 <ul>
 <li>如果服务器有阵列卡，需要提前到品牌官网下载对应驱动，否则可能无法识别磁盘</li>
-<li>准备好Windows Server安装镜像文件和可启动的U盘</li>
+<li>准备好 Windows Server 安装镜像文件和可启动的 U 盘</li>
 </ul>
-<h3 id="2-远程管理安装方式"><a href="#2-远程管理安装方式" class="headerlink" title="2. 远程管理安装方式"></a>2. 远程管理安装方式</h3><p>以DELL服务器为例，使用 iDRAC（IPMI接口，各家厂商名称不同）进行安装：</p>
+<h3 id="2-远程管理安装方式"><a href="#2-远程管理安装方式" class="headerlink" title="2. 远程管理安装方式"></a>2. 远程管理安装方式</h3><p>以 DELL 服务器为例，使用 iDRAC（IPMI 接口，各家厂商名称不同）进行安装：</p>
 <ul>
-<li>在BIOS中配置好iDRAC，并接入本地局域网便于日后管理，或者使用网线直连PC</li>
-<li>DELL服务器iDRAC的默认管理地址通常为192.168.0.120（以随机标签与机型文档为准）</li>
-<li>线缆连接完成后在BIOS中配置地址以及管理密码</li>
+<li>在 BIOS 中配置好 iDRAC，并接入本地局域网便于日后管理，或者使用网线直连 PC</li>
+<li>DELL 服务器 iDRAC 的默认管理地址通常为 192.168.0.120（以随机标签与机型文档为准）</li>
+<li>线缆连接完成后在 BIOS 中配置地址以及管理密码</li>
 </ul>
-<h3 id="3-服务器开机从镜像启动"><a href="#3-服务器开机从镜像启动" class="headerlink" title="3. 服务器开机从镜像启动"></a>3. 服务器开机从镜像启动</h3><p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509096.png" alt="系统安装" title="系统安装界面" decoding="async" loading="lazy"></p>
+<h3 id="3-服务器开机从镜像启动"><a href="#3-服务器开机从镜像启动" class="headerlink" title="3. 服务器开机从镜像启动"></a>3. 服务器开机从镜像启动</h3><p>开机后按自检画面提示的快捷键进入一次性启动菜单（Dell 机型通常为 <code>F11</code>，其他机型以画面提示为准），选择 U 盘或 iDRAC 虚拟光驱作为启动设备。</p>
+<p>下图为安装程序的语言与版本选择界面，注意区分「带桌面体验」与 Server Core 版本，两者的图形管理工具可用性不同：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509096.png" alt="系统安装" title="系统安装界面" decoding="async" loading="lazy"></p>
+<p>确认版本后，安装程序开始复制文件并展开镜像，期间服务器会自动重启数次，无需人工干预：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509385.png" alt="安装过程" title="安装过程界面" decoding="async" loading="lazy"></p>
+<p>镜像展开完成后，需设置内置 Administrator 账户的密码，之后即可首次登录：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509728.png" alt="完成安装" title="安装完成界面" decoding="async" loading="lazy"></p>
-<h2 id="系统基础配置"><a href="#系统基础配置" class="headerlink" title="系统基础配置"></a>系统基础配置</h2><p>在安装完成Windows Server系统后，需要进行一些基础配置：</p>
-<h3 id="1-更改计算机名和固定IP地址"><a href="#1-更改计算机名和固定IP地址" class="headerlink" title="1. 更改计算机名和固定IP地址"></a>1. 更改计算机名和固定IP地址</h3><ul>
+<h2 id="系统基础配置"><a href="#系统基础配置" class="headerlink" title="系统基础配置"></a>系统基础配置</h2><p>在安装完成 Windows Server 系统后，需要进行一些基础配置：</p>
+<h3 id="1-更改计算机名和固定-IP-地址"><a href="#1-更改计算机名和固定-IP-地址" class="headerlink" title="1. 更改计算机名和固定 IP 地址"></a>1. 更改计算机名和固定 IP 地址</h3><ul>
 <li>更改计算机名为易于识别的名称</li>
-<li>配置静态IP地址以确保服务稳定性</li>
+<li>配置静态 IP 地址以确保服务稳定性</li>
 <li>完成配置后重启服务器使设置生效</li>
 </ul>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509513.png" alt="更改计算机名" title="更改计算机名界面" decoding="async" loading="lazy"></p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509381.png" alt="固定IP地址" title="配置静态IP地址界面" decoding="async" loading="lazy"></p>
-<h2 id="域服务安装与配置"><a href="#域服务安装与配置" class="headerlink" title="域服务安装与配置"></a>域服务安装与配置</h2><h3 id="1-添加角色功能"><a href="#1-添加角色功能" class="headerlink" title="1. 添加角色功能"></a>1. 添加角色功能</h3><p>添加AD域服务功能以及DHCP服务（如果由交换机、路由器、防火墙等分配可忽略）：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509381.png" alt="固定 IP 地址" title="配置静态IP地址界面" decoding="async" loading="lazy"></p>
+<h2 id="域服务安装与配置"><a href="#域服务安装与配置" class="headerlink" title="域服务安装与配置"></a>域服务安装与配置</h2><h3 id="1-添加角色功能"><a href="#1-添加角色功能" class="headerlink" title="1. 添加角色功能"></a>1. 添加角色功能</h3><p>添加 AD 域服务功能以及 DHCP 服务（如果由交换机、路由器、防火墙等分配可忽略）：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509842.png" alt="添加域服务功能" title="添加AD域服务角色" decoding="async" loading="lazy"></p>
 <p>确认域服务安装：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509441.png" alt="域服务确认安装" title="域服务安装确认" decoding="async" loading="lazy"></p>
 <h3 id="2-配置域控制器"><a href="#2-配置域控制器" class="headerlink" title="2. 配置域控制器"></a>2. 配置域控制器</h3><p>将服务器提升为域控制器：</p>
-<h4 id="步骤1：启动域控制器部署向导"><a href="#步骤1：启动域控制器部署向导" class="headerlink" title="步骤1：启动域控制器部署向导"></a>步骤1：启动域控制器部署向导</h4><p>点击提示中的”部署后配置”，选择”将服务器提升为域控制器”：</p>
+<h4 id="步骤-1：启动域控制器部署向导"><a href="#步骤-1：启动域控制器部署向导" class="headerlink" title="步骤 1：启动域控制器部署向导"></a>步骤 1：启动域控制器部署向导</h4><p>点击提示中的”部署后配置”，选择”将服务器提升为域控制器”：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509594.png" alt="启动域控制器部署" title="启动域控制器部署向导" decoding="async" loading="lazy"></p>
-<h4 id="步骤2：部署新域与域名"><a href="#步骤2：部署新域与域名" class="headerlink" title="步骤2：部署新域与域名"></a>步骤2：部署新域与域名</h4><p>配置新域和域名信息：</p>
+<h4 id="步骤-2：部署新域与域名"><a href="#步骤-2：部署新域与域名" class="headerlink" title="步骤 2：部署新域与域名"></a>步骤 2：部署新域与域名</h4><p>配置新域和域名信息：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510494.png" alt="部署新域与域名" title="配置域名信息" decoding="async" loading="lazy"></p>
-<h4 id="步骤3：配置域控制器与DNS服务"><a href="#步骤3：配置域控制器与DNS服务" class="headerlink" title="步骤3：配置域控制器与DNS服务"></a>步骤3：配置域控制器与DNS服务</h4><p>设置域控制器和DNS服务选项：</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510311.png" alt="配置域控与DNS服务" title="配置域控制器和DNS服务" decoding="async" loading="lazy"></p>
-<h4 id="步骤4：其他选项及安装"><a href="#步骤4：其他选项及安装" class="headerlink" title="步骤4：其他选项及安装"></a>步骤4：其他选项及安装</h4><p>配置其他安装选项：</p>
+<h4 id="步骤-3：配置域控制器与-DNS-服务"><a href="#步骤-3：配置域控制器与-DNS-服务" class="headerlink" title="步骤 3：配置域控制器与 DNS 服务"></a>步骤 3：配置域控制器与 DNS 服务</h4><p>设置域控制器和 DNS 服务选项：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510311.png" alt="配置域控与 DNS 服务" title="配置域控制器和DNS服务" decoding="async" loading="lazy"></p>
+<h4 id="步骤-4：其他选项及安装"><a href="#步骤-4：其他选项及安装" class="headerlink" title="步骤 4：其他选项及安装"></a>步骤 4：其他选项及安装</h4><p>配置其他安装选项：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510564.png" alt="其他选项及安装" title="其他安装选项" decoding="async" loading="lazy"></p>
-<h4 id="步骤5：设置目录服务还原模式密码"><a href="#步骤5：设置目录服务还原模式密码" class="headerlink" title="步骤5：设置目录服务还原模式密码"></a>步骤5：设置目录服务还原模式密码</h4><p>为目录服务还原模式设置密码：</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510798.png" alt="设置DSRM密码" title="设置DSRM密码" decoding="async" loading="lazy"></p>
-<h4 id="步骤6：确认配置选项"><a href="#步骤6：确认配置选项" class="headerlink" title="步骤6：确认配置选项"></a>步骤6：确认配置选项</h4><p>检查并确认所有配置选项：</p>
+<h4 id="步骤-5：设置目录服务还原模式密码"><a href="#步骤-5：设置目录服务还原模式密码" class="headerlink" title="步骤 5：设置目录服务还原模式密码"></a>步骤 5：设置目录服务还原模式密码</h4><p>为目录服务还原模式设置密码：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510798.png" alt="设置 DSRM 密码" title="设置DSRM密码" decoding="async" loading="lazy"></p>
+<h4 id="步骤-6：确认配置选项"><a href="#步骤-6：确认配置选项" class="headerlink" title="步骤 6：确认配置选项"></a>步骤 6：确认配置选项</h4><p>检查并确认所有配置选项：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510256.png" alt="确认配置选项" title="确认配置选项" decoding="async" loading="lazy"></p>
-<h4 id="步骤7：预安装检查"><a href="#步骤7：预安装检查" class="headerlink" title="步骤7：预安装检查"></a>步骤7：预安装检查</h4><p>执行预安装检查以确保所有要求都满足：</p>
+<h4 id="步骤-7：预安装检查"><a href="#步骤-7：预安装检查" class="headerlink" title="步骤 7：预安装检查"></a>步骤 7：预安装检查</h4><p>执行预安装检查以确保所有要求都满足：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510759.png" alt="预安装检查" title="预安装检查" decoding="async" loading="lazy"></p>
-<h4 id="步骤8：完成安装"><a href="#步骤8：完成安装" class="headerlink" title="步骤8：完成安装"></a>步骤8：完成安装</h4><p>安装完成后重启服务器，域控制器部署完成：</p>
+<h4 id="步骤-8：完成安装"><a href="#步骤-8：完成安装" class="headerlink" title="步骤 8：完成安装"></a>步骤 8：完成安装</h4><p>安装完成后重启服务器，域控制器部署完成：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510752.png" alt="安装完成" title="安装完成界面" decoding="async" loading="lazy"></p>
 <h2 id="验证域控制器功能"><a href="#验证域控制器功能" class="headerlink" title="验证域控制器功能"></a>验证域控制器功能</h2><p>安装完成后，通过以下方式验证域控制器功能是否正常：</p>
 <ol>
@@ -578,11 +583,11 @@
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>在部署域控制器时需要注意以下重要事项：</p>
 <ul>
 <li>在生产环境中部署域控制器前，建议先在测试环境中进行验证</li>
-<li>确保DNS设置正确，域控制器通常也是DNS服务器</li>
-<li>建议配置静态IP地址以确保域服务的稳定性</li>
-<li>定期备份AD域数据，防止意外情况导致数据丢失</li>
+<li>确保 DNS 设置正确，域控制器通常也是 DNS 服务器</li>
+<li>建议配置静态 IP 地址以确保域服务的稳定性</li>
+<li>定期备份 AD 域数据，防止意外情况导致数据丢失</li>
 </ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过以上步骤，我们完成了Windows Server系统的安装以及AD域服务的配置。AD域服务的部署是构建企业网络环境的重要基础，掌握其安装和配置方法对于系统管理员来说至关重要。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过以上步骤，我们完成了 Windows Server 系统的安装以及 AD 域服务的配置。AD 域服务的部署是构建企业网络环境的重要基础，掌握其安装和配置方法对于系统管理员来说至关重要。</p>
 <p>在实际应用中，还需要根据具体需求进行更详细的配置，如：</p>
 <ul>
 <li>组织单位（OU）结构设计</li>
@@ -807,9 +812,9 @@
                 <a href="/2021/05/04/edge%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80/">
                     <div class="card-image">
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="Edge浏览器无法打开网页提示兼容性问题的解决方案" decoding="async" loading="lazy">
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="Edge 浏览器无法打开网页提示兼容性问题的解决方案" decoding="async" loading="lazy">
                         
-                        <span class="card-title">Edge浏览器无法打开网页提示兼容性问题的解决方案</span>
+                        <span class="card-title">Edge 浏览器无法打开网页提示兼容性问题的解决方案</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1036,7 +1041,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">18.2k</span>&nbsp;字
+                class="white-color">24.2k</span>&nbsp;字
             
             
             

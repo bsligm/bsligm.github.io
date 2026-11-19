@@ -329,7 +329,7 @@
             <div class="description center-align">
                 
                 <span id="subtitle"></span>
-                <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
+                <script src="/libs/typed/typed.min.js"></script>
                 <script>
                     var typed = new Typed("#subtitle", {
                         strings: ['欢迎来到我的技术博客','分享Windows服务器与网络技术经验'],
@@ -485,7 +485,8 @@
                         <div class="card-content article-content">
                             <div class="summary block-with-text">
                                 
-                                    Windows域环境下批量部署BitLockerBitLocker是Windows系统提供的全盘加密功能，能够有效保护存储在硬盘上的数据安全。在企业环境中，通过组策略可以实现BitLocker的批量部署和统一管理。本文将详细介绍在Windo
+                                    BitLocker 是 Windows 自带的全盘加密功能，可在设备丢失或被盗时保护硬盘数据。在域环境中，借助组策略可以完成策略下发、批量启用与恢复密钥集中备份，无需逐台操作。
+本文给出一套已验证的落地方案，包含四个环节：域控制器组件准备 
                                 
                             </div>
                             <div class="publish-info">
@@ -549,7 +550,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">18.2k</span>&nbsp;字
+                class="white-color">24.2k</span>&nbsp;字
             
             
             
