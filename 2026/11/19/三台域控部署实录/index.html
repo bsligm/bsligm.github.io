@@ -1,0 +1,1406 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Active Directory 部署, 域控, Windows Server 2025, Proxmox VE, Secure Boot, TPM, LDAPS, portproxy, 同名域, NTP, pwdLastSet, BitLocker 恢复密码">
+    <meta name="description" content="接手一套混合云的 Windows 身份基础设施：本地机房一台 PVE 上跑两台域控，云上一台 ECS 做第三台域控，外加证书服务器和一台远程桌面网关。从第一次基线审计到现在三个多月，主线之外的坑比主线还长。这篇按部署顺序把三台域控的落地过程">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2026/11/19/%E4%B8%89%E5%8F%B0%E5%9F%9F%E6%8E%A7%E9%83%A8%E7%BD%B2%E5%AE%9E%E5%BD%95/&#34;},&#34;headline&#34;:&#34;三台域控部署实录：两台本地加一台云上的 AD 落地与十个坑&#34;,&#34;description&#34;:&#34;接手一套混合云的 Windows 身份基础设施：本地机房一台 PVE 上跑两台域控，云上一台 ECS 做第三台域控，外加证书服务器和一台远程桌面网关。从第一次基线审计到现在三个多月，主线之外的坑比主线还长。这篇按部署顺序把三台域控的落地过程&#34;,&#34;datePublished&#34;:&#34;2026-11-19T12:50:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T12:50:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    
+    
+    
+    <link rel="canonical" href="https://bsligm.zone/2026/11/19/%E4%B8%89%E5%8F%B0%E5%9F%9F%E6%8E%A7%E9%83%A8%E7%BD%B2%E5%AE%9E%E5%BD%95/">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="三台域控部署实录：两台本地加一台云上的 AD 落地与十个坑 | 李广明的技术博客">
+    <meta property="og:url" content="https://bsligm.zone/2026/11/19/%E4%B8%89%E5%8F%B0%E5%9F%9F%E6%8E%A7%E9%83%A8%E7%BD%B2%E5%AE%9E%E5%BD%95/">
+    <meta property="og:site_name" content="李广明的技术博客">
+    <meta property="og:description" content="接手一套混合云的 Windows 身份基础设施：本地机房一台 PVE 上跑两台域控，云上一台 ECS 做第三台域控，外加证书服务器和一台远程桌面网关。从第一次基线审计到现在三个多月，主线之外的坑比主线还长。这篇按部署顺序把三台域控的落地过程">
+    
+    <meta property="og:image" content="https://bsligm.zone/medias/featureimages/12.jpg">
+    
+    
+    <meta property="article:published_time" content="2026-11-19T12:50:00.000Z">
+    
+    
+    <meta property="article:modified_time" content="2026-11-19T12:50:00.000Z">
+    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    <title>三台域控部署实录：两台本地加一台云上的 AD 落地与十个坑 | 李广明的技术博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+    <link rel="alternate" href="/atom.xml" title="李广明的技术博客" type="application/atom+xml">
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">李广明的技术博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">李广明的技术博客</div>
+        <div class="logo-desc">
+            
+            李广明的技术博客，专注于Windows服务器、网络技术、系统集成等IT领域知识分享
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/bsligm/bsligm.github.io" class="waves-effect waves-light" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/bsligm/bsligm.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">三台域控部署实录：两台本地加一台云上的 AD 落地与十个坑</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Active-Directory/">
+                                <span class="chip bg-color">Active Directory</span>
+                            </a>
+                        
+                            <a href="/tags/Windows-Server/">
+                                <span class="chip bg-color">Windows Server</span>
+                            </a>
+                        
+                            <a href="/tags/Proxmox-VE/">
+                                <span class="chip bg-color">Proxmox VE</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%9F%9F%E6%8E%A7/">
+                                <span class="chip bg-color">域控</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%AE%89%E5%85%A8%E5%9F%BA%E7%BA%BF/">
+                                <span class="chip bg-color">安全基线</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/" class="post-category">
+                                系统运维
+                            </a>
+                        
+                            <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/" class="post-category">
+                                基础设施
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2026-11-19
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2026-11-19
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    4.4k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    15 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>接手一套混合云的 Windows 身份基础设施：本地机房一台 PVE 上跑两台域控，云上一台 ECS 做第三台域控，外加证书服务器和一台远程桌面网关。从第一次基线审计到现在三个多月，主线之外的坑比主线还长。这篇按部署顺序把三台域控的落地过程记一遍，公司相关的地址、主机名、域名、凭据一律不带；只有历史记录、没有复测的结论我会单独标出来。</p>
+<h2 id="拓扑与角色分工"><a href="#拓扑与角色分工" class="headerlink" title="拓扑与角色分工"></a>拓扑与角色分工</h2><p>先给一个抽象后的结构，方便对号入座：</p>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>位置</th>
+<th>系统</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DC1</td>
+<td>本地 PVE 虚拟机</td>
+<td>Windows Server 2025</td>
+<td>主域控，兼 DNS</td>
+</tr>
+<tr>
+<td>DC2</td>
+<td>本地 PVE 虚拟机</td>
+<td>Windows Server 2025</td>
+<td>第二域控，与 DC1 同站点</td>
+</tr>
+<tr>
+<td>DC3</td>
+<td>云上 ECS</td>
+<td>Windows Server 2025 Datacenter</td>
+<td>云上域控，独立网段，与本地经隧道互联</td>
+</tr>
+<tr>
+<td>证书服务器</td>
+<td>本地 PVE 虚拟机</td>
+<td>Windows Server</td>
+<td>AD CS 企业 CA，签机器证书与 LDAPS</td>
+</tr>
+<tr>
+<td>远程桌面网关</td>
+<td>本地 PVE 虚拟机</td>
+<td>Windows Server 2025</td>
+<td>RD Gateway，公网 443 收 RDP</td>
+</tr>
+</tbody></table>
+<p>三台域控是审计确认后的形态。DC1/DC2 从一开始就是域控；DC3 在八月初交付时按当时的要求只做了系统初始化、没装 AD 角色，几天内才提升为域控。提升前那轮准备工作（改名、静态地址、DNS 指向本地 DC、安全基线对齐）反而是后面几乎零返工的原因，这块下面单独讲。</p>
+<p>单台机器从裸机到提升为域控的分步手顺，我早年写过一篇 <a href="/2021/05/06/AD%E6%90%AD%E5%BB%BA/">Windows Server 安装以及 AD 域服务搭建</a>，域名、功能级别、DSRM 密码这些不可回退的取值都在那篇里。本文不重复这部分，只讲三台规模之后才出现的问题。</p>
+<p>例行审计记录的 FSMO 角色里，PDC Emulator、RID Master、Infrastructure Master 三项都在 DC1；另外两项角色当时的审计表没有列出，不在此文断言。</p>
+<h2 id="虚拟化层：PVE-上跑-Windows-域控的对齐清单"><a href="#虚拟化层：PVE-上跑-Windows-域控的对齐清单" class="headerlink" title="虚拟化层：PVE 上跑 Windows 域控的对齐清单"></a>虚拟化层：PVE 上跑 Windows 域控的对齐清单</h2><p>域控对虚拟化的要求不多，但每一条都影响能不能装、装完稳不稳。逐项核对过的配置：</p>
+<ul>
+<li><strong>固件必须 OVMF + Secure Boot + TPM 2.0</strong>。Server 2025 的若干安全特性默认要求这些，PVE 侧对应 OVMF 固件加 vTPM 状态盘，EFI 用 4M 类型并预注册微软密钥。这三项配齐的虚拟机，后来才具备跑 BitLocker 计划的前提。</li>
+<li><strong>磁盘接口</strong>。初建的域控用 IDE 挂系统盘。这是 PVE 新建 Windows 虚机的默认懒路，代价是 I/O 性能比 virtio-scsi 加 iothread 低三成以上。换接口要同时改启动顺序，并提前注入 virtio 驱动，否则起来找不到盘。</li>
+<li><strong>Hyper-V enlightenments 全开</strong>。<code>hv_relaxed</code>、<code>hv_synic</code>、<code>hv_stimer</code> 这一组是给 Windows 客户机减负的，PVE 对 Windows 机型模板只默认开一部分，逐项补全后 CPU 等待明显收敛。</li>
+<li><strong>禁用睡眠和休眠</strong>（<code>disable_s3=1</code>、<code>disable_s4=1</code>）。域控睡过去一次，Kerberos 时间偏差和复制积压就够排查半天。</li>
+<li><strong>CPU 型号</strong>至少 x86-64-v2-AES，能直通用 host；8 核以上启用 NUMA 绑定。<code>ostype</code> 别随手写客户端机型，机型模板会连带决定默认设备组合。</li>
+<li><strong>时钟</strong>：RTC 用 <code>driftfix=slew</code>，全集群统一 base 取 localtime 还是 UTC，混用会出现开机时间跳变。</li>
+</ul>
+<p>PVE 宿主本身审计出的问题也值得列，因为基本都是”默认装机就不会有”的项：主机防火墙未启用、ZFS 数据池未加密、vzdump 备份只有符号链接没有实际配置和保留策略、无 HA 单点、root 无 MFA。当时综合评分给了 63%。这份清单留作整改基线，<strong>截至发稿宿主防火墙和实际备份仍未整改</strong>，属于已知未闭环。</p>
+<h2 id="安全基线：从-77-分到-89-分动了哪些项"><a href="#安全基线：从-77-分到-89-分动了哪些项" class="headerlink" title="安全基线：从 77 分到 89 分动了哪些项"></a>安全基线：从 77 分到 89 分动了哪些项</h2><p>DC1 上线初期做过一次全盘安全审计，修复后重启复验，评分 77% 提到 89%。真正值得记的是修复过程中的几个具体坑。</p>
+<p><strong>NetBIOS 的 139 端口关不干净。</strong> 逐网卡把注册表 <code>NetBT\Parameters\Interfaces\...\NetbiosOptions</code> 设为 2 并重启，端口仍在监听——承载者是内核（PID 4），<code>sc stop</code> 无从下手。最终接受的做法是注册表禁用加防火墙在 Public profile 上对 137/138/139 加阻止规则兜底：监听仍在内网地址上，只是外部不可达。这个行为微软社区讨论多年，结论基本就是防火墙兜底为正解。</p>
+<p><strong>WinRM 的 HTTP 监听绑在 IPv6 全接口。</strong> 用 <code>netsh http show servicestate</code> 才看到通配监听，而 WinRM 的 IPv4 防火墙规则对 v6 监听完全不生效。给 5985 补限段规则（只允许管理与办公网段）后收口；RDP 3389 同理补限段，公网面由上游防火墙负责。</p>
+<p><strong>LDAP 通道签名。</strong> 注册表 <code>LdapSigning=1</code>，重启域控后生效。没有域内测试环境，这类注册表手术前按惯例给相关虚机打了快照再动手（审计前的快照清单里就有这几台），改完确认 Netlogon、KDC、ADWS 全部正常再保留。快照不是备份，但能让一次改动有后悔药。</p>
+<p><strong>SMB 基线三件套</strong>：卸载 SMB1、启用签名、启用加密。注意 Server 2025 上签名参数的名称与旧版本不同，脚本照抄旧文章会静默失败。</p>
+<p>后来 DC3 提升前、远程桌面网关上线前，都拿同一张对齐表逐台核过。每台多花二十分钟，换来三台行为一致。跨版本环境里”每台默认值不一样”才是最大隐患，基线表是性价比最高的防御。</p>
+<h2 id="证书：一张指错目标的机器证书"><a href="#证书：一张指错目标的机器证书" class="headerlink" title="证书：一张指错目标的机器证书"></a>证书：一张指错目标的机器证书</h2><p>八月中旬审计发现 DC2 的机器证书指向了错误目标主机，走 LDAPS 的客户端校验会失败。修复本身不复杂：重建请求、按正确 SAN 签发、重启依赖服务。留下的尾巴是当时的临时方案——一套自签续期脚本以 SYSTEM 计划任务部署到三台域控，命令行不含明文凭据（脚本上机前跑过凭据关键词扫描）；但域内企业 CA 就绪后，域控证书改由内部 CA 签发，这套自签脚本就成了历史遗留。历史记录显示计划任务仍在，是否与 CA 方案冲突没有复测，这条只能记成”历史说法”。</p>
+<p>通用教训：<strong>机器证书的 SAN 必须在请求阶段核对。</strong> 签发后才发现指错，回滚成本远大于前置检查。现在的做法是签发脚本里硬校验 SAN 与主机 FQDN 一致才提交。</p>
+<h2 id="时间源：域控的-NTP-别用默认"><a href="#时间源：域控的-NTP-别用默认" class="headerlink" title="时间源：域控的 NTP 别用默认"></a>时间源：域控的 NTP 别用默认</h2><p>PDC Emulator 是全林时间源，默认取时地址在国内办公网的表现是同步间隔拉长、偏差爬到分钟级、Kerberos 开始报 clock skew。</p>
+<p>实测结论：多个公共 NTP 从业务网不可达或抖动严重，逐个探测后固定一家延迟稳定的国内源并配备用源；非 PDC 域控全部回归默认层级跟随 PDC，不做”每台都指公网”这种画蛇添足。改完用 <code>w32tm /resync /force</code> 验证，偏差回落到毫秒级。</p>
+<p>坑在于 <strong>w32tm 的生效链很长</strong>：组策略、注册表、手动配置三层，手动配置会被组策略周期刷回。改完当场正常、几周后复发，基本都是策略里还压着旧值。查时间问题先跑 <code>w32tm /query /source</code> 和 <code>/query /configuration</code>，确认当前真实生效层，别一上来就调 syncfrom。</p>
+<h2 id="最大的坑：内网域名和官网域名同名"><a href="#最大的坑：内网域名和官网域名同名" class="headerlink" title="最大的坑：内网域名和官网域名同名"></a>最大的坑：内网域名和官网域名同名</h2><p>三个月里最花时间的问题，值得完整讲。</p>
+<p>AD 域名和官网主域名用了同一个字符串。这不是错误配置，当年建域时内外同名是常见做法，官网也在同一个品牌域下。麻烦在于：办公网的 DNS 查询全部走内网域控，裸域名解析回来的是三台域控的内网地址，浏览器打官网就撞在域控的 80/443 上——域控上没有 Web 服务，连接被拒。带 www 的记录指向公网，所以 www 正常、只有裸域炸。内部区里还残留历史时期手工加的 www 公网记录，与公网权威解析已经不一致，属于同一根因的次生问题。</p>
+<p>候选方案按侵入性排序：内网 DNS 做条件转发、客户端侧代理、或者域控直接转发。前两者分别动全局 DNS 和所有终端，被否。最终落地的是对域控侵入最小的一种：<strong>三台域控各加两条 Windows 原生 portproxy，把本机私网地址的 TCP 80/443 转发到官网 www 的公网端点</strong>，防火墙只放行办公网段到域控 80/443 且限定进程 svchost。请求经域控跳板后 301 到 www，后续流量直达公网，域控不终止 TLS、不经手证书链。</p>
+<p>实施里踩的坑比方案本身更有教育意义：</p>
+<ol>
+<li><strong>转发目标不能用裸域名的解析结果</strong>。上游名称如果解析回域控自己，直接形成回环。部署前检查里必须确认上游解析出的是公网地址。</li>
+<li><strong>首轮试点失败过，失败点是持久性</strong>。首轮防火墙规则按进程匹配放行，并用一条计划任务做健康探测、异常自动回退。上线后发现规则没能留存，而探测任务跑在管理员远程会话的子进程树里，会话断开时守卫跟着一起没了。重做版改为 SYSTEM 账户的独立计划任务，规则改成按本机私网地址加端口加进程精确匹配，并把旧 IIS 默认站点的自动启动关掉（只改 <code>serverAutoStart</code> 一个属性，保留 Web 服务运行），防止未来某天 IIS 把 80 抢回去。这套”守卫 + 超时自动回退”后来真的被触发过一次并成功回退。</li>
+<li><strong>回退必须按任务边界设计</strong>。每台域控留一个独立发布目录：变更前配置快照、原始 IIS 配置、回滚脚本及其哈希。回滚只撤销本任务新增的两条转发和精确防火墙规则、恢复站点自动启动值，绝不 <code>reset</code> 全部 portproxy、不整份还原防火墙或 DNS——域控上别人家的规则与你无关。云上那台的等效动作是安全组只删本任务新增的规则 ID，原有二十余条逐项保留。</li>
+<li><strong>验收要覆盖域功能，不只是网页</strong>。改的是域控的网络栈，网页跳转只占验收清单小半：三台复制失败计数、LDAPS 握手、SYSVOL 与 NETLOGON 可读、GPO 目录、LDAP SRV 记录、关键服务 PID 与变更前基线一致。两百多项入口检查和十余次客户端完整链路之外，这些才是敢在生产域控上动手的底气。</li>
+</ol>
+<p>未闭环也记在这：内部区里那条历史 www 记录没清理（实测当前可用，动它需要单独评审）；没做生产重启演练，所以”重启后依然生效”只能说配置层面成立、没有实测；官网源站的偶发连接失败只做了有界复测。</p>
+<h2 id="云上域控：一台-1-核-8G-的-ECS-敢不敢当-DC"><a href="#云上域控：一台-1-核-8G-的-ECS-敢不敢当-DC" class="headerlink" title="云上域控：一台 1 核 8G 的 ECS 敢不敢当 DC"></a>云上域控：一台 1 核 8G 的 ECS 敢不敢当 DC</h2><p>DC3 的配置单拿出来看是劝退的：1 vCPU、8GB 内存。但小规格域控在中小企业混合云里非常常见，能跑的前提是角色预期要诚实——价值是本地整体断线时认证不至于全灭，以及给云上业务提供就近认证，不是拿来扛负载的。</p>
+<p>要点：</p>
+<ul>
+<li>初始化阶段就完成与本地域控完全一致的安全基线（SMB 三件套、LDAP 签名、NetBIOS 禁用、RDP NLA、防火墙三 profile 启用），提升为域控后不用再补作业。</li>
+<li>安全组只对管理网段放行远程管理和 WinRM，不对公网开放任何 AD 端口；复制与认证流量走与本地的隧道。</li>
+<li>DNS 首选/备用指向本地两台域控，云上私有网络自定义 DNS 参与域解析，否则域成员找不到 SRV 记录。</li>
+<li>时间源在云上更隐蔽：云主机默认走云厂商内部时钟源，提升成域控后要按域内层级逻辑重新审视它的时间来源，别让”云默认”和”域默认”打架。</li>
+</ul>
+<p>八月的例行审计里，三台域控复制 0 失败、延迟在站点链接允许的窗口内，这台小机器没有任何性能相关告警。</p>
+<h2 id="pwdLastSet-0：一次”嫌疑犯不是凶手”的排查"><a href="#pwdLastSet-0：一次”嫌疑犯不是凶手”的排查" class="headerlink" title="pwdLastSet=0：一次”嫌疑犯不是凶手”的排查"></a>pwdLastSet=0：一次”嫌疑犯不是凶手”的排查</h2><p>十一月排查下游身份同步平台批量写密码失败，第一嫌疑人是”下次登录必须改密”标记（<code>pwdLastSet=0</code>）。全林扫描结果：一百多个用户对象里只有 9 个带标记，且全部是禁用账号（8 个普通账号加内置 Guest），与失败的那批启用账号完全不重叠。</p>
+<p>处理与三点收获：</p>
+<ol>
+<li>清理在 PDC Emulator 上执行，<code>Set-ADUser -ChangePasswordAtLogon:$false</code>（等效写入 <code>-1</code>），8/8 成功，逐对象回读确认 <code>userAccountControl</code> 没被顺手改动，内置 Guest 原样不碰——不在范围内就不动。</li>
+<li><strong>跨站点复制延迟差点骗过验收</strong>。本地域控已收到变更，云上域控短时间内还没收到复制更新，在它上面复核会得出”没改成”的假象。确认属于复制节奏正常后，用 <code>Sync-ADObject</code> 对这批对象做单对象同步（不动复制拓扑和站点计划），三台视图一致才算完成。多域控环境”写一台、验三台”必须是默认动作，且验证要接受复制延迟窗口，拿单次快照下结论必然误判。</li>
+<li>结论必须诚实：<strong>清标记不等于修故障</strong>。批量写密码失败的根因不在这次清理里。首次写入的正确顺序（LDAPS 写密成功、再清强制改密标记、回读 <code>pwdLastSet&gt;0</code>、用专用测试账号验证首同步与改密）已写进对接方案，但真实首同步链路没验收，此项到发稿仍未闭环。顺带否掉两种野路子：用”密码永不过期”绕标记是在改密码策略；写脚本周期性全域清标记会覆盖管理员主动设置的强制改密。两者都比原问题更糟。</li>
+</ol>
+<h2 id="零碎但值得记的"><a href="#零碎但值得记的" class="headerlink" title="零碎但值得记的"></a>零碎但值得记的</h2><ul>
+<li><strong>RD Gateway 可以纯注册表配置</strong>。纯远程 PowerShell 场景下官方 cmdlet 依赖的部署上下文不完整，认证模式、设备策略、审计开关直接写 Terminal Server 的 Parameters 键完成，证书绑定写 GUID 子键，重启网关服务生效。图形界面和 cmdlet 不是唯一的门，但要留下注册表前后对比作为变更证据。</li>
+<li><strong>BitLocker 恢复密码入 AD</strong>。试点验证了 AD 侧备份与按 OU 授权非域管读取，但一次真实恢复演练没做完——“已实现”只能写到试点为止。没演练过的读取路径等于不存在。</li>
+<li><strong>DNS 区安全更新</strong>。四个区全部 Secure Dynamic Update，非域内主机无法往区里注册记录。这是默认值，但值得确认没人图省事开过不安全更新。</li>
+<li><strong>运维脚本本身也要过安全审查</strong>。续期脚本上机前跑过凭据关键词扫描，计划任务运行账户回读为 SYSTEM，凭据不落命令行。自动化脚本是新的攻击面，这个习惯值得固化。</li>
+<li><strong>远程执行链路的收尾</strong>。整个项目大量改动通过远程 PowerShell 完成，收尾时要清掉本次上传的脚本、临时 stdout、测试用的临时授权条目，并回读两端确认无残留进程与监听。长期配置和 known_hosts 不清空，也不为了重试降级主机密钥校验。</li>
+</ul>
+<h2 id="未闭环清单"><a href="#未闭环清单" class="headerlink" title="未闭环清单"></a>未闭环清单</h2><p>按诚实原则，把发稿时点仍未关闭的项集中列出来：</p>
+<table>
+<thead>
+<tr>
+<th>事项</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PVE 宿主防火墙、实际备份任务、宿主 MFA</td>
+<td>未整改（审计已知）</td>
+</tr>
+<tr>
+<td>ZFS 数据池加密</td>
+<td>未做，依赖上一项先有备份</td>
+</tr>
+<tr>
+<td>证书自签续期任务与内部 CA 共存</td>
+<td>历史说法，未复测</td>
+</tr>
+<tr>
+<td>内部 DNS 历史 www 记录</td>
+<td>未清理，实测可用</td>
+</tr>
+<tr>
+<td>BitLocker 真实恢复演练</td>
+<td>未验收</td>
+</tr>
+<tr>
+<td>下游身份同步首同步链路</td>
+<td>方案已定，未验收</td>
+</tr>
+<tr>
+<td>域控重启演练（转发持久性）</td>
+<td>未做</td>
+</tr>
+</tbody></table>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>三台域控本身没什么技术含量：装、提升、对齐基线，微软文档里全有。真正花时间的全是文档不会写的部分——内外同名域这种历史决策的账、复制延迟造成的验收假象、注册表与组策略的生效链打架、以及”改域控网络栈”这种动一下就要拿全域功能验收兜底的敬畏心。</p>
+<p>只留一条经验：<strong>在生产域控上动手之前，先把回退边界和验收清单写清楚，再碰键盘。</strong></p>
+<hr>
+<p>公司环境的地址、主机名、证书指纹、安全组 ID 与凭据已全部脱敏；性能与评分数字取自当时现场报告的原始记录，未经二次复测，仅作口径参考。</p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">李广明</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://bsligm.zone/2026/11/19/%E4%B8%89%E5%8F%B0%E5%9F%9F%E6%8E%A7%E9%83%A8%E7%BD%B2%E5%AE%9E%E5%BD%95/">https://bsligm.zone/2026/11/19/%E4%B8%89%E5%8F%B0%E5%9F%9F%E6%8E%A7%E9%83%A8%E7%BD%B2%E5%AE%9E%E5%BD%95/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer noopener noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank" rel="noopener noreferrer">李广明</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Active-Directory/">
+                                    <span class="chip bg-color">Active Directory</span>
+                                </a>
+                            
+                                <a href="/tags/Windows-Server/">
+                                    <span class="chip bg-color">Windows Server</span>
+                                </a>
+                            
+                                <a href="/tags/Proxmox-VE/">
+                                    <span class="chip bg-color">Proxmox VE</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%9F%9F%E6%8E%A7/">
+                                    <span class="chip bg-color">域控</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%AE%89%E5%85%A8%E5%9F%BA%E7%BA%BF/">
+                                    <span class="chip bg-color">安全基线</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: 'Ov23liWZgseSe42ZYLbk',
+        clientSecret: '2c994858e1b7678f92b060716b0390bf71cdc01b',
+        repo: 'bsligm.github.io',
+        owner: 'bsligm',
+        admin: ["bsligm"],
+        id: '2026-11-19T20-50-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2026/11/19/%E4%B8%89%E5%8F%B0%E5%9F%9F%E6%8E%A7%E9%83%A8%E7%BD%B2%E5%AE%9E%E5%BD%95/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="三台域控部署实录：两台本地加一台云上的 AD 落地与十个坑" decoding="async" loading="lazy">
+                        
+                        <span class="card-title">三台域控部署实录：两台本地加一台云上的 AD 落地与十个坑</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2026-11-19
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/" class="post-category">
+                                    系统运维
+                                </a>
+                            
+                            <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/" class="post-category">
+                                    基础设施
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Active-Directory/">
+                        <span class="chip bg-color">Active Directory</span>
+                    </a>
+                    
+                    <a href="/tags/Windows-Server/">
+                        <span class="chip bg-color">Windows Server</span>
+                    </a>
+                    
+                    <a href="/tags/Proxmox-VE/">
+                        <span class="chip bg-color">Proxmox VE</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%9F%9F%E6%8E%A7/">
+                        <span class="chip bg-color">域控</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%AE%89%E5%85%A8%E5%9F%BA%E7%BA%BF/">
+                        <span class="chip bg-color">安全基线</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2026/11/19/DGX-Spark-vLLM%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%A4%9AAgent%E6%8E%A5%E5%85%A5/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="DGX Spark 部署 vLLM：256K 上下文本机推理与四类 Agent 接入实录" decoding="async" loading="lazy">
+                        
+                        <span class="card-title">DGX Spark 部署 vLLM：256K 上下文本机推理与四类 Agent 接入实录</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2026-11-19
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/" class="post-category">
+                                    系统运维
+                                </a>
+                            
+                            <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/" class="post-category">
+                                    基础设施
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/DGX-Spark/">
+                        <span class="chip bg-color">DGX Spark</span>
+                    </a>
+                    
+                    <a href="/tags/vLLM/">
+                        <span class="chip bg-color">vLLM</span>
+                    </a>
+                    
+                    <a href="/tags/LiteLLM/">
+                        <span class="chip bg-color">LiteLLM</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86/">
+                        <span class="chip bg-color">大模型推理</span>
+                    </a>
+                    
+                    <a href="/tags/Ubuntu/">
+                        <span class="chip bg-color">Ubuntu</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: 李广明的技术博客<br />'
+            + '文章作者: 李广明<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('2'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2021-2026</span>
+            
+            <span id="year">2021</span>
+            <a href="/about" target="_blank" rel="noopener noreferrer">李广明</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank" rel="noopener noreferrer">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">38.2k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2021";
+                    var startMonth = "5";
+                    var startDate = "6";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/bsligm" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50" rel="noopener noreferrer">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:bsligm@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50" rel="noopener noreferrer">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1055537871" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1055537871" data-position="top" data-delay="50" rel="noopener noreferrer">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50" rel="noopener noreferrer">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+	
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
