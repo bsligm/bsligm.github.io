@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2026/11/19/PVE%E5%8F%8C%E5%AE%BF%E4%B8%BB%E6%9C%BA%E4%B8%8EGPU%E5%88%87%E5%88%86%E5%AE%9E%E5%BD%95/&#34;},&#34;headline&#34;:&#34;PVE 双宿主机落地实录：网络平面隔离、ZFS 容量陷阱、vGPU 切分与推理延迟实测&#34;,&#34;description&#34;:&#34;公司机房的虚拟化底座是两台 PVE 宿主机：一台老一些，单张 L40S，跑身份服务和桌面；一台新一些，八张 RTX PRO 6000，跑推理。两台机器版本要对齐、GPU 要给研发切着用、容量要在告警前看见，事情就多了。这篇按网络、存储、模板&#34;,&#34;datePublished&#34;:&#34;2026-11-19T12:40:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T12:40:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2026/11/19/PVE%E5%8F%8C%E5%AE%BF%E4%B8%BB%E6%9C%BA%E4%B8%8EGPU%E5%88%87%E5%88%86%E5%AE%9E%E5%BD%95/&#34;},&#34;headline&#34;:&#34;PVE 双宿主机落地实录：网络平面隔离、ZFS 容量陷阱、vGPU 切分与推理延迟实测&#34;,&#34;description&#34;:&#34;公司机房的虚拟化底座是两台 PVE 宿主机：一台老一些，单张 L40S，跑身份服务和桌面；一台新一些，八张 RTX PRO 6000，跑推理。两台机器版本要对齐、GPU 要给研发切着用、容量要在告警前看见，事情就多了。这篇按网络、存储、模板&#34;,&#34;datePublished&#34;:&#34;2026-11-19T12:40:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T15:05:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -30,7 +30,7 @@
     <meta property="article:published_time" content="2026-11-19T12:40:00.000Z">
     
     
-    <meta property="article:modified_time" content="2026-11-19T12:40:00.000Z">
+    <meta property="article:modified_time" content="2026-11-19T15:05:00.000Z">
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
@@ -505,14 +505,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    6.4k
+                    7.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    24 分
+                    28 分
                 </div>
                 
 
@@ -560,7 +560,7 @@
 <tr>
 <td>内存</td>
 <td>503 GiB 可用</td>
-<td>512 GiB（32 槽只插 4 条 DDR5-5600，通道数受限）</td>
+<td>512 GB（4×128 GB DDR5-5600，32 槽只插 4 条，OS 可见约 503 GiB）</td>
 </tr>
 <tr>
 <td>GPU</td>
@@ -595,7 +595,7 @@
 <li><strong>bond 起来之后，成员口的 <code>ip link</code> 地址被 bond 统一覆盖。</strong> 两台机器成员口的当前 MAC 是 bond 的，不是出厂的；认领”哪个物理口是哪根线”只能靠 permanent MAC 加 PCIe 总线号。重装系统后 bond MAC 会变，交换机上如果配了端口安全或静态 MAC 绑定，会直接失联。</li>
 <li><strong>交换机侧是 lacp-static 动态聚合时，单个口不协商就不转发。</strong> PVE 安装器阶段还没有 bond，直连装机器可能整个拿不到 IP。要么在安装器里直接建 bond，要么临时在交换机侧退聚合，二选一，动手前必须先查交换机配置再定。</li>
 <li><strong><code>bond-lacp-rate</code> 和 <code>bond-min-links</code> 不在 PVE 的 API schema 里</strong>，图形界面不显示，只能手写 <code>/etc/network/interfaces</code>。手写就有粘贴事故：一台机器的管理 bond 配置里混进一行 <code>2.18</code> 脏内容，把整条 <code>bond-lacp-rate</code> 吞掉了，<code>ifreload</code> 不报错，得靠 <code>cat -A</code> 加 <code>ifreload -n -a</code> 空跑才发现。修完在 sysfs 里读回 <code>fast 1</code> 才算过。</li>
-<li><strong>哈希策略不能照抄另一台。</strong> A 是 <code>layer2+3</code>，B 是 <code>layer3+4</code>。B 用 layer3+4 是生产实测出来的：layer2 只看目的 MAC，网关 MAC 唯一，结果第二条链路发送方向只跑了 0.4MB，近乎闲置。反过来 A 的 layer2+3 也有其场景依据，官方桥接示例就是这个值，所以我没有统一两边，只把差异登记下来。</li>
+<li><strong>哈希策略不能照抄另一台。</strong> 这是生产实测出来的：<code>layer2</code> 只按源目的 MAC 哈希，网关 MAC 唯一，结果第二条 10G 链路发送方向只跑了 0.4MB（另一口 5.6MB），近乎闲置，改成 <code>layer3+4</code> 之后两口都发包。但改完不是一劳永逸：现场读回的结果是管理 bond 为 <code>layer3+4</code>、业务 bond 仍是 <code>layer2+3</code>，两台机器也没统一成同一个值。官方桥接示例本来就是 <code>layer2+3</code>，所以这不算配错，我只把差异连同实测依据登记下来，等交换机侧哈希策略核对完再决定统一方向。</li>
 <li><strong>bond 存在不等于聚合验收通过。</strong> 要看成员状态、churn、错误计数，还要看交换机侧。我们的上联是一对 M-LAG 双归交换机，宿主两个成员口都上联到同一台（早期）后来才是双交换机；<code>lacp_rate=fast</code> 与交换机侧 slow timeout 不一致至今没收敛；入方向流量比例受 M-LAG local-preference 影响，不能假定 50:50。另外 802.3ad 下一条 TCP 流永远只走一个口，想验证聚合得打多条不同五元组的流，看两个口发送计数一起涨。</li>
 </ol>
 <p>MTU 全线 1500，没上 jumbo frame，存储网络是后面才单独规划的，没预留成功。</p>
@@ -631,7 +631,7 @@
 <p>踩过的具体坑：<code>nameserver</code> 用逗号分隔会导致 DNS 静默失效（要分号）；配了 <code>ipconfig0</code> 但没有种子盘是彻底死配置；来宾缺 <code>resolvconf</code> 时解析接管要单独处理；手工的 <code>01-lan</code> 与生成的 <code>50-cloud-init</code> 会重复定义同一张网卡。还有个至今没修的告警：PVE 的生成器用了已弃用的 <code>user</code> 标量格式，来宾 <code>extended_status</code> 一直是 <code>degraded done</code>、退出码 2，不影响功能，但我们没有靠屏蔽告警把它”变没”。</p>
 <p>Windows 来宾不吃 cloud-init，走 ISO 加 virtio 路线，验收退化成以 QGA 三层核对为准。</p>
 <h2 id="GPU：L40S-走-mdev，八卡机走-SR-IOV"><a href="#GPU：L40S-走-mdev，八卡机走-SR-IOV" class="headerlink" title="GPU：L40S 走 mdev，八卡机走 SR-IOV"></a>GPU：L40S 走 mdev，八卡机走 SR-IOV</h2><p>两台机器的 vGPU 路线不一样，这是最容易抄错的地方。</p>
-<p>宿主 A 的 L40S 是 <strong>mdev 分片</strong>路线，虚拟机配置形如 <code>hostpci0: 0000:xx:00.4,mdev=nvidia-1153</code>。宿主 B 的 RTX PRO 6000 <strong>Server Edition</strong> 每卡 48 个 VF，走 SR-IOV 加 vGPU Manager，profile 编号由本机 API 实际返回（22 项可用），<strong>不能把 A 的 <code>nvidia-NNNN</code> 编号抄过去</strong>——不同代卡的编号完全不同。</p>
+<p>宿主 A 的 L40S 是 <strong>mdev 分片</strong>路线，虚拟机配置形如 <code>hostpci0: 0000:b1:00.4,mdev=nvidia-1153</code>。宿主 B 的 RTX PRO 6000 <strong>Server Edition</strong> 每卡 48 个 VF，走 SR-IOV 加 vGPU Manager，profile 编号由本机实际枚举。<strong><code>nvidia-NNNN</code> 这个数字既不能跨代卡抄，也不能跨 profile 抄</strong>——同一张 L40S 上 <code>nvidia-1153</code> 和 <code>nvidia-1156</code> 是两个不同显存档位的类型，八卡机上的 <code>nvidia-1534</code>（普通 24Q）和 <code>nvidia-1561</code>（MIG 派生 24Q）更是两回事。判据只有一个：在本机枚举结果里对号，别信任何文档或聊天记录里的常量。</p>
 <p>主机侧组件与顺序：</p>
 <ul>
 <li>vGPU Manager 与来宾驱动版本配对（我们锁在 R580：宿主 580.65.05、来宾 580.65.06），DKMS 随内核构建；</li>
@@ -671,11 +671,11 @@
 <td>4</td>
 </tr>
 </tbody></table>
-<p><strong>普通 DC-24Q 不是 MIG。</strong> 它固定的是显存档位，计算单元靠时间片调度共享。真正的 MIG 分区在 profile 名里带 <code>DC-1-*</code>（我们用的是 <code>DC-1-24Q</code>，对应 MIG 的 <code>1g.24gb+gfx</code>，GPU Instance Profile ID 47，23.12 GiB、46 个 SM），这类 profile 才是 MIG 派生的 vGPU。素材里有一句我完全同意：<strong>不要把普通 24Q 称为 MIG</strong>。</p>
+<p><strong>普通 DC-24Q 不是 MIG。</strong> 它固定的是显存档位，计算单元靠时间片调度共享。真正的 MIG 分区在 profile 名里带 <code>DC-1-*</code>（我们用的是 <code>DC-1-24Q</code>，对应 MIG 的 <code>1g.24gb+gfx</code>，GPU Instance Profile ID 47，23.12 GiB、46 个 SM），这类 profile 才是 MIG 派生的 vGPU。日常沟通里”用 MIG 切了一卡四”这种说法我听过太多次，<strong>普通 24Q 不要叫 MIG</strong>，两者的运维动作和故障面完全不同。</p>
 <p>另一件容易搞错的事：<strong>MIG 支持是按 SKU 给的，不是”计算能力够就有”。</strong> L40S 是 Ada、计算能力 8.9，不在官方 MIG 支持列表里；RTX PRO 6000 Blackwell Server Edition 在。所以八卡机上我们才既能用 vGPU 时间片、也能用 MIG，而 L40S 只有 vGPU。顺带一句，只有 Server Edition 支持 vGPU，Workstation 和 Max-Q 版本不支持，买卡时这是个真金白银的差别。</p>
 <p>最后一条是观念上的：<strong>密度不等于性能</strong>。驱动列出四个实例的能力，不代表低延迟达标，没有受控并发数据之前不许把单实例吞吐乘四。而且五个 24Q 塞不进一张 96 GiB 的卡，四个是上限。</p>
-<h2 id="边缘推理机-601-608：负载画像"><a href="#边缘推理机-601-608：负载画像" class="headerlink" title="边缘推理机 601-608：负载画像"></a>边缘推理机 601-608：负载画像</h2><p>研发那批边缘推理虚拟机是这样长出来的。601 是原实例，602-604 是从它完整克隆出来的三台（不是链接克隆，<code>origin</code> 为空、<code>refreservation=0</code>），每台 8 vCPU、16 GiB、200 GiB 系统盘、各一张 DC-96Q，来宾驱动与许可正常，跑 PyTorch 2.7.1 加 CUDA 12.8。</p>
-<p>605 是从 601 完整克隆、显存来自八卡机最后一张 VF；606-608 先建成<strong>无 GPU</strong> 的测试克隆，500 GiB 精简根盘在来宾内做空闲块回收后实际约 56 GiB 一台，三台合计约 168 GiB（不是三个 500 GiB 厚制），之后才挂上 MIG 分区，规格 16 vCPU、32 GiB、balloon 关闭。</p>
+<h2 id="边缘推理机-601-608：负载画像"><a href="#边缘推理机-601-608：负载画像" class="headerlink" title="边缘推理机 601-608：负载画像"></a>边缘推理机 601-608：负载画像</h2><p>研发那批边缘推理虚拟机是这样长出来的。601 是原实例，602-604 是从它完整克隆出来的三台（不是链接克隆，<code>origin</code> 为空、<code>refreservation=0</code>），每台 8 vCPU、200 GiB 系统盘、各一张 DC-96Q，来宾驱动与许可正常，跑 PyTorch 2.7.1 加 CUDA 12.8。内存从 16 GiB 起步，后来扩到 32 GiB——起因不是容量不够，而是 VFIO 锁页撞上节点本地内存不足，触发大页整理之后连带把同池另一台一起带挂过一次。</p>
+<p>605 是从 601 完整克隆、显存来自八卡机最后一张 VF（那张卡原本是另一台虚拟机在用，10 月移交过来）。606-608 先建成<strong>无 GPU</strong> 的测试克隆，500 GiB 精简根盘在来宾内做空闲块回收后实际约 56 GiB 一台，三台合计约 168 GiB（不是三个 500 GiB 厚制）。之后这张卡经历了两个阶段：先切成四个普通 24Q 给四台共用，验不过再换成四个 MIG 硬分区。四台最终规格都是 16 vCPU、32 GiB、balloon 关闭。这条演进链要记清楚——<strong>“无 GPU 克隆”和”普通 24Q”都只是中间状态，不是交付规格</strong>，交接时按最后读回的清单说。</p>
 <p>克隆过程的坑很实在：</p>
 <ul>
 <li>新副本首次开机时虚拟网卡是断开的，先把身份处理干净、关机、再启用新 IP 上线。全程不动源机。</li>
@@ -722,46 +722,41 @@
 <h3 id="第二轮：绑到固定物理核，没有收益"><a href="#第二轮：绑到固定物理核，没有收益" class="headerlink" title="第二轮：绑到固定物理核，没有收益"></a>第二轮：绑到固定物理核，没有收益</h3><p>第一轮做的是”限制在 node0 的 CPU 池里”，vCPU 在池内仍会迁移（30 秒采样里改后两轮迁移约 85/78 次）。所以下一步很自然：把每个 vCPU 钉死到具体物理核。</p>
 <p>结论是<strong>没赢</strong>。同一 QEMU 下 CPU 池与固定核交替四轮：固定核 mean 慢 0.5956 ms（0.3079%）、P95 慢 0.7167 ms；只有 P99 低 15.46 ms、max 低 66.75 ms，而样本量不足以支撑尾延迟结论。迁移次数按预期归零（对照组 81/80 次），但均值和 P95 都没换来东西。</p>
 <p><strong>所以这个配置没有固化，已回滚。</strong> 顺带澄清一个常被夸大的说法：来宾里 <code>taskset -c 0-7</code> 只约束这 8 个 vCPU，不证明独占物理核、不证明固定、也不证明没和其他 VM 共享 SMT 兄弟核。<code>isolcpus</code>、<code>nohz_full</code>、关 <code>irqbalance</code> 改 GPU 中断亲和这些我们都没做，属于未验证区域。</p>
-<h3 id="第三轮：MIG-硬分区，并发下明显"><a href="#第三轮：MIG-硬分区，并发下明显" class="headerlink" title="第三轮：MIG 硬分区，并发下明显"></a>第三轮：MIG 硬分区，并发下明显</h3><p>四台测试机各挂一个 MIG 分区（<code>DC-1-24Q</code>，46 SM、23.12 GiB），16 vCPU、32 GiB，纯模型层 n=1024/768：</p>
+<h3 id="第三轮：普通-24Q-换-MIG-硬分区，并发下差距明显"><a href="#第三轮：普通-24Q-换-MIG-硬分区，并发下差距明显" class="headerlink" title="第三轮：普通 24Q 换 MIG 硬分区，并发下差距明显"></a>第三轮：普通 24Q 换 MIG 硬分区，并发下差距明显</h3><p>这一轮的对象是共享同一张卡的四个实例。同一张卡先切成四个普通 <code>DC-24Q</code>（时间片共享），再切成四个 <code>DC-1-24Q</code> MIG 硬分区（46 SM、可见显存约 23.69 GiB），来宾都是 16 vCPU、32 GiB。模型、权重、输入、线程契约完全冻结，换的只有切分方式。</p>
+<p>MIG 后的四路结果，两种工况分开记，不混表（单位 ms，n 为有效样本）：</p>
 <table>
 <thead>
 <tr>
-<th>测试机</th>
+<th>工况</th>
+<th align="right">n/台</th>
 <th align="right">mean</th>
 <th align="right">P95</th>
-<th align="right">max</th>
+<th align="right">最慢</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>E</td>
-<td align="right">114.749</td>
-<td align="right">117.387</td>
-<td align="right">—</td>
+<td>四路连续调用</td>
+<td align="right">1024</td>
+<td align="right">114.749-115.946</td>
+<td align="right">116.891-118.874</td>
+<td align="right">125.532-136.905</td>
 </tr>
 <tr>
-<td>F</td>
-<td align="right">114.778</td>
-<td align="right">116.891</td>
-<td align="right">—</td>
-</tr>
-<tr>
-<td>G</td>
-<td align="right">120.366</td>
-<td align="right">125.780</td>
-<td align="right">—</td>
-</tr>
-<tr>
-<td>H</td>
-<td align="right">126.917</td>
-<td align="right">148.167</td>
-<td align="right">193.202</td>
+<td>每 640 ms 四路同步发起</td>
+<td align="right">768</td>
+<td align="right">120.366-126.917</td>
+<td align="right">125.780-148.167</td>
+<td align="right">176.553-193.202</td>
 </tr>
 </tbody></table>
-<p>同四路在”普通 24Q 时间片”下的基线约 204.4-204.6 ms。<strong>并发从一路变成四路时，硬分区把时间片排队消掉了</strong>，这才是 MIG 的价值来源；单实例场景下 MIG 未必赢，我们的单实例 CUDA Graph 实验（mean 104.871 ms）是另一台机器另一套实验，不能拿来横比。</p>
-<p>这批数据还有个副产品：G 和 H 明显比 E、F 慢 5-12 ms，这两台的 CPU 池绑在 node0、而那个 GPU 在 node1。第一轮那个跨节点访存的结论在另一批机器上复现了。</p>
-<p>真实节拍压测：四路并发、按 640 ms 节拍连续提交，3760 次节拍调用里<strong>超过 640 ms 的 0 次</strong>；节拍延迟 mean 206.5-210.4 ms，max 287.6-307.8 ms；连续 300 秒口径 mean 199.9-203.0 ms，共 9710 次有效调用。峰值显存 5.28 GiB（预留 5.40），worker 最大常驻集 16.28 GiB。</p>
-<p>MIG 带来的新问题也有三条。来宾内 GPU 和显存利用率字段读不出来，<strong>读到 0 是”不可读”，不是”0% 利用率”</strong>；MIG 下原生调度查询返回不适用；回退是复合动作，要清掉本轮建的 GPU/Compute 实例、关 MIG、恢复 Best Effort 调度和监控期望，缺一环就拒绝不完整回退。另外监控里写死 96Q 规格的项不更新会误报切分后的机器。</p>
-<h2 id="同机其他负载与硬件侧"><a href="#同机其他负载与硬件侧" class="headerlink" title="同机其他负载与硬件侧"></a>同机其他负载与硬件侧</h2><p>八卡机同时还在跑大模型推理，做法是按 NUMA 各摆一个副本（GPU0-3 归 node0、GPU4-7 归 node1），张量并行加专家并行各四卡一份。GPU 空载 PCIe 会掉到 Gen1，带载实测回到 Gen5×16，这个别当成故障。</p>
+<p><strong>同一套模型、同一工况下，普通 24Q 的四路均值是 204.4-204.8 ms</strong>（每台 508 个共窗样本）。换成分区之后掉到 115 ms 上下，四路同时跑的时候，硬分区把时间片排队整个消掉了，这才是 MIG 在这里的价值来源。更早做密度评估时的判断是”四个普通 24Q 可创建，不等于四路还保得住卡级延迟”，据此拒绝过准入；这轮实测把那条判断坐实了，也正是它促成了切分方式的更换。</p>
+<p>同步发起那一组还留了个副产品：两台 120.4/126.9 ms，另外两台 121.2/121.3 ms。慢的那两台 CPU 池绑在 node0，而那张卡（连同它的四个分区）在 node1；不慢的两台 CPU 池就在 node1。<strong>第一轮那个跨节点访存的结论，在另一批机器、另一种切分下复现了。</strong> 同批复验做了 2048 个样本，均值 119.8-122.9、P95 124.2-145.4，全部低于 200 ms。</p>
+<p>接下来这套别和上面混：<strong>同一个 MIG 布局，换成抓球模型（四摄像头输入、无 CUDA Graph）跑真实节拍</strong>，四路并发按 640 ms 提交，3760 次节拍调用里超过 640 ms 的 0 次；节拍延迟 mean 206.5-210.4 ms，max 287.6-307.8 ms；连续 300 秒口径 mean 199.9-203.0 ms，共 9710 次有效调用。峰值显存 5.28 GiB（预留 5.40），worker 最大常驻集 16.28 GiB。</p>
+<p>这组数字跟普通 24Q 的 204 ms 挨在一起，纯属巧合，<strong>不是同一套模型，不能拿来当 MIG 的对照基线</strong>。同理，那台独享 96Q 的生产机历史上 104.86 ms 是动态业务日志、没有同条件的权重哈希，只能当参考，不能签”非劣”。要拿 MIG 去替代独卡，得在自己的模型和输入上重测。</p>
+<p>还有一条容易被忽略的代价：从普通 24Q 换成 MIG，原始动作张量在可比点上的最大绝对差是 0.015625。这个量级算不算可接受的物理控制误差，得由研发按实际控制量和轨迹容差判，我这边只报数，不替它签字。</p>
+<p>MIG 带来的新问题也有三条。来宾内 GPU 和显存利用率字段读不出来，<strong>读到 0 是”不可读”，不是”0% 利用率”</strong>，监控侧最终是按设备能力把这三类不支持的可选指标显式排除，而不是灌 0；MIG 下原生调度查询返回不适用；回退是复合动作，要清掉本轮建的 GPU/Compute 实例、关 MIG、恢复 Best Effort 调度和监控期望，缺一环就拒绝不完整回退。另外监控里写死 96Q 规格的项不更新会误报切分后的机器。</p>
+<h2 id="同机其他负载与硬件侧"><a href="#同机其他负载与硬件侧" class="headerlink" title="同机其他负载与硬件侧"></a>同机其他负载与硬件侧</h2><p>八卡机也是大模型推理机，但这里的布局换过两版，别把历史当现状：裸金属阶段跑的是上下两个副本、按 NUMA 各摆一份、张量并行加专家并行各四卡；上 PVE 之后换模型，改成单卡多副本加数据并行，生成阶段不再跨卡做张量归约。到今年 11 月现场读回，这台机器上 GPU0-3 各一张 96Q 归四台边缘推理机，GPU4-6 三张 96Q 归大模型那台，GPU7 是四个 MIG 分区——<strong>八个索引全部有主，没有空闲卡可以”顺手切一块”</strong>。</p>
+<p>GPU 空载时 PCIe 会掉到 Gen1，带载实测回到 Gen5×16，这个别当成故障。</p>
 <p>考机结论里最反直觉的是功率墙：<strong>不要为了省电把功率上限从 600W 锁到 450W。</strong> 正序（冷到热）测出来 300W 最快，那是第一档吃到了冷机红利；反向重测推翻了这个结论。真正的因果是温度决定 SM 时钟、时钟决定吞吐——396.9 TFLOPS 对应 70.3°C/2165 MHz，337.6 对应 83.7°C/1849 MHz；而 450W 档两轮都最差，怀疑是功率墙与调频迟滞共振，机制没证明。峰值 87°C 会触发热慢降频，是这台机器的唯一短板；整机峰值输入 5544W，N+1 余量约 2.3 kW。</p>
 <p>裸金属阶段还留了一条通用教训：换系统后 <code>/data</code> 的设备名从 <code>nvme0n1</code> 变成 <code>nvme1n1</code>，我们靠序列号和 UUID 交叉核对才确认挂载无误。<strong>配置文件里不要写设备名。</strong> 掉盘不卡 emergency 也值得一试：<code>nofail</code> 加 30 秒 systemd 挂载超时，配合实测 <code>local-fs.target</code> 对挂载单元只有 <code>Wants=</code> 弱依赖。</p>
 <h2 id="未闭环清单"><a href="#未闭环清单" class="headerlink" title="未闭环清单"></a>未闭环清单</h2><table>
@@ -785,23 +780,27 @@
 </tr>
 <tr>
 <td>高可用</td>
-<td>无独立 QDevice、无仲裁与 fencing 演练，HA 资源清单为空</td>
+<td>双节点集群已 quorate，但没独立 QDevice、没 fencing 演练，HA 资源清单为空，两节点全挂即全停</td>
 </tr>
 <tr>
 <td>在线迁移</td>
-<td>测试机双向迁移成功，但有约 4 秒收包空档、ICMP 丢 0.498%，不写”应用零中断”</td>
+<td>测试机双向迁移成功，但有约 4 秒收包空档、ICMP 丢 0.498%；带 vGPU/直通的迁移边界未验，不写”应用零中断”</td>
 </tr>
 <tr>
 <td>备份</td>
-<td>恢复演练只在隔离机做过，生产机未演练；NAS 与运行盘同故障域</td>
+<td>每日 NAS 作业按清单排除了全部边缘推理机和大模型机，实际只覆盖一台；恢复演练只在隔离机做过，生产机未演练</td>
 </tr>
 <tr>
 <td>vGPU</td>
-<td>冷启动持久性、专业图形应用体验未验；MIG 组合未获官方支持矩阵认证</td>
+<td>MIG 冷启动持久性未验（恢复钩子只核了文件摘要，没执行冷启动）；专业图形应用体验未验；MIG 组合未获官方支持矩阵认证</td>
 </tr>
 <tr>
 <td>推理</td>
-<td>真机端到端延迟未测；尾延迟尖峰未解决；四台评测入口已停用，未接回机器人</td>
+<td>真机端到端延迟未测；尾延迟尖峰未解决；四台评测入口已停用，未接回机器人；动作容差待研发验收</td>
+</tr>
+<tr>
+<td>硬件</td>
+<td>一处网卡驱动打过软件补丁，异常路径已修但原始器件级根因未定位；两次宕机现象相似，根因仍未定</td>
 </tr>
 <tr>
 <td>绑核</td>
@@ -1280,7 +1279,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">44.6k</span>&nbsp;字
+                class="white-color">45.6k</span>&nbsp;字
             
             
             
