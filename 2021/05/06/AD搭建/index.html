@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2021/05/06/AD%E6%90%AD%E5%BB%BA/&#34;},&#34;headline&#34;:&#34;Windows Server安装以及AD域服务搭建&#34;,&#34;description&#34;:&#34;Active Directory（AD）域服务提供集中式的身份认证、账号与资源管理能力，是 Windows 域环境的基石。本文记录从裸机安装 Windows Server 到完成域控制器（DC）部署的完整流程：安装方式选择 → 系统基础配置&#34;,&#34;datePublished&#34;:&#34;2021-05-06T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T03:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2021/05/06/AD%E6%90%AD%E5%BB%BA/&#34;},&#34;headline&#34;:&#34;Windows Server安装以及AD域服务搭建&#34;,&#34;description&#34;:&#34;Active Directory（AD）域服务提供集中式的身份认证、账号与资源管理能力，是 Windows 域环境的基石。本文记录从裸机安装 Windows Server 到完成域控制器（DC）部署的完整流程：安装方式选择 → 系统基础配置&#34;,&#34;datePublished&#34;:&#34;2021-05-06T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T07:30:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -30,7 +30,7 @@
     <meta property="article:published_time" content="2021-05-06T03:00:00.000Z">
     
     
-    <meta property="article:modified_time" content="2026-11-19T03:00:00.000Z">
+    <meta property="article:modified_time" content="2026-11-19T07:30:00.000Z">
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
@@ -66,7 +66,7 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
     <link rel="alternate" href="/atom.xml" title="李广明的技术博客" type="application/atom+xml">
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 8.1.2"></head>
 
 
 
@@ -497,14 +497,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.3k
+                    2.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    4 分
+                    9 分
                 </div>
                 
 
@@ -547,9 +547,9 @@
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509728.png" alt="完成安装" title="安装完成界面" decoding="async" loading="lazy"></p>
 <h2 id="系统基础配置"><a href="#系统基础配置" class="headerlink" title="系统基础配置"></a>系统基础配置</h2><p>在安装完成 Windows Server 系统后，需要进行一些基础配置：</p>
 <h3 id="1-更改计算机名和固定-IP-地址"><a href="#1-更改计算机名和固定-IP-地址" class="headerlink" title="1. 更改计算机名和固定 IP 地址"></a>1. 更改计算机名和固定 IP 地址</h3><ul>
-<li>更改计算机名为易于识别的名称</li>
-<li>配置静态 IP 地址以确保服务稳定性</li>
-<li>完成配置后重启服务器使设置生效</li>
+<li><strong>计算机名在提升为域控之前定稿</strong>。改名会牵动已下发的组策略引用、已加域计算机的计算机账户，以及按名称写死的脚本与共享路径，域控上线后再改的成本远高于现在多想两分钟。名称超过 15 字符会被 NetBIOS 截断，命名建议同时体现机房、角色与序号，第二台域控直接顺延。</li>
+<li><strong>网卡设为静态地址，DNS 首选填本机 <code>127.0.0.1</code></strong>（已有域内 DNS 时指向该地址）。这一步做扎实，下一步的预安装检查就不会因此报错；DNS 角色要到下一阶段才安装，此刻指向本机暂时解析不了任何域名属预期状态，处理方式见「注意事项」。</li>
+<li>两项都改完后重启一次，再进入角色安装，避免中途改地址导致已注册的 DNS 记录与实际不一致。</li>
 </ul>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509513.png" alt="更改计算机名" title="更改计算机名界面" decoding="async" loading="lazy"></p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509381.png" alt="固定 IP 地址" title="配置静态IP地址界面" decoding="async" loading="lazy"></p>
@@ -557,46 +557,104 @@
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509842.png" alt="添加域服务功能" title="添加AD域服务角色" decoding="async" loading="lazy"></p>
 <p>确认域服务安装：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509441.png" alt="域服务确认安装" title="域服务安装确认" decoding="async" loading="lazy"></p>
-<h3 id="2-配置域控制器"><a href="#2-配置域控制器" class="headerlink" title="2. 配置域控制器"></a>2. 配置域控制器</h3><p>将服务器提升为域控制器：</p>
-<h4 id="步骤-1：启动域控制器部署向导"><a href="#步骤-1：启动域控制器部署向导" class="headerlink" title="步骤 1：启动域控制器部署向导"></a>步骤 1：启动域控制器部署向导</h4><p>点击提示中的”部署后配置”，选择”将服务器提升为域控制器”：</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509594.png" alt="启动域控制器部署" title="启动域控制器部署向导" decoding="async" loading="lazy"></p>
-<h4 id="步骤-2：部署新域与域名"><a href="#步骤-2：部署新域与域名" class="headerlink" title="步骤 2：部署新域与域名"></a>步骤 2：部署新域与域名</h4><p>配置新域和域名信息：</p>
+<h3 id="2-配置域控制器"><a href="#2-配置域控制器" class="headerlink" title="2. 配置域控制器"></a>2. 配置域控制器</h3><p>角色安装完成并不会让本机成为域控，还要再执行提升操作。向导一共八页，逐页截图对复现没有价值，真正需要盯住的取值集中在下表：</p>
+<table>
+<thead>
+<tr>
+<th>向导页</th>
+<th>关键界面项</th>
+<th>实际要注意的取值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1 部署后配置</td>
+<td>「将服务器提升为域控制器」</td>
+<td>入口在角色安装完成后的提示或「服务器管理器 → 通知」里，关掉提示仍可从通知区重新进入，不必重装角色</td>
+</tr>
+<tr>
+<td>2 部署配置</td>
+<td>操作类型</td>
+<td>全新环境选「添加新林」，为已有域增补域控选另一项。两者后续可选项不同，选错只能退出向导重来</td>
+</tr>
+<tr>
+<td>2 部署配置</td>
+<td>DNS 域名与 NetBIOS 域名</td>
+<td>两者上线后都不可更改，向导是唯一一次可以改的机会。域名建议用与对外域名隔离的子域或独立后缀，NetBIOS 名取域名首段，超过 15 字符会被截断</td>
+</tr>
+<tr>
+<td>3 域控制器选项</td>
+<td>DNS 服务器、全局编录、只读域控制器</td>
+<td>新林首台域控的 DNS 与全局编录默认勾选且不可取消，AD 与 DNS 同机是硬要求；只读域控制器仅用于无法物理防护的分支站点，总部域控不选</td>
+</tr>
+<tr>
+<td>4 其他选项</td>
+<td>林/域功能级别</td>
+<td>决定可用特性与域控最低系统版本，提升后基本无法回退，按现网最老的域控版本选取</td>
+</tr>
+<tr>
+<td>4 其他选项</td>
+<td>数据库、日志、SYSVOL 路径</td>
+<td>默认全部落在系统盘。数据库与日志分盘能降低单盘故障时的恢复难度，只有一台盘就别硬拆，保持默认更好维护</td>
+</tr>
+<tr>
+<td>4 其他选项</td>
+<td>启用回收站</td>
+<td>误删对象的恢复成本差别很大，建议开启。它要求林功能级别达到门槛才可选，且开启后不支持直接关闭</td>
+</tr>
+<tr>
+<td>5 目录服务还原模式密码</td>
+<td>DSRM 密码</td>
+<td>AD 数据库异常、域内无其他域控可登录时，这是唯一的本地登录通道，必须纳入密码保管流程，且不要与域管理员密码复用</td>
+</tr>
+<tr>
+<td>6 确认</td>
+<td>摘要页</td>
+<td>此页只是回放前几步的选择，值得逐行核一遍的是域名与功能级别，这两项后面改不了</td>
+</tr>
+<tr>
+<td>7 预安装检查</td>
+<td>验证结果</td>
+<td>失败最常见的两个原因是 DNS 指向错误与网卡未设静态地址。修正后点「重新测试」即可，不需要回退上一步重填</td>
+</tr>
+<tr>
+<td>8 安装</td>
+<td>自动重启</td>
+<td>校验通过即开始安装并自动重启，期间不要强制断电；重启完成后部署才算结束</td>
+</tr>
+</tbody></table>
+<p>真正需要留档的只有三张：命名页是不可逆项、DSRM 密码页决定出事时能否进机器、预安装检查页决定这一趟会不会白跑。</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510494.png" alt="部署新域与域名" title="配置域名信息" decoding="async" loading="lazy"></p>
-<h4 id="步骤-3：配置域控制器与-DNS-服务"><a href="#步骤-3：配置域控制器与-DNS-服务" class="headerlink" title="步骤 3：配置域控制器与 DNS 服务"></a>步骤 3：配置域控制器与 DNS 服务</h4><p>设置域控制器和 DNS 服务选项：</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510311.png" alt="配置域控与 DNS 服务" title="配置域控制器和DNS服务" decoding="async" loading="lazy"></p>
-<h4 id="步骤-4：其他选项及安装"><a href="#步骤-4：其他选项及安装" class="headerlink" title="步骤 4：其他选项及安装"></a>步骤 4：其他选项及安装</h4><p>配置其他安装选项：</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510564.png" alt="其他选项及安装" title="其他安装选项" decoding="async" loading="lazy"></p>
-<h4 id="步骤-5：设置目录服务还原模式密码"><a href="#步骤-5：设置目录服务还原模式密码" class="headerlink" title="步骤 5：设置目录服务还原模式密码"></a>步骤 5：设置目录服务还原模式密码</h4><p>为目录服务还原模式设置密码：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510798.png" alt="设置 DSRM 密码" title="设置DSRM密码" decoding="async" loading="lazy"></p>
-<h4 id="步骤-6：确认配置选项"><a href="#步骤-6：确认配置选项" class="headerlink" title="步骤 6：确认配置选项"></a>步骤 6：确认配置选项</h4><p>检查并确认所有配置选项：</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510256.png" alt="确认配置选项" title="确认配置选项" decoding="async" loading="lazy"></p>
-<h4 id="步骤-7：预安装检查"><a href="#步骤-7：预安装检查" class="headerlink" title="步骤 7：预安装检查"></a>步骤 7：预安装检查</h4><p>执行预安装检查以确保所有要求都满足：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510759.png" alt="预安装检查" title="预安装检查" decoding="async" loading="lazy"></p>
-<h4 id="步骤-8：完成安装"><a href="#步骤-8：完成安装" class="headerlink" title="步骤 8：完成安装"></a>步骤 8：完成安装</h4><p>安装完成后重启服务器，域控制器部署完成：</p>
+<p>向导其余各页的界面截图：</p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081509594.png" alt="启动域控制器部署" title="启动域控制器部署向导" decoding="async" loading="lazy"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510311.png" alt="配置域控与 DNS 服务" title="配置域控制器和DNS服务" decoding="async" loading="lazy"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510564.png" alt="其他选项及安装" title="其他安装选项" decoding="async" loading="lazy"></p>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510256.png" alt="确认配置选项" title="确认配置选项" decoding="async" loading="lazy"></p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081510752.png" alt="安装完成" title="安装完成界面" decoding="async" loading="lazy"></p>
-<h2 id="验证域控制器功能"><a href="#验证域控制器功能" class="headerlink" title="验证域控制器功能"></a>验证域控制器功能</h2><p>安装完成后，通过以下方式验证域控制器功能是否正常：</p>
+<h2 id="验证域控制器功能"><a href="#验证域控制器功能" class="headerlink" title="验证域控制器功能"></a>验证域控制器功能</h2><p>安装完成只说明向导跑完了。下面四条分别核域控自身健康、复制状态、域名解析与 DC 定位、客户端实际登录，每条都给出可判定的通过标准：</p>
 <ol>
-<li>打开”服务器管理器”，查看”通知”区域是否有错误信息</li>
-<li>使用”Active Directory 用户和计算机”管理工具查看域结构</li>
-<li>在客户端计算机上尝试加入域</li>
+<li><strong>域控自检</strong>：在域控上执行 <code>dcdiag /v</code>，逐项应为 <code>Pass</code>。测试项较多，输出较长时先看结尾的汇总行，再回读报 <code>FAIL</code> 的那一项。</li>
+<li><strong>复制状态</strong>：<code>repadmin /showrepl</code> 应显示复制成功。单台域控没有复制伙伴，返回「没有伙伴」属正常，此时该项只能作为基线留存，等第二台域控上线后才有实际意义。</li>
+<li><strong>域名解析与 DC 定位</strong>：在域控上执行 <code>nslookup -q=srv _ldap._tcp.dc._msdcs.&lt;域名&gt;</code>，应返回本机地址；在客户端执行 <code>nltest /dsgetdc:&lt;域名&gt;</code>，应返回域控主机名与站点。解析不到 SRV 记录，问题基本在 DNS 指向，而不是域服务本身。</li>
+<li><strong>客户端加域</strong>：加域后注销并重新登录，在客户端执行 <code>echo %logonserver%</code>，应返回域控的计算机名。拿到这个值才说明这台机器实际走完了域认证，而不只是本地缓存了旧凭据。</li>
 </ol>
-<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>在部署域控制器时需要注意以下重要事项：</p>
-<ul>
-<li>在生产环境中部署域控制器前，建议先在测试环境中进行验证</li>
-<li>确保 DNS 设置正确，域控制器通常也是 DNS 服务器</li>
-<li>建议配置静态 IP 地址以确保域服务的稳定性</li>
-<li>定期备份 AD 域数据，防止意外情况导致数据丢失</li>
+<p>图形界面下还可以打开「服务器管理器」查看「通知」区域有无报错，以及用「Active Directory 用户和计算机」确认域与组织单位结构，但这两处只能看出「界面能打开」，不能替代上面的判据。</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
+<li><strong>DNS 是硬依赖</strong>。域控制器同时承担 DNS 角色，网卡的 DNS 必须指向本机（或已有的域内 DNS），指向公网 DNS 会导致 SRV 记录解析不到、客户端加域失败。</li>
+<li><strong>上游转发单独配</strong>。域内 DNS 接管后要在条件转发器或根提示里补上外部解析出口，否则内网解析正常、外网全断，容易被误判成域服务故障。</li>
+<li><strong>静态 IP 不可协商</strong>。地址变更会让 <code>_msdcs</code> 区域记录与实际地址不一致，故障表现为间歇性登录变慢而非直接报错，排查成本很高。</li>
+<li><strong>备份要含 System State</strong>。只备份文件卷无法还原 AD 数据库，域控备份必须走包含 System State 的方案，并确认备份窗口早于复制周期。</li>
 </ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过以上步骤，我们完成了 Windows Server 系统的安装以及 AD 域服务的配置。AD 域服务的部署是构建企业网络环境的重要基础，掌握其安装和配置方法对于系统管理员来说至关重要。</p>
-<p>在实际应用中，还需要根据具体需求进行更详细的配置，如：</p>
-<ul>
-<li>组织单位（OU）结构设计</li>
-<li>组策略配置</li>
-<li>用户和计算机账户管理</li>
-<li>信任关系配置</li>
-<li>备份和恢复策略制定</li>
-</ul>
-<p>建议在正式部署前制定详细的规划文档，并在测试环境中充分验证后再应用到生产环境。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这台域控制器的交付路径很短：装系统 → 改计算机名与静态 IP → 添加 AD DS（按需含 DHCP）角色 → 提升为域控制器并集成 DNS → 重启后以「服务器管理器通知无报错、ADUC 可见域结构、客户端成功加域」三步收口。</p>
+<p>链路里有两处事后很难补救：域名与 NetBIOS 域名上线后再变更代价极高，向导第 2 步就要按最终命名填写；DSRM 密码是 AD 数据库异常时唯一的本地登录通道，必须纳入密码保管流程，不能作为向导里一次性的过场。</p>
+<p>上面这套流程交付的只是一台能用的域控，距离敢把它交给别人用还差三件事，按顺序补：</p>
+<ol>
+<li><strong>第二台域控制器</strong>。单台 DC 故障期间加域、域登录、组策略刷新全部不可用，System State 备份的权威副本也随之失效。</li>
+<li><strong>还原演练</strong>。域控备份必须包含 System State，并且实际做过一次非授权还原；「备份任务成功」不等于具备恢复能力。</li>
+<li><strong>时间同步与站点规划</strong>。Kerberos 对时间偏差敏感，PDC Emulator 角色持有者要指向可靠的 NTP 源。多场地部署还需提前在「AD 站点和服务」登记子网，否则客户端会跨场地认证与复制。</li>
+</ol>
+<p>组织单位划分、组策略体系、账户生命周期属于域稳定后的持续治理，与本文的部署交付是两个阶段，不宜在同一窗口内一起改动。</p>
 
                 
             </div>
@@ -782,20 +840,20 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Helpdesk/">
-                        <span class="chip bg-color">Helpdesk</span>
-                    </a>
-                    
                     <a href="/tags/AD%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
                         <span class="chip bg-color">AD域控制器</span>
                     </a>
                     
-                    <a href="/tags/%E5%AE%89%E5%85%A8/">
-                        <span class="chip bg-color">安全</span>
+                    <a href="/tags/Helpdesk/">
+                        <span class="chip bg-color">Helpdesk</span>
                     </a>
                     
                     <a href="/tags/PowerShell/">
                         <span class="chip bg-color">PowerShell</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%AE%89%E5%85%A8/">
+                        <span class="chip bg-color">安全</span>
                     </a>
                     
                 </div>
@@ -1041,7 +1099,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">24.2k</span>&nbsp;字
+                class="white-color">28.6k</span>&nbsp;字
             
             
             

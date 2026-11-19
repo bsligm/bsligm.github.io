@@ -14,7 +14,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/03/04/Windows%E6%B2%99%E7%9B%92%20sandbox%20%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B/&#34;},&#34;headline&#34;:&#34;Windows沙盒 sandbox 实际应用案例&#34;,&#34;description&#34;:&#34;背景介绍IT 支持工作中常遇到一类两难需求：某个仍在使用的管理系统只兼容过时的浏览器与插件，而这些组件本身已不适合装在办公机上。\n本次案例即属此类：打印机联机认证使用理光的格兰林系统，删除已注册 IC 卡时必须在 IE 浏览器中访问其后台，&#34;,&#34;datePublished&#34;:&#34;2023-03-04T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T03:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/03/04/Windows%E6%B2%99%E7%9B%92%20sandbox%20%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B/&#34;},&#34;headline&#34;:&#34;Windows沙盒 sandbox 实际应用案例&#34;,&#34;description&#34;:&#34;背景介绍IT 支持工作中常遇到一类两难需求：某个仍在使用的管理系统只兼容过时的浏览器与插件，而这些组件本身已不适合装在办公机上。\n本次案例即属此类：打印机联机认证使用理光的格兰林系统，删除已注册 IC 卡时必须在 IE 浏览器中访问其后台，&#34;,&#34;datePublished&#34;:&#34;2023-03-04T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T07:30:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -32,7 +32,7 @@
     <meta property="article:published_time" content="2023-03-04T03:00:00.000Z">
     
     
-    <meta property="article:modified_time" content="2026-11-19T03:00:00.000Z">
+    <meta property="article:modified_time" content="2026-11-19T07:30:00.000Z">
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
@@ -68,7 +68,7 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
     <link rel="alternate" href="/atom.xml" title="李广明的技术博客" type="application/atom+xml">
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 8.1.2"></head>
 
 
 
@@ -448,12 +448,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Helpdesk/">
-                                <span class="chip bg-color">Helpdesk</span>
-                            </a>
-                        
                             <a href="/tags/Windows-11/">
                                 <span class="chip bg-color">Windows 11</span>
+                            </a>
+                        
+                            <a href="/tags/Helpdesk/">
+                                <span class="chip bg-color">Helpdesk</span>
                             </a>
                         
                             <a href="/tags/%E5%AE%89%E5%85%A8/">
@@ -529,30 +529,25 @@
                 <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>IT 支持工作中常遇到一类两难需求：某个仍在使用的管理系统只兼容过时的浏览器与插件，而这些组件本身已不适合装在办公机上。</p>
 <p>本次案例即属此类：打印机联机认证使用理光的格兰林系统，删除已注册 IC 卡时必须在 IE 浏览器中访问其后台，而该后台依赖 Flash Player 插件。Flash Player 已全面停止支持，存在已知安全风险且历史上捆绑软件较多，不应安装在物理机上。</p>
 <p>处理思路是把「不安全的运行环境」与「主机」彻底分开：在 Windows 自带的沙盒中临时安装并运行所需组件，用完即销毁。落地方式是沙盒配置文件（<code>.wsb</code>）+ <code>MappedFolders</code> 映射脚本目录 + <code>LogonCommand</code> 自动执行安装，双击文件即可得到装好 Flash Player 的干净环境。</p>
-<h2 id="Windows-沙盒简介"><a href="#Windows-沙盒简介" class="headerlink" title="Windows 沙盒简介"></a>Windows 沙盒简介</h2><p>Windows 沙盒是 Windows 10 Pro/Enterprise 和 Windows 11 Pro/Enterprise 版本中内置的一个轻量级虚拟化环境，具有以下特点：</p>
-<ul>
-<li><strong>临时性</strong>：沙盒是临时桌面环境，关闭后所有数据（含本次安装的 Flash Player）全部清除</li>
-<li><strong>隔离性</strong>：沙盒与主机系统隔离，主机不受沙盒内软件影响</li>
-<li><strong>安全性</strong>：沙盒内的应用程序<strong>默认</strong>无法访问主机文件系统，但通过 <code>MappedFolders</code> 显式映射的目录是明确例外——本案例正是依靠这一例外把安装脚本送进沙盒</li>
-<li><strong>便捷性</strong>：无需配置虚拟机，一键启动</li>
-</ul>
+<h2 id="Windows-沙盒简介"><a href="#Windows-沙盒简介" class="headerlink" title="Windows 沙盒简介"></a>Windows 沙盒简介</h2><p>Windows 沙盒是 Windows 10 与 Windows 11 的 Pro/Enterprise 版本内置的轻量虚拟化环境：每次启动都是全新实例，关闭后本次会话的全部改动（含本案例临时安装的 Flash Player）随之消失，沙盒内装的软件不会残留到主机。</p>
+<p>沙盒内程序默认无法访问主机文件系统，唯一例外是通过 <code>MappedFolders</code> 显式映射进来的目录；本案例正是依靠这一例外把安装脚本送进沙盒。</p>
 <p>需要注意，映射目录是<strong>真实的读写通道</strong>（可设为只读），因此映射范围应保持最小：只映射存放安装脚本的目录，绝不映射用户主目录或包含凭据的路径。</p>
 <p>官方文档参考：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/security/threat-protection/windows-sandbox/windows-sandbox-configure-using-wsb-file">Windows 沙盒配置指南 | Microsoft Learn</a></p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230303131900199.png" alt="Windows 沙盒架构" title="Windows沙盒架构图" decoding="async" loading="lazy"></p>
 <h2 id="解决方案实施"><a href="#解决方案实施" class="headerlink" title="解决方案实施"></a>解决方案实施</h2><h3 id="1-启用-Windows-沙盒功能"><a href="#1-启用-Windows-沙盒功能" class="headerlink" title="1. 启用 Windows 沙盒功能"></a>1. 启用 Windows 沙盒功能</h3><p>首先确保 Windows 沙盒功能已启用：</p>
 <ol>
-<li>打开”控制面板” → “程序” → “启用或关闭 Windows 功能”</li>
-<li>勾选”Windows 沙盒”选项</li>
-<li>点击”确定”并重启计算机</li>
+<li>打开「控制面板」→「程序」→「启用或关闭 Windows 功能」</li>
+<li>勾选「Windows 沙盒」选项</li>
+<li>点击「确定」并重启计算机</li>
 </ol>
 <h3 id="2-编写批处理脚本"><a href="#2-编写批处理脚本" class="headerlink" title="2. 编写批处理脚本"></a>2. 编写批处理脚本</h3><p>创建批处理文件，用于在沙盒内自动完成「连接共享 → 取安装包 → 静默安装」：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">REM 连接网络共享路径</span><br><span class="line">net use &quot;\\UNC路径&quot; &quot;&lt;口令&gt;&quot; &#x2F;user:&quot;&lt;域&gt;\&lt;账号&gt;&quot;</span><br><span class="line"></span><br><span class="line">REM 复制Flash Player安装文件到沙盒下载目录</span><br><span class="line">xcopy &quot;\\UNC路径\flashplayer.exe&quot; &quot;C:\Users\WDAGUtilityAccount\Downloads\&quot; &#x2F;i &#x2F;Y &#x2F;Q</span><br><span class="line"></span><br><span class="line">REM 静默安装Flash Player</span><br><span class="line">C:\Users\WDAGUtilityAccount\Downloads\flashplayer.exe &#x2F;verysilent &#x2F;suppressmsgboxes</span><br></pre></td></tr></table></figure>
+<figure class="highlight batch"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="comment">REM 连接网络共享路径</span></span><br><span class="line"><span class="built_in">net</span> use &quot;\\UNC路径&quot; &quot;&lt;口令&gt;&quot; /user:&quot;&lt;域&gt;\&lt;账号&gt;&quot;</span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">REM 复制Flash Player安装文件到沙盒下载目录</span></span><br><span class="line"><span class="built_in">xcopy</span> &quot;\\UNC路径\flashplayer.exe&quot; &quot;C:\Users\WDAGUtilityAccount\Downloads\&quot; /i /Y /Q</span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">REM 静默安装Flash Player</span></span><br><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">WDAGUtilityAccount</span>\<span class="title">Downloads</span>\<span class="title">flashplayer.exe</span> /<span class="title">verysilent</span> /<span class="title">suppressmsgboxes</span></span></span><br></pre></td></tr></table></figure>
 
 <p>三处要点：</p>
 <ul>
 <li><strong>凭据占位</strong>：<code>&lt;口令&gt;</code> 与 <code>&lt;域&gt;\&lt;账号&gt;</code> 为占位符，实际使用时替换为专用只读账户。该脚本会被映射进沙盒，不要把域管理员凭据写入其中。</li>
-<li>**<code>xcopy</code> 必须带 <code>/i /Y /Q</code>**：<code>LogonCommand</code> 是无人值守执行的，若目标目录不存在或需要覆盖确认，<code>xcopy</code> 会停在交互提问上，导致安装流程整体挂起。<code>/i</code> 在目标不存在且源为文件时按文件创建，<code>/Y</code> 抑制覆盖确认，<code>/Q</code> 关闭文件回显。</li>
-<li>**路径统一为 <code>C:\Users\...</code>**：Windows 路径不区分大小写，但脚本与配置文件中的大小写混用会增加阅读与检索成本，统一写法更便于比对。</li>
+<li><strong><code>xcopy</code> 必须带 <code>/i /Y /Q</code></strong>：<code>LogonCommand</code> 是无人值守执行的，若目标目录不存在或需要覆盖确认，<code>xcopy</code> 会停在交互提问上，导致安装流程整体挂起。<code>/i</code> 在目标不存在且源为文件时按文件创建，<code>/Y</code> 抑制覆盖确认，<code>/Q</code> 关闭文件回显。</li>
+<li><strong>路径统一为 <code>C:\Users\...</code></strong>：Windows 路径不区分大小写，但脚本与配置文件中的大小写混用会增加阅读与检索成本，统一写法更便于比对。</li>
 </ul>
 <p>将批处理文件保存在<code>C:\SandboxScripts</code>目录下：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230303134422839.png" alt="批处理脚本位置" title="批处理脚本存储位置" decoding="async" loading="lazy"></p>
@@ -579,23 +574,10 @@
 <li><strong>网络访问</strong>：沙盒默认可访问网络。本案例需要访问共享与打印机管理后台，如需收紧可在主机侧通过防火墙/网络策略限制沙盒可达范围。</li>
 <li><strong>凭据暴露面</strong>：映射进沙盒的脚本若含明文凭据，等同于把凭据交给沙盒内运行的所有代码。优先使用共享侧的最小权限账户，并在用完后撤销临时授权。</li>
 </ol>
-<h2 id="应用场景扩展"><a href="#应用场景扩展" class="headerlink" title="应用场景扩展"></a>应用场景扩展</h2><p>Windows 沙盒不仅适用于本案例，还可以用于以下场景：</p>
-<ol>
-<li><strong>恶意软件分析</strong>：在隔离环境中运行可疑程序</li>
-<li><strong>软件测试</strong>：测试新软件对系统的影响</li>
-<li><strong>文档查看</strong>：安全查看来源不明的文档</li>
-<li><strong>系统维护</strong>：运行可能影响系统的维护工具</li>
-<li><strong>培训演示</strong>：提供干净的演示环境</li>
-</ol>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过 Windows 沙盒，我们成功解决了需要在 IE 浏览器中运行 Flash Player 的特殊需求，同时确保了主机系统的安全。这种方法既满足了业务需求，又避免了在生产环境中安装不安全软件的风险。</p>
-<p>Windows 沙盒作为微软提供的轻量级虚拟化解决方案，在处理此类特殊需求时具有显著优势：</p>
-<ul>
-<li>无需额外的虚拟化软件</li>
-<li>启动速度快</li>
-<li>安全隔离性好</li>
-<li>使用简单便捷</li>
-</ul>
-<p>建议在遇到类似需求时，优先考虑使用 Windows 沙盒作为解决方案。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这个需求最终没有靠「在办公机上装 Flash」解决，而是靠 <code>.wsb</code> 文件把它压成了双击一下：<code>MappedFolders</code> 把安装脚本送进沙盒，<code>LogonCommand</code> 在登录时自动执行，关窗即销毁，主机始终不留 Flash Player。</p>
+<p>值得留意的是这个方案的成本结构。它省掉了虚拟机的镜像维护，但每次启动都要重跑一遍安装，因此只适合「一年点几次」的低频操作；如果某个遗留后台需要每天使用，把凭据和共享路径长期写死在 <code>.wsb</code> 里，反而不如一台受控的隔离虚拟机好管。</p>
+<p>边界也很清楚：沙盒与主机之间唯一的数据通道就是映射目录，<code>ReadOnly</code> 设与不设直接决定沙盒对主机目录有没有写入权，脚本里带不带共享明文凭据决定了暴露面有多大。这三项配置在保存 <code>.wsb</code> 时就该按最小权限定死，而不是等用起来再调。</p>
+<p>恶意软件初筛、来源不明文档查看、一次性维护工具验证这类需求可以复用同一套模板，只把 <code>LogonCommand</code> 换成对应的启动动作。</p>
 
                 
             </div>
@@ -660,12 +642,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Helpdesk/">
-                                    <span class="chip bg-color">Helpdesk</span>
-                                </a>
-                            
                                 <a href="/tags/Windows-11/">
                                     <span class="chip bg-color">Windows 11</span>
+                                </a>
+                            
+                                <a href="/tags/Helpdesk/">
+                                    <span class="chip bg-color">Helpdesk</span>
                                 </a>
                             
                                 <a href="/tags/%E5%AE%89%E5%85%A8/">
@@ -781,14 +763,6 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Helpdesk/">
-                        <span class="chip bg-color">Helpdesk</span>
-                    </a>
-                    
-                    <a href="/tags/Windows/">
-                        <span class="chip bg-color">Windows</span>
-                    </a>
-                    
                     <a href="/tags/Chromium/">
                         <span class="chip bg-color">Chromium</span>
                     </a>
@@ -797,8 +771,16 @@
                         <span class="chip bg-color">浏览器</span>
                     </a>
                     
+                    <a href="/tags/Windows/">
+                        <span class="chip bg-color">Windows</span>
+                    </a>
+                    
                     <a href="/tags/AD%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
                         <span class="chip bg-color">AD域控制器</span>
+                    </a>
+                    
+                    <a href="/tags/Helpdesk/">
+                        <span class="chip bg-color">Helpdesk</span>
                     </a>
                     
                 </div>
@@ -849,20 +831,20 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Helpdesk/">
-                        <span class="chip bg-color">Helpdesk</span>
-                    </a>
-                    
                     <a href="/tags/AD%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8/">
                         <span class="chip bg-color">AD域控制器</span>
                     </a>
                     
-                    <a href="/tags/%E5%AE%89%E5%85%A8/">
-                        <span class="chip bg-color">安全</span>
+                    <a href="/tags/Helpdesk/">
+                        <span class="chip bg-color">Helpdesk</span>
                     </a>
                     
                     <a href="/tags/PowerShell/">
                         <span class="chip bg-color">PowerShell</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%AE%89%E5%85%A8/">
+                        <span class="chip bg-color">安全</span>
                     </a>
                     
                 </div>
@@ -1048,7 +1030,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">24.2k</span>&nbsp;字
+                class="white-color">28.6k</span>&nbsp;字
             
             
             

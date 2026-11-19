@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/08/07/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/&#34;},&#34;headline&#34;:&#34;华为 Atlas800 服务器安装银河麒麟&#34;,&#34;description&#34;:&#34;本文记录在华为 Atlas 800 推理服务器上部署银河麒麟操作系统，并依次完成 NPU 驱动、芯片固件与 CANN 框架安装的完整手顺。全流程通过 iBMC 带外管理完成系统安装，无需现场接键盘显示器；驱动、固件与 CANN 三者版本必须&#34;,&#34;datePublished&#34;:&#34;2023-08-07T08:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T08:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/08/07/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/&#34;},&#34;headline&#34;:&#34;华为 Atlas800 服务器安装银河麒麟&#34;,&#34;description&#34;:&#34;本文记录在华为 Atlas 800 推理服务器上部署银河麒麟操作系统，并依次完成 NPU 驱动、芯片固件与 CANN 框架安装的完整手顺。全流程通过 iBMC 带外管理完成系统安装，无需现场接键盘显示器；驱动、固件与 CANN 三者版本必须&#34;,&#34;datePublished&#34;:&#34;2023-08-07T08:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T07:30:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -30,7 +30,7 @@
     <meta property="article:published_time" content="2023-08-07T08:00:00.000Z">
     
     
-    <meta property="article:modified_time" content="2026-11-19T08:00:00.000Z">
+    <meta property="article:modified_time" content="2026-11-19T07:30:00.000Z">
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
@@ -66,7 +66,7 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
     <link rel="alternate" href="/atom.xml" title="李广明的技术博客" type="application/atom+xml">
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 8.1.2"></head>
 
 
 
@@ -501,14 +501,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.4k
+                    2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    7 分
                 </div>
                 
 
@@ -542,7 +542,7 @@
 <h4 id="步骤-2：配置-iBMC-网络"><a href="#步骤-2：配置-iBMC-网络" class="headerlink" title="步骤 2：配置 iBMC 网络"></a>步骤 2：配置 iBMC 网络</h4><p>根据实际网络环境配置 iBMC 的网络参数：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202308101158988.png" alt="iBMC 网络配置" title="iBMC网络配置界面" decoding="async" loading="lazy"></p>
 <h4 id="步骤-3：挂载系统镜像"><a href="#步骤-3：挂载系统镜像" class="headerlink" title="步骤 3：挂载系统镜像"></a>步骤 3：挂载系统镜像</h4><ol>
-<li>进入”虚拟控制台” → “镜像文件”</li>
+<li>进入「虚拟控制台」→「镜像文件」</li>
 <li>上传银河麒麟系统 ISO 镜像文件</li>
 <li>设置从 CD/DVD 启动</li>
 </ol>
@@ -555,7 +555,7 @@
 <h3 id="1-获取驱动与固件"><a href="#1-获取驱动与固件" class="headerlink" title="1. 获取驱动与固件"></a>1. 获取驱动与固件</h3><ol>
 <li>登录<a target="_blank" rel="noopener" href="https://support.huawei.com/enterprise/zh/ascend-computing/ascend-hdk-pid-252764743/software">Ascend HDK</a>软件下载页面</li>
 <li>选择 Ascend HDK 22.0.0 系列版本</li>
-<li>根据产品系统架构在”软件分类”中勾选”910-aarch64”或”910-x86_64”</li>
+<li>根据产品系统架构在「软件分类」中勾选 <code>910-aarch64</code> 或 <code>910-x86_64</code></li>
 <li>下载以下软件包：<ul>
 <li>Ascend-hdk-910-npu-driver_XXXXXX.run（驱动包）</li>
 <li>Ascend-hdk-910-npu-firmware_XXXXXX.run（固件包）</li>
@@ -573,44 +573,42 @@
 <li>通过其他共享路径</li>
 </ul>
 <h3 id="3-创建专用用户"><a href="#3-创建专用用户" class="headerlink" title="3. 创建专用用户"></a>3. 创建专用用户</h3><p>驱动需要以 HwHiAIUser 身份运行，需要创建该用户：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建HwHiAIUser用户</span></span><br><span class="line">sudo useradd HwHiAIUser</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为HwHiAIUser设置密码</span></span><br><span class="line">sudo passwd HwHiAIUser</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建HwHiAIUser用户</span></span><br><span class="line"><span class="built_in">sudo</span> useradd HwHiAIUser</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为HwHiAIUser设置密码</span></span><br><span class="line"><span class="built_in">sudo</span> passwd HwHiAIUser</span><br></pre></td></tr></table></figure>
 
-<h3 id="4-安装驱动程序"><a href="#4-安装驱动程序" class="headerlink" title="4. 安装驱动程序"></a>4. 安装驱动程序</h3><p>执行以下命令安装 NPU 驱动：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入驱动与固件目录</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$path</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 为驱动和固件文件添加可执行权限</span></span><br><span class="line">chmod +x Ascend-hdk-910-npu-driver_XXXXXX.run</span><br><span class="line">chmod +x Ascend-hdk-910-npu-firmware_XXXXXX.run</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行驱动完整安装</span></span><br><span class="line">./Ascend-hdk-910-npu-driver_XXXXXX.run --FULL</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装完成后重启系统</span></span><br><span class="line">sudo reboot</span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证驱动安装是否成功</span></span><br><span class="line">npu-smi info</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行固件安装</span></span><br><span class="line">./Ascend-hdk-910-npu-firmware_XXXXXX.run --FULL</span><br><span class="line"></span><br><span class="line"><span class="comment"># 再次重启系统</span></span><br><span class="line">sudo reboot</span><br></pre></td></tr></table></figure>
+<h3 id="4-安装驱动程序"><a href="#4-安装驱动程序" class="headerlink" title="4. 安装驱动程序"></a>4. 安装驱动程序</h3><p>以下命令中 <code>$path</code> 指驱动与固件 <code>.run</code> 包所在目录，先按其实际位置定义（本文示例为 <code>/opt/ascend/pkg</code>）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> path=/opt/ascend/pkg</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入驱动与固件目录</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$path</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 为驱动和固件文件添加可执行权限（XXXXXX 替换为下载包的实际版本号）</span></span><br><span class="line"><span class="built_in">chmod</span> +x Ascend-hdk-910-npu-driver_XXXXXX.run</span><br><span class="line"><span class="built_in">chmod</span> +x Ascend-hdk-910-npu-firmware_XXXXXX.run</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行驱动完整安装</span></span><br><span class="line">./Ascend-hdk-910-npu-driver_XXXXXX.run --FULL</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装完成后重启系统</span></span><br><span class="line"><span class="built_in">sudo</span> reboot</span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证驱动安装是否成功</span></span><br><span class="line">npu-smi info</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行固件安装</span></span><br><span class="line">./Ascend-hdk-910-npu-firmware_XXXXXX.run --FULL</span><br><span class="line"></span><br><span class="line"><span class="comment"># 再次重启系统</span></span><br><span class="line"><span class="built_in">sudo</span> reboot</span><br></pre></td></tr></table></figure>
 
 <p>此处先装驱动、后装固件：驱动刚装完时固件仍为旧版本，<code>npu-smi info</code> 可能提示驱动与固件版本不匹配，属预期告警，不代表驱动安装失败。完成固件安装并再次重启后该提示应消失；若仍存在，再核对驱动包与固件包是否为同一版本。</p>
 <h2 id="CANN-框架安装"><a href="#CANN-框架安装" class="headerlink" title="CANN 框架安装"></a>CANN 框架安装</h2><p>CANN（Compute Architecture for Neural Networks）是华为昇腾 AI 处理器的异构计算架构，提供完整的 AI 开发和推理能力。</p>
 <h3 id="1-下载-CANN-框架"><a href="#1-下载-CANN-框架" class="headerlink" title="1. 下载 CANN 框架"></a>1. 下载 CANN 框架</h3><p>访问华为官方下载页面获取 CANN 框架：<br><a target="_blank" rel="noopener" href="https://support.huawei.com/enterprise/zh/ascend-computing/cann-pid-251168373/software">CANN 框架下载</a></p>
-<h3 id="2-传输安装包"><a href="#2-传输安装包" class="headerlink" title="2. 传输安装包"></a>2. 传输安装包</h3><p>将 CANN 安装包复制到银河麒麟操作系统的指定路径<code>$path</code></p>
+<h3 id="2-传输安装包"><a href="#2-传输安装包" class="headerlink" title="2. 传输安装包"></a>2. 传输安装包</h3><p>将 CANN 安装包复制到前述 <code>$path</code> 目录（与驱动包同目录即可）</p>
 <h3 id="3-安装依赖环境"><a href="#3-安装依赖环境" class="headerlink" title="3. 安装依赖环境"></a>3. 安装依赖环境</h3><p>CANN 依赖 Python 3 与 pip。银河麒麟默认不提供可用软件源，需先按所购系统的授权方式配置本地或网络源，否则 <code>yum</code> 会因源不可用而失败。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装Python 3</span></span><br><span class="line">sudo yum install python3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装pip（aarch64 源内常见包名为 python3-pip，以实际源内包名为准）</span></span><br><span class="line">sudo yum install python-pip</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装Python 3</span></span><br><span class="line"><span class="built_in">sudo</span> yum install python3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装pip（aarch64 源内常见包名为 python3-pip，以实际源内包名为准）</span></span><br><span class="line"><span class="built_in">sudo</span> yum install python-pip</span><br></pre></td></tr></table></figure>
 
 <h3 id="4-安装-CANN-框架"><a href="#4-安装-CANN-框架" class="headerlink" title="4. 安装 CANN 框架"></a>4. 安装 CANN 框架</h3><p>执行以下命令安装 CANN 框架：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 为安装包添加可执行权限</span></span><br><span class="line">chmod +x <span class="variable">$path</span>/Ascend-cann-nnae_xxxxxx_linux-aarch64.run</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行完整安装</span></span><br><span class="line"><span class="variable">$path</span>/Ascend-cann-nnae_xxxxxx_linux-aarch64.run --FULL</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装完成后重启系统</span></span><br><span class="line">sudo reboot</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 为安装包添加可执行权限</span></span><br><span class="line"><span class="built_in">chmod</span> +x <span class="variable">$path</span>/Ascend-cann-nnae_xxxxxx_linux-aarch64.run</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行完整安装</span></span><br><span class="line"><span class="variable">$path</span>/Ascend-cann-nnae_xxxxxx_linux-aarch64.run --FULL</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装完成后重启系统</span></span><br><span class="line"><span class="built_in">sudo</span> reboot</span><br></pre></td></tr></table></figure>
 
-<h2 id="验证安装结果"><a href="#验证安装结果" class="headerlink" title="验证安装结果"></a>验证安装结果</h2><p>安装完成后，可以通过以下方式验证系统是否正常工作：</p>
+<h2 id="验证安装结果"><a href="#验证安装结果" class="headerlink" title="验证安装结果"></a>验证安装结果</h2><p>按层次分三步验证，各步失败对应的故障面不同：</p>
 <ol>
-<li><p>检查 NPU 状态：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npu-smi info</span><br></pre></td></tr></table></figure></li>
-<li><p>验证 CANN 框架：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -c <span class="string">&quot;import torch; print(torch.__version__)&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>设备在位</strong>。<code>npu-smi info</code> 应列出全部 NPU，卡数与 <code>lspci | grep -i ascend</code> 的计数一致；卡数不足说明驱动或固件未正确加载。</li>
+<li><strong>CANN 工具链可用</strong>。加载安装时生成的 <code>set_env.sh</code>（自定义安装路径时以实际路径为准），确认环境变量已注入、工具链目录非空：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /usr/local/Ascend/ascend-toolkit/set_env.sh</span><br><span class="line"><span class="built_in">env</span> | grep -i ascend</span><br></pre></td></tr></table></figure>
+注意 CANN nnae 包本身不含 PyTorch，<code>python3 -c &quot;import torch&quot;</code> 成功与否与 CANN 是否装好无关，不能作为 CANN 的验证手段；需要 PyTorch 训练/推理时另行安装对应的昇腾适配层。</li>
+<li><strong>算例跑通</strong>。用与当前 CANN 版本配套的官方 sample 跑一次最小的算子编译与执行（样例包需按版本号在华为支持站点另行下载），这一步通过才算业务可用的环境。</li>
 </ol>
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
-<li><strong>版本兼容性</strong>：确保驱动、固件和 CANN 框架版本相互兼容</li>
-<li><strong>权限管理</strong>：严格按照要求使用专用用户执行相关操作</li>
-<li><strong>备份策略</strong>：在安装前做好系统备份</li>
-<li><strong>网络配置</strong>：确保服务器网络连接稳定</li>
-<li><strong>硬件检查</strong>：安装前后检查硬件状态</li>
+<li><strong>先核对版本三元组</strong>。驱动、固件、CANN 三者按华为适配表配对，装之前用 <code>npu-smi info</code> 记录当前固件版本，装完再对比，避免升完驱动才发现固件不匹配。</li>
+<li><strong>专用用户先建再装</strong>。<code>HwHiAIUser</code> 要在执行安装脚本之前创建完毕，安装属主由执行身份决定，事后补用户不会修正已落盘的目录权限。</li>
+<li><strong>安装前完成系统备份或快照</strong>。驱动与固件安装会改动内核模块和板载固件，失败后回退成本高，通过 iBMC 挂虚拟介质做系统镜像备份是当前最省事的路径。</li>
+<li><strong>重启窗口预先申请</strong>。全程三次重启，且每次重启后需确认 NPU 在位（<code>npu-smi info</code> 应列出全部卡数），卡数少于物理数量说明驱动或固件未正确加载。</li>
 </ol>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过以上步骤，您已经成功在华为 Atlas 800 服务器上安装了银河麒麟操作系统，并配置了 NPU 驱动和 CANN 框架。这套环境可以用于 AI 推理、模型训练等高性能计算任务。</p>
-<p>建议在生产环境中部署时：</p>
-<ol>
-<li>制定详细的安装计划和回滚方案</li>
-<li>充分测试驱动和框架的稳定性</li>
-<li>配置完善的监控和告警机制</li>
-<li>定期更新驱动和框架版本</li>
-<li>建立完整的文档记录</li>
-</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这台 Atlas 800 的交付顺序是：iBMC 挂镜像装银河麒麟 → 建 <code>HwHiAIUser</code> → 装 NPU 驱动 → 装固件 → 装 CANN → 依次以 <code>npu-smi info</code>、CANN 工具链、官方算例三层验证。全程有三次重启（驱动、固件、CANN 各一次），规划停机窗口时别只算一次。</p>
+<p>几个只有踩过才会记住的点：</p>
+<ul>
+<li><strong>驱动、固件、CANN 三者是绑定的版本三元组</strong>，不能只升其中一个。跨版本混装的结果通常是 <code>npu-smi</code> 正常但算子报错，排查成本远高于一次装对。</li>
+<li><strong><code>HwHiAIUser</code> 先建好再动手</strong>。驱动要以该用户身份运行，用户必须在执行安装脚本之前建好；root 直装完再补建用户，已落盘目录的属主不会自动修正，后续以该用户启动的任务会因权限不足失败。</li>
+<li><strong>aarch64 的软件源包名与 x86 不同</strong>，Python/pip 依赖按源内实际包名确认，别照搬 x86 手册。</li>
+</ul>
+<p>装完只是有了硬件通道。<code>npu-smi info</code> 出表只证明驱动与固件加载成功，业务模型能不能跑还得用目标模型跑一轮完整的推理或训练才算数。也是在这一步，把固件、驱动、CANN 三个版本号一并记进资产台账——以后判断任何一次升级是否可行，依据的就是这三个号。</p>
 
                 
             </div>
@@ -1047,7 +1045,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">24.2k</span>&nbsp;字
+                class="white-color">28.6k</span>&nbsp;字
             
             
             
