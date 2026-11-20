@@ -1019,34 +1019,55 @@ Horizon 的服务调用（音频、输入、NFC）
 
 
 结论是这条路线不需要 HOS 内核、不需要 Hypervisor、不需要 TrustZone——早期调研里”HOS 上 x86 不可能”的判断被推翻，修正后才敢立项。三堵墙都有活跃的参考项目（ScarletNX、LAS Recomp、totk-recomp），本项目不是从零造轮子，做的是”把上游成果对齐到 Deck 的验收标准”。
+AOT 构建侧的落法是”函数发现 → 逐函数 lift 成 C → 宿主 clang 编译”（非 QEMU、非动态翻译）：
+.venv\\Scripts\\python recomp\\gen.py --exefs build\\extracted\\v101\\exefs --out generated\\v101 \    --patches recomp\\patches-v101.txt --version v101.venv\\Scripts\\python tools\\build_game.py --version v101# Lifting takes about 15 s, a clean compile about 200 s on 24 threads.
+
+lift 15 秒、干净构建 200 秒（24 线程）是管线的一手口径；按指令量切 chunk，二次构建只重编变更部分，运行期零解释开销，代价全摊在构建里。
 上游成熟度：工作量分布在上游，验收标准在自己三款游戏的上游成熟度差异很大，直接决定工作量分布：
 
 血源诅咒（bbport）：上游最成熟，原生 x86-64 执行 + 自研 Vulkan 渲染器，Deck 上 30-60fps 可用，工作重心在验收和平台集成；
 异界锁链（astral-chain-pc-recomp）：LLVM 静态重编译管线完整，但上游明说”尚未针对 4GB VRAM 和 Deck 优化”，这块要自己补；
 战神 3（SpartanPort）：上游在 Deck/RADV 上有已知的渲染损坏，动手前先确认新版是否修掉，否则搬过去也是坏的。
 
-拆开理由是验收标准三作共用一套，不是各自”能跑”。标准落成客观部分：63 条可勾选的案例（输入/UI/画面/系统/性能五类），外加一轮盲区审计把案例集本身也审了一遍——验收标准也会过时，它自己也需要验收。
-Deck 是验收场，不是工地这个项目最容易搞砸的地方是”在 Deck 上又改又测”——Deck 的 rootfs 只读（steamos-readonly），系统盘小、存档珍贵，重活在 Deck 上做等于边开飞机边换发动机。
+拆开理由是验收标准三作共用一套，不是各自”能跑”：63 条可勾选案例（输入/UI/画面/系统/性能五类），外加一轮盲区审计把案例集本身也审了一遍——验收标准也会过时，它自己也需要验收。
+Deck 是验收场，不是工地这个项目最容易搞砸的地方是”在 Deck 上又改又测”：rootfs 只读（steamos-readonly）、系统盘小、存档珍贵，重活在 Deck 上做等于边开飞机边换发动机。
 纪律定死一条：构建、AOT、迭代全在远端 Runner 上做；Deck 只做最终验收，且验收过程必须轻拿轻放。落地成一个测试电池（deck-experience），每次在 Deck 上跑一轮受控会话：
 
-启动走 systemd-run --user --unit 包一层，SSH 断了进程不跟着死（setsid nohup 挡不住 logind 的 cgroup 回收，这条是实测出来的，不是查出来的）；
+启动走 systemd-run --user 包一层，SSH 断了进程不死（setsid nohup 挡不住 logind 的 cgroup 回收，实测出来的）；
 环境固化在一个 candidate 脚本里：语言、陀螺、手柄过滤、帧率开关全部显式声明，不接受”上次好像是这么设的”；
-存储保护：bind mount 只暴露存档目录，可用空间低于 1GiB 自动停会话，会话结束写 exit.json，其中 player_saves_unchanged 是硬断言——测完存档没被动过，这轮测试才算干净；
-全程留 monitor.jsonl：帧率、帧时、剩余空间，事后归因用。
+存储保护：bwrap 只读根 + 任务独占的精确挂载，可用空间低于 1GiB 自动停会话，会话结束写 exit.json，其中 player_saves_unchanged 是硬断言——测完存档没被动过，这轮测试才算干净。
 
-反直觉的坑：60fps 开关设了，窗口标题写着 30.0TOTK 的帧率解锁开关设了 60fps，窗口标题却稳定显示 30.0 fps、帧时 p50 31.91ms——开关没生效。反直觉的地方：没有报错、没有崩溃、帧曲线还很稳，”能跑、没崩”恰恰是最容易骗过去的判据。这条回归靠 monitor 日志里的运行时数字读出来的，不读数字就漏过去了。
+候选环境按白名单式重建：先 unset 掉上一轮可能残留的诊断变量，再显式 export：
+#!/usr/bin/env bashset -euo pipefailulimit -c 0unset TOTK_INPUT_FIFO TOTK_INPUT_SCRIPT TOTK_FS_LOG TOTK_AUDIO_CAPTURE TOTK_INPUT_AUDITunset DM_NVN_TSV DM_NVN_TSV_CALLS DM_NVN_FRAMES DM_NVN_PROF DM_PRESENT_HZ DM_PRESENT_INTERVAL DM_DETCLOCKunset TOTK_HEADLESS TOTK_SHOT LARECOMP_FNPROFexport XDG_DATA_HOME=&quot;$HOME/.local/share/ultratears/test-profiles/⟨test-profile⟩&quot;export TOTK_GYRO=1export TOTK_LANG=zh-Hans TOTK_OPERATION_MODE=handheld TOTK_STEAMDECK_UI=1export TOTK_FPS60=1 TOTK_REALTIME=1 TOTK_UNCAPPED=1 TOTK_UNCAPPED_HZ=60 TOTK_UNCAPPED_INTERVAL=1export TOTK_CLOTH_REALTIME=1 TOTK_HIGHFPS_FIX=1 SDL_VIDEO_DRIVER=x11 SDL_VIDEODRIVER=x11export SDL_GAMECONTROLLER_IGNORE_DEVICES_EXCEPT=&quot;0x045e/0xc0de&quot;export SDL_GAMECONTROLLERCONFIG_FILE=&quot;.../deck-experience-20261107/test-pad-mapping.txt&quot;exec &quot;/home/deck/native-recomp/totk-native/releases/⟨build-id⟩/run.sh&quot;
+
+“继承上一个环境”是回归的最大来源，所以候选环境必须白名单式重建。手柄那行只认注入手柄、过滤 Deck 自带的，输入归因才干净。
+启动侧把”轻拿轻放”从口头纪律变成内核级事实：bwrap 只读根 + 三个任务独占的可写挂载（case 目录、存档副本、扩展目录）：
+cmd=[&#x27;bwrap&#x27;,&#x27;--ro-bind&#x27;,&#x27;/&#x27;,&#x27;/&#x27;,&#x27;--proc&#x27;,&#x27;/proc&#x27;,&#x27;--dev-bind&#x27;,&#x27;/dev&#x27;,&#x27;/dev&#x27;,     &#x27;--bind&#x27;,str(B),str(B),     &#x27;--tmpfs&#x27;,str(Path.home()/&#x27;.local/share&#x27;),     &#x27;--bind&#x27;,str(state),str(original),     &#x27;--bind&#x27;,str(B/(g+&#x27;-extensions&#x27;)),str(ext),     &#x27;--tmpfs&#x27;,&#x27;/tmp&#x27;,&#x27;--ro-bind&#x27;,&#x27;/tmp/.X11-unix&#x27;,&#x27;/tmp/.X11-unix&#x27;,     &#x27;--die-with-parent&#x27;,str(B/&#x27;scripts&#x27;/(g+&#x27;-candidate.sh&#x27;))]
+
+--ro-bind / / 把整个 rootfs 读只，游戏写盘只落进这几个挂载点；游戏二进制一行没改，只是路径背后换成了测试副本。
+存档断言是”文件内容哈希全等”，不是”目录没动”——游戏完全可以原地覆盖同一个文件：
+def inventory(root):    rows=&#123;&#125;    for p in sorted(root.rglob(&#x27;*&#x27;)):        if p.is_file():            a=p.stat()            with p.open(&#x27;rb&#x27;) as f:h=hashlib.file_digest(f,&#x27;sha256&#x27;).hexdigest()            z=p.stat();assert (a.st_size,a.st_mtime_ns)==(z.st_size,z.st_mtime_ns)            rows[str(p)]=dict(size=a.st_size,sha256=h)    return rows
+
+hash 前后各 stat 一次，不等就报错不启动——宁可拒绝半状态基线。退出时全量对照会话开场基线：
+// totk-42/exit.json（真实产物）&#123;  &quot;returncode&quot;: -15,  &quot;ended&quot;: 1794232731.764613,  &quot;test_stop&quot;: true,  &quot;player_saves_unchanged&quot;: false&#125;
+
+这条 false 真实发生过：长跑会话里游戏自己写了配置/缓存，硬断言抓了脏轮，不靠人眼复核。
+全程留 monitor.jsonl（每秒一行：进程活否 + 余量），事后归因用。
+反直觉的坑：60fps 开关设了，窗口标题写着 30.0没有报错、没有崩溃、帧曲线还很稳——“能跑、没崩”是最容易骗过去的判据。遥操会话抓不了屏（gamescope 下 x11grab 只抓到黑图），帧率探针装在窗口标题里：
+snprintf(title, sizeof title, &quot;UltraTears  |  game %.1f fps  |  shown %.1f fps&quot;,         (game - game0) / s, (shown - shown0) / s);SDL_SetWindowTitle(window, title);
+
+标题走 X11 属性，SSH 里随时可读、跨会话存活。诊断现场就是它：标题 30.0 fps，env 里 TOTK_FPS60=1。标题、STATS 周期行、帧时 p50（31.91ms）三个独立来源交叉一致，才判”开关没生效”。根因线索落在源码注释里：60fps 依赖一套 60 FPS game patch 加实时帧步进，注释标着 not ported yet——env 变量生效了，下游补丁没跟上，引擎按 30 帧节奏推进游戏时间，所以稳在 30。
 UI 与美术资产：准原生的最后一公里“能跑”和”准原生”之间差的是观感层，工作量不显山露水但占了不少：
 
-按键提示：按 Deck 实际绑定的手柄出图标，Xbox/Nintendo 两套布局都要对，QTE 提示同步；
-画面：掌机分辨率下的马赛克/模糊问题逐项过，各游戏的超分路径（FSR 各版本）在 4GB 显存约束下重新选型；
-平台集成：Steam 的游戏库条目、封面、控制器模板，做到在 Deck 的游戏模式里”看起来就是个正常游戏”；
+按键提示：按实际绑定手柄出图标，Xbox/Nintendo 两套布局都要对；
+画面：掌机分辨率下的马赛克/模糊逐项过，超分路径（FSR 各版本）在 4GB 显存约束下重新选型；
+平台集成：Steam 库条目、封面、控制器模板，做到游戏模式里”看起来就是个正常游戏”；
 中文化：支持简中的上游直接用，不支持的按资产管线补，不硬改字符串表。
 
 成果：血源在 Deck 上 30-60fps 可用，三作共用一套验收标准
-血源诅咒在 Deck 上 30-60fps 可用，是三款里上游最成熟、验收直接落地的一款；
-63 条可勾选验收案例集（输入/UI/画面/系统/性能五类）加一轮盲区审计，成为三作共用的标准——标准本身也被审计过一轮；
-遥操测试电池 deck-experience 跑通受控会话：player_saves_unchanged 硬断言保证”测完存档没被动过”，全程留 monitor.jsonl 供事后归因；
-Steam 游戏库条目、封面、控制器模板集成到位，Deck 游戏模式下”看起来就是个正常游戏”。
+血源诅咒在 Deck 上 30-60fps 可用，三款里上游最成熟、验收直接落地的一款；
+三作共用一套 63 条案例的验收标准，且标准本身被盲区审计过一轮；
+deck-experience 受控会话跑通：内核级隔离 + 存档硬断言 + 全程留痕。
 
 未闭环清单
 
@@ -1064,10 +1085,6 @@ TOTK 60fps 解锁
 未生效：窗口标题稳定 30.0 fps，帧时 p50 31.91ms
 
 
-4K 插帧
-压不满 60fps
-
-
 战神 3 RADV 渲染损坏
 等上游修复后收口
 
@@ -1076,11 +1093,10 @@ hardware_validated
 三款均 false：代码合入、CI 绿、遥操会话跑通，都不等于”用户手里那台 Deck 上日常可玩”
 
 
-调研不是实施，这条边界在知识库里单独记过。
-小结三堵墙都是上游破的，本项目实际做的是验收对齐：遥操电池、63 条案例、存储硬断言。真正花时间的仍是文档不写的部分：Deck 只读 rootfs 逼着构建远端化、logind 的 cgroup 回收让 setsid nohup 失效、60fps 开关不生效还不报错。这也是”AI Agent 参与游戏工程”的样本：Agent 承担上游源码审计、验收案例生成、遥操会话编排、回归归因；人把三关——目标（准原生）、纪律（Deck 轻拿轻放）、验收（读数字不读心跳）。和前面 homelab 接管那几篇是同一个模式，只是对象从基础设施换成了游戏。
-只留一条经验：Deck 的验收要读运行时数字，不是读进程活着。
+小结三堵墙都是上游破的，本项目实际做的是验收对齐：遥操电池、63 条案例、存储硬断言。真正花时间的仍是文档不写的部分：Deck 只读 rootfs 逼着构建远端化、logind 的 cgroup 回收让 setsid nohup 失效、60fps 开关不生效还不报错。这也是”AI Agent 参与游戏工程”的样本：Agent 做源码审计、案例生成、遥操编排、归因；人把三关——目标（准原生）、纪律（Deck 轻拿轻放）、验收（读数字不读心跳）。
+只留一条经验：验收读运行时数字，不读进程活着。
 
-游戏名为专有名词保留；内网节点名、IP 与凭据引用均已脱敏；帧率与帧时取自当时遥操会话的现场记录，未经二次复测，仅作口径参考。
+游戏名为专有名词保留；内网节点名、IP 与凭据引用均已脱敏；帧率与帧时取自当时遥操会话的现场记录，仅作口径参考。
 ]]></content>
       <categories>
         <category>桌面维护</category>
@@ -1106,6 +1122,10 @@ USB 重定向：设备列表实时刷新，断连自动回收，重连不串设�
 崩溃现场：崩溃前落盘一份会话摘要（分辨率/帧率/输入状态/最近事件），下次启动可回读。
 
 清单的价值在于防止”顺手多加功能”：八周里出现过两次想加”手势映射”的冲动，都因为不在清单上而压住。拆开理由是：范围漂移比范围小更贵，小可以补，漂移要全量回归。
+USB 重定向那条验收（断连回收、重连不串设备）的实现，是整条链路不信任旧状态：
+private func scanBus() &#123;  guard MLUSBScanShouldStart(busScanInFlight, !pageIsVisible, true, false,                            0, busScanGeneration, 0, 0) else &#123; return &#125;  busScanInFlight = true  let generation = busScanGeneration  DispatchQueue.global(qos: .utility).async &#123;    var status = MLUSBBusSnapshotStatus.busUnreadable    let devices = MLUSBBusSnapshotCopyDeviceIdentities(&amp;status)    DispatchQueue.main.async &#123;      busScanInFlight = false      guard MLUSBScanMayPublish(!pageIsVisible, generation, busScanGeneration, true) else &#123;        if pageIsVisible &#123; scanBus() &#125;   // 切走又切回：旧结果丢弃，立即补扫        return      &#125;      rows = panel.acceptBusSnapshot(devices, status: status, hostIsPaired: hostIsPaired)      panelRevision += 1    &#125;  &#125;&#125;
+
+每次刷新给”这一轮”盖一个 generation 编号，后台线程读总线快照回主线程时再核编号：用户扫描期间切走又切回，旧结果直接丢弃并立即补扫，防”拔了设备列表还在”。断连回收不靠事件回调，靠”快照里没出现 = 这一轮的行就不再生成”；规则匹配每次对全新快照重算，重连时同一设备自然回到同一规则，不串。
 工程拆分：结论是壳层做全，核心层少动Moonlight 客户端是跨平台 C++ 核心 + 各平台壳。增强原则一句话：壳层做全，核心层少动。
 
 
@@ -1131,14 +1151,21 @@ Xcode 工程 + 外部依赖 xcframework，开发期 ad-hoc 签名，出包前统
 —
 
 
+分区重做里有个体现取舍的细节：分区枚举的 raw value 是不连续的：
+enum SettingsPaneType: Int, CaseIterable &#123;  // NOTE: Raw values are pinned to keep backward compatibility with persisted selection.  case stream = 0  case video = 1  case audio = 5  case input = 2  case app = 3  case legacy = 4  case devices = 6  // 下一个空闲值；重排编号等于把老用户的存档选择挪到别的页  static var allCases: [SettingsPaneType] &#123;    [.stream, .video, .audio, .input, .app, .devices]  &#125;&#125;
+
+0/1/5/2/3/6 不是笔误：选中项会持久化到用户 defaults，重排编号等于把老用户”上次打开的页”挪到别的分区。新增”设备”分区只取下一个空闲值 6，allCases 再显式列一次展示顺序——“存储值”和”展示顺序”解耦，一次代价换掉持久值迁移表。
 一个值得记的控件决策：设置页六分区标签栏最终用系统原生分段控件 + tabs 语义，而不是自绘的玻璃拟态标签。自绘好看，但可访问性、键盘导航、高亮状态全要自己保——在设置页这种”高频进入但停留短”的界面上，系统控件的隐性价值大于自绘的视觉价值。这条写进了项目红线：这个控件不许换。
-反直觉的坑：Terminated: 15 不是代码问题CI 超时表现为 Terminated: 15，看起来像代码问题，实际是排队 + 单 runner 的并发瓶颈。反直觉的地方是：错误信息指向执行，根因却在调度，对着 diff 找原因会找很久。结构性约束是：macOS 的 Xcode 构建只能在 macOS runner 上跑，家里只有一台，任意时刻最多一个 macOS 构建在跑，其余排队；审计类 job（源码合规扫描）单次跑 140 秒左右，叠加构建后整条流水线经常逼近 10 分钟超时线。
+反直觉的坑：Terminated: 15 不是代码问题CI 超时表现为 Terminated: 15，看起来像代码问题，实际是排队 + 单 runner 的并发瓶颈。反直觉的地方是：错误信息指向执行，根因却在调度，对着 diff 找原因会找很久。结构性约束是：macOS 的 Xcode 构建只能在 macOS runner 上跑，家里只有一台，任意时刻最多一个 macOS 构建在跑，其余排队。审计 job 单跑 140 秒左右，但和变异测试电池、安全 job 共用一台 8 核 runner 时，它实际跑过 1803 秒、被旧 30 分钟线杀掉——这就是 Terminated: 15 的真实长相。
 处理分三层：
 
 重试先于归因：Terminated: 15 的 job 单跑一次，过了就记”单 runner 并发”，不再对着 diff 找原因。这条省掉了很多伪排查；
-docs-only 变更走 rules 跳过重 job：只改文档的分支不该跑全量源码审计，按变更路径过滤；
-超时线对审计 job 单独放宽：构建 10 分钟不动，审计类放到 15 分钟，各管各的。
+rules 层防同 SHA 双流水线：一次 push 会同时生成 push 流水线和 MR 流水线，pipeline 791/792 就是这条的证据——十五个安全 job 为一次裁决排队，Mac job 全部空等；docs-only 按路径过滤是后续优化，尚未入库；
+超时线按实测写、注释里留证据链：构建 30 分钟线不动，审计类按实测单独放宽：
 
+audit:python:  stage: lint  tags: [macos]  cache: &#123;&#125;  # Measured ~140s alone; pipeline 647 recorded 1803s (killed at the old  # 30m ceiling) while the mutation battery and security jobs shared the  # 8-core runner.  timeout: 60 minutesworkflow:  rules: &amp;pipeline_rules    # A branch with an open merge request is judged by that merge request,    # not by its own push pipeline. Pipeline 791 and 792 are the evidence:    # one push made both, fifteen security jobs queued for one verdict.    - if: &#x27;$CI_PIPELINE_SOURCE == &quot;push&quot; &amp;&amp; $CI_OPEN_MERGE_REQUESTS&#x27;      when: never    - if: &#x27;$CI_PIPELINE_SOURCE == &quot;push&quot;&#x27;    - if: &#x27;$CI_PIPELINE_SOURCE == &quot;merge_request_event&quot;&#x27;    - if: &#x27;$CI_PIPELINE_SOURCE == &quot;web&quot;&#x27;
+
+不写证据链，超时线就只是拍出来的数：60 分钟是 pipeline 647 买回来的，不是嫌 15 分钟紧。最重的变异测试电池单独 200 分钟线加 resource_group 串联，不和它要保护的门禁抢核。
 两条验收线：串流能用，不等于开发机可用这个项目最花时间的不是功能，是分清楚两条验收线：
 
 串流可用：真实桌面连上、10-bit 色彩正确、USB 重定向在真实设备（手柄、摄像头）上验证、断连重连无残留。全部过完才算”能用”；
@@ -1194,7 +1221,7 @@ GPU 释放反向保障 WeKnora
   <entry>
     <title>把 P100 直通给 NAS：顺手做了一个超分插帧的飞牛 App</title>
     <url>/2026/10/15/P100%E7%9B%B4%E9%80%9A%E7%BB%99NAS%E4%B8%8E%E9%A3%9E%E7%89%9B%E8%B6%85%E5%88%86%E6%8F%92%E5%B8%A7App/</url>
-    <content><![CDATA[飞牛（fnOS）NAS 里塞了一张无风扇 Tesla P100 16G，直通方式的结论先放出来：选 DDA，不选 vfio。这张卡的定位从采购起就是”常驻低负载推理”，直通方案的判定标准不是”隔离多彻底”，而是”系统升级要动几次启动链”——NAS 这种单消费者场景，DDA 的长期成本更低。在这张卡上面顺手做了一个飞牛 App：NAS 上的视频一键超分 + 插帧。这篇把两件事一起记。
+    <content><![CDATA[飞牛（fnOS）NAS 里塞了一张无风扇 Tesla P100 16G，直通方式结论先放：选 DDA，不选 vfio。这张卡定位是”常驻低负载推理”，判定标准不是”隔离多彻底”，而是”系统升级要动几次启动链”——单消费者场景，DDA 长期成本更低。顺手做了个飞牛 App：视频一键超分 + 插帧。两件事一起记。
 直通选型：DDA 不是”更简单”，是更便宜飞牛底层是 Debian，GPU 直通有两条路：
 
 
@@ -1218,33 +1245,33 @@ DDA
 隔离性弱于 vfio，同机其他进程可见该卡
 
 
-拆开选 DDA 的理由：不是 DDA 机制更简单，而是 vfio 的代价在这个环境里摊不平。
+拆开选 DDA 的理由：不是机制更简单，而是 vfio 的代价在这个环境里摊不平——NAS 系统盘数据盘合一，vfio 要动 GRUB 参数和 initramfs，每次系统大升级都是一次”直通还能不能活”的重新验证；这张卡消费者只有一个（自研推理容器），不需要 vfio 级隔离；P100 是 Maxwell 架构，DDA 路径下 CUDA 工具链验证过完整。时间线说明：nvidia-smi、容器 CUDA 这条用户态链路是切换后几天补齐的验收，不算在切换当天。
+切换动作就是宿主侧三行 Hyper-V 命令 + 来宾侧内核驱动自识别：
+# 前置：飞牛 VM 关闭；动态内存 True→False（DDA 限制），启动内存固定 8GiBDisable-PnpDevice -InstanceID &#x27;PCI\VEN_10DE&amp;DEV_15F8&amp;…&#x27; -Confirm:$falseDismount-VMHostAssignableDevice -InstanceID &lt;同上&gt; -ForceAdd-VMAssignableDevice -VMName 飞牛NAS -InstanceID &lt;同上&gt;# 来宾侧验证：lspci 显示 Kernel driver in use: nvidia
 
-NAS 是系统盘 + 数据盘合一的设备。vfio 要动 GRUB 参数和 initramfs，每次系统大升级都是一次”直通还能不能活”的重新验证；DDA 不动启动链。
-这张卡的消费者只有一个（自研推理容器），不需要 vfio 级别的隔离。
-P100 是 Maxwell 架构，DDA 路径下 CUDA 工具链验证过完整——容器内 nvidia-smi 能看到卡、显存、温度。
+全程没碰 GRUB 和 initramfs——这就是 vfio 每次大升级要重新验证、而 DDA 不用动启动链的具体证据。
+App 设计：把推理容器包成飞牛应用推理能力在容器里，NAS 用户要的是”在文件管理器里点一下”，所以做成标准飞牛 App（appcenter 机制）：外壳 Web UI，里子是调用推理容器的 REST 接口。功能范围克制：超分（低清 → 1080p/4K）+ 插帧（30 → 60fps），二选一或串联，不做风格化、去噪——99% 的需求就是把老片源提清晰度，做多了维护不起。
+反直觉的坑：预检全绿，文件还是没写进去早期版本预检只查”目录存不存在”，结果任务跑完写不进输出目录，白烧了二十分钟显存。反直觉的地方是：预检阶段一切正常，代价付完了才看见。
+修法是把 output_writable 加进 preflight，并把最终保存路径直接显示在前端预检对话框里——用户提交前就知道文件会落在哪。可写检查的关键在身份：
+def check_output_write(uid, output):    root = matching_root(output, authorized_roots(uid, True))    app_acl(uid, output, True)    fd = open_beneath(root, output, directory=True)    try:        # 系统授权不等于 Linux ACL 允许应用账号写入；用与 worker 相同的        # effective 身份检查，而不是当前服务身份。        if not os.access(&#x27;.&#x27;, os.W_OK | os.X_OK, dir_fd=fd, effective_ids=True):            raise PermissionError(&#x27;飞牛已授权，但应用账号无法写入成品目录；&#x27;                                  &#x27;请在飞牛文件管理中检查该目录的应用写入权限&#x27;)    finally:        os.close(fd)
 
-切换动作本身不复杂：解绑 vfio、装 DDA 组件、重建推理容器、容器内跑一次 cuda-samples 级别的显存压测确认可用。全程 NAS 服务没停过，数据卷不沾 GPU 直通这条链路。
-App 设计：把推理容器包成飞牛应用推理能力在容器里，但 NAS 用户要的是”在文件管理器里点一下”。所以做成了标准飞牛 App（走 appcenter 机制）：外壳是 Web UI，里子是调用推理容器的 REST 接口。
-功能范围克制：超分（低清 → 1080p/4K）+ 插帧（30 → 60fps），二选一或串联，不做风格化、不做去噪。NAS 场景下 99% 的需求就是把老片源提一下清晰度，做多了维护不起。
-反直觉的坑：预检全绿，文件还是没写进去早期版本预检只查”目录存不存在”，结果任务跑完写不进输出目录（权限问题），白烧了二十分钟显存。这个坑反直觉的地方是：预检阶段一切正常，错误只在写盘阶段出现，代价已经付完了才看见。
-修法是把 output_writable 加进 preflight：实测写一个临时文件再删，并把最终保存路径直接显示在前端预检对话框里——用户提交前就知道文件会落在哪。
-完整的预检清单是四项：源文件可读、输出目录可写、GPU 当前显存余量够不够目标规格、模型是否已加载。预检不过直接告诉用户缺什么，不让用户提交一个必然失败的任务再等二十分钟看报错。
-队列与验收：把”完成”的定义写进产品逻辑任务队列严格单并发。 P100 一张卡，第二个任务排队。不做”小任务插队”这种优化，拆开理由是：NAS 用户的心智就是”我提交了，它排着，好了通知我”，插队会打乱预期。
-验收标准写进产品逻辑。 这个 App 的”完成”定义是：成品文件真实落盘、大小合理、SHA256 与任务记录一致。不是”任务状态显示成功”。NAS 环境里”容器说成功”和”文件真的在那”之间，存在磁盘水位、目录授权这类中间层，只看状态位会漏。下载按钮点下去，落盘的字节和 SHA 对得上，这条链路才算闭环。
-错误路径不吞。 后端返回非 JSON 的错误（容器 OOM 被 kill，网关返回 HTML 错误页），前端早期会显示一坨原始文本。后来统一成一条规则：任何非预期响应格式，前端归一成”任务失败 + 一句人话”，原始响应该进日志就进日志，不甩给用户。
-显存规划：一张卡两个主人这张 P100 同时也是 WeKnora 嵌入池 的主池。同一张卡两个主人，规则写死：
+飞牛里”系统授权”和”应用账号 ACL”是两层，最容易踩的是”预检用服务身份能写、worker 用应用账号写不进”。所以不写临时文件，用与 worker 相同的应用账号 effective 身份核 ACL 写权限——判定口径和执行身份一致；报错文案直接指到飞牛 UI 操作。
+完整预检四项：源文件可读（开 fd + ffprobe）、输出目录可写（上面的 effective 身份检查）、GPU 显存余量闸门（只读 nvidia-smi 采样）、GPU 准入（策略列表内才放行，不满足置 held 排队，模型按任务加载）。预检不过直接告诉用户缺什么，不提交一个必然失败的任务再等二十分钟。
+队列与验收：把”完成”的定义写进产品逻辑任务队列严格单并发。 P100 一张卡，第二个任务排队，不做”小任务插队”——NAS 用户的心智就是”我提交了，它排着，好了通知我”，插队打乱预期。实现全部是 SQLite + 一个 break：
+def scheduler():    global CURRENT    while not STOP.wait(3):        with db() as c:            items = c.execute(                &quot;SELECT * FROM jobs WHERE state IN (&#x27;queued&#x27;,&#x27;held&#x27;) &quot;                &quot;ORDER BY created&quot;).fetchall()        for row in items:            with LOCK:                state = db().execute(&#x27;SELECT state FROM jobs WHERE id=?&#x27;,                                     (row[&#x27;id&#x27;],)).fetchone()[&#x27;state&#x27;]                if state not in (&#x27;queued&#x27;, &#x27;held&#x27;):                    continue                CURRENT = (row[&#x27;id&#x27;], subprocess.Popen(argv, ...))                update(row[&#x27;id&#x27;], &#x27;running&#x27;, &#x27;正在执行&#x27;)            # ... 等进程结束（每 2 秒复查权限与 guard.require_gpu）...            break            # 单并发的全部实现
 
-嵌入模型常驻，优先保；
-超分/插帧模型按需加载、用完即卸；
-冲突时视频任务等嵌入——嵌入被 WeKnora 高频调用，卡它等于卡全站知识库。
+队列本体是 jobs 表的 state 字段，没有队列对象、没有信号量——并发数 1 时，锁 + 状态机比队列对象更不易出 bug。重启后队列还在（表在）；held（让步/权限撤销，检查点保留）与 queued 恢复条件不同。运行中每 2 秒复查 GPU 余量与目录授权，恶化就 kill 置 held——“视频等嵌入”的动态版本就是这段。
+验收标准写进产品逻辑，而且是两层。 第一层分片级 SHA256 检查点：分片编码完先解码回读核帧数/分辨率/帧率，过了才把 SHA 写进检查点；续跑逐分片重算比对，对不上拒绝续跑——NAS 断电/重启后恢复的依据。第二层成品级全量实际解码：封装完不是数大小就交差：
+# 续跑前：逐分片 SHA 重算，任一不符即拒绝续跑    for i, p in enumerate(data.get(&#x27;parts&#x27;, [])):        if p[&#x27;name&#x27;] != f&#x27;part-&#123;i:06d&#125;.mkv&#x27; or p[&#x27;start&#x27;] != done:            raise ValueError(&#x27;检查点分片顺序非法&#x27;)        if store.sha(p[&#x27;name&#x27;]) != p[&#x27;sha256&#x27;]:            raise ValueError(&#x27;已完成分片校验和变化；拒绝续跑&#x27;)# 封装后：全量实际解码验收        final = decoded(finalfd)        fv = next(x for x in final[&#x27;streams&#x27;] if x[&#x27;codec_type&#x27;] == &#x27;video&#x27;)        if abs(float(final[&#x27;format&#x27;][&#x27;duration&#x27;]) - expected_duration) &gt; .25:            raise RuntimeError(&#x27;最终时长校验失败&#x27;)        if int(fv.get(&#x27;nb_read_frames&#x27;, 0)) != total or fv[&#x27;width&#x27;] != out_width \                or fv[&#x27;height&#x27;] != out_height \                or abs(float(Fraction(fv[&#x27;avg_frame_rate&#x27;]) - target)) &gt; .02:            raise RuntimeError(&#x27;最终实际解码/帧数/尺寸/帧率验收失败&#x27;)
 
-代价是视频任务开始时要等模型加载（十几秒），换来的是两边都不需要”暂停对方”的手动操作。
-版本节奏：主版本和热修不混App 走飞牛 appcenter 的升级机制，版本从 0.3.x 一路磨到 0.3.12 收口。升级流程本身也踩过坑：官方升级包覆盖自研修改、热修补丁和主版本升级互相打架。收口约定是主版本走 appcenter 正式包，热修走独立补丁并在包内登记适用版本，不混。
+所以”完成”= 成品真实落盘，且分片 SHA 检查点 + 成品实际解码（帧数/时长/分辨率/帧率/音轨字幕数与源一致）两层都过——不是”任务状态显示成功”，也不是简单”SHA 对得上”（成品层验收的是解码结果，不是整片 SHA）。NAS 环境里”容器说成功”和”文件真的在那”之间有中间层，只看状态位会漏；检查点用 tmp + os.replace + fsync 原子提交，不会半写。
+错误路径不吞。 非 JSON 错误（OOM、网关 HTML 页）归一成一条固定文案：JSON 带 error 就用它，不带就兜底；每任务日志留末 1500 字节进任务状态。
+显存规划：一张卡两个主人这张 P100 同时也是 WeKnora 嵌入池 的主池。同一张卡两个主人，规则写死：嵌入模型常驻优先保；超分/插帧模型按需加载、用完即卸；冲突时视频任务等嵌入——嵌入被 WeKnora 高频调用，卡它等于卡全站知识库。代价是视频任务多等十几秒模型加载，换来两边都不需要”暂停对方”的手动操作。
+版本节奏：主版本和热修不混App 走飞牛 appcenter 升级机制，版本从 0.3.x 磨到 0.3.12 收口。踩过坑：官方升级包覆盖自研修改、热修和主版本升级互相打架。收口约定：主版本走 appcenter 正式包，热修走独立补丁并在包内登记适用版本，不混。
 成果：一张卡在 NAS 上同时养两个推理服务，交付口径已定
-P100 以 DDA 常驻 NAS，同一张卡同时供给 WeKnora 嵌入池与超分插帧 App：嵌入模型常驻优先保，视频模型按需加载、用完即卸，冲突时视频等嵌入——两边不再需要手动”暂停对方”；
-飞牛 App 0.3.12 收口在用，版本纪律落地：主版本走 appcenter 正式包、热修走独立补丁并登记适用版本，官方升级覆盖自研修改的坑有了固定解法；
-“完成”的定义已进产品逻辑：预检四项（源文件可读、输出目录可写、显存余量、模型已加载）＋成品文件真实落盘且 SHA256 与任务记录一致，替代任务状态位；
+P100 以 DDA 常驻 NAS，同一张卡同时供给 WeKnora 嵌入池与超分插帧 App，冲突时视频等嵌入，两边不再需要手动”暂停对方”；
+飞牛 App 0.3.12 收口在用：主版本走 appcenter 正式包、热修走独立补丁并登记适用版本，官方升级覆盖自研修改的坑有了固定解法；
+“完成”的定义已进产品逻辑：预检四项（源文件可读、输出目录可写、显存余量、GPU 准入）＋分片 SHA256 检查点 + 成品全量实际解码两层验收，替代任务状态位；
 4K 插帧按”1080p 插帧满帧、4K 插帧降帧可用”的口径在用，4K 满帧率明确要等换卡，交付不再含混。
 
 未闭环清单
@@ -1256,7 +1283,7 @@ P100 以 DDA 常驻 NAS，同一张卡同时供给 WeKnora 嵌入池与超分插
 
 
 4K 插帧 60fps
-未达成，峰值 50 多帧，显存和算力都到边了
+未达成（峰值 50 多帧）；交付口径：1080p 插帧满帧、4K 插帧降帧可用
 
 
 换卡
@@ -1267,9 +1294,8 @@ vfio 替代方案
 未做，当前单消费者，隔离需求不成立
 
 
-4K 插帧暂时按”1080p 插帧满帧、4K 插帧降帧可用”的口径交付，要再往上只能等卡换。
-小结P100 直通和这个 App 都没有高难动作：选直通方式、包容器、把验收写进逻辑，文档里全有。真正花时间的仍是文档不写的部分：直通方式对系统升级的容忍度差多少、”成功”和”文件落盘”在 NAS 环境是两个状态、官方升级包覆盖自研修改。
-只留一条经验：NAS 上跑推理，先定义”完成”——成品真实落盘且 SHA 对得上，不是任务状态位。
+小结P100 直通和这个 App 都没有高难动作。真正花时间是文档不写的部分：直通方式对系统升级的容忍度差多少、”成功”和”文件落盘”在 NAS 环境是两个状态、官方升级包覆盖自研修改。
+只留一条经验：NAS 上跑推理，先定义”完成”——分片 SHA 检查点 + 成品实际解码两层都过，不是任务状态位。
 
 卡型号、显存数字与 App 版本号取自当时现场记录；DDA 行为未经飞牛大升级后二次复测，仅作口径参考。
 ]]></content>
@@ -1288,8 +1314,8 @@ vfio 替代方案
   <entry>
     <title>把家里的算力全掏出来：WeKnora 的模型保障线实录</title>
     <url>/2026/10/11/%E6%8A%8A%E5%AE%B6%E9%87%8C%E7%9A%84%E7%AE%97%E5%8A%9B%E5%85%A8%E6%8E%8F%E5%87%BA%E6%9D%A5WeKnora%E6%A8%A1%E5%9E%8B%E4%BF%9D%E9%9A%9C%E5%AE%9E%E5%BD%95/</url>
-    <content><![CDATA[WeKnora 跑在家庭虚拟机上，承担家里和公司两套知识库，有三类模型调用：文档解析、向量嵌入、摘要生成。早期全走公网 API，两个月后两个问题都到了忍不了的程度：成本，和”文档内容出境”这件事本身。真正花时间的不是选模型，是家里没有一台”够用的机器”，只有几台”各管一段的机器”——这篇记录怎么把它们拼成一条供给线。
-家底盘点：结论：没有一台够，拼起来才够
+    <content><![CDATA[WeKnora 跑在家庭虚拟机上，承担家里和公司两套知识库，有三类模型调用：文档解析、向量嵌入、摘要生成。早期全走公网 API，两个月后两个问题都到了忍不了的程度：成本，和”文档内容出境”这件事本身。真正花时间的不是选模型，是家里没有一台”够用的机器”，只有几台”各管一段的机器”。
+家底盘点：没有一台够，拼起来才够
 
 
 节点
@@ -1323,38 +1349,39 @@ GB10 121G 统一内存
 大模型主力（单列一篇）
 
 
-四台全是既有用途，没有一台是”为推理专门留的”。池化方案是加一个轻量推理路由（下称 router）：WeKnora 只对着 router 的单一端点发请求，router 按角色（短对话/长对话/嵌入/摘要）分发到对应池子。拆分理由是把供给复杂度收敛在一层，不是追求多池本身——调用方只认一个地址，供给侧随便折腾。
-路由层：结论：一个熔断口径管全部池子每个池子五个固定字段：active / capacity / waiting / success / failure，外加状态位 circuit_open。判定规则固定三条：
+四台全是既有用途。池化方案是加一个轻量推理路由（下称 router）：WeKnora 只对着 router 单一端点发请求，router 按角色（短对话/长对话/嵌入/摘要）分发到对应池子——把供给复杂度收敛在一层，调用方只认一个地址，供给侧随便折腾。
+路由层：一个熔断口径管全部池子每个池子五个固定字段：active / capacity / waiting / success / failure，外加状态位 circuit_open。判定规则：
 
-连续失败超阈值 → circuit_open=true，摘流，请求落回退池；
-摘流池子定期探活，成功即回流；
-并发上限按池独立，满了进 waiting，排队超时就转回退，不无限堆。
+连续失败超阈值 → circuit_open=true，摘流；
+摘流 30 秒后由真实请求自然回流——不额外造探活请求，第一个真实请求就是探针，成功即清零；
+回退有两条不同的路：熔断或上下文预算不足时沿候选链换池（静态回退）；排队超时直接 429 让 WeKnora 退避重试（动态退避），不无限堆。
 
-这套口径的直接收益是故障归因结构化：哪次解析慢、慢在哪个池子、当时熔断状态如何，全在 /metrics 里，不用翻各节点日志拼时间线。
+口径都是代码里的落点。池子的熔断状态机：
+class Pool:    def __init__(self, n):        self.cv = threading.Condition(); self.capacity = n        self.active = 0; self.waiters = []        self.success = 0; self.failure = 0        self.failures = 0; self.open_until = 0    def release(self, kb, ok, backend_error=False):        with self.cv:            self.active -= 1            if ok:                self.success += 1; self.failures = 0; self.open_until = 0            else:                self.failure += 1                if backend_error:            # 只有后端 5xx 累计，客户端 4xx 不算池子故障                    self.failures += 1                    if self.failures &gt;= 3:    # 连续 3 次后端失败 → 熔断 30 秒                        self.open_until = time.monotonic() + 30
+
+open_until 时间戳挂在请求释放路径上：熔断窗口内进来的请求直接 503，30 秒后自然放行，放行的第一个成功请求把状态清零。“摘流→等待→自然回流”两个字段（失败计数 + 截止时间）就实现了，不需要半开状态机，也不需要探测定时器——探活不额外造请求，借的是业务流量本身。
+归因的底座是每请求一行结构化日志（归因字段是踩坑后补的）：
+&#123;&quot;request_id&quot;:&quot;9f4567a6…&quot;,&quot;backend&quot;:&quot;long&quot;,&quot;group&quot;:&quot;…&quot;,&quot;ok&quot;:false, &quot;seconds&quot;:180.184,&quot;stage&quot;:&quot;upstream&quot;,&quot;http_status&quot;:504,&quot;error_kind&quot;:&quot;timeout&quot;&#125;
+
+request_id 贯穿，backend/group 定位池与知识库，stage 区分卡在排队还是卡在上游——/metrics 的瞬时状态加逐请求日志就是完整时间线。
 两次实际熔断，两种性质，都记下来：
-P100 池被视频任务挤掉。 P100 白天在给 NAS 的视频处理出图，显存占满，嵌入请求全超时，router 两分钟内熔断摘流，请求自动落到 Mac mini 回退池。WeKnora 侧只看到”部分解析变慢”，没有失败。这是想要的行为：GPU 争抢是常态，不是故障——熔断层存在的意义就是把”常态争抢”从”故障”里分出来。
-台式机池被游戏抢占。 这条是手动策略而非熔断：打补丁/玩游戏前跑一套”暂停序列”——router 侧把该池子后端标记 enabled=false，对 disabled 后端直接 503 转回退；Windows 侧走 WinRM 停两个模型服务、杀进程、确认两张卡占用归零，游戏进程（串流服务除外）不受影响。恢复时顺序反过来：先起模型、验证两个端点真实能出 token，再恢复 router 配置。先验证后端、再放开路由——顺序反了，就是把半死的服务重新挂回流量里。
-P100 池：结论：显存 16G 是硬约束，两边都常驻必爆P100 16G 同时供嵌入和视频处理，分配原则写死：
+P100 池被视频任务挤掉。 P100 白天在给 NAS 的视频处理出图，显存占满，嵌入请求全超时，router 两分钟内熔断摘流，请求自动落到 Mac mini 回退池。WeKnora 侧只看到”部分解析变慢”，没有失败。这就是熔断层存在的意义：把”常态争抢”从”故障”里分出来。
+分发侧的”按角色路由”在代码里是角色 → 主池 + 候选回退链：
+def resolve(body, headers, path):    wire = body.get(&#x27;model&#x27;, &#x27;wk-default&#x27;)    parts = wire.split(&#x27;.&#x27;, 1)             # 模型名 = 角色.知识库标签    role = parts[0]    group = parts[1] if len(parts) &gt; 1 else headers.get(&#x27;X-WK-KB&#x27;, &#x27;unscoped&#x27;)    if path.endswith(&#x27;/embeddings&#x27;):       # 嵌入固定 P100 池，维度不匹配即 400        return &#x27;p100&#x27;, group, 2, &#x27;nomic-embed-text&#x27;, None    # 角色定主池：问答/视觉→mac，长文合成→long，其余→short    name = &#x27;mac&#x27; if (imgs or role in (&#x27;wk-qa&#x27;, &#x27;wk-vision&#x27;)) else \           &#x27;long&#x27; if role == &#x27;wk-compose&#x27; else &#x27;short&#x27;    # 候选链：主池 → 回退池，逐个做上下文预算核对    candidates = ([name, &#x27;long&#x27;, &#x27;mac&#x27;] if name == &#x27;short&#x27;                  else [name, &#x27;mac&#x27;, &#x27;long&#x27;] if name == &#x27;long&#x27;                  else [name])    oversize = False    for candidate in candidates:           # 主池满/熔断时沿链回退        if time.monotonic() &lt; POOLS[candidate].open_until:            continue        tokens = token_count(candidate, body) + imgs * 8192  # 真实 tokenizer 计数        if tokens + out + 128 &gt; CFG[&#x27;backends&#x27;][candidate][&#x27;context&#x27;]:            oversize = True; continue        # 超上下文预算 → 换链上下一个池子        return candidate, group, priority, CFG[&#x27;backends&#x27;][candidate][&#x27;model&#x27;], tokens    raise Reject(400 if oversize else 503, &#x27;no compatible local backend available&#x27;)
 
-嵌入模型常驻（几个 GB 级），优先保；
-视频出图模型按需加载，出图完成即释放；
-两边都常驻峰值超 16G，所以视频侧”用完即卸”，代价是每次出图多等十几秒加载。
-
-反直觉的地方是：被让路的反而是新业务。入池前直觉上嵌入是”附加任务”，但它是 WeKnora 的调用主力，视频出图是低频次任务——按调用频次排序定驻留优先级，不按业务新旧。更细的显存记录在 飞牛 app 那篇。
-嵌入：结论：最高频、最便宜、最敏感，必须单池嵌入模型最容易在资源规划里被漏掉——它调用频率最高（每次文档进出都打）、单次最便宜、但对延迟最敏感。两条教训：
-
-嵌入请求不和大对话走同一个池子：一个大请求的排队会把几十个小嵌入请求全卡住；
-Mac mini 回退池容量按”主池全挂时 24 小时能消化当前积压”算，不按峰值算——峰值永远补不满，积压消化才是现实目标。
-
+候选先查熔断，再按真实 tokenizer 计数核对上下文窗口（不是按字符估）。超限不直接失败，而是换链上下一个池子——长文进不了 short 池自然落到 long 池。所以准确说法是：角色定主池，熔断状态和上下文预算定实际落点；两条回退路径在此汇合，互不干扰。
+台式机池被游戏抢占。 手动策略而非熔断：打补丁/玩游戏前跑”暂停序列”——router 配置层摘除该池后端（对已摘除后端 503 转回退）；Windows 侧 WinRM 停两个模型服务、杀进程、确认两卡占用归零。恢复顺序反过来：先起模型、验证端点真实能出 token，再恢复 router 配置。先验证后端、再放开路由——顺序反了就是把半死的服务挂回流量。
+P100 池：显存 16G 是硬约束，两边都常驻必爆P100 16G 同时供嵌入和视频处理，分配原则写死：嵌入模型常驻（几个 GB 级）优先保；视频出图模型按需加载、用完即卸——两边都常驻峰值超 16G，视频侧的代价是每次出图多等十几秒加载。
+反直觉的地方是被让路的反而是新业务：嵌入是 WeKnora 的调用主力，视频出图是低频次任务——按调用频次定驻留优先级，不按业务新旧。更细的显存记录见飞牛 app 那篇。
+嵌入：最高频、最便宜、最敏感，必须单池嵌入调用频率最高（每次文档进出都打）、单次最便宜、对延迟最敏感，两条教训：不和大对话同池——一个大请求的排队会把几十个小嵌入请求全卡住；Mac mini 回退池容量按”主池全挂时 24 小时能消化当前积压”算，不按峰值算——峰值永远补不满，积压消化才是现实目标。
 供给线全景WeKnora   │  单一端点   ▼inference-router (18093, /metrics 暴露全池状态)   ├── 长对话池    → 台式机 (GGUF, WinRM 可暂停/恢复)   ├── 短对话池    → 台式机   ├── 嵌入池      → 飞牛 P100 ──回退──→ Mac mini   └── 大上下文    → DGX Spark (独立供给, 见其专篇)
 
-WeKnora 对这条线无感知：router 端点不变，后端怎么换、谁熔断、谁在排队，都不影响它的配置。这就是调用方只认一个地址的价值。
+配置层面的证据：三库所有模型槽位（摘要/Wiki 合成/问答/嵌入等，逻辑模型名）的 base_url 只有一条 http://inference-router:8080/v1，宿主侧映射 18093 [等价实现]。槽位里看不到”池”的存在——切本地那天改的是槽位的 base_url 和模型名，不是加一堆后端地址。“调用方只认一个地址”落到实处就是这一条 base_url。 踩过坑：配置是容器挂载卷，改完必须 force-recreate 才生效，忘重建就一直没加载。
 成果：供给线已收敛到单一端点，且按设计扛过真实争抢
-调用侧收敛完成：WeKnora 的模型调用从”全走公网 API”收敛到只对着 router 单一端点 18093 发请求，长对话/短对话/嵌入/大上下文四个池子各就各位在跑，后端怎么换都不动它的配置。
+调用侧收敛完成：WeKnora 的模型调用从”全走公网 API”收敛到只对着 router 单一端点 18093 发请求，四个池子各就各位，后端怎么换都不动它的配置。
 两套原始动机的现状：成本与文档出境不再是”忍不了”——供给主体已换成家里算力（P100、台式机、Mac mini、DGX Spark），端点不变。
-熔断口径不是纸面设计：两次真实争抢都按设计行为走了——P100 被视频出图挤掉，router 两分钟内熔断摘流、请求自动落 Mac mini 回退池；游戏前的暂停序列把台式机池 503 转回退、恢复时先验后端再放开路由。两次 WeKnora 侧都无失败。
-故障归因从此不用翻日志拼时间线：哪个池子慢、当时熔断状态、排队多深，全部在 /metrics 五个固定字段里直接读。
-给后面省的事：加机器只是填表——口径统一了，新节点按五字段接入，不用再重新设计路由逻辑。
+熔断口径不是纸面设计：两次真实争抢都按设计行为走了，WeKnora 侧都无失败。
+归因链路已验证：逐请求结构化日志 + /metrics 五字段 + 状态位，哪个池子慢、当时熔断状态如何直接读；加机器只是填表，新节点按五字段接入。
 
 未闭环清单
 
@@ -1368,6 +1395,10 @@ router 单点（与知识库同 VM，VM 重启期间供给线全断）
 未闭环，独立部署 + 状态外置已列待办
 
 
+router 配置靠容器重建生效（改配置忘 recreate 不加载）
+已踩坑，未闭环：配置热加载或改后校验
+
+
 游戏暂停序列
 手动策略，未自动触发
 
@@ -1376,7 +1407,7 @@ Mac mini 回退池积压消化时长的真实值
 按 24 小时口径设计，未实测压满
 
 
-小结拼供给线没有高难动作：四台异构机器、一个 router、一套熔断口径。真正花时间在取舍上：P100 的显存归谁、嵌入池独立与否、回退容量按峰值还是按积压、暂停与恢复的顺序。
+小结拼供给线没有高难动作：四台异构机器、一个 router、一套熔断口径。真正花时间在取舍上：P100 显存归谁、嵌入池独立与否、回退容量按峰值还是按积压、暂停与恢复的顺序。
 只留一条经验：多机拼推理池，先定熔断口径再定池子——口径统一了，加机器只是填表。
 
 文中卡型、显存、端口取自当时现场记录；公司名与内网地址已脱敏，未闭环项以表格为准。
@@ -1417,7 +1448,7 @@ Mac mini 回退池积压消化时长的真实值
 维度五：自然语言操作面 —— 结论：用户侧收口，前四条健康度的读数判断问题：人能不能用一句自然语言，触发一条完整的操作链路？
 前四条做得再好，人每次还要”记得先查库、再确认通道、再下命令”，接管的价值折半。
 家里落点：现在的习惯是给 Agent 极短指令——“继续”、”把 Zabbix 降噪”、”GPU 释放给串流”——然后期望它自己从知识库、git log、全局基线里重建上下文，把能离线做完的做完，别把半成品推回来。这个体验稳不稳，就是前四条维度健康程度的直接读数：任何一条断了，短指令就会退化成长指令。
-自评：结论：三条达成、一条基本达成、一条部分达成
+自评：三条达成、一条基本达成、一条部分达成
 
 
 维度
@@ -1607,10 +1638,23 @@ SSH 进 HAOS 内核
 
 应用层通道从装完就有：长期 access token 建在专门的服务账号上（不是主账号），scope 按”读多写少”给。Agent 日常巡检走这一层：实体状态、集成健康、最近事件，全不碰系统。
 系统层是这次新开的。HAOS 的 SSH 默认不开，开了就是 root——这个权限级别在家庭环境里必须配套收口动作，见下文。
+系统层通道：dropbear，不是 OpenSSHHAOS 的 SSH 和家里其他 Linux 主机的 OpenSSH 不是一个东西：独立端口、dropbear 实现、独立口令（统一口令在 HAOS 上直接失败，收口动作见后文）。连接形态因此单独写死在通道定义里：
+HA=root@&lt;haos&gt;SSH=&quot;ssh -i $HOME/.ssh/id_ed25519 -o UserKnownHostsFile=$KH -o ConnectTimeout=20 -p 22222 $HA&quot;# dropbear 无 sftp-server：scp 必须加 -O 走 sftp 协议兼容层scp -O -i &quot;$HOME/.ssh/id_ed25519&quot; -o UserKnownHostsFile=&quot;$KH&quot; -P 22222 \    &quot;$HA:/mnt/data/supervisor/backup/$SLUG.tar&quot; &quot;$OUT/HA-$NAME.tar&quot;tar tf &quot;$OUT/HA-$NAME.tar&quot; &gt;/dev/null &amp;&amp; echo &quot;tar OK&quot;   # 回读：tar 结构可读才算完整
+
+两个坑都踩出来才写进通道定义的：dropbear 默认不带 sftp-server，新版 scp 默认走 SFTP 协议，不加 -O 会直接握手失败——所以 -O 是这个通道的固定参数，不是可选优化；tar tf 回读是因为”scp 退出码 0”只证明文件字节到了，tar 结构可读才算完整。备份闭环的完整链路：触发 → 等完成 → scp -O 拉回 → restic 推远端仓 → HA 侧轮转（保 2 份 ops- 前缀快照）→ 本地 14 天轮转；restic 的 forget/prune 遇陈旧锁先 restic unlock 再重试一次，失败不阻断——产物已入仓，锁是本地问题。
 系统层面：三类真实任务这个通道不是白开的。接管跑通后，Agent 通过系统层实际处理过三类任务：
-容器故障。 某个第三方集成以容器方式跑，崩溃后应用层只看到”集成不可用”，看不出是容器 OOM 还是镜像挂了。系统层 docker ps -a + docker logs --tail 一步定位；重建容器比从 UI 里”重新配置集成”快得多，也不动配置。
+容器故障。 某个第三方集成以容器方式跑，崩溃后应用层只看到”集成不可用”，看不出是容器 OOM 还是镜像挂了。系统层一步定位，关键在退出码分流：
+# 定位：看退出码。137=OOMKilled（容器被杀），2=应用自身报错$SSH &quot;docker ps -a --filter name=&lt;addon&gt; --format &#x27;&#123;&#123;.Names&#125;&#125; &#123;&#123;.Status&#125;&#125; exit=&#123;&#123;.State&#125;&#125;&#x27;&quot;$SSH &quot;docker logs --tail 50 --timestamps &lt;addon-container&gt;&quot;# 重建：镜像不动、配置不动，只重建容器本体$SSH &quot;docker stop &lt;addon-container&gt; &amp;&amp; docker rm &lt;addon-container&gt;&quot;$SSH &quot;ha addon reload &lt;addon&gt;&quot;        # 走 HA 的 addon 机制重建，而不是手搓 docker run
+
+退出码是分流判据：137 要去调内存限额、看宿主压力，2 是集成自身问题要看日志，两者处置完全不同——定位的产物不是”容器挂了”四个字，而是该走哪条处置路径。重建走 ha addon reload 而不是裸 docker run，保证配置来源仍是 HA 托管的 compose，重建结果不会被下次升级的容器清单当成”野容器”。这段是示意等价实现，真实脚本多了重建后的状态回读。
 磁盘水位。 HAOS 系统盘不大，数据库加备份慢慢会涨。Agent 定期查 df，水位过线时先查占用大头（/var/lib/mysql、备份目录、容器日志）。容器日志的轮转策略在系统层改一次就长期生效，不用每次手动清。
-HAOS 升级。 应用层 UI 只能选”升级 HA”，HAOS 本体的升级必须走系统层。Agent 的做法：升级前读当前版本号、确认磁盘余量、拉一个快照；升级后对比版本号、检查各集成状态、把结果写回巡检报告。整条链路里没有一步需要人打开 UI。
+HAOS 升级。 应用层 UI 只能选”升级 HA”，HAOS 本体的升级必须走系统层。升级前必做的一步是快照，用的就是 Supervisor 的 full backup。ha backups new 是异步的——CLI 返回 slug 不代表备份完成，完成判定用”两次采样文件大小稳定”，比轮询状态文本更抗实现变化：
+NAME=&quot;ops-$(date +%F-%H%M)&quot;SLUG=$($SSH &quot;ha backups new --name $NAME&quot; | awk &#x27;/^slug:/&#123;print $2&#125;&#x27;)[[ &quot;$SLUG&quot; =~ ^[0-9a-f]&#123;8&#125;$ ]] || &#123; echo &quot;ERROR invalid backup slug&quot;; exit 1; &#125;# 完成判定：文件大小连续两次采样不变且非零，而不是看&quot;进度条&quot;for i in $(seq 1 120); do    sleep 10    SZ=$($SSH &quot;stat -c %s /mnt/data/supervisor/backup/$SLUG.tar 2&gt;/dev/null || echo 0&quot;)    SZ2=$($SSH &quot;sleep 8; stat -c %s /mnt/data/supervisor/backup/$SLUG.tar 2&gt;/dev/null || echo 0&quot;)    if [ &quot;$SZ&quot; = &quot;$SZ2&quot; ] &amp;&amp; [ &quot;$SZ&quot; != &quot;0&quot; ]; then echo &quot;done size=$SZ&quot;; break; fidone
+
+两次采样间隔 8 秒且都从远端取，防的是”本地时钟快、远端还在写”的假稳定。快照名带 ops- 前缀是刻意的：后面轮转只删自己创建的前缀，不碰用户手动备份。轮转走 --raw-json 回读，Agent 侧精确圈定对象：
+LIST=$($SSH &quot;ha backups list --raw-json&quot;)printf &#x27;%s&#x27; &quot;$LIST&quot; | python3 -c &#x27;import sys, jsonb = json.load(sys.stdin)[&quot;data&quot;][&quot;backups&quot;]b = sorted((x for x in b if x[&quot;name&quot;].startswith(&quot;ops-&quot;) and x[&quot;type&quot;] == &quot;full&quot;),           key=lambda x: x[&quot;date&quot;], reverse=True)print(&quot;\n&quot;.join(x[&quot;slug&quot;] for x in b[2:]))&#x27; | while IFS= read -r old; do    $SSH &quot;ha backups remove $old&quot; || echo &quot;WARN backup removal failed: $old&quot;done
+
+“前缀 + type=full”两个条件同时满足才进轮转候选，保留最近 2 份。HAOS 侧一切以 ha CLI 的结构化输出为准，不看 UI——这也是升级后”对比版本号、检查各集成状态”的具体做法：ha os info 读前后版本 diff，ha addon list --raw-json 逐集成核状态，结果写回巡检报告。整条链路里没有一步需要人打开 UI。
 容器内修改：诊断的路，不是修改的路HA 本体是一个容器，第三方集成容器也是容器。这里有一个容易走偏的做法：从 HAOS 内核里 docker exec 进 HA 容器改文件。能成，但反直觉的地方是：HA 升级时容器是整体替换的，改的文件没了。修改在下次升级时被静默丢掉，写入当时没有任何报错；而且绕过了应用层的配置机制（configuration.yaml、UI 配置），出问题时两头查。
 收口规则：容器内的配置变更一律走应用层 API 或配置文件挂载；系统层的 docker exec 只用于诊断，不用于修改。诊断产出的是日志和状态，修改必须走会被升级保留的路径。
 权限收口：收在”谁能连”上SSH root 在家庭网里的风险面主要是”谁能连”。收口动作：
@@ -1619,7 +1663,7 @@ HAOS 升级。 应用层 UI 只能选”升级 HA”，HAOS 本体的升级必�
 主用密钥登录，口令登录保留但走独立于统一密码的单独口令——HAOS 对统一口令不认，这事本身就说明了它是独立系统，别试图统一它；
 Agent 每次系统层操作在报告里标注”系统层”，与应用层操作区分——权限级别不同，出问题的排查路径也不同。
 
-全站位置：一套通道口径覆盖四类系统HA 这条线打通后，家里的接管面覆盖：
+全站位置：一套通道口径覆盖四类系统HA 这条线打通后，接管面覆盖：
 
 
 
@@ -1644,12 +1688,12 @@ Web 控制台服务
 各自的 API
 
 
-Agent 侧的结论是统一的：每个系统给出”应用层 + 系统层”两个明确通道，操作分级，不靠一个万能通道走天下。
+结论统一：每个系统给出”应用层 + 系统层”两个明确通道，操作分级，不靠一个万能通道走天下。
 成果：三类系统层任务全部闭环，整条链路没打开过 UI现在 HAOS 上跑着两层通道：应用层 REST + WebSocket API（长期 token，只读为主）加系统层 SSH（管理网段限定，root），权限边界就是前文那张分工表，两边各管各的。
 
-三类系统层任务都跑出过真实结果，全程零 UI 操作。 容器故障用 docker ps -a + docker logs --tail 一步定位并重建，比从 UI”重新配置集成”快；磁盘水位由 Agent 定期查 df，容器日志轮转策略在系统层改一次就长期生效，不再每次手动清；HAOS 升级走”读版本号 → 查磁盘余量 → 拉快照 → 升级后对比版本号、查集成状态、写回巡检报告”，链路里没有一步需要人打开 UI。
+三类系统层任务都跑出过真实结果，全程零 UI 操作。 容器故障按退出码分流定位、走 addon 机制重建；磁盘水位定期查 df，日志轮转写进容器配置一次生效；HAOS 升级走”读版本号 → 查余量 → 快照（双采样判完成、ops- 前缀轮转保 2 份）→ 升级后 diff 版本、逐集成核状态、写回报告”，链路里没有一步需要人打开 UI。
 “升级会吃掉什么”这类坑已经用规则钉死了。 容器内 docker exec 只许诊断、不许修改，配置变更一律走会被升级保留的路径——这一类”升级后修改被静默丢掉”的故障从路径上被排除，而不是靠人记。
-家里四类系统的通道口径统一了。 Windows 走 WinRM、Linux 服务机走 SSH、HAOS 走系统层加应用层、Web 控制台走各自 API，每个系统都是”应用层 + 系统层”两个明确通道——出问题时先定层，排查路径一眼可判，不用再两头查。
+家里四类系统的通道口径统一了。 Windows 走 WinRM、Linux 服务机走 SSH、HAOS 走系统层加应用层、Web 控制台走各自 API，每个系统都是”应用层 + 系统层”两个明确通道——出问题时先定层，排查路径一眼可判。
 
 未闭环清单
 
@@ -1687,9 +1731,9 @@ HAOS 主机的具体 IP、域后缀与凭据均已脱敏；版本号与行为取
   <entry>
     <title>Windows Server 的 Agent 接管：PowerShell 7 与 WinRM 双通道实录</title>
     <url>/2026/10/01/Windows-Servers%E7%9A%84Agent%E6%8E%A5%E7%AE%A1PowerShell7%E4%B8%8EWinRM%E5%8F%8C%E9%80%9A%E9%81%93/</url>
-    <content><![CDATA[把三台 Windows 主机交给 Agent 接管，目标很直接：让 Agent 用一条固定节奏（写脚本 → 上传 → 执行 → 读回退出码）操作它们，长上下文和会话数据都不再依赖人工开远程桌面。真正花时间的不是通道本身，而是让这条节奏在三台行为不一致的机器上都不漂移——每台 Server 2025 的默认值都不一样，通道选型必须能吸收这种差异。
-改造前的状态是 Agent 只能走 SSH 接 PowerShell，脚本用 base64 的 EncodedCommand 绕引号。能跑，但每次调用都要重新处理三件事：UTF-16LE 转码、255 字节的重复上限、嵌套引号。这些坑都得在脚本里写注释防下次再踩，维护成本随调用次数线性涨。
-通道选型：结构化回传，不是协议新三个候选通道都实测过，判定标准只有一条——Agent 能不能拿到结构化的 stdout、stderr 和退出码。这是判断”这步到底成没成”的刚需，其他都是次要。
+    <content><![CDATA[把三台 Windows 主机交给 Agent 接管，用一条固定节奏（写脚本 → 上传 → 执行 → 读回退出码）操作它们，不再依赖人工开远程桌面。真正花时间的不是通道本身，而是让这条节奏在三台默认值各不相同的 Server 2025 上都不漂移。
+改造前 Agent 只能走 SSH 接 PowerShell，脚本用 base64 的 EncodedCommand 绕引号，每次调用要处理 UTF-16LE 转码、255 字节的重复上限、嵌套引号，维护成本随调用次数线性涨。
+通道选型：结构化回传，不是协议新三个候选通道都实测过，判定标准只有一条——Agent 能不能拿到结构化的 stdout、stderr 和退出码，这是判断”这步到底成没成”的刚需。
 
 
 
@@ -1722,32 +1766,37 @@ stdout/stderr/退出码原生结构化
 主通道
 
 
-WinRM 的 WinRS 协议原生对接 PowerShell，退出码不用额外约定就能读回，这是它胜出的唯一理由——不是因为协议更新。三台的 5985 端口在域内防火墙里本就为远程管理开着，走 WinRM 没有新增暴露面。
-认证统一 NTLM，域账号 administrator@domain，口令不入脚本，Agent 侧从一个权限 600 的凭据文件读。Kerberos 理论上更干净，但跨主机的 SPN 要多维护一层，个人规模下 NTLM 的复杂度/收益比更好——这是明确取舍，不是没得选。
-执行面：PowerShell 7 只加不替换三台统装 PowerShell 7（7.6.x），走官方 zip 静默安装到 C:\Program Files\PowerShell\7，不走 MSI 安装器。拆开理由有三条：
+WinRS 原生对接 PowerShell，退出码不用额外约定就能读回，这是它胜出的唯一理由——不是因为协议更新。三台的 5985 端口本就为远程管理开着。
+认证统一 NTLM，域账号 administrator@domain，口令不入脚本，从 600 权限凭据文件读。Kerberos 要多维护一层跨主机 SPN，个人规模下复杂度/收益比输给 NTLM。
+执行面：PowerShell 7 只加不替换三台统装 PowerShell 7（7.6.x），走官方 zip 静默安装到 C:\Program Files\PowerShell\7，不走 MSI。理由有三条：
 
 zip 免 UAC 交互，无 GUI 的域控上 MSI 会卡授权弹窗；
-与 5.1 完全隔离，5.1 的脚本兼容性事故不会传染到 7，反之亦然；
-powershell 仍指向 5.1，只把 pwsh 目录加进系统级 PATH，旧运维脚本行为不漂移。
+与 5.1 完全隔离，脚本兼容性事故互不传染；
+powershell 仍指向 5.1，只把 pwsh 目录加进 PATH，旧脚本不漂移。
 
-装完两个固定动作，都是踩出来的：
+装完两个固定动作，都是为 Agent 无头执行稳定补的，不是”装 PS7”的一部分：Set-PSReadLineOption -PredictionViewStyle None 关预测提示（无头执行偶发吞一行输出，日志解析会误判”这条命令没执行”）；[Environment]::SetEnvironmentVariable(&#39;PSModulePath&#39;, &#39;\&lt;dc1&gt;\ops$\ps-modules&#39;, &#39;Machine&#39;) 把模块路径收敛到内网共享（默认去查 Gallery，域控没有固定出网策略，超时拖慢十几秒；查不到就查不到，不设回源）。两条都必须开新会话回读验证，改当前会话的进程环境变量不算数。
+Agent 侧：pywinrm，不是 Invoke-CommandAgent 跑在 Mac 上。本地装 PowerShell 7 走 Invoke-Command，实测 Microsoft.WSMan.Management 在 macOS 上会话稳定性不够，且排障要分两头。选 pywinrm 的理由是排障只在一头：
+def session():    # 口令从 600 权限凭据文件读，不进命令行参数、不回显    secret = pathlib.Path.home().joinpath(CRED_FILE).read_text().strip()    return winrm.Session(&#x27;http://&lt;dc1&gt;:5985/wsman&#x27;,                         auth=(&#x27;administrator@domain&#x27;, secret),                         transport=&#x27;ntlm&#x27;, operation_timeout_sec=45, read_timeout_sec=60)def ps(source, tag):    # 三件前置：关进度条污染 stdout、首错即停、输出强制 UTF-8    source = (&quot;$ProgressPreference=&#x27;SilentlyContinue&#x27;; $ErrorActionPreference=&#x27;Stop&#x27;; &quot;              &quot;[Console]::OutputEncoding=[Text.Encoding]::UTF8; &quot; + source)    r = session().run_ps(source)    data = &#123;&#x27;status&#x27;: r.status_code,            &#x27;stdout&#x27;: r.std_out.decode(&#x27;utf-8&#x27;, &#x27;replace&#x27;),            &#x27;stderr&#x27;: r.std_err.decode(&#x27;utf-8&#x27;, &#x27;replace&#x27;)&#125;    if r.status_code:        raise RuntimeError(tag + &#x27;: &#x27; + data[&#x27;stderr&#x27;][:1500])    return data
 
-Set-PSReadLineOption 关预测提示。 无头执行时预测提示偶发吞一行输出，日志解析会误判成”这条命令没执行”。
-$env:PSModulePath 收敛到内网共享目录。 默认会去查 PowerShell Gallery，域控没有固定出网策略，查询超时把脚本拖慢十几秒。查不到就查不到，不设回源。
+所有远端调用都走这层公共代码。一个实测纠正过的误判：std_out 是单字节 UTF-8 流，不是 UTF-16LE，解码策略因此写死；成功判定永远是 status_code==0 加回读值，连接成功不等于执行成功。
+venv 版本组合固定为实测可复现的一套：Python 3.11 + pywinrm 0.5.0 + pyspnego 0.12.4 + requests_ntlm 1.3.0。版本坑：pyspnego（NTLM 认证依赖）没有 Python 3.15 的 wheel，homebrew 默认的 3.15 在 pip install 阶段失败且报错不指向版本，固定 3.11 写进基线。
+反直觉的坑：WinRM 单条命令有长度上限把一整套”暂停服务 → 杀进程 → 验证 → 恢复”塞进一次 run_ps，会炸在 command line is too long。反直觉的是：错误发生在远端解析阶段，本地看不出异常，status_code 甚至不报错。
+Agent 侧按脚本体量预先分流：短脚本直发，长脚本先落盘再执行，不能靠”失败了再拆”——失败在远端，无从发现。实测阈值 1900 字符：
+if len(source) &gt; 1900:    target = REMOTE + &#x27;\\scripts\\&#x27; + tag    encoded = base64.b64encode(source.encode(&#x27;utf-8&#x27;)).decode(&#x27;ascii&#x27;)    # 先建目录+清空目标文件，分块追加 base64，每块独立核状态    setup = s.run_ps(&quot;New-Item -ItemType Directory -Force &#x27;&quot; + REMOTE + &quot;\\scripts&#x27;|Out-Null; &quot;                     &quot;[IO.File]::WriteAllText(&#x27;&quot; + target + &quot;.b64&#x27;,&#x27;&#x27;)&quot;)    if setup.status_code:        raise RuntimeError(&#x27;Script upload directory failed&#x27;)    for offset in range(0, len(encoded), 2200):        r = s.run_ps(&quot;[IO.File]::AppendAllText(&#x27;&quot; + target + &quot;.b64&#x27;,&#x27;&quot;                     + encoded[offset:offset+2200] + &quot;&#x27;)&quot;)        if r.status_code:            raise RuntimeError(&#x27;Script upload chunk failed&#x27;)    # 远端解码落 .ps1 再执行，彻底绕开单次命令长度上限    source = (&quot;[IO.File]::WriteAllBytes(&#x27;&quot; + target + &quot;.ps1&#x27;,&quot;              &quot;[Convert]::FromBase64String([IO.File]::ReadAllText(&#x27;&quot; + target + &quot;.b64&#x27;))); &quot;              &quot;&amp; &#x27;&quot; + target + &quot;.ps1&#x27;&quot;)
 
-Agent 侧：pywinrm，不是 Invoke-CommandAgent 跑在 Mac 上。本地装 PowerShell 7 + Microsoft.WSMan.Management 理论上能 Invoke-Command，实测该模块在 macOS 上会话稳定性不够，且每次调用走本机 PS 引擎，排障要分两头。选 pywinrm 的拆分理由是排障只在一头：
-import winrmsession = winrm.Session(    &quot;http://&lt;dc1&gt;/wsman&quot;,    auth=(&quot;administrator@domain&quot;, pw),   # pw 从 600 文件读，不回显    transport=&quot;ntlm&quot;,    server_cert_verify=False,            # 内网 HTTP，TLS 留给 5986 备用)r = session.run_ps(script)print(r.status_code)print(r.std_out.decode())
+上传路径的价值在”每块独立核 status_code“：失败停在可定位的块上；分块大小 2200 是实测取的，留出引号和转义的余量。
+还有第二条路径：脚本 gzip 压缩后塞进单次 run_ps——实测 5.6KB 脚本压缩编码后只剩 3.3KB，装得下。断言在本地做：远端真正吃的是 utf-16le 编码后的长度，实测安全线是 7800 字符以内，超限本地就炸：
+data = base64.b64encode(gzip.compress(code.encode(), mtime=0)).decode()stub = (&quot;$m=[IO.MemoryStream]::new([Convert]::FromBase64String(&#x27;&quot; + data + &quot;&#x27;),$false);&quot;        &quot;$z=[IO.Compression.GZipStream]::new($m,[IO.Compression.CompressionMode]::Decompress);&quot;        &quot;$s=[IO.StreamReader]::new($z);&quot;        &quot;&amp; ([ScriptBlock]::Create($s.ReadToEnd()))&quot;)# 断言在本地做：utf-16le 编码后的长度才是远端真正吃的长度assert len(base64.b64encode(stub.encode(&#x27;utf-16le&#x27;))) &lt; 7800, &#x27;Encoded command too long&#x27;
 
-这个 venv 有一个必须写下来的版本坑：pyspnego（NTLM 认证依赖）没有 Python 3.15 的 wheel。用 homebrew 默认的 3.15 建 venv 会在 pip install 阶段失败，而失败信息不指向版本，容易误判成网络或包本身问题。venv 固定用 Python 3.11，路径写进 Agent 全局基线，不许换。
-反直觉的坑：WinRM 单条命令有长度上限把一整套”暂停服务 → 杀进程 → 验证 → 恢复”塞进一次 run_ps，会炸在 command line is too long。这个坑反直觉的地方是：错误发生在远端解析阶段，本地看不出任何异常，status_code 甚至不报错。
-解法是把长序列拆成多个独立调用，每步之间读回状态再发下一步。拆完之后脚本反而更像 Agent 该有的执行模型——小步、可验证、可中断，而不是”一把梭然后祈祷”。这条后来写进了基线：WinRM 单条脚本超过一定体量就强制分阶段。
-备选通道：SSH 保留三样SSH 没拆，保留三样，降级路径写明：
+mtime=0 把时间戳归零，同一脚本的 base64 可复现，两次运行之间的 diff 才有意义；两条路径并存也简单——1900 字符以下的脚本占多数，直发免掉上传开销。隐性前提：WinRM 会话的默认 shell 是内置 PS 5.1，不是装好的 7，run_ps 里不能写 7.x 独有语法（三元 ? :、-AsHashtable、ForEach-Object -Parallel），否则脚本不长也会在远端爆。
+长序列本身拆成多个独立调用，每步读回状态再发下一步，这条写进基线：WinRM 单条脚本超过一定体量就强制分阶段。远端侧形态是状态机：进度文件 temp+Replace 原子写，每步落盘再发下一步，重连都能从进度文件恢复现场；finally 保证失败路径上挂载和开机回滚——否则一次失败会留下一台状态未知的机器。
+备选通道：SSH 保留三样SSH 通道没拆，保留三样：
 
 sshd 服务本身，端口只放行管理网段；
 域账号公钥登录（与 Agent 同一密钥对），口令登录关；
-一条约定：WinRM 探活失败时 Agent 切 SSH，并在报告里标注”降级通道”，避免读者以为一切正常。
+一条约定：WinRM 探活失败时 Agent 切 SSH，并在报告里标注”降级通道”。
 
-降级实际触发过一次：一台域控打补丁后 WinRM 服务被置成 Automatic (Delayed Start)，开机后几分钟窗口内不可用，SSH 顶住了那次巡检。双通道的价值不在日常，在这种窗口期——单通道时这段时间就是盲区。
+降级是代码判的：探活取最轻量命令（读主机名即可），WinRM 失败再探 SSH，两判定独立；降级不是失败，但必须在报告里显式标注。触发过一次：一台域控打补丁后 WinRM 服务被置成 Automatic (Delayed Start)，开机后几分钟窗口内不可用，SSH 顶住了那次巡检。双通道的价值不在日常，在这种窗口期——单通道时这段时间就是盲区。
 接入矩阵：三台共用一套凭据
 
 
@@ -1776,13 +1825,8 @@ Hyper-V 宿主
 Get-VM 走 WinRM
 
 
-三台共用同一套凭据文件和同一个 pywinrm venv，差异只在连接串。这条写进 Agent 全局基线当硬规则：Windows 主机任务默认 WinRM 优先，选别的通道要在任务开头写明理由。比”每台一份连接说明”少维护很多，也不会文档与现场漂移。
-成果：三台共用一套凭据与一个 venv，补丁窗口期靠 SSH 降级顶住了现在三台 Windows Server 2025（DC1、DC2、Hyper-V 宿主）跑在同一个固定节奏上：写脚本 → 上传 → 执行 → 读回退出码。差异只在连接串——同一套 600 权限凭据文件、同一个 Python 3.11 的 pywinrm venv、同一张接入矩阵，WinRM 主通道在前，SSH 备选通道挂在每台后面。
-
-降级路径不是纸面设计，实际触发过一次并顶住了。 一台域控打补丁后 WinRM 服务被置成 Automatic (Delayed Start)，开机后几分钟窗口内主通道不可用，SSH 接住了那次巡检——这段盲区在单通道时代就是丢的。
-通道判定规则已进 Agent 全局基线，不再靠记忆。 硬规则是 Windows 主机任务默认 WinRM 优先、选别的通道要在任务开头写明理由。新增一台 Windows 主机只多一条连接串，不用多维护一份”这台怎么连”的说明，文档和现场不会漂移。
-排障收敛在一头。 执行面全部在 Agent 侧的 pywinrm venv 上，远端只出 stdout/stderr 和退出码，不再两头翻日志；这条 venv 的版本坑（pyspnego 无 Python 3.15 wheel）已固定为 3.11 并写进基线，不会复发成”再踩一遍”的成本。
-
+三台共用同一套凭据文件和同一个 pywinrm venv，差异只在连接串，这条写进 Agent 全局基线当硬规则：Windows 主机任务默认 WinRM 优先，选别的通道要在任务开头写明理由。
+成果：阈值、版本、降级路径全部固化成基线三台节奏一致，差异只在连接串。这次新固化进基线的硬规则：长脚本 1900 字符以上强制上传分流，gzip 路径本地断言 7800 上限；venv 版本组合写死；WinRM 探活失败自动切 SSH 并标注”降级通道”——补丁窗口期触发过一次并顶住了。排障收敛在一头：执行面全在 Agent 侧 venv，远端只出 stdout/stderr 和退出码。
 未闭环清单
 
 
@@ -1792,7 +1836,7 @@ Get-VM 走 WinRM
 
 
 TLS（5986）端点
-未启用，三台走 HTTP 5985 + 网段限定
+未启用，三台走 HTTP 5985 + 网段限定；一旦有隧道从办公网直连，TLS 要作为前置项补上
 
 
 域内 Kerberos 替代 NTLM
@@ -1803,8 +1847,7 @@ TLS（5986）端点
 已知会复发，无自动守护
 
 
-域内当前 HTTP 可接受；一旦有隧道从办公网直连，TLS 端点要作为前置项补上。
-小结Windows 侧接管没有高难动作，装、通、对齐，微软文档里全有。真正花时间的仍是文档不写的部分：三台默认值不一致带来的通道漂移、版本坑不指向根因的误导、单条命令上限在远端才爆的静默失败。
+小结Windows 侧接管没有高难动作，装、通、对齐，文档里全有。真正花时间是文档不写的部分：三台默认值不一致的通道漂移、版本坑不指向根因的误导、单条命令上限在远端才爆的静默失败。
 只留一条经验：给 Agent 接 Windows，先给它一个能读回退出码的通道，再谈自动化。
 
 三台主机的具体 IP、域后缀与凭据均已脱敏；版本号与行为取自当时现场记录，未经二次复测，仅作口径参考。
