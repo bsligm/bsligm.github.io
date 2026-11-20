@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="JumpServer 企业版, PAM, 高鲁棒性, systemd timer, PostgreSQL 备份, 健康巡检, AD 组同步, AccessKey HMAC, 故障恢复演练">
-    <meta name="description" content="2023 年那篇《JumpServer 单节点无外置数据库部署》解决的是「装起来」：一台 Linux、一套离线包、内置数据库，能登、能跳、能审计就算收工。这篇是公司环境的版本，解决的是「活得久」：同样的单节点形态，但部署理念换了一套——安装">
+    <meta name="keywords" content="JumpServer 企业版, PAM, 高鲁棒性, systemd timer, PostgreSQL 备份, 健康巡检, AD 组同步, LDAP 部门映射, AccessKey HMAC, AI Agent, JMS Admin API, AI Native, 故障恢复演练">
+    <meta name="description" content="2023 年那篇《JumpServer 单节点无外置数据库部署》解决的是「装起来」：一台 Linux、一套离线包、内置数据库，能登、能跳、能审计就算收工。这篇是公司环境的版本，解决的是「活得久、管得宽」：同样的单节点形态，但部署理念换了一套">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2026/11/20/JumpServer%E4%BC%81%E4%B8%9A%E7%89%88%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%81%A5%E5%A3%AE%E6%80%A7%E5%B7%A5%E7%A8%8B/&#34;},&#34;headline&#34;:&#34;JumpServer 企业版部署与健壮性工程：从单节点到可验证的高鲁棒性&#34;,&#34;description&#34;:&#34;2023 年那篇《JumpServer 单节点无外置数据库部署》解决的是「装起来」：一台 Linux、一套离线包、内置数据库，能登、能跳、能审计就算收工。这篇是公司环境的版本，解决的是「活得久」：同样的单节点形态，但部署理念换了一套——安装&#34;,&#34;datePublished&#34;:&#34;2026-11-20T04:30:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:30:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2026/11/20/JumpServer%E4%BC%81%E4%B8%9A%E7%89%88%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%81%A5%E5%A3%AE%E6%80%A7%E5%B7%A5%E7%A8%8B/&#34;},&#34;headline&#34;:&#34;JumpServer 企业版部署与健壮性工程：从单节点到可验证的高鲁棒性&#34;,&#34;description&#34;:&#34;2023 年那篇《JumpServer 单节点无外置数据库部署》解决的是「装起来」：一台 Linux、一套离线包、内置数据库，能登、能跳、能审计就算收工。这篇是公司环境的版本，解决的是「活得久、管得宽」：同样的单节点形态，但部署理念换了一套&#34;,&#34;datePublished&#34;:&#34;2026-11-20T04:30:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:30:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -22,7 +22,7 @@
     <meta property="og:title" content="JumpServer 企业版部署与健壮性工程：从单节点到可验证的高鲁棒性 | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2026/11/20/JumpServer%E4%BC%81%E4%B8%9A%E7%89%88%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%81%A5%E5%A3%AE%E6%80%A7%E5%B7%A5%E7%A8%8B/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="2023 年那篇《JumpServer 单节点无外置数据库部署》解决的是「装起来」：一台 Linux、一套离线包、内置数据库，能登、能跳、能审计就算收工。这篇是公司环境的版本，解决的是「活得久」：同样的单节点形态，但部署理念换了一套——安装">
+    <meta property="og:description" content="2023 年那篇《JumpServer 单节点无外置数据库部署》解决的是「装起来」：一台 Linux、一套离线包、内置数据库，能登、能跳、能审计就算收工。这篇是公司环境的版本，解决的是「活得久、管得宽」：同样的单节点形态，但部署理念换了一套">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/11.jpg">
     
@@ -497,14 +497,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.5k
+                    5.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    13 分
+                    21 分
                 </div>
                 
 
@@ -524,7 +524,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>2023 年那篇<a href="/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/">《JumpServer 单节点无外置数据库部署》</a>解决的是「装起来」：一台 Linux、一套离线包、内置数据库，能登、能跳、能审计就算收工。这篇是公司环境的版本，解决的是「活得久」：同样的单节点形态，但部署理念换了一套——安装只是起点，备份要原子、巡检要分钟级、同步要幂等、回退要按对象、健康状态要能证明不是假绿。</p>
+                <p>2023 年那篇<a href="/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/">《JumpServer 单节点无外置数据库部署》</a>解决的是「装起来」：一台 Linux、一套离线包、内置数据库，能登、能跳、能审计就算收工。这篇是公司环境的版本，解决的是「活得久、管得宽」：同样的单节点形态，但部署理念换了一套——安装只是起点，备份要原子、巡检要分钟级、部门归属要自动、回退要按对象、健康状态要能证明不是假绿，最后还要把管理员操作面整个开放给 AI Agent。</p>
 <p>环境一句话：PVE 单节点上的一台虚拟机，Ubuntu 26.04，JumpServer 企业版 v4.10.18，PostgreSQL 16 + Redis 7 内置，13 个组件容器，承载全公司的特权访问入口。地址、主机名、内部产品名均脱敏；所有容器名、端口、命令可直接照抄。</p>
 <h2 id="部署理念：先想清楚会怎么死"><a href="#部署理念：先想清楚会怎么死" class="headerlink" title="部署理念：先想清楚会怎么死"></a>部署理念：先想清楚会怎么死</h2><p>单节点形态的死法就几种，部署方案按死法倒推：</p>
 <table>
@@ -695,7 +695,9 @@
 <li><strong>失鲜独立告警</strong>：健康值的采样时间戳单独一个 Zabbix 对象，<strong>文件停止更新本身就是告警</strong>——巡检挂了比业务挂了更可怕，因为它让你以为业务还活着</li>
 </ul>
 <p>Zabbix 侧四个对象：原始状态、健康值、采样时间戳，再加异常与失鲜两条告警规则。失鲜规则盯时间戳不盯数值，专治「旧文件假绿」。</p>
-<h3 id="3-AD-组同步（cron-每日-03-30，自研脚本）"><a href="#3-AD-组同步（cron-每日-03-30，自研脚本）" class="headerlink" title="3. AD 组同步（cron 每日 03:30，自研脚本）"></a>3. AD 组同步（cron 每日 03:30，自研脚本）</h3><p>LDAP 只解决「用户能登录」，不解决「用户进对组」。自研同步脚本每天把 AD 组结构重算成 JumpServer 用户组，设计约束四条：</p>
+<h3 id="3-身份层：LDAP-登录-AD-部门自动映射（cron-每日-03-30，自研脚本）"><a href="#3-身份层：LDAP-登录-AD-部门自动映射（cron-每日-03-30，自研脚本）" class="headerlink" title="3. 身份层：LDAP 登录 + AD 部门自动映射（cron 每日 03:30，自研脚本）"></a>3. 身份层：LDAP 登录 + AD 部门自动映射（cron 每日 03:30，自研脚本）</h3><p>身份分两层。第一层是登录：JumpServer 的 LDAP 认证直接对接 AD，80 个域用户零本地账号，Base DN 与过滤条件按部门 OU 收口——范围填小同步不到人，填大会把服务账号、停用账号一起拉进来，这是 LDAP 配置里最容易翻车的地方。</p>
+<p>第二层是部门归属：LDAP 只解决「能登录」，不解决「进对组」。自研同步脚本每天把 AD 的部门/组结构重算成 JumpServer 用户组，规则很直接——AD 里 OU=研发的人自动进 JMS 的 <code>dev</code> 组，OU=运维进 <code>ops</code> 组，脚本维护一份部门到组的映射表。入职加进 AD 对应 OU，第二天 03:30 同步跑完就自动出现在堡垒机对应组里，管理员不建任何账号；离职在 AD 禁用，脚本跳过禁用账号，自动从组里移出。</p>
+<p>设计约束四条：</p>
 <ul>
 <li><strong>幂等</strong>：全量重算 + 差异 PATCH，跑一百次和跑一次结果一样</li>
 <li><strong>白名单</strong>：<code>systemadmin</code> 等系统组永不触碰，脚本写错也不炸管理通道</li>
@@ -717,6 +719,73 @@
 </ol>
 <p>这个故障的教训是结构性的：<strong>启用状态的残留比禁用状态的残留危险得多</strong>。禁用只是占地方，启用就是活的故障源。所以加固清单里有一条专门的动作——把 v5 残留的服务账号全部停用，组件统计接口里允许出现「历史离线项」，不清零图表（清零意味着删审计数据，更亏）。</p>
 <p>还有一个更隐蔽的并发问题，当时准备补丁但按最小变更原则没有立即上生产：定时任务 <code>clean_orphan_session</code> 会把「尚未发送首次心跳的新建会话」误判为孤儿提前结束——会话实际在跑、录像还在写，数据库里却已标结束。补丁思路是给清理任务加 5 分钟宽限期，隔离环境复现竞态 + 5 项回归测试通过后才算数，等待生产任务进程重载窗口再上。<strong>补丁没上生产之前，它只是补丁</strong>。</p>
+<h2 id="Agent-通道：让-AI-Agent-用-JMS-API-干活"><a href="#Agent-通道：让-AI-Agent-用-JMS-API-干活" class="headerlink" title="Agent 通道：让 AI Agent 用 JMS API 干活"></a>Agent 通道：让 AI Agent 用 JMS API 干活</h2><p>堡垒机解决的是「人怎么安全地操作资产」。但运维动作越来越多由 AI Agent 发起——排障脚本、自动纳管、定期巡检。Agent 没有浏览器、没有 session cookie、没有鼠标，它只有一条路：API。</p>
+<h3 id="认证：AccessKey-HMAC-SHA256-签名"><a href="#认证：AccessKey-HMAC-SHA256-签名" class="headerlink" title="认证：AccessKey HMAC-SHA256 签名"></a>认证：AccessKey HMAC-SHA256 签名</h3><p>JumpServer 的 Admin API 支持 AccessKey 认证。给 Agent 建一个专用服务账号，生成一对 AK/SK，之后每个请求都带签名头：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Authorization: Signature keyId=&quot;&lt;AK&gt;&quot;, algorithm=&quot;hmac-sha256&quot;,</span><br><span class="line">  headers=&quot;(request-target) date&quot;,</span><br><span class="line">  signature=&quot;&lt;base64(HMAC-SHA256(SK, &#x27;(request-target): &lt;method&gt; &lt;path&gt;\ndate: &lt;date&gt;&#x27;))&gt;&quot;</span><br><span class="line"></span><br><span class="line">Date: &lt;RFC 1123 GMT 时间&gt;</span><br></pre></td></tr></table></figure>
+
+<p>为什么不用 Token 或 Basic Auth：</p>
+<ul>
+<li><strong>Token 要刷新、会过期</strong>，Agent 长跑任务跑到一半 token 失效就断链。HMAC 签名无状态，AK/SK 不变就永远有效</li>
+<li><strong>Basic Auth 把密码放每个请求头</strong>，日志一漏全漏。HMAC 只泄露签名，SK 本身不上网</li>
+<li><strong>签名绑定 <code>(request-target) + date</code></strong>，重放攻击的时间窗口被 date 卡死（服务端校验时间差）</li>
+</ul>
+<p>这套签名和上面 AD 组同步脚本用的是同一套——同步脚本就是 Agent 认证的第一次实战，跑了一年多没出过认证问题。</p>
+<h3 id="Agent-能干什么：管理员权限的-API-面"><a href="#Agent-能干什么：管理员权限的-API-面" class="headerlink" title="Agent 能干什么：管理员权限的 API 面"></a>Agent 能干什么：管理员权限的 API 面</h3><p>JMS Admin API 把 Web 界面上管理员能做的操作全部暴露了。Agent 用同一个 AK/SK，能干的事包括：</p>
+<table>
+<thead>
+<tr>
+<th>动作</th>
+<th>API 端点</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>添加资产</td>
+<td><code>POST /api/v1/assets/assets/</code></td>
+<td>指定地址、平台、协议，自动进入资产列表</td>
+</tr>
+<tr>
+<td>添加账号</td>
+<td><code>POST /api/v1/assets/&lt;id&gt;/accounts/</code></td>
+<td>给资产绑定登录凭据（用户名+密码/密钥）</td>
+</tr>
+<tr>
+<td>创建授权</td>
+<td><code>POST /api/v1/perms/asset-permissions/</code></td>
+<td>把用户组 × 资产 × 账号绑成一条规则</td>
+</tr>
+<tr>
+<td>查询会话</td>
+<td><code>GET /api/v1/terminal/sessions/</code></td>
+<td>谁正在连哪台机器、什么状态</td>
+</tr>
+<tr>
+<td>结束会话</td>
+<td><code>PATCH /api/v1/terminal/sessions/&lt;id&gt;/</code></td>
+<td>Agent 发现异常会话可以直接踢</td>
+</tr>
+<tr>
+<td>系统升级</td>
+<td><code>POST /api/v1/settings/...</code> 或 <code>jmsctl upgrade</code></td>
+<td>版本管理</td>
+</tr>
+</tbody></table>
+<p>关键点是<strong>管理员权限</strong>：Agent 用 admin 角色的 AK/SK，操作等价于管理员在 Web 界面上点鼠标。纳管新服务器、给新入职员工开权限、结束异常会话——这些以前必须找一个有 Web 登录权限的人来点，现在 Agent 直接完成。</p>
+<h3 id="实操：Codex-通过-JMS-API-纳管资产"><a href="#实操：Codex-通过-JMS-API-纳管资产" class="headerlink" title="实操：Codex 通过 JMS API 纳管资产"></a>实操：Codex 通过 JMS API 纳管资产</h3><p>一个完整的「Agent 纳管新资产」流程：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests, hmac, hashlib, base64</span><br><span class="line"><span class="keyword">from</span> email.utils <span class="keyword">import</span> formatdate</span><br><span class="line"></span><br><span class="line">AK = <span class="string">&quot;your-access-key-id&quot;</span></span><br><span class="line">SK = <span class="string">&quot;your-secret-key&quot;</span></span><br><span class="line">BASE = <span class="string">&quot;https://jms.example.com/api/v1&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sign</span>(<span class="params">method, path, date</span>):</span><br><span class="line">    string_to_sign = <span class="string">f&quot;(request-target): <span class="subst">&#123;method.lower()&#125;</span> <span class="subst">&#123;path&#125;</span>\ndate: <span class="subst">&#123;date&#125;</span>&quot;</span></span><br><span class="line">    sig = base64.b64encode(</span><br><span class="line">        hmac.new(SK.encode(), string_to_sign.encode(), hashlib.sha256).digest()</span><br><span class="line">    ).decode()</span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&#x27;Signature keyId=&quot;<span class="subst">&#123;AK&#125;</span>&quot;,algorithm=&quot;hmac-sha256&quot;,headers=&quot;(request-target) date&quot;,signature=&quot;<span class="subst">&#123;sig&#125;</span>&quot;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">api_request</span>(<span class="params">method, path, body=<span class="literal">None</span></span>):</span><br><span class="line">    date = formatdate(usegmt=<span class="literal">True</span>)</span><br><span class="line">    headers = &#123;<span class="string">&quot;Date&quot;</span>: date, <span class="string">&quot;Authorization&quot;</span>: sign(method, path, date)&#125;</span><br><span class="line">    <span class="keyword">if</span> body: headers[<span class="string">&quot;Content-Type&quot;</span>] = <span class="string">&quot;application/json&quot;</span></span><br><span class="line">    <span class="keyword">return</span> requests.request(method, BASE + path, json=body, headers=headers, timeout=<span class="number">30</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 添加资产</span></span><br><span class="line">asset = api_request(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;/assets/assets/&quot;</span>, &#123;</span><br><span class="line">    <span class="string">&quot;name&quot;</span>: <span class="string">&quot;新服务器-01&quot;</span>,</span><br><span class="line">    <span class="string">&quot;address&quot;</span>: <span class="string">&quot;10.0.2.50&quot;</span>,</span><br><span class="line">    <span class="string">&quot;platform&quot;</span>: <span class="string">&quot;Linux&quot;</span>,</span><br><span class="line">    <span class="string">&quot;protocols&quot;</span>: [&#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;ssh&quot;</span>, <span class="string">&quot;port&quot;</span>: <span class="number">22</span>&#125;],</span><br><span class="line">    <span class="string">&quot;nodes&quot;</span>: [<span class="string">&quot;/运维/生产环境&quot;</span>]   <span class="comment"># 资产节点 ID</span></span><br><span class="line">&#125;).json()</span><br><span class="line">asset_id = asset[<span class="string">&quot;id&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 绑定登录账号</span></span><br><span class="line">api_request(<span class="string">&quot;POST&quot;</span>, <span class="string">f&quot;/assets/<span class="subst">&#123;asset_id&#125;</span>/accounts/&quot;</span>, &#123;</span><br><span class="line">    <span class="string">&quot;name&quot;</span>: <span class="string">&quot;root&quot;</span>,</span><br><span class="line">    <span class="string">&quot;username&quot;</span>: <span class="string">&quot;root&quot;</span>,</span><br><span class="line">    <span class="string">&quot;secret&quot;</span>: <span class="string">&quot;the-password&quot;</span>,   <span class="comment"># 或 SSH 密钥</span></span><br><span class="line">    <span class="string">&quot;secret_type&quot;</span>: <span class="string">&quot;password&quot;</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 授权给运维组</span></span><br><span class="line">api_request(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;/perms/asset-permissions/&quot;</span>, &#123;</span><br><span class="line">    <span class="string">&quot;name&quot;</span>: <span class="string">&quot;运维组-新服务器-01&quot;</span>,</span><br><span class="line">    <span class="string">&quot;users&quot;</span>: [],</span><br><span class="line">    <span class="string">&quot;user_groups&quot;</span>: [<span class="string">&quot;&lt;运维组ID&gt;&quot;</span>],</span><br><span class="line">    <span class="string">&quot;assets&quot;</span>: [asset_id],</span><br><span class="line">    <span class="string">&quot;accounts&quot;</span>: [<span class="string">&quot;root&quot;</span>],</span><br><span class="line">    <span class="string">&quot;actions&quot;</span>: [<span class="string">&quot;connect&quot;</span>, <span class="string">&quot;upload&quot;</span>, <span class="string">&quot;download&quot;</span>, <span class="string">&quot;refresh&quot;</span>],</span><br><span class="line">    <span class="string">&quot;date_expired&quot;</span>: <span class="string">&quot;2099-12-31&quot;</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 验证：回读授权规则</span></span><br><span class="line">rules = api_request(<span class="string">&quot;GET&quot;</span>, <span class="string">f&quot;/perms/asset-permissions/?name=运维组-新服务器-01&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;授权规则已创建: <span class="subst">&#123;rules.json()[<span class="string">&#x27;count&#x27;</span>]&#125;</span> 条&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>四步走完，一台新服务器从「裸 IP」变成「运维组可通过堡垒机 SSH 连接、有录像审计的纳管资产」。全程 Agent 完成，人只负责确认。</p>
+<h3 id="宿主机-OS-账户：打通最后一环"><a href="#宿主机-OS-账户：打通最后一环" class="headerlink" title="宿主机 OS 账户：打通最后一环"></a>宿主机 OS 账户：打通最后一环</h3><p>资产纳管只解决了「堡垒机能跳过去」。Agent 要真正操作宿主机（装补丁、改配置、重启服务），还需要宿主机 OS 层的凭据。两个来源：</p>
+<ul>
+<li><strong>JMS 资产账号</strong>：上面第 2 步绑定的 root 密码/密钥。Agent 从 JMS API 读取该账号的 secret，通过 SSH/RDP 协议网关（koko 2222 / razor 3389）建立连接</li>
+<li><strong>独立凭据库</strong>：宿主机管理员密码存在 Agent 的凭据库（如 <code>~/.config/</code> 下 mode 600 文件），不走 JMS 账号体系。适合宿主机本身不在 JMS 纳管范围的情况</li>
+</ul>
+<p>我们的实际做法是<strong>双轨并行</strong>：宿主机已纳管 JMS 的，Agent 走 JMS 账号（好处是每次连接都有录像审计）；未纳管的，走独立凭据库（好处是不受 JMS 故障影响）。后续方向是全部收口到 JMS 账号——<strong>Agent 的每一次 OS 操作都落在堡垒机录像里</strong>，这就是 AI Native 的执行审计层。</p>
+<h3 id="AI-Native-闭环"><a href="#AI-Native-闭环" class="headerlink" title="AI Native 闭环"></a>AI Native 闭环</h3><p>把上面三块拼起来，运维闭环变成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">人（自然语言）→ AI Agent（Codex）</span><br><span class="line">                    │</span><br><span class="line">                    ├── JMS Admin API（HMAC 签名）</span><br><span class="line">                    │     ├── 添加资产 + 账号 + 授权</span><br><span class="line">                    │     ├── 查询/结束会话</span><br><span class="line">                    │     └── 系统设置/升级</span><br><span class="line">                    │</span><br><span class="line">                    ├── SSH/RDP 协议网关（koko/razor）</span><br><span class="line">                    │     └── 宿主机 OS 操作（装补丁/改配置/重启）</span><br><span class="line">                    │</span><br><span class="line">                    └── 录像归档（每次连接自动录像）</span><br><span class="line">                          └── 审计层：谁（Agent）在什么时候对哪台机器做了什么</span><br></pre></td></tr></table></figure>
+
+<p>这比传统「人登录堡垒机 → 点鼠标 → 操作宿主机」多了两件事：<strong>操作者可以是机器</strong>（无头 Agent 不需要浏览器），<strong>每一次操作都有录像</strong>（Agent 干的事和人干的事审计标准一致）。</p>
+<p>未闭环：Agent 的 AK/SK 目前是 admin 全权限，还没有做按操作粒度收权（只给资产写权限不给用户管理权限）。下一步是 JMS 的角色权限体系拆细，给 Agent 一个「能管资产但不能改用户」的中间角色。</p>
 <h2 id="回退策略：按对象，不按整库"><a href="#回退策略：按对象，不按整库" class="headerlink" title="回退策略：按对象，不按整库"></a>回退策略：按对象，不按整库</h2><p>所有加固项在动生产前先落备份，且备份分两层：</p>
 <ul>
 <li>主机层 <code>/var/backups/jms-hardening-&lt;日期&gt;/</code>：修改前的数据库 dump、旧配置、旧 crontab</li>
@@ -739,8 +808,11 @@
 <li><strong>孤儿会话宽限补丁</strong>在隔离环境验证完毕，待生产重载窗口</li>
 <li><strong>授权规则回收机制</strong>：存量规则接近永久有效且含个人名规则，收敛方案已定（独立账号优先、特权按需带有效期），执行未完成</li>
 <li><strong>Zabbix 告警的通知送达</strong>没做过故障演练。采集正常不等于告警真能到值班人手上</li>
+<li><strong>Agent 权限粒度</strong>：Agent 的 AK/SK 目前是 admin 全权限，还没拆出「能管资产不能改用户」的中间角色</li>
+<li><strong>整库恢复演练</strong>之外还差一次「Agent 全流程演练」：用 Agent 跑一遍 纳管→授权→SSH 操作→回读录像 的完整链路并在生产验收</li>
 </ul>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>单节点不丢人，丢人的是单节点装完就不管。这篇的四个 timer 加一套按对象的回退策略，本质是把「这台机器现在活着」变成「这台机器活着这件事可以被独立验证」——备份能读、巡检能证明在跑、巡检挂了也会响、回退按对象取原值。</p>
+<p>再往前一步是把操作者也变成可验证的：AD 部门映射让「人进对组」自动化，HMAC 签名让 Agent 能拿着和同步脚本同一套认证直接调管理员 API，录像归档让 Agent 干的每一件事都有审计留痕。堡垒机从「人的入口」变成「人和 Agent 共用的受控执行层」，这是这套环境里 AI Native 落得最实的一块。</p>
 <p>下一阶段的增量是隔离备份目标和整库恢复演练，把「未闭环」清单上的前两条划掉。届时堡垒机的故障域才算真正从单盘里搬出去。</p>
 
                 
@@ -1192,7 +1264,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">42.4k</span>&nbsp;字
+                class="white-color">44.4k</span>&nbsp;字
             
             
             
