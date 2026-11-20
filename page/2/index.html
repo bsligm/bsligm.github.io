@@ -383,7 +383,7 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                2023 年 5 月 Chromium 内核升级 v113 后，部分终端的 Chrome/Edge 无法启动：标签页提示「喔唷，崩溃了，此网页出现问题」，进程异常终止，错误码 STATUS_STACK_BUFFER_OVERRUN。域内环境
+                                终端与应用层的交付物一致性里有一类最难处理的故障：同一台装法、同一批镜像的机器，某个内核版本升级后浏览器整批起不来。2023 年 5 月 Chromium 内核到 v113 后，部分终端的 Chrome/Edge 启动即崩，错误码 STAT
                             
                         </div>
                         <div class="publish-info">
@@ -449,7 +449,7 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                IT 支持中常遇到一类两难需求：某个仍在使用的管理系统只兼容过时的浏览器与插件，而这些组件本身已不适合装在办公机上。本案例即属此类：打印机联机认证使用理光的格兰林系统，删除已注册 IC 卡时必须在 IE 中访问其后台，后台依赖 Flash 
+                                终端管理里有一类需求靠账号体系压不住：某个仍在使用的管理系统只兼容过时的浏览器与插件，而这些组件本身已不适合装在办公机上。本案例即属此类：打印机联机认证使用理光的格兰林系统，删除已注册 IC 卡时必须在 IE 中访问其后台，后台依赖 Fla
                             
                         </div>
                         <div class="publish-info">
@@ -507,10 +507,7 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                BitLocker 是 Windows 自带的全盘加密。域环境里靠组策略完成策略下发、批量启用与恢复密钥集中备份，不用逐台操作。这篇给出一套已验证的落地方案：域控制器组件准备 → 客户端脚本 → 组策略配置 → 实施与验证。
-前置条件
-
-客
+                                BitLocker 补上设备侧的一环：账号在域上，密码会泄露，盘里的数据不能只靠登录密码守着。域环境里靠组策略完成策略下发、批量启用与恢复密钥集中备份，不用逐台操作。这篇给出一套已验证的落地方案：域控制器组件准备 → 客户端脚本 → 组策略
                             
                         </div>
                         <div class="publish-info">
@@ -572,7 +569,7 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                Active Directory（AD）域服务提供集中式的身份认证、账号与资源管理能力，是 Windows 域环境的基石。本文记录从裸机安装 Windows Server 到完成域控制器（DC）部署的完整流程：安装方式选择 → 系统基础配置
+                                这是身份体系的起点。公司与家庭两套环境，各由一台 Windows Server 域控制器作身份底座：JumpServer 的 LDAP 同步、BitLocker 恢复密钥托管、终端封装的组策略、应用隔离的专用账号，全部挂在这套身份上。终端管
                             
                         </div>
                         <div class="publish-info">
@@ -630,8 +627,8 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                Windows 10/11 上的 Microsoft Edge 在部分终端启动后任意网页都无法加载，页面统一提示兼容性问题。故障与站点内容无关、影响整机 Edge 实例，在刚推送安全更新或部署了第三方安全软件的终端上更集中。
-处置分两条路径
+                                域环境终端的默认浏览器是 Edge，它挂掉时所有走浏览器的业务入口一起断。这个故障与站点内容无关、影响整机 Edge 实例，在刚推送安全更新或部署了第三方安全软件的终端上更集中。「兼容性问题」的提示文案有误导性，真实触发点见下节。
+处置分两
                             
                         </div>
                         <div class="publish-info">
@@ -689,7 +686,7 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                在 macOS 上安装或打开应用时，可能出现「XXXX 已损坏，无法打开。你应该将它移到废纸篓。」的提示，应用被直接拒绝启动。这是 Gatekeeper 与隔离属性（quarantine）机制的共同结果：本意是阻止未公证来源的可执行文件运行
+                                域环境统一管的是 Windows 终端，macOS 是用户自带设备的入口，mac 上的应用放行策略没人管，「App 已损坏」就成了桌面支持的高频工单。这个提示是 Gatekeeper 与隔离属性（quarantine）机制的共同结果：本意是
                             
                         </div>
                         <div class="publish-info">
@@ -780,7 +777,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">44.4k</span>&nbsp;字
+                class="white-color">49.7k</span>&nbsp;字
             
             
             

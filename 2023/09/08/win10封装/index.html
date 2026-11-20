@@ -5,8 +5,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Win10封装, 系统部署, 批量部署, 镜像制作, NTlite, Dism++, 系统优化">
-    <meta name="description" content="企业批量装机，各部门的定制软件、环境变量、本地策略不完全一样，逐台手工配置的时间成本随终端数量线性增长，且难以保证一致性。
-系统封装的思路是把标准软件、环境配置、系统变量与本地策略预先配置好，连同系统状态一并打包成可分发的 ISO，装机时只">
+    <meta name="description" content="终端与应用层要解决的核心问题是交付物一致性：100 台机器和 1 台行为一样。封装把标准软件、环境配置与本地策略压进一个镜像，批量交付不再靠人肉装系统，一致性由镜像保证，装机只做一次写入。
+这篇记录一份 Windows 10 基线镜像的完整">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -14,7 +14,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/09/08/win10%E5%B0%81%E8%A3%85/&#34;},&#34;headline&#34;:&#34;Windows 10 系统封装详细教程&#34;,&#34;description&#34;:&#34;企业批量装机，各部门的定制软件、环境变量、本地策略不完全一样，逐台手工配置的时间成本随终端数量线性增长，且难以保证一致性。\n系统封装的思路是把标准软件、环境配置、系统变量与本地策略预先配置好，连同系统状态一并打包成可分发的 ISO，装机时只&#34;,&#34;datePublished&#34;:&#34;2023-09-08T07:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/09/08/win10%E5%B0%81%E8%A3%85/&#34;},&#34;headline&#34;:&#34;Windows 10 系统封装详细教程&#34;,&#34;description&#34;:&#34;终端与应用层要解决的核心问题是交付物一致性：100 台机器和 1 台行为一样。封装把标准软件、环境配置与本地策略压进一个镜像，批量交付不再靠人肉装系统，一致性由镜像保证，装机只做一次写入。\n这篇记录一份 Windows 10 基线镜像的完整&#34;,&#34;datePublished&#34;:&#34;2023-09-08T07:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -23,8 +23,8 @@
     <meta property="og:title" content="Windows 10 系统封装详细教程 | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2023/09/08/win10%E5%B0%81%E8%A3%85/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="企业批量装机，各部门的定制软件、环境变量、本地策略不完全一样，逐台手工配置的时间成本随终端数量线性增长，且难以保证一致性。
-系统封装的思路是把标准软件、环境配置、系统变量与本地策略预先配置好，连同系统状态一并打包成可分发的 ISO，装机时只">
+    <meta property="og:description" content="终端与应用层要解决的核心问题是交付物一致性：100 台机器和 1 台行为一样。封装把标准软件、环境配置与本地策略压进一个镜像，批量交付不再靠人肉装系统，一致性由镜像保证，装机只做一次写入。
+这篇记录一份 Windows 10 基线镜像的完整">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/3.jpg">
     
@@ -499,14 +499,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.6k
+                    2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    7 分
                 </div>
                 
 
@@ -526,8 +526,15 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>企业批量装机，各部门的定制软件、环境变量、本地策略不完全一样，逐台手工配置的时间成本随终端数量线性增长，且难以保证一致性。</p>
-<p>系统封装的思路是把标准软件、环境配置、系统变量与本地策略预先配置好，连同系统状态一并打包成可分发的 ISO，装机时只做一次镜像写入。下文按虚拟机准备、系统与账户配置、策略与优化、清理备份、ISO 打包的顺序记录完整过程。</p>
+                <p>终端与应用层要解决的核心问题是交付物一致性：100 台机器和 1 台行为一样。封装把标准软件、环境配置与本地策略压进一个镜像，批量交付不再靠人肉装系统，一致性由镜像保证，装机只做一次写入。</p>
+<p>这篇记录一份 Windows 10 基线镜像的完整制作流程：虚拟机当工位、装系统配账户、装标准软件、清理备份、用 NTlite 替换 <code>install.esd</code> 重打包 ISO。下面按原流程走一遍，每个环节为什么这么选、代价是什么，集中在「关键设计决策」一节。</p>
+<h2 id="关键设计决策"><a href="#关键设计决策" class="headerlink" title="关键设计决策"></a>关键设计决策</h2><ul>
+<li><strong>镜像替换 vs sysprep 离线捕获。</strong> 这份镜像走的是替换 ISO 内 <code>install.esd</code> 的路线，部署时仍是一次完整安装，OOBE 照常走。好处是制作简单、不碰 sysprep 的边界；代价是累积补丁会让镜像漂移（末节展开），且流程里没有显式泛化步骤——各台部署出来的 SID 是否一致，进 AD 域前需按实际行为确认（见「待人工确认」）。</li>
+<li><strong>Dism++ 增量备份。</strong> 多个镜像版本共用一个文件、只存差异，省空间。链条是相互依赖的：回滚到旧版本需要前面所有链文件都在，断一环就不能独立回退。</li>
+<li><strong>账户策略。</strong> OOBE 默认建的普通用户会删掉，改用内置 Administrator 完成封装，镜像里不带业务用户的 profile 目录。Administrator 自己的 profile 留在镜像里，部署出的机器首次开箱就是 Administrator 身份——这条要写进基线文档。</li>
+<li><strong>电源方案带回退。</strong> 卓越性能只在部分平台（工作站/HEDT）可见，装机按「卓越性能 → 高性能」顺序探测回退，避免笔记本上硬编码一个方案。</li>
+<li><strong>最小镜像原则。</strong> 改动越少，镜像适用面越广、维护越轻。「封装内容小结」把实际改动逐项列出，改版时能对账，也是验收时的决策标准。</li>
+</ul>
 <h2 id="事前准备"><a href="#事前准备" class="headerlink" title="事前准备"></a>事前准备</h2><table>
 <thead>
 <tr>
@@ -626,7 +633,7 @@
 <li>Edge 中预装 Adblock Plus 与百度药丸扩展</li>
 <li>按需启用所需 Windows 功能组件</li>
 </ol>
-<p>改动越少，镜像的适用面越广、后续维护越轻。每多预装一项，就多一项要在下次改版时重新验证的东西。</p>
+<p>每多预装一项，就多一项要在下次改版时重新验证的东西——这条在「关键设计决策」里作为验收标准，改版前先过一遍这份小结。</p>
 <h2 id="ISO-镜像打包"><a href="#ISO-镜像打包" class="headerlink" title="ISO 镜像打包"></a>ISO 镜像打包</h2><h3 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1. 准备工作"></a>1. 准备工作</h3><ol>
 <li>解压原版 ISO</li>
 <li>将封装得到的 ESD 文件重命名为 <code>install.esd</code></li>
@@ -664,6 +671,10 @@
 </ol>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>流程主线是：虚拟机内装系统 → 用 Administrator 完成软件与策略预配置 → Dism++ 清理并备份 → 用 NTlite 替换 <code>install.esd</code> 重打包 ISO。终端越多，省下的重复装机时间越可观。</p>
 <p>不过镜像不是做完就一劳永逸：累积补丁会把镜像越拉越旧，新机型也会缺驱动。每个镜像版本都要留下「基于哪个 ISO、打了哪批补丁、在哪些真机验证过驱动/加域/软件」的记录，否则半年后没人说得清手上这份镜像处于什么状态，只能从头再封一次。</p>
+<h2 id="待人工确认"><a href="#待人工确认" class="headerlink" title="待人工确认"></a>待人工确认</h2><ul>
+<li>封装流程未显式调用 <code>sysprep /generalize</code>：各台部署出来的机器 SID 是否一致、进 AD 域前是否需要手动泛化，按所用 Dism++ 版本的实际行为确认；</li>
+<li>「百度药丸」Edge 扩展的官方分发地址：正文仅有截图未给出链接，引用前核实来源。</li>
+</ul>
 
                 
             </div>
@@ -1108,7 +1119,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">44.4k</span>&nbsp;字
+                class="white-color">49.7k</span>&nbsp;字
             
             
             

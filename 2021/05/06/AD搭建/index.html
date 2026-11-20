@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Windows Server, AD域, 服务器安装, 域控制器, Active Directory">
-    <meta name="description" content="Active Directory（AD）域服务提供集中式的身份认证、账号与资源管理能力，是 Windows 域环境的基石。本文记录从裸机安装 Windows Server 到完成域控制器（DC）部署的完整流程：安装方式选择 → 系统基础配置">
+    <meta name="keywords" content="Windows Server, AD域, 服务器安装, 域控制器, Active Directory, SYSVOL, DSRM, 域控部署">
+    <meta name="description" content="这是身份体系的起点。公司与家庭两套环境，各由一台 Windows Server 域控制器作身份底座：JumpServer 的 LDAP 同步、BitLocker 恢复密钥托管、终端封装的组策略、应用隔离的专用账号，全部挂在这套身份上。终端管">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2021/05/06/AD%E6%90%AD%E5%BB%BA/&#34;},&#34;headline&#34;:&#34;Windows Server安装以及AD域服务搭建&#34;,&#34;description&#34;:&#34;Active Directory（AD）域服务提供集中式的身份认证、账号与资源管理能力，是 Windows 域环境的基石。本文记录从裸机安装 Windows Server 到完成域控制器（DC）部署的完整流程：安装方式选择 → 系统基础配置&#34;,&#34;datePublished&#34;:&#34;2021-05-06T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2021/05/06/AD%E6%90%AD%E5%BB%BA/&#34;},&#34;headline&#34;:&#34;Windows Server安装以及AD域服务搭建&#34;,&#34;description&#34;:&#34;这是身份体系的起点。公司与家庭两套环境，各由一台 Windows Server 域控制器作身份底座：JumpServer 的 LDAP 同步、BitLocker 恢复密钥托管、终端封装的组策略、应用隔离的专用账号，全部挂在这套身份上。终端管&#34;,&#34;datePublished&#34;:&#34;2021-05-06T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -22,7 +22,7 @@
     <meta property="og:title" content="Windows Server安装以及AD域服务搭建 | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2021/05/06/AD%E6%90%AD%E5%BB%BA/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="Active Directory（AD）域服务提供集中式的身份认证、账号与资源管理能力，是 Windows 域环境的基石。本文记录从裸机安装 Windows Server 到完成域控制器（DC）部署的完整流程：安装方式选择 → 系统基础配置">
+    <meta property="og:description" content="这是身份体系的起点。公司与家庭两套环境，各由一台 Windows Server 域控制器作身份底座：JumpServer 的 LDAP 同步、BitLocker 恢复密钥托管、终端封装的组策略、应用隔离的专用账号，全部挂在这套身份上。终端管">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/0.jpg">
     
@@ -497,14 +497,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.7k
+                    3.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    9 分
+                    10 分
                 </div>
                 
 
@@ -524,9 +524,39 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Active Directory（AD）域服务提供集中式的身份认证、账号与资源管理能力，是 Windows 域环境的基石。本文记录从裸机安装 Windows Server 到完成域控制器（DC）部署的完整流程：安装方式选择 → 系统基础配置 → 添加 AD 角色 → 提升为域控制器 → 结果验证。</p>
-<p>适用于新建小型域环境，或为现有域增补域控的场景。执行前需具备 Windows Server 安装镜像，以及服务器物理访问权限或带外管理接口访问权限。</p>
-<h2 id="系统安装准备"><a href="#系统安装准备" class="headerlink" title="系统安装准备"></a>系统安装准备</h2><p>安装服务器系统的方式有很多，除常规的 U 盘安装介质外，也可以通过 iDRAC 等带外管理接口挂载镜像远程安装。</p>
+                <p>这是身份体系的起点。公司与家庭两套环境，各由一台 Windows Server 域控制器作身份底座：JumpServer 的 LDAP 同步、BitLocker 恢复密钥托管、终端封装的组策略、应用隔离的专用账号，全部挂在这套身份上。终端管理解决的是「机器和账号可信」——登录用哪个域账号、设备落在哪个计算机对象、拉取哪套策略，这一层立不住，上面各层都是临时的。日后 AI Agent 接入时用的无头身份与服务账号，也要先在 AD 里立户。</p>
+<p>本文记录从裸机安装 Windows Server 到完成域控制器（DC）部署的完整流程：安装方式选择 → 系统基础配置 → 添加 AD 角色 → 提升为域控制器 → 结果验证。适用于新建小型域环境，或为现有域增补域控的场景。执行前需具备 Windows Server 安装镜像，以及服务器物理访问权限或带外管理接口访问权限。</p>
+<h2 id="关键设计决策"><a href="#关键设计决策" class="headerlink" title="关键设计决策"></a>关键设计决策</h2><p>提升向导跑完之前要做的几个决策，代价一并列出：</p>
+<table>
+<thead>
+<tr>
+<th>决策</th>
+<th>为什么这么选</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>计算机名在提升前定稿</td>
+<td>改名牵动已下发的组策略引用、计算机对象、按名称写死的脚本与共享路径</td>
+<td>命名要一次想好体现机房、角色与序号；超 15 字符被 NetBIOS 截断</td>
+</tr>
+<tr>
+<td>网卡静态 IP、DNS 首选指向本机 <code>127.0.0.1</code></td>
+<td>AD 与 DNS 同机共生是硬依赖：SRV 记录定位、客户端加域全靠它</td>
+<td>地址变更会让 <code>_msdcs</code> 区域记录失配，症状是间歇性登录变慢而非直接报错，排查成本高</td>
+</tr>
+<tr>
+<td>单台域控，SYSVOL 用默认 DFS 复制</td>
+<td>小型域环境一台够用；2008 R2 起默认 DFSR 替代旧 FRS，无需额外配置</td>
+<td>故障域是整个域：故障期间加域、域登录、组策略刷新全部不可用，System State 备份替代不了在线域控</td>
+</tr>
+<tr>
+<td>AD 数据库、日志、SYSVOL 保持系统盘默认</td>
+<td>只有一块盘，分盘徒增恢复路径</td>
+<td>单盘故障全失，依赖 System State 备份加一次真实还原演练</td>
+</tr>
+</tbody></table>
+<h2 id="系统安装准备"><a href="#系统安装准备" class="headerlink" title="系统安装准备"></a>系统安装准备</h2><p>除 U 盘安装介质外，也可以通过 iDRAC 等带外管理接口挂载镜像远程安装。</p>
 <h3 id="1-U-盘安装方式"><a href="#1-U-盘安装方式" class="headerlink" title="1. U 盘安装方式"></a>1. U 盘安装方式</h3><p>使用 U 盘安装介质时需要注意以下事项：</p>
 <ul>
 <li>如果服务器有阵列卡，需要提前到品牌官网下载对应驱动，否则可能无法识别磁盘</li>
@@ -1099,7 +1129,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">44.4k</span>&nbsp;字
+                class="white-color">49.7k</span>&nbsp;字
             
             
             

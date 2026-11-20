@@ -494,7 +494,7 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                Active Directory（AD）域服务提供集中式的身份认证、账号与资源管理能力，是 Windows 域环境的基石。本文记录从裸机安装 Windows Server 到完成域控制器（DC）部署的完整流程：安装方式选择 → 系统基础配置
+                                这是身份体系的起点。公司与家庭两套环境，各由一台 Windows Server 域控制器作身份底座：JumpServer 的 LDAP 同步、BitLocker 恢复密钥托管、终端封装的组策略、应用隔离的专用账号，全部挂在这套身份上。终端管
                             
                         </div>
                         <div class="publish-info">
@@ -551,8 +551,8 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                Windows 10/11 上的 Microsoft Edge 在部分终端启动后任意网页都无法加载，页面统一提示兼容性问题。故障与站点内容无关、影响整机 Edge 实例，在刚推送安全更新或部署了第三方安全软件的终端上更集中。
-处置分两条路径
+                                域环境终端的默认浏览器是 Edge，它挂掉时所有走浏览器的业务入口一起断。这个故障与站点内容无关、影响整机 Edge 实例，在刚推送安全更新或部署了第三方安全软件的终端上更集中。「兼容性问题」的提示文案有误导性，真实触发点见下节。
+处置分两
                             
                         </div>
                         <div class="publish-info">
@@ -609,7 +609,7 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                在 macOS 上安装或打开应用时，可能出现「XXXX 已损坏，无法打开。你应该将它移到废纸篓。」的提示，应用被直接拒绝启动。这是 Gatekeeper 与隔离属性（quarantine）机制的共同结果：本意是阻止未公证来源的可执行文件运行
+                                域环境统一管的是 Windows 终端，macOS 是用户自带设备的入口，mac 上的应用放行策略没人管，「App 已损坏」就成了桌面支持的高频工单。这个提示是 Gatekeeper 与隔离属性（quarantine）机制的共同结果：本意是
                             
                         </div>
                         <div class="publish-info">
@@ -675,7 +675,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">44.4k</span>&nbsp;字
+                class="white-color">49.7k</span>&nbsp;字
             
             
             

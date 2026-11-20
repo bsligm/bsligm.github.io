@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="macOS 26, CrossOver Preview, GPTK3, 游戏移植工具包, 一键更新脚本, MetalFX, DLSS">
-    <meta name="description" content="CrossOver Preview 在 macOS 26 测试版上尚未完全适配新的游戏移植能力，需手工用 Apple Game Porting Toolkit 3（GPTK3）的文件替换 CrossOver 内置的同名组件，并额外配置 Me">
+    <meta name="description" content="macOS 上跑 Windows 应用有两条路线：虚拟机（重、独占 GPU）与 Wine 兼容层（轻、共享 GPU）。CrossOver 是后者的商业发行版，而 Apple 给开发者的 Game Porting Toolkit（GPTK）把">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2025/09/09/macOS-26-CrossOver-GPTK3%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0%E8%84%9A%E6%9C%AC/&#34;},&#34;headline&#34;:&#34;macOS 26 测试版 CrossOver Preview GPTK3 一键更新脚本&#34;,&#34;description&#34;:&#34;CrossOver Preview 在 macOS 26 测试版上尚未完全适配新的游戏移植能力，需手工用 Apple Game Porting Toolkit 3（GPTK3）的文件替换 CrossOver 内置的同名组件，并额外配置 Me&#34;,&#34;datePublished&#34;:&#34;2025-09-09T02:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2025/09/09/macOS-26-CrossOver-GPTK3%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0%E8%84%9A%E6%9C%AC/&#34;},&#34;headline&#34;:&#34;macOS 26 测试版 CrossOver Preview GPTK3 一键更新脚本&#34;,&#34;description&#34;:&#34;macOS 上跑 Windows 应用有两条路线：虚拟机（重、独占 GPU）与 Wine 兼容层（轻、共享 GPU）。CrossOver 是后者的商业发行版，而 Apple 给开发者的 Game Porting Toolkit（GPTK）把&#34;,&#34;datePublished&#34;:&#34;2025-09-09T02:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -22,7 +22,7 @@
     <meta property="og:title" content="macOS 26 测试版 CrossOver Preview GPTK3 一键更新脚本 | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2025/09/09/macOS-26-CrossOver-GPTK3%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0%E8%84%9A%E6%9C%AC/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="CrossOver Preview 在 macOS 26 测试版上尚未完全适配新的游戏移植能力，需手工用 Apple Game Porting Toolkit 3（GPTK3）的文件替换 CrossOver 内置的同名组件，并额外配置 Me">
+    <meta property="og:description" content="macOS 上跑 Windows 应用有两条路线：虚拟机（重、独占 GPU）与 Wine 兼容层（轻、共享 GPU）。CrossOver 是后者的商业发行版，而 Apple 给开发者的 Game Porting Toolkit（GPTK）把">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/1.jpg">
     
@@ -505,14 +505,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    6k
+                    6.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    29 分
+                    31 分
                 </div>
                 
 
@@ -532,9 +532,16 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>CrossOver Preview 在 macOS 26 测试版上尚未完全适配新的游戏移植能力，需手工用 Apple Game Porting Toolkit 3（GPTK3）的文件替换 CrossOver 内置的同名组件，并额外配置 MetalFX 相关文件。<code>crossover-gptk3.sh</code> 把这一过程自动化：校验环境、带时间戳备份、替换库文件、MD5 校验，出错时按备份回滚，最后按需把 DLL 复制进指定容器。</p>
-<p>保护机制都能事后核验：<code>external</code> 与 <code>wine</code> 先 <code>mv</code> 成 <code>*.backup.&lt;时间戳&gt;</code> 再复制新文件，任一改名失败即退出，此时按同一时间戳手工移回即可（两者按先后顺序改名，失败时可能只有一个已改名）。复制失败、或复制后这两个目录缺失，脚本立即用备份还原；MD5 校验失败不自动还原，只汇总失败数并询问是否继续。全部操作追加写入 <code>/tmp/crossover-gptk3-&lt;时间戳&gt;.log</code>，出问题以日志和备份目录为准。</p>
+                <p>macOS 上跑 Windows 应用有两条路线：虚拟机（重、独占 GPU）与 Wine 兼容层（轻、共享 GPU）。CrossOver 是后者的商业发行版，而 Apple 给开发者的 Game Porting Toolkit（GPTK）把 Metal 上跑 Windows 游戏所需的 DirectX 翻译、FXAA/DLSS 替代品（MetalFX）封装成一套 redist 库——CrossOver 应用包里内置了一份旧版 GPTK 组件（<code>apple_gptk</code> 目录）。</p>
+<p>CrossOver Preview 在 macOS 26 测试版上还没跟上 GPTK3，解法是手工把 GPTK 3.0 beta 3 的文件替换进 CrossOver 应用包，再给目标容器补上 <code>nvngx</code>（DLSS）→<code>nvngx-on-metalfx</code> 的映射。<code>crossover-gptk3.sh</code> 把这条路径自动化：校验环境、带时间戳备份、替换库文件、MD5 校验、失败回滚，随后按需把 DLL 复制进指定容器。这篇的价值在预研性质：它验证了「macOS + Wine 系 + 官方移植工具」这条路在公司 VDI/PXVDI 终端方案里的可行性，脚本本身是一次性交付物，升级后重跑即可。</p>
+<p>保护机制都能事后核验：<code>external</code> 与 <code>wine</code> 先 <code>mv</code> 成 <code>*.backup.&lt;时间戳&gt;</code> 再复制新文件，任一改名失败即退出（两者按先后顺序改名，失败时可能只有一个已改名）。复制失败、或复制后这两个目录缺失，脚本立即用备份还原；MD5 校验失败不自动还原，只汇总失败数并询问是否继续。全部操作追加写入 <code>/tmp/crossover-gptk3-&lt;时间戳&gt;.log</code>，出问题以日志和备份目录为准。</p>
 <p>适用范围：macOS 26 测试版 + CrossOver Preview + GPTK 3.0 beta 3。脚本修改 CrossOver 应用包内文件，属非官方改动，CrossOver 升级后需重新执行。</p>
+<h2 id="关键设计决策"><a href="#关键设计决策" class="headerlink" title="关键设计决策"></a>关键设计决策</h2><ul>
+<li><strong>为什么是脚本而不是 GUI。</strong> 这套操作要动的是应用包内 <code>/Applications/CrossOver.app/Contents/SharedSupport</code> 下的受保护目录，GUI 工具（甚至 Finder）在权限、隐藏文件、批量 MD5 三件事上都不顺手。脚本换来回的是可重复：备份、复制、校验、回滚每一步都能从日志重放，出错时不用靠记忆判断「刚才改到哪了」。代价是脚本绑定目录结构与文件清单，CrossOver 或 GPTK 升级后要先重核再跑。</li>
+<li><strong>版本锁定：为什么死绑 GPTK 3.0 beta 3。</strong> 脚本按卷名前缀（<code>Evaluation environment for Windows games</code>）匹配挂载点，按 <code>redist/lib</code> 的文件清单做 MD5 校验。Apple 的 GPTK 是 beta 节奏，版本间文件清单会增减。锁定版本的代价是时效——Apple 发新版后脚本会因找不到镜像或校验不过而中止，这是故意的：宁可失败也不要静默复制一份清单对不上的文件进应用包。</li>
+<li><strong>备份策略：先 <code>mv</code> 再复制，不原地覆盖。</strong> 应用包目录是「一个文件都丢不起」的状态：CrossOver 升级能还原，手工改坏不能。改名备份（而非复制备份）保证任意时刻磁盘上只有两份状态（原状或新状），中间态不存在；代价是备份和应用包同卷，同盘故障两者一起丢，脚本层面接受这个风险。</li>
+<li><strong>提权最小化：能不用 sudo 就不用。</strong> 脚本先测目录可写性再询问提权，且提权只作用于应用包内文件操作，容器目录（用户目录）始终不提权。MDM 管的机器上这条决定脚本能不能非交互跑——提权范围越窄，审批越容易过。</li>
+</ul>
 <h2 id="脚本使用指南"><a href="#脚本使用指南" class="headerlink" title="脚本使用指南"></a>脚本使用指南</h2><h3 id="前置条件"><a href="#前置条件" class="headerlink" title="前置条件"></a>前置条件</h3><ol>
 <li>确保已安装 CrossOver Preview 版本</li>
 <li>从<a target="_blank" rel="noopener" href="https://developer.apple.com/games/game-porting-toolkit/">Apple 开发者网站</a>下载 Game Porting Toolkit 安装包</li>
@@ -583,6 +590,11 @@
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>crossover-gptk3.sh</code> 把 GPTK3 文件替换从多步手工操作收敛为一次执行，内置带时间戳备份、MD5 完整性校验、失败回滚与全量日志，出错时可据日志与备份恢复到改动前状态。</p>
 <p>使用前确认三项前置条件均已满足（CrossOver Preview 已安装、GPTK 安装包与评估环境镜像均已挂载），并留意容器选择环节：DLL 只复制到所选容器，选错容器不影响文件替换本身，但目标游戏不会获得更新。</p>
 <p><strong>免责</strong>：脚本涉及系统文件操作，使用前了解其功能并做好数据备份，作者不对使用造成的任何损失负责。</p>
+<h2 id="待人工确认"><a href="#待人工确认" class="headerlink" title="待人工确认"></a>待人工确认</h2><ul>
+<li>CrossOver 后续版本若原生支持 GPTK3（或官方更新 <code>apple_gptk</code> 目录结构），本脚本整套作废，届时确认替代路径；</li>
+<li><code>ditto</code> 复制后逐文件 MD5 校验的是内容一致性，不含权限/签名位：应用包内文件被改后 Code Signing 是否仍被 Gatekeeper/MDM 接受（尤其 <code>com.apple.security.cs.</code> 相关 entitlement 校验），在 MDM 环境下需实测一次冷启动确认；</li>
+<li>脚本对 macOS 主版本的分支只区分 15 / 26 / 其他，macOS 15.5 之后的小版本对 GPTK3 的支持边界未逐一验证。</li>
+</ul>
 
                 
             </div>
@@ -1031,7 +1043,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">44.4k</span>&nbsp;字
+                class="white-color">49.7k</span>&nbsp;字
             
             
             

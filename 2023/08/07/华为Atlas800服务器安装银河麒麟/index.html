@@ -5,8 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Atlas800, 银河麒麟, iBMC, NPU 驱动, CANN, aarch64">
-    <meta name="description" content="华为 Atlas 800 推理服务器上部署银河麒麟，再依次装 NPU 驱动、芯片固件与 CANN。全程走 iBMC 带外管理装系统，不用现场接键盘显示器；驱动、固件、CANN 版本必须互相匹配，混版就是 NPU 不可用。
-通过 iBMC 安">
+    <meta name="description" content="计算与存储主题的三篇老文是算力层的起点，这篇是国产算力路径的一篇：华为 Atlas 800 推理服务器（8×Ascend 910，aarch64）装银河麒麟，再装 NPU 驱动、芯片固件与 CANN。全程走 iBMC 带外管理装系统，不用现">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -14,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/08/07/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/&#34;},&#34;headline&#34;:&#34;华为 Atlas800 服务器安装银河麒麟&#34;,&#34;description&#34;:&#34;华为 Atlas 800 推理服务器上部署银河麒麟，再依次装 NPU 驱动、芯片固件与 CANN。全程走 iBMC 带外管理装系统，不用现场接键盘显示器；驱动、固件、CANN 版本必须互相匹配，混版就是 NPU 不可用。\n通过 iBMC 安&#34;,&#34;datePublished&#34;:&#34;2023-08-07T08:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/08/07/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/&#34;},&#34;headline&#34;:&#34;华为 Atlas800 服务器安装银河麒麟&#34;,&#34;description&#34;:&#34;计算与存储主题的三篇老文是算力层的起点，这篇是国产算力路径的一篇：华为 Atlas 800 推理服务器（8×Ascend 910，aarch64）装银河麒麟，再装 NPU 驱动、芯片固件与 CANN。全程走 iBMC 带外管理装系统，不用现&#34;,&#34;datePublished&#34;:&#34;2023-08-07T08:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -23,8 +22,7 @@
     <meta property="og:title" content="华为 Atlas800 服务器安装银河麒麟 | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2023/08/07/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="华为 Atlas 800 推理服务器上部署银河麒麟，再依次装 NPU 驱动、芯片固件与 CANN。全程走 iBMC 带外管理装系统，不用现场接键盘显示器；驱动、固件、CANN 版本必须互相匹配，混版就是 NPU 不可用。
-通过 iBMC 安">
+    <meta property="og:description" content="计算与存储主题的三篇老文是算力层的起点，这篇是国产算力路径的一篇：华为 Atlas 800 推理服务器（8×Ascend 910，aarch64）装银河麒麟，再装 NPU 驱动、芯片固件与 CANN。全程走 iBMC 带外管理装系统，不用现">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/2.jpg">
     
@@ -503,14 +501,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.5k
+                    1.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    7 分
                 </div>
                 
 
@@ -530,7 +528,8 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>华为 Atlas 800 推理服务器上部署银河麒麟，再依次装 NPU 驱动、芯片固件与 CANN。全程走 iBMC 带外管理装系统，不用现场接键盘显示器；驱动、固件、CANN 版本必须互相匹配，混版就是 NPU 不可用。</p>
+                <p>计算与存储主题的三篇老文是算力层的起点，这篇是国产算力路径的一篇：华为 Atlas 800 推理服务器（8×Ascend 910，aarch64）装银河麒麟，再装 NPU 驱动、芯片固件与 CANN。全程走 iBMC 带外管理装系统，不用现场接键盘显示器。</p>
+<p>这条线和 NVIDIA 栈的差别在生态不在流程：驱动、固件、CANN 的版本三元组必须按华为适配表互相匹配，混版就是 NPU 不可用；CANN 是 C++ 与算子层的生态位，和 CUDA 的差距体现在算子覆盖与第三方框架适配，不在安装手顺上。</p>
 <h2 id="通过-iBMC-安装银河麒麟"><a href="#通过-iBMC-安装银河麒麟" class="headerlink" title="通过 iBMC 安装银河麒麟"></a>通过 iBMC 安装银河麒麟</h2><p>iBMC（integrated Baseboard Management Controller）是华为服务器的基板管理控制器，远程装系统全靠它。</p>
 <h3 id="1-出厂默认配置"><a href="#1-出厂默认配置" class="headerlink" title="1. 出厂默认配置"></a>1. 出厂默认配置</h3><table>
 <thead>
@@ -618,6 +617,10 @@ CANN nnae 包本身不含 PyTorch，<code>python3 -c &quot;import torch&quot;</c
 <li><strong>装前做系统备份或快照</strong>。驱动与固件动的是内核模块和板载固件，失败回退成本高；iBMC 挂虚拟介质做镜像备份是最省事的路径。</li>
 <li><strong>三次重启窗口预先申请</strong>。驱动、固件、CANN 各一次，每次重启后都确认 NPU 在位，卡数少于物理数量说明没加载对。</li>
 </ol>
+<h2 id="关键设计决策"><a href="#关键设计决策" class="headerlink" title="关键设计决策"></a>关键设计决策</h2><p><strong>aarch64 决定内核与驱动的耦合。</strong> 910 NPU 驱动只发布到特定内核版本，驱动与银河麒麟发行版自带的内核版本是硬绑定，OS 与驱动包版本错配时 <code>--FULL</code> 安装直接报内核不兼容。先装 OS 定死内核版本，再按内核版本反查驱动包，顺序反了要重装。</p>
+<p><strong>装完 OS 先验证 iBMC 再装驱动。</strong> iBMC 是唯一的带外管理通道，后面驱动与固件各要重启一次，iBMC 不通就得现场插键鼠。装完系统第一件事用新 IP 登录 iBMC 确认网络与虚拟控制台正常，再动驱动。</p>
+<p><strong>先驱动后固件、中间那次重启不能省。</strong> 驱动装完固件还是旧版，<code>npu-smi info</code> 的版本不匹配告警是预期状态；固件装完重启后告警才应消失。把两次重启合成一次能省时间，但中间状态对不上时说不清是驱动问题还是固件问题。</p>
+<p><strong>验证分三层，每层对应不同故障面。</strong> <code>npu-smi info</code> 只证明驱动与固件加载成功；工具链 <code>set_env.sh</code> 加载后目录非空只证明 CANN 落盘完整；业务可用要等官方算例跑通。跳过第三层等于交付一台”能看卡但没验证过能算”的机器。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>交付顺序固定：iBMC 挂镜像装银河麒麟 → 建 <code>HwHiAIUser</code> → 驱动 → 固件 → CANN → <code>npu-smi info</code>、CANN 工具链、官方算例三层验证。</p>
 <ul>
 <li><strong>停机窗口按三次重启算</strong>，别按一次算。</li>
@@ -1062,7 +1065,7 @@ CANN nnae 包本身不含 PyTorch，<code>python3 -c &quot;import torch&quot;</c
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">44.4k</span>&nbsp;字
+                class="white-color">49.7k</span>&nbsp;字
             
             
             

@@ -5,10 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="BitLocker, 批量部署, AD域, 组策略, TPM 2.0, 恢复密钥">
-    <meta name="description" content="BitLocker 是 Windows 自带的全盘加密。域环境里靠组策略完成策略下发、批量启用与恢复密钥集中备份，不用逐台操作。这篇给出一套已验证的落地方案：域控制器组件准备 → 客户端脚本 → 组策略配置 → 实施与验证。
-前置条件
-
-客">
+    <meta name="description" content="BitLocker 补上设备侧的一环：账号在域上，密码会泄露，盘里的数据不能只靠登录密码守着。域环境里靠组策略完成策略下发、批量启用与恢复密钥集中备份，不用逐台操作。这篇给出一套已验证的落地方案：域控制器组件准备 → 客户端脚本 → 组策略">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -16,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/&#34;},&#34;headline&#34;:&#34;Windows域环境下批量部署BitLocker&#34;,&#34;description&#34;:&#34;BitLocker 是 Windows 自带的全盘加密。域环境里靠组策略完成策略下发、批量启用与恢复密钥集中备份，不用逐台操作。这篇给出一套已验证的落地方案：域控制器组件准备 → 客户端脚本 → 组策略配置 → 实施与验证。\n前置条件\n\n客&#34;,&#34;datePublished&#34;:&#34;2023-02-22T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/&#34;},&#34;headline&#34;:&#34;Windows域环境下批量部署BitLocker&#34;,&#34;description&#34;:&#34;BitLocker 补上设备侧的一环：账号在域上，密码会泄露，盘里的数据不能只靠登录密码守着。域环境里靠组策略完成策略下发、批量启用与恢复密钥集中备份，不用逐台操作。这篇给出一套已验证的落地方案：域控制器组件准备 → 客户端脚本 → 组策略&#34;,&#34;datePublished&#34;:&#34;2023-02-22T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -25,10 +22,7 @@
     <meta property="og:title" content="Windows域环境下批量部署BitLocker | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="BitLocker 是 Windows 自带的全盘加密。域环境里靠组策略完成策略下发、批量启用与恢复密钥集中备份，不用逐台操作。这篇给出一套已验证的落地方案：域控制器组件准备 → 客户端脚本 → 组策略配置 → 实施与验证。
-前置条件
-
-客">
+    <meta property="og:description" content="BitLocker 补上设备侧的一环：账号在域上，密码会泄露，盘里的数据不能只靠登录密码守着。域环境里靠组策略完成策略下发、批量启用与恢复密钥集中备份，不用逐台操作。这篇给出一套已验证的落地方案：域控制器组件准备 → 客户端脚本 → 组策略">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/6.jpg">
     
@@ -507,14 +501,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.4k
+                    2.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    8 分
+                    9 分
                 </div>
                 
 
@@ -534,7 +528,12 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>BitLocker 是 Windows 自带的全盘加密。域环境里靠组策略完成策略下发、批量启用与恢复密钥集中备份，不用逐台操作。这篇给出一套已验证的落地方案：域控制器组件准备 → 客户端脚本 → 组策略配置 → 实施与验证。</p>
+                <p>BitLocker 补上设备侧的一环：账号在域上，密码会泄露，盘里的数据不能只靠登录密码守着。域环境里靠组策略完成策略下发、批量启用与恢复密钥集中备份，不用逐台操作。这篇给出一套已验证的落地方案：域控制器组件准备 → 客户端脚本 → 组策略配置 → 实施与验证。</p>
+<h2 id="关键设计决策"><a href="#关键设计决策" class="headerlink" title="关键设计决策"></a>关键设计决策</h2><ul>
+<li><strong>仅 TPM 解锁，不叠加启动 PIN</strong>：办公机放人看得到、锁得住的物理位置，TPM 密封的启动密钥已能防拆盘偷读；叠加 PIN 换来的是每次开机多一步交互，批量环境里摩擦成本不成比例。TPM 1.2 与无 TPM 设备策略完全不同（启动密钥/USB 起始盘），单独设计，不共用同一 GPO。</li>
+<li><strong>恢复密钥集中托管给域（AD Recovery）</strong>：密钥落在计算机对象的 <code>msFVE-RecoveryInformation</code> 子对象下，随 AD 复制与备份走，运维不用维护第二份清单；脚本里的共享文本重定向是旁路兜底，不是主渠道。</li>
+<li><strong>关机脚本触发而非启动脚本</strong>：下班关机是批量窗口，加密耗时与「关机变慢」的体感绑定在一起，用户接受度好于开机等加密；代价是组策略脚本有默认超时，超时被强杀会留下「半程加密」，需在测试 OU 实测后决定是否调整（策略名与默认值随版本不同，以本机编辑器为准）。</li>
+</ul>
 <p><strong>前置条件</strong></p>
 <ul>
 <li>客户端已入域，域控制器承担 DNS 角色。</li>
@@ -588,7 +587,7 @@
 </ol>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230221112332612.png" alt="关机脚本配置" title="关机脚本设置" decoding="async" loading="lazy"></p>
 <blockquote>
-<p><strong>关机脚本的超时风险</strong>：BitLocker 加密在脚本触发后才真正开始，而组策略脚本有默认超时限制，超时被强杀就是”加密没完成先关机”（下次开机继续，但用户会感知到关机明显变慢）。生产环境要评估脚本执行超时相关设置（策略名与默认值随版本不同，以本机编辑器为准），并优先考虑改<strong>启动脚本</strong>触发或改用运维工具批量下发。触发方式定之前先在测试 OU 实测关机耗时。</p>
+<p><strong>超时风险已在设计决策里说明</strong>。触发方式定之前先在测试 OU 实测关机耗时；如果实测不超时且希望更稳，可改<strong>启动脚本</strong>触发或改用运维工具批量下发。</p>
 </blockquote>
 <h2 id="实施"><a href="#实施" class="headerlink" title="实施"></a>实施</h2><ol>
 <li><strong>链接 GPO</strong>：两条 GPO 链接到要开 BitLocker 的 OU。</li>
@@ -1079,7 +1078,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">44.4k</span>&nbsp;字
+                class="white-color">49.7k</span>&nbsp;字
             
             
             

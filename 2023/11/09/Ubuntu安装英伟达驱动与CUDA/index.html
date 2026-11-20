@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Ubuntu, 英伟达驱动, CUDA, runfile 安装, DKMS, nouveau, Secure Boot">
-    <meta name="description" content="NVIDIA GPU 在 Ubuntu 上要跑起来分两步：先装专有驱动（决定可用的最高 CUDA 版本），再装 CUDA 工具包（编译器与运行库）。这篇覆盖 runfile 安装全过程与常见失败排查；操作会改内核模块和系统级配置，建议先在测">
+    <meta name="description" content="计算与存储主题的三篇老文是算力层的起点，这篇是最底层的一篇：先装专有驱动（决定可用的最高 CUDA 版本），再装 CUDA 工具包（编译器与运行库）。后来的 DGX Spark 部署、PVE GPU 切分、vLLM 环境，全部落回这两步。当">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/11/09/Ubuntu%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E9%A9%B1%E5%8A%A8%E4%B8%8ECUDA/&#34;},&#34;headline&#34;:&#34;Ubuntu 安装英伟达驱动与 CUDA&#34;,&#34;description&#34;:&#34;NVIDIA GPU 在 Ubuntu 上要跑起来分两步：先装专有驱动（决定可用的最高 CUDA 版本），再装 CUDA 工具包（编译器与运行库）。这篇覆盖 runfile 安装全过程与常见失败排查；操作会改内核模块和系统级配置，建议先在测&#34;,&#34;datePublished&#34;:&#34;2023-11-09T03:40:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/11/09/Ubuntu%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E9%A9%B1%E5%8A%A8%E4%B8%8ECUDA/&#34;},&#34;headline&#34;:&#34;Ubuntu 安装英伟达驱动与 CUDA&#34;,&#34;description&#34;:&#34;计算与存储主题的三篇老文是算力层的起点，这篇是最底层的一篇：先装专有驱动（决定可用的最高 CUDA 版本），再装 CUDA 工具包（编译器与运行库）。后来的 DGX Spark 部署、PVE GPU 切分、vLLM 环境，全部落回这两步。当&#34;,&#34;datePublished&#34;:&#34;2023-11-09T03:40:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -22,7 +22,7 @@
     <meta property="og:title" content="Ubuntu 安装英伟达驱动与 CUDA | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2023/11/09/Ubuntu%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E9%A9%B1%E5%8A%A8%E4%B8%8ECUDA/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="NVIDIA GPU 在 Ubuntu 上要跑起来分两步：先装专有驱动（决定可用的最高 CUDA 版本），再装 CUDA 工具包（编译器与运行库）。这篇覆盖 runfile 安装全过程与常见失败排查；操作会改内核模块和系统级配置，建议先在测">
+    <meta property="og:description" content="计算与存储主题的三篇老文是算力层的起点，这篇是最底层的一篇：先装专有驱动（决定可用的最高 CUDA 版本），再装 CUDA 工具包（编译器与运行库）。后来的 DGX Spark 部署、PVE GPU 切分、vLLM 环境，全部落回这两步。当">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/2.jpg">
     
@@ -489,14 +489,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.2k
+                    1.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    4 分
+                    6 分
                 </div>
                 
 
@@ -516,7 +516,8 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>NVIDIA GPU 在 Ubuntu 上要跑起来分两步：先装专有驱动（决定可用的最高 CUDA 版本），再装 CUDA 工具包（编译器与运行库）。这篇覆盖 runfile 安装全过程与常见失败排查；操作会改内核模块和系统级配置，建议先在测试机验证。</p>
+                <p>计算与存储主题的三篇老文是算力层的起点，这篇是最底层的一篇：先装专有驱动（决定可用的最高 CUDA 版本），再装 CUDA 工具包（编译器与运行库）。后来的 DGX Spark 部署、PVE GPU 切分、vLLM 环境，全部落回这两步。当时没展开的点——驱动版本怎么选、驱动与 CUDA 的兼容矩阵、ECC、nvidia-persistenced——正是后面踩坑最多的地方。</p>
+<p>这篇覆盖 runfile 安装全过程与常见失败排查；操作会改内核模块和系统级配置，建议先在测试机验证。</p>
 <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><ol>
 <li>按 GPU 型号在<a target="_blank" rel="noopener" href="https://www.nvidia.cn/Download/index.aspx?lang=cn">NVIDIA 驱动下载页</a>确认支持的驱动版本并下载 <code>.run</code> 文件。</li>
 </ol>
@@ -569,6 +570,10 @@
 
 <p>出版本信息即成功：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091305908.png" alt="nvcc 命令输出示例" title="nvcc命令输出示例" decoding="async" loading="lazy"></p>
+<h2 id="关键设计决策"><a href="#关键设计决策" class="headerlink" title="关键设计决策"></a>关键设计决策</h2><p><strong>为什么用 runfile 而不是 apt 包。</strong> apt 路线（<code>nvidia-driver-*</code>）版本滞后且不可选版本；runfile 现场编译内核模块，能精确指定版本。代价是内核升级要重编译——这就是安装器里 DKMS 必须选 Yes 的原因，否则就得锁内核。</p>
+<p><strong>专有驱动 vs 开源内核模块。</strong> 2023 年对当时的卡，专有驱动是稳妥选择。这个选项在新一代架构上变成关键项：vGPU、MIG 依赖开源内核模块（<code>-m=kernel-open</code>），Blackwell 系卡在 PVE 上的实测也都建立在开源模块上——后面 GPU 切分篇的黑名单 <code>nouveau</code> 报 <code>unknown chipset</code> 就是这个背景。</p>
+<p><strong>nouveau 为什么必须禁。</strong> nouveau 与专有驱动争抢同一块 GPU，modeset 冲突会让安装器直接失败。屏蔽只处理模块加载，和”卸载 NVIDIA 驱动”是两件事。</p>
+<p><strong>版本兼容矩阵怎么查。</strong> 硬约束只有一条：工具包版本 ≤ <code>nvidia-smi</code> 显示的 <code>CUDA Version</code>——那是驱动支持的上限，不是已装的工具包版本。反查方向从 CUDA 版本找对应驱动，用 CUDA Toolkit Release Notes / 驱动 release notes，别凭记忆。</p>
 <h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="1-驱动安装失败"><a href="#1-驱动安装失败" class="headerlink" title="1. 驱动安装失败"></a>1. 驱动安装失败</h3><p>两类常见原因：</p>
 <ul>
 <li><strong>Secure Boot 启用</strong>：未签名的内核模块被拒绝加载。BIOS 里禁用 Secure Boot，或按安装器提示登记 MOK（Machine Owner Key）后重启完成签名。</li>
@@ -1033,7 +1038,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">44.4k</span>&nbsp;字
+                class="white-color">49.7k</span>&nbsp;字
             
             
             

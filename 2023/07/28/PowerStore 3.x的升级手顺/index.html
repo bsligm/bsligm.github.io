@@ -5,7 +5,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="PowerStore, 驱动器固件升级, PowerStoreOS, NDU, 维护窗口">
-    <meta name="description" content="DELL EMC PowerStore 3.x 群集的升级分三步：驱动器固件、PowerStoreOS 无中断升级（NDU）、PowerStore T 型号群集升级。顺序不能颠倒——先固件后系统，新 PowerStoreOS 对盘面固件有兼">
+    <meta name="description" content="计算与存储主题的三篇老文是算力层与存储层的起点，这篇是存储层的一篇：DELL EMC PowerStore 是后来 PVE、虚拟化集群与备份策略的底座，备份仓库和 VM 数据面都依赖它。
+升级分三步：驱动器固件、PowerStoreOS 无">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +14,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/07/28/PowerStore%203.x%E7%9A%84%E5%8D%87%E7%BA%A7%E6%89%8B%E9%A1%BA/&#34;},&#34;headline&#34;:&#34;PowerStore 3.x 的升级手顺&#34;,&#34;description&#34;:&#34;DELL EMC PowerStore 3.x 群集的升级分三步：驱动器固件、PowerStoreOS 无中断升级（NDU）、PowerStore T 型号群集升级。顺序不能颠倒——先固件后系统，新 PowerStoreOS 对盘面固件有兼&#34;,&#34;datePublished&#34;:&#34;2023-07-28T01:40:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/07/28/PowerStore%203.x%E7%9A%84%E5%8D%87%E7%BA%A7%E6%89%8B%E9%A1%BA/&#34;},&#34;headline&#34;:&#34;PowerStore 3.x 的升级手顺&#34;,&#34;description&#34;:&#34;计算与存储主题的三篇老文是算力层与存储层的起点，这篇是存储层的一篇：DELL EMC PowerStore 是后来 PVE、虚拟化集群与备份策略的底座，备份仓库和 VM 数据面都依赖它。\n升级分三步：驱动器固件、PowerStoreOS 无&#34;,&#34;datePublished&#34;:&#34;2023-07-28T01:40:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -22,7 +23,8 @@
     <meta property="og:title" content="PowerStore 3.x 的升级手顺 | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2023/07/28/PowerStore%203.x%E7%9A%84%E5%8D%87%E7%BA%A7%E6%89%8B%E9%A1%BA/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="DELL EMC PowerStore 3.x 群集的升级分三步：驱动器固件、PowerStoreOS 无中断升级（NDU）、PowerStore T 型号群集升级。顺序不能颠倒——先固件后系统，新 PowerStoreOS 对盘面固件有兼">
+    <meta property="og:description" content="计算与存储主题的三篇老文是算力层与存储层的起点，这篇是存储层的一篇：DELL EMC PowerStore 是后来 PVE、虚拟化集群与备份策略的底座，备份仓库和 VM 数据面都依赖它。
+升级分三步：驱动器固件、PowerStoreOS 无">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/1.jpg">
     
@@ -489,14 +491,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.3k
+                    1.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    4 分
+                    6 分
                 </div>
                 
 
@@ -516,7 +518,8 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>DELL EMC PowerStore 3.x 群集的升级分三步：驱动器固件、PowerStoreOS 无中断升级（NDU）、PowerStore T 型号群集升级。顺序不能颠倒——先固件后系统，新 PowerStoreOS 对盘面固件有兼容性要求，反着做会把已升级的节点留在不受支持的组合上。升级期间配置变更与 vVol 等管理任务不可用，需预留维护窗口并完成健康检查。</p>
+                <p>计算与存储主题的三篇老文是算力层与存储层的起点，这篇是存储层的一篇：DELL EMC PowerStore 是后来 PVE、虚拟化集群与备份策略的底座，备份仓库和 VM 数据面都依赖它。</p>
+<p>升级分三步：驱动器固件、PowerStoreOS 无中断升级（NDU）、PowerStore T 型号群集升级。顺序不能颠倒——先固件后系统，新 PowerStoreOS 对盘面固件有兼容性要求，反着做会把已升级的节点留在不受支持的组合上。升级期间配置变更与 vVol 等管理任务不可用，需预留维护窗口并完成健康检查。</p>
 <p>控制台入口统一写作 <strong>Settings → Cluster → Upgrades</strong>，中文语言包环境是「设置 → 群集 → 升级」，同一入口，下文不再重复。</p>
 <h2 id="驱动器固件升级"><a href="#驱动器固件升级" class="headerlink" title="驱动器固件升级"></a>驱动器固件升级</h2><h3 id="1-禁用-Call-Home-通知"><a href="#1-禁用-Call-Home-通知" class="headerlink" title="1. 禁用 Call Home 通知"></a>1. 禁用 Call Home 通知</h3><p>防止升级期间向支持部门发 Call Home 警报：</p>
 <ol>
@@ -582,6 +585,10 @@
 </ol>
 <h3 id="4-升级过程发生了什么"><a href="#4-升级过程发生了什么" class="headerlink" title="4. 升级过程发生了什么"></a>4. 升级过程发生了什么</h3><p>主设备的主节点会故障切换到辅助节点，管理会话随之断开，Manager 要等故障切换完成才能重新登录。主机 I/O 由 NDU 保证不中断，受影响的是管理面不是数据面——这也是升级窗口内不排配置变更和 vVol 任务的原因。</p>
 <p>界面自定义不随升级保留：各列表的列布局装上新版 PowerStoreOS 后重置为默认。依赖自定义列（如按容量使用率排序的视图）的，提前告知，升级后重新配置。</p>
+<h2 id="关键设计决策"><a href="#关键设计决策" class="headerlink" title="关键设计决策"></a>关键设计决策</h2><p><strong>三层升级顺序：微码/固件 → PowerStoreOS → 应用层（含 vVol 任务）。</strong> 驱动器固件对宿主 OS 版本有兼容要求，先升 OS 再把固件留在旧版，中间任何一步失败，群集停在不受支持的组合上。应用层排在数据面稳定之后，因为升级期间 vVol 的创建/迁移/打快照全不可用，业务侧变更不能和升级同窗口。</p>
+<p><strong>回滚窗口在第一次故障切换之前。</strong> NDU 是节点级滚动升级：主设备主节点故障切换到辅助节点后，旧版 PowerStoreOS 仍在辅节点上。第一台设备的升级完成前出问题时，回滚成本最低；多台设备滚动推进之后，回滚要逐台反向操作，窗口要按设备数量重新算。</p>
+<p><strong>PowerStore T 与标准型的差异：窗口和流程不同。</strong> T 型号（PowerStore T10/T20/T30）单台升级 1–1.5 小时，维护窗口按设备数量累加；标准型（PowerStore 1000/2000/3000）走 NDU 流程，窗口按节点滚动估算。两者共用 Settings → Cluster → Upgrades 入口，但升级包类型、失败重试条件和回滚路径都不同，执行前确认群集型号再取对应手顺。</p>
+<p><strong>自动下载只下载不安装，且新包会覆盖旧包。</strong> 包被换过而维护窗口仍按旧版本评估过，执行当天才发现就要重新排期。所以下载后先确认包版本再动手，这条比”自动下载方便”更值钱。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
 <li><strong>顺序</strong>：禁 Call Home 开维护模式 → 驱动器固件 → PowerStoreOS，颠倒则节点落在不受支持的固件组合上。</li>
 <li><strong>估时</strong>：单台 1–1.5 小时按台数累加，不按”一次升级”估。</li>
@@ -1037,7 +1044,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">44.4k</span>&nbsp;字
+                class="white-color">49.7k</span>&nbsp;字
             
             
             

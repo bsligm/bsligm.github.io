@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="macOS, App损坏, Gatekeeper, spctl, xattr, 隔离属性, 隐私与安全性">
-    <meta name="description" content="在 macOS 上安装或打开应用时，可能出现「XXXX 已损坏，无法打开。你应该将它移到废纸篓。」的提示，应用被直接拒绝启动。这是 Gatekeeper 与隔离属性（quarantine）机制的共同结果：本意是阻止未公证来源的可执行文件运行">
+    <meta name="description" content="域环境统一管的是 Windows 终端，macOS 是用户自带设备的入口，mac 上的应用放行策略没人管，「App 已损坏」就成了桌面支持的高频工单。这个提示是 Gatekeeper 与隔离属性（quarantine）机制的共同结果：本意是">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2021/04/29/mac%20app%E6%8D%9F%E5%9D%8F/&#34;},&#34;headline&#34;:&#34;macOS 提示\&#34;App 已损坏，无法打开\&#34;的多种解决方法&#34;,&#34;description&#34;:&#34;在 macOS 上安装或打开应用时，可能出现「XXXX 已损坏，无法打开。你应该将它移到废纸篓。」的提示，应用被直接拒绝启动。这是 Gatekeeper 与隔离属性（quarantine）机制的共同结果：本意是阻止未公证来源的可执行文件运行&#34;,&#34;datePublished&#34;:&#34;2021-04-29T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2021/04/29/mac%20app%E6%8D%9F%E5%9D%8F/&#34;},&#34;headline&#34;:&#34;macOS 提示\&#34;App 已损坏，无法打开\&#34;的多种解决方法&#34;,&#34;description&#34;:&#34;域环境统一管的是 Windows 终端，macOS 是用户自带设备的入口，mac 上的应用放行策略没人管，「App 已损坏」就成了桌面支持的高频工单。这个提示是 Gatekeeper 与隔离属性（quarantine）机制的共同结果：本意是&#34;,&#34;datePublished&#34;:&#34;2021-04-29T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -22,7 +22,7 @@
     <meta property="og:title" content="macOS 提示&#34;App 已损坏，无法打开&#34;的多种解决方法 | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2021/04/29/mac%20app%E6%8D%9F%E5%9D%8F/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="在 macOS 上安装或打开应用时，可能出现「XXXX 已损坏，无法打开。你应该将它移到废纸篓。」的提示，应用被直接拒绝启动。这是 Gatekeeper 与隔离属性（quarantine）机制的共同结果：本意是阻止未公证来源的可执行文件运行">
+    <meta property="og:description" content="域环境统一管的是 Windows 终端，macOS 是用户自带设备的入口，mac 上的应用放行策略没人管，「App 已损坏」就成了桌面支持的高频工单。这个提示是 Gatekeeper 与隔离属性（quarantine）机制的共同结果：本意是">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/8.jpg">
     
@@ -497,7 +497,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.4k
+                    1.6k
                 </div>
                 
 
@@ -524,8 +524,13 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>在 macOS 上安装或打开应用时，可能出现「XXXX 已损坏，无法打开。你应该将它移到废纸篓。」的提示，应用被直接拒绝启动。这是 Gatekeeper 与隔离属性（quarantine）机制的共同结果：本意是阻止未公证来源的可执行文件运行，也会拦住来源可信的合法软件。</p>
-<p>先说明结论：绝大多数此类报错并非文件真的损坏，而是 Gatekeeper 拦截。优先用方法三（只处理单个应用），只在确有需要时临时放开全局设置。</p>
+                <p>域环境统一管的是 Windows 终端，macOS 是用户自带设备的入口，mac 上的应用放行策略没人管，「App 已损坏」就成了桌面支持的高频工单。这个提示是 Gatekeeper 与隔离属性（quarantine）机制的共同结果：本意是阻止未公证来源的可执行文件运行，也会拦住来源可信的合法软件。</p>
+<p>绝大多数此类报错并非文件真的损坏，而是 Gatekeeper 拦截。优先用方法三（只处理单个应用），只在确有需要时临时放开全局设置。</p>
+<h2 id="关键设计决策"><a href="#关键设计决策" class="headerlink" title="关键设计决策"></a>关键设计决策</h2><ul>
+<li><strong>默认拦截未公证来源，放行按影响面从小到大选</strong>：右键「打开」→ 单应用 <code>xattr</code> 移除隔离属性 → 全局 <code>spctl --master-disable</code>。放行面越大，「哪个应用被放行了」越难追溯，全局开关用完必须恢复，且恢复前先 <code>spctl --status</code> 确认当前状态，别拿记忆当基线。</li>
+<li><strong>放行前先跑 <code>spctl -a</code> 读拒绝原因</strong>：<code>signature</code> 类拒绝说明包没有可用签名，公证流程无望；notarization 类拒绝说明签名有效但开发者漏交公证。两类原因的处理方式不同，不读原因就放行等于把判断外包给运气。</li>
+<li><strong>架构不匹配不当 Gatekeeper 问题处理</strong>：Intel 与 Apple 芯片的架构不匹配同样表现为启动失败，但报错文案不同（通常提示应用需要更新而非「已损坏」），先分清报错类别再动安全设置，避免把「应用不支持这代芯片」误修成「改了安全策略」。</li>
+</ul>
 <h2 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h2><p>常见触发条件：</p>
 <ol>
 <li>软件来自未在 Apple 注册或未通过公证（Notarization）的开发者</li>
@@ -1029,7 +1034,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">44.4k</span>&nbsp;字
+                class="white-color">49.7k</span>&nbsp;字
             
             
             

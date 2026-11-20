@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Chromium, Chrome, Edge, STATUS_STACK_BUFFER_OVERRUN, Exploit Protection, 硬件强制堆栈保护, 组策略">
-    <meta name="description" content="2023 年 5 月 Chromium 内核升级 v113 后，部分终端的 Chrome/Edge 无法启动：标签页提示「喔唷，崩溃了，此网页出现问题」，进程异常终止，错误码 STATUS_STACK_BUFFER_OVERRUN。域内环境">
+    <meta name="description" content="终端与应用层的交付物一致性里有一类最难处理的故障：同一台装法、同一批镜像的机器，某个内核版本升级后浏览器整批起不来。2023 年 5 月 Chromium 内核到 v113 后，部分终端的 Chrome/Edge 启动即崩，错误码 STAT">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/05/18/Chromium%E6%B5%8F%E8%A7%88%E5%99%A8%20%E5%86%85%E6%A0%B8113%20STATUS_STACK_BUFFER_OVERRUN%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/&#34;},&#34;headline&#34;:&#34;Chromium 内核 113 STATUS_STACK_BUFFER_OVERRUN 解决方案&#34;,&#34;description&#34;:&#34;2023 年 5 月 Chromium 内核升级 v113 后，部分终端的 Chrome/Edge 无法启动：标签页提示「喔唷，崩溃了，此网页出现问题」，进程异常终止，错误码 STATUS_STACK_BUFFER_OVERRUN。域内环境&#34;,&#34;datePublished&#34;:&#34;2023-05-18T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/05/18/Chromium%E6%B5%8F%E8%A7%88%E5%99%A8%20%E5%86%85%E6%A0%B8113%20STATUS_STACK_BUFFER_OVERRUN%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/&#34;},&#34;headline&#34;:&#34;Chromium 内核 113 STATUS_STACK_BUFFER_OVERRUN 解决方案&#34;,&#34;description&#34;:&#34;终端与应用层的交付物一致性里有一类最难处理的故障：同一台装法、同一批镜像的机器，某个内核版本升级后浏览器整批起不来。2023 年 5 月 Chromium 内核到 v113 后，部分终端的 Chrome/Edge 启动即崩，错误码 STAT&#34;,&#34;datePublished&#34;:&#34;2023-05-18T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -22,7 +22,7 @@
     <meta property="og:title" content="Chromium 内核 113 STATUS_STACK_BUFFER_OVERRUN 解决方案 | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2023/05/18/Chromium%E6%B5%8F%E8%A7%88%E5%99%A8%20%E5%86%85%E6%A0%B8113%20STATUS_STACK_BUFFER_OVERRUN%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="2023 年 5 月 Chromium 内核升级 v113 后，部分终端的 Chrome/Edge 无法启动：标签页提示「喔唷，崩溃了，此网页出现问题」，进程异常终止，错误码 STATUS_STACK_BUFFER_OVERRUN。域内环境">
+    <meta property="og:description" content="终端与应用层的交付物一致性里有一类最难处理的故障：同一台装法、同一批镜像的机器，某个内核版本升级后浏览器整批起不来。2023 年 5 月 Chromium 内核到 v113 后，部分终端的 Chrome/Edge 启动即崩，错误码 STAT">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/3.jpg">
     
@@ -505,14 +505,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.2k
+                    2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    4 分
+                    7 分
                 </div>
                 
 
@@ -532,9 +532,15 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>2023 年 5 月 Chromium 内核升级 v113 后，部分终端的 Chrome/Edge 无法启动：标签页提示「喔唷，崩溃了，此网页出现问题」，进程异常终止，错误码 <code>STATUS_STACK_BUFFER_OVERRUN</code>。域内环境会批量出现，直接阻断依赖浏览器的业务系统入口。</p>
-<p>微软社区把它描述为「堆栈溢出」，但 <code>STATUS_STACK_BUFFER_OVERRUN</code>（<code>0xC0000409</code>）实际是 <strong>Windows 在控制流防护 CFG 与硬件强制堆栈保护等 exploit 防护机制命中时的快速失败（fast-fail）</strong>，由系统主动终止进程，并非写穿栈边界的传统栈溢出。论坛说法是表象，处置针对的正是这套防护机制。</p>
+                <p>终端与应用层的交付物一致性里有一类最难处理的故障：同一台装法、同一批镜像的机器，某个内核版本升级后浏览器整批起不来。2023 年 5 月 Chromium 内核到 v113 后，部分终端的 Chrome/Edge 启动即崩，错误码 <code>STATUS_STACK_BUFFER_OVERRUN</code>，域内批量出现，依赖浏览器的业务入口直接断。这篇是浏览器内核级故障定位的实战样本：从表象的错误码，到根因落在 Windows 的哪一层防护，再按单机/企业两条路径处置。</p>
+<p>先纠正一个常见的误读。微软社区把它描述为「堆栈溢出」，但 <code>STATUS_STACK_BUFFER_OVERRUN</code>（<code>0xC0000429</code>）不是写穿栈边界的传统溢出，而是 <strong>硬件强制堆栈保护（CET 影子栈）与 CFG 等 exploit 防护命中时的快速失败（fast-fail）</strong>，由系统主动终止进程。（另一个常一起出现的 <code>0xC0000409</code> 是 <code>STATUS_FATAL_APP_EXCEPTION</code>，泛指 fail-fast，两者不是一回事。）论坛说法是表象，处置针对的正是这套防护机制。</p>
 <p>参考：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-hans/answers/questions/8007f833-2959-419a-8408-e0cc0bfcbd5d/microsoft?forum=microsoftedge-all&referrer=answers">微软社区 — Edge 浏览器崩溃讨论</a></p>
+<h2 id="关键设计决策"><a href="#关键设计决策" class="headerlink" title="关键设计决策"></a>关键设计决策</h2><ul>
+<li><strong>崩在哪个进程，怎么判断。</strong> Chromium 是多进程模型：浏览器主进程、GPU、网络、每个标签页一个渲染进程。渲染进程崩了是「Aw, Snap」单标签页重启；这篇的症状是浏览器本体起不来，崩的是被系统防护 kill 的主程序映像。定位手段就是看终止码落在哪个进程——终止码是 fail-fast，说明杀进程的是 Windows 自己的防护层，而不是浏览器自己写穿内存，排查方向从浏览器翻到系统侧。</li>
+<li><strong>为什么回滚内核版本能解决。</strong> 硬件强制堆栈保护（HSP）在 Windows 11 22H2 起随内存完整性默认开启；Chromium 113 开始启用 CET 影子栈支持，HSP 的强制范围随之覆盖浏览器进程树。只要有一枚未带 CET 支持编译的驱动或模块挂在进程里，命中即 fast-fail。回滚浏览器内核等于把影子栈支持退回上一代基线，所以有效——但代价是整台机器的浏览器行为退回旧版本，影响面远大于「只对浏览器放宽」。这也是本文选按映像放宽防护（Exploit Protection / IFEO）而不是回滚内核的原因：把代价圈在 <code>chrome.exe</code>/<code>msedge.exe</code> 两个映像里。</li>
+<li><strong>为什么「仅审核」而不是「关」。</strong> 审核模式下防护命中只记事件不终止进程，浏览器能起来，事件日志留痕——根因（哪个模块命中）还能查。直接关闭防护则连证据都没有，之后要恢复默认时也无法证明哪些模块本来就有问题。代价是审核期间防护实际不拦，属临时可用性处置，不是长期方案。</li>
+<li><strong>为什么用 IFEO 组策略而不是浏览器命令行开关。</strong> 命令行参数（如 <code>--no-sandbox</code>）需要改启动方式，域内已部署的机器启动入口不受控；Exploit Protection 的 GUI 逐台点又不规模化。IFEO 缓解位图经注册表 GPO 按映像名下发，开机即生效、逐机可回读验证（<code>gpresult /r</code> + 注册表三值），是唯一能批量且可审计的路径。</li>
+</ul>
 <h2 id="单机解决方案"><a href="#单机解决方案" class="headerlink" title="单机解决方案"></a>单机解决方案</h2><p>在 Windows 安全中心为该浏览器映像单独放宽硬件强制堆栈保护，使其从「命中即终止」降级为「仅记录」。</p>
 <h3 id="1-在-Exploit-Protection-中添加目标程序"><a href="#1-在-Exploit-Protection-中添加目标程序" class="headerlink" title="1. 在 Exploit Protection 中添加目标程序"></a>1. 在 Exploit Protection 中添加目标程序</h3><ol>
 <li>打开 Windows 安全中心 → <strong>应用和浏览器控制</strong></li>
@@ -608,6 +614,10 @@
 <li><code>STATUS_STACK_BUFFER_OVERRUN</code> 是 exploit 防护命中后的快速失败，不是真正的栈溢出；</li>
 <li>单机：Exploit Protection 中把目标映像「硬件强制实施的堆栈保护」改为仅审核；企业：等效 IFEO 缓解策略经 GPO 按映像下发，<code>chrome.exe</code> 与 <code>msedge.exe</code> 分别配置；</li>
 <li>临时处置，跟踪 Chromium 与微软后续版本，上游修复后撤销 GPO、恢复默认防护。</li>
+</ul>
+<h2 id="待人工确认"><a href="#待人工确认" class="headerlink" title="待人工确认"></a>待人工确认</h2><ul>
+<li>本次崩溃对应的是哪个 Windows 版本/更新的 HSP 默认开启变化（22H2 内核 22621 起默认内存完整性+HSP），当时域内机器的实际系统版本需对照事件日志确认；</li>
+<li>位图值 <code>…0010…</code>（第 16 字节，0 起算 byte 15 置 <code>0x10</code>）正是微软文档中 CFG 启用（<code>EnableCfg</code>）的标准位图；<code>EAFModules</code> 置空值表示按模块全量审计。位定义随 Windows 版本有增补，数值照抄本文示例即可，恢复默认前建议用 <code>Get-ProcessMitigation -Name chrome.exe</code> 读回当前实际值留档。</li>
 </ul>
 
                 
@@ -1049,7 +1059,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">44.4k</span>&nbsp;字
+                class="white-color">49.7k</span>&nbsp;字
             
             
             
