@@ -5,8 +5,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Edge浏览器, 渲染器代码完整性, RendererCodeIntegrityEnabled, 注册表, 组策略, 企业部署">
-    <meta name="description" content="Windows 10/11 上的 Microsoft Edge 在部分终端启动后，任意网页都无法加载，页面统一提示兼容性问题。该故障与站点内容无关，影响整机 Edge 实例，在刚推送安全更新或部署了第三方安全软件的终端上更集中。
-处置分两条">
+    <meta name="description" content="Windows 10/11 上的 Microsoft Edge 在部分终端启动后任意网页都无法加载，页面统一提示兼容性问题。故障与站点内容无关、影响整机 Edge 实例，在刚推送安全更新或部署了第三方安全软件的终端上更集中。
+处置分两条路径">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -14,7 +14,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2021/05/04/edge%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80/&#34;},&#34;headline&#34;:&#34;Edge 浏览器无法打开网页提示兼容性问题的解决方案&#34;,&#34;description&#34;:&#34;Windows 10/11 上的 Microsoft Edge 在部分终端启动后，任意网页都无法加载，页面统一提示兼容性问题。该故障与站点内容无关，影响整机 Edge 实例，在刚推送安全更新或部署了第三方安全软件的终端上更集中。\n处置分两条&#34;,&#34;datePublished&#34;:&#34;2021-05-04T05:50:12.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T07:30:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2021/05/04/edge%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80/&#34;},&#34;headline&#34;:&#34;Edge 浏览器无法打开网页提示兼容性问题的解决方案&#34;,&#34;description&#34;:&#34;Windows 10/11 上的 Microsoft Edge 在部分终端启动后任意网页都无法加载，页面统一提示兼容性问题。故障与站点内容无关、影响整机 Edge 实例，在刚推送安全更新或部署了第三方安全软件的终端上更集中。\n处置分两条路径&#34;,&#34;datePublished&#34;:&#34;2021-05-04T05:50:12.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -23,8 +23,8 @@
     <meta property="og:title" content="Edge 浏览器无法打开网页提示兼容性问题的解决方案 | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2021/05/04/edge%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="Windows 10/11 上的 Microsoft Edge 在部分终端启动后，任意网页都无法加载，页面统一提示兼容性问题。该故障与站点内容无关，影响整机 Edge 实例，在刚推送安全更新或部署了第三方安全软件的终端上更集中。
-处置分两条">
+    <meta property="og:description" content="Windows 10/11 上的 Microsoft Edge 在部分终端启动后任意网页都无法加载，页面统一提示兼容性问题。故障与站点内容无关、影响整机 Edge 实例，在刚推送安全更新或部署了第三方安全软件的终端上更集中。
+处置分两条路径">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/7.jpg">
     
@@ -32,7 +32,7 @@
     <meta property="article:published_time" content="2021-05-04T05:50:12.000Z">
     
     
-    <meta property="article:modified_time" content="2026-11-19T07:30:00.000Z">
+    <meta property="article:modified_time" content="2026-11-20T04:00:00.000Z">
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
@@ -492,21 +492,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2026-11-19
+                    2026-11-20
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.4k
+                    1.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    4 分
                 </div>
                 
 
@@ -526,11 +526,10 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Windows 10/11 上的 Microsoft Edge 在部分终端启动后，任意网页都无法加载，页面统一提示兼容性问题。该故障与站点内容无关，影响整机 Edge 实例，在刚推送安全更新或部署了第三方安全软件的终端上更集中。</p>
-<p>处置分两条路径：单台终端直接改注册表恢复；企业环境通过域控组策略统一下发，避免逐台操作。</p>
-<h2 id="故障现象"><a href="#故障现象" class="headerlink" title="故障现象"></a>故障现象</h2><p>启动 Edge 后，任意站点都返回兼容性问题提示，报错界面如下。重点关注提示中的错误描述文案，它决定后续排查方向：</p>
+                <p>Windows 10/11 上的 Microsoft Edge 在部分终端启动后任意网页都无法加载，页面统一提示兼容性问题。故障与站点内容无关、影响整机 Edge 实例，在刚推送安全更新或部署了第三方安全软件的终端上更集中。</p>
+<p>处置分两条路径：单机直接改注册表恢复；企业环境用域控组策略统一下发。</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081511061.jpg" alt="Edge浏览器兼容性问题报错" title="Edge浏览器报错信息" decoding="async" loading="lazy"></p>
-<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>提示把它描述成「兼容性问题」，但真实触发点是 Edge 渲染进程的代码完整性检查（Renderer Code Integrity）：渲染器代码未通过完整性校验时，进程走 Windows 的快速失败（fast-fail）路径被强制终止，因此表现与字面意义上的页面兼容性无关。</p>
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>「兼容性问题」是表象，真实触发点是 Edge 渲染进程的代码完整性检查（Renderer Code Integrity）：渲染器代码未通过完整性校验时，进程走 Windows 快速失败（fast-fail）路径被强制终止，与字面意义的页面兼容性无关。</p>
 <p>常见诱因：</p>
 <ol>
 <li>第三方安全软件向渲染进程注入模块，导致完整性校验失败</li>
@@ -539,7 +538,7 @@
 <li>注册表策略项配置错误</li>
 </ol>
 <p>下文方案通过关闭渲染器代码完整性检查绕过该触发点，属于可用性恢复，而非根因修复。</p>
-<h2 id="单机解决方案"><a href="#单机解决方案" class="headerlink" title="单机解决方案"></a>单机解决方案</h2><h3 id="1-打开注册表编辑器"><a href="#1-打开注册表编辑器" class="headerlink" title="1. 打开注册表编辑器"></a>1. 打开注册表编辑器</h3><p>按下 <code>Win+R</code> 组合键，输入 <code>regedit</code>，按回车键打开注册表编辑器。修改 <code>HKEY_LOCAL_MACHINE</code> 需要管理员权限，建议以管理员身份运行。</p>
+<h2 id="单机解决方案"><a href="#单机解决方案" class="headerlink" title="单机解决方案"></a>单机解决方案</h2><h3 id="1-打开注册表编辑器"><a href="#1-打开注册表编辑器" class="headerlink" title="1. 打开注册表编辑器"></a>1. 打开注册表编辑器</h3><p><code>Win+R</code> 输入 <code>regedit</code> 回车打开注册表编辑器。修改 <code>HKEY_LOCAL_MACHINE</code> 需要管理员权限，以管理员身份运行。</p>
 <h3 id="2-导航到指定路径"><a href="#2-导航到指定路径" class="headerlink" title="2. 导航到指定路径"></a>2. 导航到指定路径</h3><p>依次打开以下路径，路径不存在时逐级新建对应项：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge</span><br></pre></td></tr></table></figure>
 
@@ -548,14 +547,14 @@
 <li>名称：<code>RendererCodeIntegrityEnabled</code></li>
 <li>数值数据：<code>0</code></li>
 </ul>
-<p>该值表示关闭 Edge 的渲染器代码完整性检查。需要明确两点代价：</p>
+<p>该值关闭 Edge 的渲染器代码完整性检查。明确两点代价：</p>
 <ul>
 <li>这是绕过校验，不是消除注入源。若诱因是第三方安全软件，仍应同步排查其注入规则</li>
 <li>Edge 后续版本升级可能重置该策略或让问题重新出现，升级后需复验</li>
 </ul>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081511347.png" alt="注册表编辑器配置" title="注册表项设置" decoding="async" loading="lazy"></p>
-<h3 id="4-重启浏览器"><a href="#4-重启浏览器" class="headerlink" title="4. 重启浏览器"></a>4. 重启浏览器</h3><p>完全退出 Edge（确认系统托盘中的后台运行进程一并结束）后重新启动，验证页面能否正常加载。</p>
-<h2 id="企业批量部署解决方案"><a href="#企业批量部署解决方案" class="headerlink" title="企业批量部署解决方案"></a>企业批量部署解决方案</h2><p>终端数量较多时逐台改注册表不可维护，应改用域控组策略统一下发。</p>
+<h3 id="4-重启浏览器"><a href="#4-重启浏览器" class="headerlink" title="4. 重启浏览器"></a>4. 重启浏览器</h3><p>完全退出 Edge（确认系统托盘中的后台运行进程一并结束）再启动，验证页面能否正常加载。</p>
+<h2 id="企业批量部署解决方案"><a href="#企业批量部署解决方案" class="headerlink" title="企业批量部署解决方案"></a>企业批量部署解决方案</h2><p>终端多时逐台改注册表不可维护，改用域控组策略下发。</p>
 <h3 id="1-打开组策略管理编辑器"><a href="#1-打开组策略管理编辑器" class="headerlink" title="1. 打开组策略管理编辑器"></a>1. 打开组策略管理编辑器</h3><p>在域控服务器运行 <code>gpmc.msc</code> 打开组策略管理编辑器，先确认目标 OU 结构：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081512602.png" alt="组策略管理编辑器" title="组策略管理界面" decoding="async" loading="lazy"></p>
 <h3 id="2-选择应用范围"><a href="#2-选择应用范围" class="headerlink" title="2. 选择应用范围"></a>2. 选择应用范围</h3><blockquote>
@@ -567,7 +566,7 @@
 <li>选择「在这个域中创建 GPO 并在此处链接」，按用途命名</li>
 <li>按注册表位置决定放在计算机配置还是用户配置。本例写入 <code>HKEY_LOCAL_MACHINE</code>，两者都能下发，但计算机配置对整机生效更稳定</li>
 </ol>
-<h3 id="3-配置组策略"><a href="#3-配置组策略" class="headerlink" title="3. 配置组策略"></a>3. 配置组策略</h3><p>以用户配置为例，导航到 <code>用户配置</code> → <code>首选项</code> → <code>Windows设置</code> → <code>注册表</code>，右键新建注册表项，按下表填写：</p>
+<h3 id="3-配置组策略"><a href="#3-配置组策略" class="headerlink" title="3. 配置组策略"></a>3. 配置组策略</h3><p>以用户配置为例，导航到 <code>用户配置</code> → <code>首选项</code> → <code>Windows设置</code> → <code>注册表</code>，右键新建注册表项：</p>
 <ul>
 <li>操作：新建</li>
 <li>Hive：<code>HKEY_LOCAL_MACHINE</code></li>
@@ -580,7 +579,7 @@
 <h3 id="4-部署和验证"><a href="#4-部署和验证" class="headerlink" title="4. 部署和验证"></a>4. 部署和验证</h3><p>在客户端执行以下命令强制刷新策略：</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpupdate /force</span><br></pre></td></tr></table></figure>
 
-<p>随后确认两件事：客户端 <code>HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge</code> 下已出现 <code>RendererCodeIntegrityEnabled</code> 且值为 <code>0</code>；Edge 重启后网页可正常打开。若策略未落地，用 <code>gpresult /r</code> 核查该 GPO 是否链接到客户端所在 OU、是否被安全筛选或 WMI 筛选排除。</p>
+<p>随后核两件事：客户端 <code>HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge</code> 下已出现 <code>RendererCodeIntegrityEnabled</code> 且值为 <code>0</code>；Edge 重启后网页可正常打开。策略未落地时用 <code>gpresult /r</code> 核查 GPO 是否链接到客户端所在 OU、是否被安全筛选或 WMI 筛选排除。</p>
 <h2 id="预防措施"><a href="#预防措施" class="headerlink" title="预防措施"></a>预防措施</h2><ol>
 <li><strong>定期更新</strong>：保持系统与浏览器处于受支持版本</li>
 <li><strong>策略审查</strong>：定期审查 Edge 相关组策略，避免多份策略写同一键值互相覆盖</li>
@@ -596,8 +595,11 @@
 <p>怀疑系统文件完整性异常时，以管理员身份执行：</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sfc /scannow</span><br></pre></td></tr></table></figure>
 
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>把 <code>HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge</code> 下的 <code>RendererCodeIntegrityEnabled</code> 置为 <code>0</code>，可关闭 Edge 渲染器代码完整性检查，恢复「任意网页都提示兼容性问题」的故障。该手段绕过的是触发点，若根因是安全软件注入仍需从注入源处理，并在 Edge 升级后复验。</p>
-<p>企业环境优先用独立 GPO 定向下发到受影响 OU，不要写入默认域策略；下发后以 <code>gpupdate /force</code> 加注册表回读确认真的生效，而非只看 GPO 创建成功。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>把 <code>HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge</code> 下的 <code>RendererCodeIntegrityEnabled</code> 置为 <code>0</code>，关闭渲染器代码完整性检查，恢复「任意网页都提示兼容性问题」；</li>
+<li>绕过的是触发点，根因若是安全软件注入仍需处理注入源，Edge 升级后复验；</li>
+<li>企业用独立 GPO 定向下发到受影响 OU，不写默认域策略；<code>gpupdate /force</code> 加注册表回读确认生效，不只看 GPO 创建成功。</li>
+</ul>
 
                 
             </div>
@@ -1038,7 +1040,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">43.1k</span>&nbsp;字
+                class="white-color">38.9k</span>&nbsp;字
             
             
             

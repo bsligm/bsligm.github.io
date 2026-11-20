@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="DGX Spark, GB10, vLLM 部署, NVFP4, 统一内存, LiteLLM 网关, 投机解码 MTP, reasoning_effort, Codex, Claude Code">
-    <meta name="description" content="入手一台 DGX Spark 的主要目的不是折腾硬件，而是把手上几个 AI 编码 Agent 从按 token 计费的订阅 API 挪回内网。两个动机：一是长上下文任务（一次上下文压缩就吞掉二十万 token）在云端成本压不住；二是历史会话">
+    <meta name="description" content="买一台 DGX Spark 的目标很直接：把手上几个 AI 编码 Agent 从按 token 计费的订阅 API 挪回内网，长上下文的成本和会话数据都不再出境。跑了八周，最花时间的不是 vLLM 本身，而是让四个协议、思考档位语义和工具调">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2026/11/19/DGX-Spark-vLLM%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%A4%9AAgent%E6%8E%A5%E5%85%A5/&#34;},&#34;headline&#34;:&#34;DGX Spark 部署 vLLM：256K 上下文本机推理与四类 Agent 接入实录&#34;,&#34;description&#34;:&#34;入手一台 DGX Spark 的主要目的不是折腾硬件，而是把手上几个 AI 编码 Agent 从按 token 计费的订阅 API 挪回内网。两个动机：一是长上下文任务（一次上下文压缩就吞掉二十万 token）在云端成本压不住；二是历史会话&#34;,&#34;datePublished&#34;:&#34;2026-11-19T12:10:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T12:10:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2026/11/19/DGX-Spark-vLLM%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%A4%9AAgent%E6%8E%A5%E5%85%A5/&#34;},&#34;headline&#34;:&#34;DGX Spark 部署 vLLM：256K 上下文本机推理与四类 Agent 接入实录&#34;,&#34;description&#34;:&#34;买一台 DGX Spark 的目标很直接：把手上几个 AI 编码 Agent 从按 token 计费的订阅 API 挪回内网，长上下文的成本和会话数据都不再出境。跑了八周，最花时间的不是 vLLM 本身，而是让四个协议、思考档位语义和工具调&#34;,&#34;datePublished&#34;:&#34;2026-11-19T12:10:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -22,7 +22,7 @@
     <meta property="og:title" content="DGX Spark 部署 vLLM：256K 上下文本机推理与四类 Agent 接入实录 | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2026/11/19/DGX-Spark-vLLM%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%A4%9AAgent%E6%8E%A5%E5%85%A5/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="入手一台 DGX Spark 的主要目的不是折腾硬件，而是把手上几个 AI 编码 Agent 从按 token 计费的订阅 API 挪回内网。两个动机：一是长上下文任务（一次上下文压缩就吞掉二十万 token）在云端成本压不住；二是历史会话">
+    <meta property="og:description" content="买一台 DGX Spark 的目标很直接：把手上几个 AI 编码 Agent 从按 token 计费的订阅 API 挪回内网，长上下文的成本和会话数据都不再出境。跑了八周，最花时间的不是 vLLM 本身，而是让四个协议、思考档位语义和工具调">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/10.jpg">
     
@@ -30,7 +30,7 @@
     <meta property="article:published_time" content="2026-11-19T12:10:00.000Z">
     
     
-    <meta property="article:modified_time" content="2026-11-19T12:10:00.000Z">
+    <meta property="article:modified_time" content="2026-11-20T04:00:00.000Z">
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
@@ -498,21 +498,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2026-11-19
+                    2026-11-20
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5.2k
+                    5.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    19 分
+                    18 分
                 </div>
                 
 
@@ -532,9 +532,8 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>入手一台 DGX Spark 的主要目的不是折腾硬件，而是把手上几个 AI 编码 Agent 从按 token 计费的订阅 API 挪回内网。两个动机：一是长上下文任务（一次上下文压缩就吞掉二十万 token）在云端成本压不住；二是历史会话和代码片段没必要出境。跑了八周，最花时间的部分并不是 vLLM 本身，而是让四个协议不同、思考档位语义不同、工具调用格式不同的 Agent 客户端在同一台推理机上同时正常工作。</p>
-<p>下面按部署顺序记录，每个参数都给出取舍理由，未验证的地方单独标出来。</p>
-<h2 id="机器与环境"><a href="#机器与环境" class="headerlink" title="机器与环境"></a>机器与环境</h2><p>GB10 超级芯片，120GB 统一内存，aarch64 指令集，出厂预装 Ubuntu 24.04.5。</p>
+                <p>买一台 DGX Spark 的目标很直接：把手上几个 AI 编码 Agent 从按 token 计费的订阅 API 挪回内网，长上下文的成本和会话数据都不再出境。跑了八周，最花时间的不是 vLLM 本身，而是让四个协议、思考档位语义和工具调用格式都不同的 Agent 客户端在同一台推理机上同时正常工作。下面按部署顺序记录，每个参数给出取舍理由，未验证的部分单独标出。</p>
+<h2 id="机器与环境"><a href="#机器与环境" class="headerlink" title="机器与环境"></a>机器与环境</h2><p>GB10 超级芯片，120GB 统一内存，aarch64，出厂预装 Ubuntu 24.04.5 LTS。</p>
 <table>
 <thead>
 <tr>
@@ -563,13 +562,13 @@
 <td>36 W / 60 ℃</td>
 </tr>
 </tbody></table>
-<p>有三条硬件特性影响了后面所有决策。</p>
+<p>三条硬件特性决定了后面所有选择。</p>
 <p><strong>统一内存。</strong> CPU 与 GPU 共享同一块物理内存，121 GiB 可以整体交给模型，这是这台机器敢开 256K 上下文的唯一原因。代价是模型常驻之后没有余量做别的，实测长期停在 111/121 GiB。</p>
-<p><strong>单卡。</strong> 无法同时驻留两份完整模型，热切换时可用内存约 12 GiB，一次加载几十秒。所以”多模型路由”在这台机器上只能靠外部网关兜住回退，不能靠本机起多实例。</p>
+<p><strong>单卡。</strong> 无法同时驻留两份完整模型，热切换时可用内存约 12 GiB，一次加载几十秒。”多模型路由”在这台机器上只能靠外部网关兜住回退，不能靠本机起多实例。</p>
 <p><strong>aarch64。</strong> 所有镜像都要确认有 arm64 变体，只有 x86 的镜像在这一层直接失败，早期吃过一次。</p>
-<p>散热方面，跑满时的降频做了核验：<code>nvidia-smi -q -d PERFORMANCE</code> 的 <code>clocks_event_reasons</code> 全程 <code>0x0</code>，没有主动降频事件。GB10 的功耗上限本身只有百瓦级，散热裕量比预期大。</p>
-<p>网络用 netplan 配静态地址，有线接口的 <code>autoconnect-priority</code> 设为 100，无线作为备份接口。这个优先级不是可选项：早期无线没关自动连接，Wi-Fi 每次抖动都会抢走默认路由，导致推理服务”突然连不上”，发生了两次。</p>
-<p>监控接进现成的 Zabbix，Agent2 7.4，加了 7 个自定义 Item 和 3 个触发器，覆盖显存占用、KV cache 使用率、请求排队和温度。其中”swap 常态换页”这一项被明确判定为 GB10 稳态而非故障，否则告警会天天响。</p>
+<p>散热核验过：<code>nvidia-smi -q -d PERFORMANCE</code> 的 <code>clocks_event_reasons</code> 全程 <code>0x0</code>，没有主动降频事件；GB10 功耗上限只有百瓦级，散热裕量比预期大。</p>
+<p>网络用 netplan 静态地址，有线 <code>autoconnect-priority</code> 设 100，无线作备份。这个优先级不是可选项：早期无线没关自动连接，Wi-Fi 每次抖动都抢走默认路由，推理服务”突然连不上”发生了两次。</p>
+<p>监控接进现成 Zabbix（Agent2 7.4），加 7 个自定义 Item 和 3 个触发器，覆盖显存占用、KV cache 使用率、请求排队和温度。”swap 常态换页”明确判定为 GB10 稳态而非故障，否则告警天天响。</p>
 <h2 id="部署形态"><a href="#部署形态" class="headerlink" title="部署形态"></a>部署形态</h2><p>最终是五个容器，而不是一条 <code>docker run</code> 拉起全部。</p>
 <table>
 <thead>
@@ -608,36 +607,36 @@
 <p>拆开的理由是权限边界，不是微服务审美。</p>
 <ul>
 <li><strong>master key 不进数据面。</strong> API Gateway 只持有各 virtual key 的 SHA256 摘要，拿不到主密钥；管理面独立端口，不对公网暴露。</li>
-<li><strong>路由与引擎解耦。</strong> 引擎重启或换模型时，网关可以先把流量摘掉，客户端看到的是排队或回退，而不是连接拒绝。</li>
-<li><strong>边界代理承担兼容层。</strong> 八百行左右的薄代理，负责思考档位映射、system 消息重排、输出预算补齐和协议错误体转换。这些逻辑放在客户端要做四遍，放进 vLLM 要改引擎源码，放在这一层只做一遍。</li>
+<li><strong>路由与引擎解耦。</strong> 引擎重启或换模型时，网关先把流量摘掉，客户端看到的是排队或回退，不是连接拒绝。</li>
+<li><strong>边界代理承担兼容层。</strong> 八百行左右的薄代理，负责思考档位映射、system 消息重排、输出预算补齐和协议错误体转换。这些逻辑放客户端要做四遍，放 vLLM 要改引擎源码，放在这一层只做一遍。</li>
 </ul>
-<p>LiteLLM 的模型注册用 YAML 声明式挂载，没用控制台的数据库注册。实测路由表在 <code>LiteLLM_ProxyModelTable</code> 里是 0 行，所有路由都来自挂载进容器的那份配置文件。这个区别在排查时很关键：控制台看不到模型、或者控制台改了不生效时，应该先看文件而不是怀疑数据库。配置骨架：</p>
+<p>LiteLLM 的模型注册用 YAML 声明式挂载，没用控制台的数据库注册。实测路由表在 <code>LiteLLM_ProxyModelTable</code> 里是 0 行，所有路由都来自挂载进容器的那份配置文件。排查时这个区别很关键：控制台看不到模型、或控制台改了不生效，先看文件而不是怀疑数据库。配置骨架：</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">model_list:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">model_name:</span> <span class="string">qwen3.8-flash-next</span>        <span class="comment"># 对外别名，与权重仓库名解耦</span></span><br><span class="line">    <span class="attr">litellm_params:</span></span><br><span class="line">      <span class="attr">model:</span> <span class="string">hosted_vllm/qwen3.8-flash-next</span></span><br><span class="line">      <span class="attr">api_base:</span> <span class="string">http://&lt;vllm-host&gt;:&lt;port&gt;/v1</span></span><br><span class="line">      <span class="attr">api_key:</span> <span class="string">os.environ/DGX_API_KEY</span></span><br><span class="line"><span class="comment"># 家庭自用，价格全部置 0，只用于消耗记账，不参与计费</span></span><br></pre></td></tr></table></figure>
 
 <p>模型别名与权重仓库名解耦是有意的：换一次量化版本不用去改四个客户端的配置。</p>
 <h2 id="vLLM-参数逐条"><a href="#vLLM-参数逐条" class="headerlink" title="vLLM 参数逐条"></a>vLLM 参数逐条</h2><p>版本 <code>0.1.dev20073+g8e685d198</code>，NVFP4 量化权重。启动命令去掉路径与无关环境变量后是这样：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">vllm serve /models/candidate \</span><br><span class="line">  --served-model-name qwen3.8-flash-next \</span><br><span class="line">  --max-model-len 262144 \</span><br><span class="line">  --max-num-seqs 8 \</span><br><span class="line">  --gpu-memory-utilization 0.80 \</span><br><span class="line">  --enable-prefix-caching \</span><br><span class="line">  --enable-chunked-prefill \</span><br><span class="line">  --max-num-batched-tokens 8192 \</span><br><span class="line">  --kv-cache-dtype bfloat16 \</span><br><span class="line">  --mamba-ssm-cache-dtype float32 \</span><br><span class="line">  --limit-mm-per-prompt <span class="string">&#x27;&#123;&quot;image&quot;:64,&quot;video&quot;:1&#125;&#x27;</span> \</span><br><span class="line">  --tool-call-parser qwen3_xml \</span><br><span class="line">  --reasoning-parser qwen3 \</span><br><span class="line">  --speculative-config <span class="string">&#x27;&#123;&quot;method&quot;:&quot;mtp&quot;,&quot;num_speculative_tokens&quot;:2&#125;&#x27;</span> \</span><br><span class="line">  --compilation-config <span class="string">&#x27;&#123;&quot;cudagraph_mode&quot;:&quot;PIECEWISE&quot;,&quot;splitting_ops&quot;:[...]&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
 
-<p><strong><code>--max-model-len 262144</code>。</strong> 256K 窗口。KV cache 占用与窗口长度线性相关，这一项决定了后面所有并发数字。</p>
+<p><strong><code>--max-model-len 262144</code>。</strong> 256K 窗口。KV cache 占用与窗口长度线性相关，这一项决定后面所有并发数字。</p>
 <p><strong><code>--gpu-memory-utilization 0.80</code>。</strong> vLLM 默认是 0.9。统一内存架构下 0.9 会挤压系统页缓存和宿主进程，早期出现过内存回收引起的请求毛刺，降到 0.80 之后没再复现。这不是玄学，是留 20 GiB 给引擎之外的进程。</p>
 <p><strong><code>--max-num-seqs 8</code>。</strong> 调度上限，不是容量声明。后文会看到真实可用并发远低于它。</p>
-<p><strong><code>--enable-prefix-caching</code>。</strong> 收益最大的一项。Agent 的多轮请求前缀高度重复（system + 工具定义 + 历史），前缀缓存命中与否，首 token 延迟差的是数量级。</p>
+<p><strong><code>--enable-prefix-caching</code>。</strong> 收益最大的一项。Agent 多轮请求前缀高度重复（system + 工具定义 + 历史），前缀缓存命中与否，首 token 延迟差的是数量级。</p>
 <p><strong><code>--enable-chunked-prefill</code> 与 <code>--max-num-batched-tokens 8192</code>。</strong> 256K 窗口的长 prompt 如果整块预填充，会把正在解码的请求全部堵住。分块之后 8192 token 一批，长请求插进来不会让在跑的流卡顿。批大小从 4096 试到 8192，再往上首 token 延迟开始回弹。</p>
-<p><strong><code>--kv-cache-dtype bfloat16</code>。</strong> 量化权重配 BF16 的 KV cache。KV 用 fp8 在这里没有收益：瓶颈是内存带宽而不是容量，而精度损失会直接体现在长上下文的多跳检索上。</p>
-<p><strong><code>--mamba-ssm-cache-dtype float32</code>。</strong> 混合架构的线性注意力状态必须保持 fp32，半精度会数值漂移，表现为长会话后半段答案质量下降。这是架构要求，不是调优选项。</p>
+<p><strong><code>--kv-cache-dtype bfloat16</code>。</strong> 量化权重配 BF16 的 KV cache。KV 用 fp8 在这里没有收益：瓶颈是内存带宽而不是容量，精度损失会直接体现在长上下文的多跳检索上。</p>
+<p><strong><code>--mamba-ssm-cache-dtype float32</code>。</strong> 混合架构的线性注意力状态必须保持 fp32，半精度会数值漂移，表现为长会话后半段答案质量下降。架构要求，不是调优选项。</p>
 <p><strong><code>--tool-call-parser qwen3_xml</code> 与 <code>--reasoning-parser qwen3</code>。</strong> 工具调用走 XML 标记，思考内容独立成 reasoning 通道。两个 parser 配错的症状完全不同：前者是工具调用变成正文文本，后者是思考内容混进答案被客户端当成结果。</p>
 <p><strong><code>--speculative-config</code> 的 MTP，<code>num_speculative_tokens=2</code>。</strong> 多 token 预测投机解码。2 是实测拐点：1 收益不够，3 之后接受率下降导致的回退抵消了收益。</p>
 <p><strong><code>--limit-mm-per-prompt</code>。</strong> 多模态上限，见后文。</p>
-<p><strong>PIECEWISE cudagraph 与 <code>splitting_ops</code>。</strong> 混合架构下 FULL cudagraph 覆盖不到线性注意力的状态更新，必须分段捕获，代价是调度开销略高。这是部署这一代模型的必选项，不算性能优化项。</p>
-<p>权重挂载有个坑值得单列：容器内 <code>/models/candidate</code> 映射到宿主模型目录，但实际生效的 <code>config.json</code> 来自另一份实验目录里的覆盖文件。也就是说<strong>在模型目录里改 config 不生效</strong>，改完重启发现参数没变，第一反应会误判成版本没生效。定位方式是 <code>docker inspect</code> 看挂载表，而不是看模型目录。</p>
-<h2 id="256K-其实是三个不同的数字"><a href="#256K-其实是三个不同的数字" class="headerlink" title="256K 其实是三个不同的数字"></a>256K 其实是三个不同的数字</h2><p>配置里写 262144，客户端显示 262144，真正能用的空间是另一回事。三层要分清：</p>
+<p><strong>PIECEWISE cudagraph 与 <code>splitting_ops</code>。</strong> 混合架构下 FULL cudagraph 覆盖不到线性注意力的状态更新，必须分段捕获，代价是调度开销略高。部署这一代模型的必选项，不算性能优化项。</p>
+<p>权重挂载有个坑值得单列：容器内 <code>/models/candidate</code> 映射到宿主模型目录，但实际生效的 <code>config.json</code> 来自另一份实验目录里的覆盖文件。<strong>在模型目录里改 config 不生效</strong>，改完重启发现参数没变，第一反应会误判成版本没生效。定位方式是 <code>docker inspect</code> 看挂载表，不是看模型目录。</p>
+<h2 id="256K-其实是三个不同的数字"><a href="#256K-其实是三个不同的数字" class="headerlink" title="256K 其实是三个不同的数字"></a>256K 其实是三个不同的数字</h2><p>配置里写 262144，客户端显示 262144，真正能用的空间是另一回事。三层：</p>
 <ol>
-<li><strong>引擎窗口</strong>——262144，由 <code>--max-model-len</code> 决定的硬上限。</li>
+<li><strong>引擎窗口</strong>——262144，<code>--max-model-len</code> 决定的硬上限。</li>
 <li><strong>有效聊天空间</strong>——要减掉固定开销。实测固定前缀 28.5K token：system prompt 8.6K、工具定义 17.5K、skills 2.4K。</li>
 <li><strong>压缩触发点</strong>——网关侧阈值 130K，实际触发点约 123.5K。</li>
 </ol>
-<p>第二层是踩坑踩出来的。最初压缩阈值设 100K，结果压缩频率约 23 次/小时：100K 阈值减掉 28.5K 固定开销，只剩 71.5K 真正留给对话，两三轮工具调用就触发一次。调到 130K 之后降到约 13 次/小时，安全校验是 123.5K 触发点加 65.5K 输出预留等于 189K，仍小于 262K。</p>
-<p>即便如此，一个前缀本来就有 80-100K 的重会话仍然每 7-12 分钟压一次。这是结构问题，没调干净。</p>
+<p>第二层是踩坑踩出来的。最初压缩阈值设 100K，压缩频率约 23 次/小时：100K 阈值减掉 28.5K 固定开销，只剩 71.5K 真正留给对话，两三轮工具调用就触发一次。调到 130K 之后降到约 13 次/小时，安全校验是 123.5K 触发点加 65.5K 输出预留等于 189K，仍小于 262K。</p>
+<p>即便如此，前缀本来就有 80-100K 的重会话仍然每 7-12 分钟压一次。这是结构问题，没调干净。</p>
 <p>另有一条被推翻的假设值得记一笔：最初按”tokenizer 计数存在 25% 偏差”做过修正，后来判定这个修正本身不严谨——不同模型的 tokenizer 行为不同，正确做法是拿真实 token 数实测，而不是套一个比例系数。</p>
 <h2 id="并发：没验证的部分比验证了的更重要"><a href="#并发：没验证的部分比验证了的更重要" class="headerlink" title="并发：没验证的部分比验证了的更重要"></a>并发：没验证的部分比验证了的更重要</h2><p>从引擎调度日志采了 7983 条样本。</p>
 <table>
@@ -664,15 +663,15 @@
 <td>仅 1 个瞬时样本，KV cache 86.2%</td>
 </tr>
 </tbody></table>
-<p><strong>持续 3 路并发可用这件事没有被证明。</strong> 所以我不会写”这台机器支持 3 路并发”。网关侧的并发门禁按 3 设置，是留了保守余量的。把 <code>max-num-seqs=8</code> 当 SLA 是这类部署最容易犯的错误，它只表示引擎最多愿意同时排 8 个序列，不表示 8 路都能有可用延迟。</p>
-<p>超时问题的归因同样反直觉。有一段连续超时，怀疑是模型或引擎的问题，最后是三层客户端原因：</p>
+<p><strong>持续 3 路并发可用这件事没有被证明。</strong> 所以我不会写”这台机器支持 3 路并发”。网关侧并发门禁按 3 设置，是留了保守余量的。把 <code>max-num-seqs=8</code> 当 SLA 是这类部署最容易犯的错误：它只表示引擎最多愿意同时排 8 个序列，不表示 8 路都有可用延迟。</p>
+<p>超时的归因同样反直觉。一段连续超时，怀疑过模型或引擎，最后是三层客户端原因：</p>
 <ul>
 <li><strong>本地并发门禁</strong>：编排层 <code>maxConcurrency=1 / queueLimit=2</code>，超出直接返回 429，一天 104 条，请求根本没出门。</li>
 <li><strong>客户端主动取消</strong>：压缩请求 240 秒超时，取消掉 22 条。</li>
 <li><strong>公网链路 502</strong>：这一层根因目前仍未闭环。</li>
 </ul>
-<p>24 小时账本是 570 success / 6 failure，p95 239.58 秒。p95 接近四分钟不是因为推理慢，而是里面包含了排队与压缩等待；分层统计之后，真正落在推理上的延迟分布是正常的。</p>
-<h2 id="四类-Agent-的接入差异"><a href="#四类-Agent-的接入差异" class="headerlink" title="四类 Agent 的接入差异"></a>四类 Agent 的接入差异</h2><p>这是花时间最多的部分。四个客户端走三种协议，思考档位七档而引擎只有三档，工具调用格式各不相同。</p>
+<p>24 小时账本 570 success / 6 failure，p95 239.58 秒。p95 接近四分钟不是因为推理慢，而是包含排队与压缩等待；分层统计之后，真正落在推理上的延迟分布是正常的。</p>
+<h2 id="四类-Agent-的接入差异"><a href="#四类-Agent-的接入差异" class="headerlink" title="四类 Agent 的接入差异"></a>四类 Agent 的接入差异</h2><p>花时间最多的部分。四个客户端走三种协议，思考档位客户端七档、引擎只有三档，工具调用格式各不相同。</p>
 <table>
 <thead>
 <tr>
@@ -702,53 +701,53 @@
 <td>两个 compat 开关</td>
 </tr>
 </tbody></table>
-<p><strong>Codex</strong> 走 Responses API。除 <code>base_url</code>、<code>env_key</code> 外必须显式声明三项窗口参数：<code>model_context_window=262144</code>、<code>model_auto_compact_token_limit=131072</code>、<code>tool_output_token_limit=8192</code>。第一项客户端会按模型名猜，猜错直接超窗；后两项不写的话一次工具输出就能把整个历史撑爆，实测有过 584098 字节的单次工具输出进历史。压缩走原生 <code>POST /v1/responses/:compact</code>，需要在边界代理的白名单里单独放行。</p>
+<p><strong>Codex</strong> 走 Responses API。除 <code>base_url</code>、<code>env_key</code> 外必须显式声明三项窗口参数：<code>model_context_window=262144</code>、<code>model_auto_compact_token_limit=131072</code>、<code>tool_output_token_limit=8192</code>。第一项客户端会按模型名猜，猜错直接超窗；后两项不写的话一次工具输出就能把整个历史撑爆，实测有过 584098 字节的单次工具输出进历史。压缩走原生 <code>POST /v1/responses/:compact</code>，需要在边界代理白名单里单独放行。</p>
 <p><strong>Claude Code</strong> 不需要配置文件，五个环境变量指向同一个模型即可：<code>ANTHROPIC_BASE_URL</code>、<code>ANTHROPIC_MODEL</code>、<code>ANTHROPIC_DEFAULT_OPUS_MODEL</code>、<code>ANTHROPIC_DEFAULT_SONNET_MODEL</code>、<code>ANTHROPIC_DEFAULT_HAIKU_MODEL</code>，凭据走 <code>ANTHROPIC_AUTH_TOKEN</code>。网关侧要为 Anthropic 协议补两件事：CORS 显式放行 <code>x-api-key, anthropic-version, anthropic-beta, anthropic-dangerous-direct-browser-access</code>；错误体补 <code>type: &quot;error&quot;</code> 字段。缺后者时客户端不显示原因，只显示一句”请求失败”。</p>
 <p><strong>WorkBuddy</strong> 最省事，标准 OpenAI Chat Completions，给 <code>base_url</code> 和模型名就通。</p>
 <p><strong>dsh</strong>（DeepSeek Harness）需要两个 compat 开关：<code>supportsDeveloperRole: false</code>，发 developer 角色会被模板拒；<code>maxTokensField: max_tokens</code>，默认发的 <code>max_completion_tokens</code> vLLM 侧不认。还要显式声明 <code>contextWindow: 262144</code> 与 <code>maxTokens: 32768</code>，<strong>这两个数字不能都填 262144</strong>——输出上限等于上下文窗口时，客户端侧的压力校验直接抛错。</p>
 <p>ZCode 也接过，同样要显式指定窗口（它按官方模型名做能力匹配，会把本地 262K 当云端 1M 处理），后来退出了验收范围。</p>
-<p><strong>边界说明</strong>：Claude Code 与 dsh 在这台机器上没有真机安装，只做到协议层与配置层验证。真机端到端跑通的是 Codex 与 WorkBuddy 两家。总验收的口径是：协议转换用例 57/57、parser 用例 57/57、真实客户端用例 32/32，250046 input token 下三处位置标记全部识别正确。</p>
-<h2 id="思考档位：七档塌缩成三档"><a href="#思考档位：七档塌缩成三档" class="headerlink" title="思考档位：七档塌缩成三档"></a>思考档位：七档塌缩成三档</h2><p>引擎原生只有 low / medium / xhigh 三档，客户端暴露 high / xhigh / max / ultra。透传的结果是 400，所以必须在边界代理做映射：</p>
+<p><strong>边界说明</strong>：Claude Code 与 dsh 在这台机器上没有真机安装，只做到协议层与配置层验证。真机端到端跑通的是 Codex 与 WorkBuddy。总验收口径：协议转换用例 57/57、parser 用例 57/57、真实客户端用例 32/32，250046 input token 下三处位置标记全部识别正确。</p>
+<h2 id="思考档位：七档塌缩成三档"><a href="#思考档位：七档塌缩成三档" class="headerlink" title="思考档位：七档塌缩成三档"></a>思考档位：七档塌缩成三档</h2><p>引擎原生只有 low / medium / xhigh 三档，客户端暴露 high / xhigh / max / ultra。透传的结果是 400，必须在边界代理做映射：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">none / minimal / low       →  low</span><br><span class="line">medium                     →  medium</span><br><span class="line">high / xhigh / max / ultra →  xhigh</span><br></pre></td></tr></table></figure>
 
 <p>映射的代价是”界面显示八档、实际三档”，这是等价性的真实损失，得承认。它比另一种做法好：白名单外一律 400，客户端直接不可用。</p>
 <p>围绕档位还有三个坑。</p>
 <p><strong><code>extra_body</code> 与顶层不等价。</strong> LiteLLM 1.101 对两条载体的合并优先级不一致，表现为”显式关闭思考但仍在思考””low 变成了 xhigh”。修法是在代理层统一顶层与 <code>extra_body</code> 里的 <code>reasoning</code>/<code>thinking</code> 载体，并固定优先级：现代 effort 语义优先，显式关闭优先。</p>
-<p><strong>legacy <code>budget_tokens</code> 不能真限流。</strong> 旧的 Anthropic 思考预算被直传采样器，思考会被硬截断。处置是它只作强度提示，走 1024/2048/4096 的既有阈值映射，不进采样器。语义上这不完全等同于原预算上限，属于已知妥协。</p>
+<p><strong>legacy <code>budget_tokens</code> 不能真限流。</strong> 旧的 Anthropic 思考预算被直传采样器，思考会被硬截断。处置是它只作强度提示，走 1024/2048/4096 的既有阈值映射，不进采样器。语义上不完全等同于原预算上限，属于已知妥协。</p>
 <p><strong><code>null</code> / <code>default</code> 必须显式拒绝。</strong> 客户端会发可选等级的空值，落到引擎是隐式行为。代理层直接返回 400 并列出可取值，比让它静默降级好排查。</p>
-<p><code>max_tokens</code> 缺失也要补。客户端省略时上游不会自动补，表现为随机截断。代理补 <code>max_output_tokens = max(default_output, budget + 8192)</code>，并硬校验输出上限在 1 到 262144 之间，思考预算不小于输出上限，否则 400。</p>
-<p>system 消息重排是另一处必改。Qwen 的 ChatML 只接受单条前导 system，而新客户端会发多条 system/developer。代理把它们合并置顶，非文本 content 一律拒 400 而不是静默字符串化——静默字符串化会把多模态内容变成一串看不出问题的 JSON 文本，问题会推迟到很后面才暴露。</p>
+<p><code>max_tokens</code> 缺失也要补。客户端省略时上游不会自动补，表现为随机截断。代理补 <code>max_output_tokens = max(default_output, budget + 8192)</code>，并硬校验输出上限在 1 到 262144 之间、思考预算不小于输出上限，否则 400。</p>
+<p>system 消息重排是另一处必改。Qwen 的 ChatML 只接受单条前导 system，新客户端会发多条 system/developer。代理把它们合并置顶，非文本 content 一律拒 400 而不是静默字符串化——静默字符串化会把多模态内容变成一串看不出问题的 JSON 文本，问题会推迟到很后面才暴露。</p>
 <h2 id="压缩队列隔离"><a href="#压缩队列隔离" class="headerlink" title="压缩队列隔离"></a>压缩队列隔离</h2><p>有一段时间每天出现 77 个最终 400。根因是”只接受摘要、拒绝 <code>tools</code> 的压缩服务”被放进了普通推理的回退链：普通请求打进去被拒，压缩请求带着 <code>tools</code> 打进去也被拒。</p>
-<p>修复方式是把两个入口彻底分开：普通恢复与摘要各自独立 provider、独立并发槽，底层是同一个上游服务，靠 provider 维度做队列隔离。之后做了故障注入验证——两个压缩任务正在跑的时候，普通恢复请求 0.8 秒完成、零排队；分离之前同样的注入下是 75 到 134 秒。</p>
-<p>这个数字的口径必须说清楚：<strong>它是故障注入结果，不是长期生产统计</strong>。它能证明隔离有效，不能证明日常延迟就是这个水平。同轮另一项证据更可靠：分离之后 133 次真实请求全部 200，路由未就绪 0 次。</p>
-<p>配套还修了几处压缩阈值的查找问题：成员带固定后缀时，查找需要 provider 通配才能命中；分组级覆盖在新版本里被忽略（实际取成员最小值），所以不生效的 <code>group/*</code> 覆盖要删掉，按成员阈值落实并读回。</p>
-<h2 id="多模态：把识图关到专用路由"><a href="#多模态：把识图关到专用路由" class="headerlink" title="多模态：把识图关到专用路由"></a>多模态：把识图关到专用路由</h2><p>一开始的做法是让所有路由都能识图，结果是免费池的 502 拖垮了主链，视觉请求跨供应商回退还造成上下文污染。最终策略三条：</p>
+<p>修复方式是把两个入口彻底分开：普通恢复与摘要各自独立 provider、独立并发槽，底层同一个上游服务，靠 provider 维度做队列隔离。之后做了故障注入验证——两个压缩任务正在跑时，普通恢复请求 0.8 秒完成、零排队；分离之前同样的注入下是 75 到 134 秒。</p>
+<p>这个数字的口径必须说清楚：<strong>它是故障注入结果，不是长期生产统计</strong>。它能证明隔离有效，不能证明日常延迟就是这个水平。同轮更可靠的证据：分离之后 133 次真实请求全部 200，路由未就绪 0 次。</p>
+<p>配套还修了几处压缩阈值的查找问题：成员带固定后缀时，查找需要 provider 通配才能命中；分组级覆盖在新版本里被忽略（实际取成员最小值），不生效的 <code>group/*</code> 覆盖要删掉，按成员阈值落实并读回。</p>
+<h2 id="多模态：把识图关到专用路由"><a href="#多模态：把识图关到专用路由" class="headerlink" title="多模态：把识图关到专用路由"></a>多模态：把识图关到专用路由</h2><p>一开始让所有路由都能识图，结果免费池的 502 拖垮主链，视觉请求跨供应商回还造成上下文污染。最终策略三条：</p>
 <ul>
 <li><strong>全局跨供应商识图关闭</strong>，只保留已验证具备原生视觉能力的成员。</li>
 <li><strong>识图集中在一个专用路由组</strong>，成员全部降档到最低思考强度。识图不需要深度思考，档位降下来吞吐差别明显。</li>
 <li><strong>图片 URL 抓取不跟跳转、不吃环境代理</strong>（<code>follow_redirects=False</code>、<code>trust_env=False</code>），避免 SSRF 与环境代理污染。</li>
 </ul>
 <p>换到专用组之后，此前某个上游累计 138 次的视觉 EOF/502 完全停止，识别请求由专用组接管，基本全部成功。</p>
-<p>引擎侧的硬上限是单请求 64 张图，65 张直接 400。已验通过的组合：64 张 512px（三种协议）、64 张 1024px、4 轮历史各 16 张。被拒之后引擎本身健康，不是崩溃。代理层不做额外的图片裁剪或降采样，把上限交给引擎是更省事也更诚实的做法。</p>
+<p>引擎侧硬上限是单请求 64 张图，65 张直接 400。已验通过的组合：64 张 512px（三种协议）、64 张 1024px、4 轮历史各 16 张。被拒之后引擎本身健康，不是崩溃。代理层不做额外的图片裁剪或降采样，把上限交给引擎是更省事也更诚实的做法。</p>
 <h2 id="让-WAF-只放行推理路径"><a href="#让-WAF-只放行推理路径" class="headerlink" title="让 WAF 只放行推理路径"></a>让 WAF 只放行推理路径</h2><p>推理服务经雷池 SafeLine 暴露到公网。默认策略下推理接口会被语义引擎误拦：工具调用的参数里出现 <code>git log --oneline -1</code>、<code>SELECT ... OR 1=1</code> 这类内容，命中 SQLi 和命令注入规则太正常了。</p>
-<p>社区版这里有条硬限制：站点级关闭内置增强规则会返回 <code>license required</code>，于是只剩语义 dry_run 加 ACL 精确放宽这一条路。做法是”POST 方法 + 五个推理 URI + JSON Content-Type”三条同时成立才放行，其余照旧拦截。</p>
-<p>关键的是反向验证：用 GET 带一个 SQLi 探针打同一路径，仍然返回 403。这证明放行规则没有越权。只验通”能过”是不够的，还得证明”别的情况过不去”。</p>
-<p>即便如此仍有 7 个边界样本被拦，原因未定位。另外要明确一点：401 只证明请求到达了鉴权边界，不代表推理成功。</p>
+<p>社区版有条硬限制：站点级关闭内置增强规则会返回 <code>license required</code>，只剩语义 dry_run 加 ACL 精确放宽这一条路。做法是”POST 方法 + 五个推理 URI + JSON Content-Type”三条同时成立才放行，其余照旧拦截。</p>
+<p>关键在反向验证：用 GET 带一个 SQLi 探针打同一路径，仍然返回 403，证明放行规则没有越权。只验通”能过”不够，还得证明”别的情况过不去”。</p>
+<p>即便如此仍有 7 个边界样本被拦，原因未定位。另要明确：401 只证明请求到达了鉴权边界，不代表推理成功。</p>
 <h2 id="其他几个坑"><a href="#其他几个坑" class="headerlink" title="其他几个坑"></a>其他几个坑</h2><ul>
 <li><strong>CLI 的写副作用比预期大。</strong> 一条切换分组的命令会删掉客户端配置里的 provider 段和模型目录引用。每次操作后必须读回配置，不能假定”命令返回 0 就只改了该改的”。</li>
 <li><strong>直接改 JSON 配置会被覆盖。</strong> 编排层的配置有内存态，手工写入的字段会在下一次保存时被覆盖，规则变更必须走 CLI。</li>
 <li><strong>shell 语法坑。</strong> <code>变量名:low</code> 在 zsh 里会被当变量修饰符吞掉，必须写 <code>${变量名}:low</code>。这类错误的表现是规则静默失效，很难查。</li>
-<li><strong>设置命令的隐藏语义。</strong> 一处”设置分组”的操作会清空该分组的规则，所以每次设置后需要重新加规则。</li>
+<li><strong>设置命令的隐藏语义。</strong> 一处”设置分组”操作会清空该分组的规则，所以每次设置后需要重新加规则。</li>
 <li><strong>嵌套分组带档位后缀是非法语法</strong>，导致路由被标记为未就绪，186 个探针里命中 11 次。</li>
 <li><strong>客户端进程会缓存旧模型目录</strong>，改完配置显示的还是旧窗口值。正确处置是读回网关实际版本，而不是中断活跃任务去重启客户端。</li>
 <li><strong>流式中断不做跨模型拼接。</strong> 半截响应跨模型续拼会产生脏内容，策略是流已经开始就不换上游，4xx 原样返回。</li>
-<li><strong>回滚脚本默认只读。</strong> 校验通过才允许 <code>--apply</code>，并且拒绝未知漂移。回滚脚本默认执行恢复是一件很危险的事。</li>
+<li><strong>回滚脚本默认只读。</strong> 校验通过才允许 <code>--apply</code>，并拒绝未知漂移。回滚脚本默认执行恢复是一件很危险的事。</li>
 </ul>
 <h2 id="仍然没解决的问题"><a href="#仍然没解决的问题" class="headerlink" title="仍然没解决的问题"></a>仍然没解决的问题</h2><ul>
 <li><strong>持续 3 路并发未验证。</strong> 要做受控压测才能给出容量结论。</li>
 <li><strong>公网 502 根因未闭环。</strong> 影响面小，但没定位。</li>
 <li><strong>会话亲和导致重复命中同一个坏 key。</strong> 同会话锁定同 key 并触发退避时表现为反复 502。根因已识别，修复被别的事打断，没落地。</li>
-<li><strong>重会话压缩频率仍偏高。</strong> 前缀 80-100K 的会话每 7-12 分钟压一次，这是固定开销结构决定的，不是参数能解决的。</li>
+<li><strong>重会话压缩频率仍偏高。</strong> 前缀 80-100K 的会话每 7-12 分钟压一次，固定开销结构决定的，不是参数能解决的。</li>
 <li><strong>内存余量偏紧。</strong> 111/121 GiB 常驻，想加第二个模型必须先解决这件事。</li>
 <li><strong>单机单点。</strong> 所有 Agent 都指向它，它挂了就全部回退订阅 API，而这个回退目前是手动切换。</li>
 <li><strong>一个上游的端口写错（8000 应为 8080）。</strong> 已定位，修复清单在仓库里，决定暂不执行。</li>
@@ -1224,7 +1223,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">43.1k</span>&nbsp;字
+                class="white-color">38.9k</span>&nbsp;字
             
             
             

@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Active Directory 部署, 域控, Windows Server 2025, Proxmox VE, Secure Boot, TPM, LDAPS, portproxy, 同名域, NTP, pwdLastSet, BitLocker 恢复密码">
-    <meta name="description" content="接手一套混合云的 Windows 身份基础设施：本地机房一台 PVE 上跑两台域控，云上一台 ECS 做第三台域控，外加证书服务器和一台远程桌面网关。从第一次基线审计到现在三个多月，主线之外的坑比主线还长。这篇按部署顺序把三台域控的落地过程">
+    <meta name="description" content="本地机房一台 PVE 跑两台域控，云上一台 ECS 做第三台，外加证书服务器和远程桌面网关。三个多月下来，主线之外的坑比主线还长。这篇按部署顺序记三台域控的落地过程，公司相关的地址、主机名、域名、凭据一律不带；只有历史记录、没有复测的结论单">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2026/11/19/%E4%B8%89%E5%8F%B0%E5%9F%9F%E6%8E%A7%E9%83%A8%E7%BD%B2%E5%AE%9E%E5%BD%95/&#34;},&#34;headline&#34;:&#34;三台域控部署实录：两台本地加一台云上的 AD 落地与十个坑&#34;,&#34;description&#34;:&#34;接手一套混合云的 Windows 身份基础设施：本地机房一台 PVE 上跑两台域控，云上一台 ECS 做第三台域控，外加证书服务器和一台远程桌面网关。从第一次基线审计到现在三个多月，主线之外的坑比主线还长。这篇按部署顺序把三台域控的落地过程&#34;,&#34;datePublished&#34;:&#34;2026-11-19T12:50:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T12:50:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2026/11/19/%E4%B8%89%E5%8F%B0%E5%9F%9F%E6%8E%A7%E9%83%A8%E7%BD%B2%E5%AE%9E%E5%BD%95/&#34;},&#34;headline&#34;:&#34;三台域控部署实录：两台本地加一台云上的 AD 落地与十个坑&#34;,&#34;description&#34;:&#34;本地机房一台 PVE 跑两台域控，云上一台 ECS 做第三台，外加证书服务器和远程桌面网关。三个多月下来，主线之外的坑比主线还长。这篇按部署顺序记三台域控的落地过程，公司相关的地址、主机名、域名、凭据一律不带；只有历史记录、没有复测的结论单&#34;,&#34;datePublished&#34;:&#34;2026-11-19T12:50:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -22,7 +22,7 @@
     <meta property="og:title" content="三台域控部署实录：两台本地加一台云上的 AD 落地与十个坑 | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2026/11/19/%E4%B8%89%E5%8F%B0%E5%9F%9F%E6%8E%A7%E9%83%A8%E7%BD%B2%E5%AE%9E%E5%BD%95/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="接手一套混合云的 Windows 身份基础设施：本地机房一台 PVE 上跑两台域控，云上一台 ECS 做第三台域控，外加证书服务器和一台远程桌面网关。从第一次基线审计到现在三个多月，主线之外的坑比主线还长。这篇按部署顺序把三台域控的落地过程">
+    <meta property="og:description" content="本地机房一台 PVE 跑两台域控，云上一台 ECS 做第三台，外加证书服务器和远程桌面网关。三个多月下来，主线之外的坑比主线还长。这篇按部署顺序记三台域控的落地过程，公司相关的地址、主机名、域名、凭据一律不带；只有历史记录、没有复测的结论单">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/12.jpg">
     
@@ -30,7 +30,7 @@
     <meta property="article:published_time" content="2026-11-19T12:50:00.000Z">
     
     
-    <meta property="article:modified_time" content="2026-11-19T12:50:00.000Z">
+    <meta property="article:modified_time" content="2026-11-20T04:00:00.000Z">
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
@@ -498,14 +498,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2026-11-19
+                    2026-11-20
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.4k
+                    4.3k
                 </div>
                 
 
@@ -532,9 +532,8 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>接手一套混合云的 Windows 身份基础设施：本地机房一台 PVE 上跑两台域控，云上一台 ECS 做第三台域控，外加证书服务器和一台远程桌面网关。从第一次基线审计到现在三个多月，主线之外的坑比主线还长。这篇按部署顺序把三台域控的落地过程记一遍，公司相关的地址、主机名、域名、凭据一律不带；只有历史记录、没有复测的结论我会单独标出来。</p>
-<h2 id="拓扑与角色分工"><a href="#拓扑与角色分工" class="headerlink" title="拓扑与角色分工"></a>拓扑与角色分工</h2><p>先给一个抽象后的结构，方便对号入座：</p>
-<table>
+                <p>本地机房一台 PVE 跑两台域控，云上一台 ECS 做第三台，外加证书服务器和远程桌面网关。三个多月下来，主线之外的坑比主线还长。这篇按部署顺序记三台域控的落地过程，公司相关的地址、主机名、域名、凭据一律不带；只有历史记录、没有复测的结论单独标出来。</p>
+<h2 id="拓扑与角色分工"><a href="#拓扑与角色分工" class="headerlink" title="拓扑与角色分工"></a>拓扑与角色分工</h2><table>
 <thead>
 <tr>
 <th>角色</th>
@@ -574,33 +573,32 @@
 <td>RD Gateway，公网 443 收 RDP</td>
 </tr>
 </tbody></table>
-<p>三台域控是审计确认后的形态。DC1/DC2 从一开始就是域控；DC3 在八月初交付时按当时的要求只做了系统初始化、没装 AD 角色，几天内才提升为域控。提升前那轮准备工作（改名、静态地址、DNS 指向本地 DC、安全基线对齐）反而是后面几乎零返工的原因，这块下面单独讲。</p>
-<p>单台机器从裸机到提升为域控的分步手顺，我早年写过一篇 <a href="/2021/05/06/AD%E6%90%AD%E5%BB%BA/">Windows Server 安装以及 AD 域服务搭建</a>，域名、功能级别、DSRM 密码这些不可回退的取值都在那篇里。本文不重复这部分，只讲三台规模之后才出现的问题。</p>
+<p>三台域控是审计确认后的形态。DC1/DC2 从一开始就是域控；DC3 八月初交付时按当时的要求只做了系统初始化、没装 AD 角色，几天内才提升为域控。提升前那轮准备工作（改名、静态地址、DNS 指向本地 DC、安全基线对齐）是后面几乎零返工的原因，下面单独讲。</p>
+<p>单台机器从裸机到提升为域控的分步手顺，早年写过一篇 <a href="/2021/05/06/AD%E6%90%AD%E5%BB%BA/">Windows Server 安装以及 AD 域服务搭建</a>，域名、功能级别、DSRM 密码这些不可回退的取值都在那篇里。本文不重复，只讲三台规模之后才出现的问题。</p>
 <p>例行审计记录的 FSMO 角色里，PDC Emulator、RID Master、Infrastructure Master 三项都在 DC1；另外两项角色当时的审计表没有列出，不在此文断言。</p>
 <h2 id="虚拟化层：PVE-上跑-Windows-域控的对齐清单"><a href="#虚拟化层：PVE-上跑-Windows-域控的对齐清单" class="headerlink" title="虚拟化层：PVE 上跑 Windows 域控的对齐清单"></a>虚拟化层：PVE 上跑 Windows 域控的对齐清单</h2><p>域控对虚拟化的要求不多，但每一条都影响能不能装、装完稳不稳。逐项核对过的配置：</p>
 <ul>
 <li><strong>固件必须 OVMF + Secure Boot + TPM 2.0</strong>。Server 2025 的若干安全特性默认要求这些，PVE 侧对应 OVMF 固件加 vTPM 状态盘，EFI 用 4M 类型并预注册微软密钥。这三项配齐的虚拟机，后来才具备跑 BitLocker 计划的前提。</li>
-<li><strong>磁盘接口</strong>。初建的域控用 IDE 挂系统盘。这是 PVE 新建 Windows 虚机的默认懒路，代价是 I/O 性能比 virtio-scsi 加 iothread 低三成以上。换接口要同时改启动顺序，并提前注入 virtio 驱动，否则起来找不到盘。</li>
-<li><strong>Hyper-V enlightenments 全开</strong>。<code>hv_relaxed</code>、<code>hv_synic</code>、<code>hv_stimer</code> 这一组是给 Windows 客户机减负的，PVE 对 Windows 机型模板只默认开一部分，逐项补全后 CPU 等待明显收敛。</li>
+<li><strong>磁盘接口</strong>。初建的域控用 IDE 挂系统盘，PVE 新建 Windows 虚机的默认懒路，代价是 I/O 性能比 virtio-scsi 加 iothread 低三成以上。换接口要同时改启动顺序，并提前注入 virtio 驱动，否则起来找不到盘。</li>
+<li><strong>Hyper-V enlightenments 全开</strong>。<code>hv_relaxed</code>、<code>hv_synic</code>、<code>hv_stimer</code> 这一组给 Windows 客户机减负，PVE 对 Windows 机型模板只默认开一部分，逐项补全后 CPU 等待明显收敛。</li>
 <li><strong>禁用睡眠和休眠</strong>（<code>disable_s3=1</code>、<code>disable_s4=1</code>）。域控睡过去一次，Kerberos 时间偏差和复制积压就够排查半天。</li>
 <li><strong>CPU 型号</strong>至少 x86-64-v2-AES，能直通用 host；8 核以上启用 NUMA 绑定。<code>ostype</code> 别随手写客户端机型，机型模板会连带决定默认设备组合。</li>
 <li><strong>时钟</strong>：RTC 用 <code>driftfix=slew</code>，全集群统一 base 取 localtime 还是 UTC，混用会出现开机时间跳变。</li>
 </ul>
-<p>PVE 宿主本身审计出的问题也值得列，因为基本都是”默认装机就不会有”的项：主机防火墙未启用、ZFS 数据池未加密、vzdump 备份只有符号链接没有实际配置和保留策略、无 HA 单点、root 无 MFA。当时综合评分给了 63%。这份清单留作整改基线，<strong>截至发稿宿主防火墙和实际备份仍未整改</strong>，属于已知未闭环。</p>
+<p>PVE 宿主本身审计出的问题也值得列，基本都是”默认装机就不会有”的项：主机防火墙未启用、ZFS 数据池未加密、vzdump 备份只有符号链接没有实际配置和保留策略、无 HA 单点、root 无 MFA。当时综合评分给了 63%。这份清单留作整改基线，<strong>截至发稿宿主防火墙和实际备份仍未整改</strong>，属于已知未闭环。</p>
 <h2 id="安全基线：从-77-分到-89-分动了哪些项"><a href="#安全基线：从-77-分到-89-分动了哪些项" class="headerlink" title="安全基线：从 77 分到 89 分动了哪些项"></a>安全基线：从 77 分到 89 分动了哪些项</h2><p>DC1 上线初期做过一次全盘安全审计，修复后重启复验，评分 77% 提到 89%。真正值得记的是修复过程中的几个具体坑。</p>
 <p><strong>NetBIOS 的 139 端口关不干净。</strong> 逐网卡把注册表 <code>NetBT\Parameters\Interfaces\...\NetbiosOptions</code> 设为 2 并重启，端口仍在监听——承载者是内核（PID 4），<code>sc stop</code> 无从下手。最终接受的做法是注册表禁用加防火墙在 Public profile 上对 137/138/139 加阻止规则兜底：监听仍在内网地址上，只是外部不可达。这个行为微软社区讨论多年，结论基本就是防火墙兜底为正解。</p>
 <p><strong>WinRM 的 HTTP 监听绑在 IPv6 全接口。</strong> 用 <code>netsh http show servicestate</code> 才看到通配监听，而 WinRM 的 IPv4 防火墙规则对 v6 监听完全不生效。给 5985 补限段规则（只允许管理与办公网段）后收口；RDP 3389 同理补限段，公网面由上游防火墙负责。</p>
 <p><strong>LDAP 通道签名。</strong> 注册表 <code>LdapSigning=1</code>，重启域控后生效。没有域内测试环境，这类注册表手术前按惯例给相关虚机打了快照再动手（审计前的快照清单里就有这几台），改完确认 Netlogon、KDC、ADWS 全部正常再保留。快照不是备份，但能让一次改动有后悔药。</p>
 <p><strong>SMB 基线三件套</strong>：卸载 SMB1、启用签名、启用加密。注意 Server 2025 上签名参数的名称与旧版本不同，脚本照抄旧文章会静默失败。</p>
 <p>后来 DC3 提升前、远程桌面网关上线前，都拿同一张对齐表逐台核过。每台多花二十分钟，换来三台行为一致。跨版本环境里”每台默认值不一样”才是最大隐患，基线表是性价比最高的防御。</p>
-<h2 id="证书：一张指错目标的机器证书"><a href="#证书：一张指错目标的机器证书" class="headerlink" title="证书：一张指错目标的机器证书"></a>证书：一张指错目标的机器证书</h2><p>八月中旬审计发现 DC2 的机器证书指向了错误目标主机，走 LDAPS 的客户端校验会失败。修复本身不复杂：重建请求、按正确 SAN 签发、重启依赖服务。留下的尾巴是当时的临时方案——一套自签续期脚本以 SYSTEM 计划任务部署到三台域控，命令行不含明文凭据（脚本上机前跑过凭据关键词扫描）；但域内企业 CA 就绪后，域控证书改由内部 CA 签发，这套自签脚本就成了历史遗留。历史记录显示计划任务仍在，是否与 CA 方案冲突没有复测，这条只能记成”历史说法”。</p>
+<h2 id="证书：一张指错目标的机器证书"><a href="#证书：一张指错目标的机器证书" class="headerlink" title="证书：一张指错目标的机器证书"></a>证书：一张指错目标的机器证书</h2><p>八月中旬审计发现 DC2 的机器证书指向了错误目标主机，走 LDAPS 的客户端校验会失败。修复本身不复杂：重建请求、按正确 SAN 签发、重启依赖服务。留下的尾巴是当时的临时方案——一套自签续期脚本以 SYSTEM 计划任务部署到三台域控，命令行不含明文凭据（脚本上机前跑过凭据关键词扫描）；域内企业 CA 就绪后，域控证书改由内部 CA 签发，这套自签脚本就成了历史遗留。历史记录显示计划任务仍在，是否与 CA 方案冲突没有复测，这条只能记成”历史说法”。</p>
 <p>通用教训：<strong>机器证书的 SAN 必须在请求阶段核对。</strong> 签发后才发现指错，回滚成本远大于前置检查。现在的做法是签发脚本里硬校验 SAN 与主机 FQDN 一致才提交。</p>
 <h2 id="时间源：域控的-NTP-别用默认"><a href="#时间源：域控的-NTP-别用默认" class="headerlink" title="时间源：域控的 NTP 别用默认"></a>时间源：域控的 NTP 别用默认</h2><p>PDC Emulator 是全林时间源，默认取时地址在国内办公网的表现是同步间隔拉长、偏差爬到分钟级、Kerberos 开始报 clock skew。</p>
 <p>实测结论：多个公共 NTP 从业务网不可达或抖动严重，逐个探测后固定一家延迟稳定的国内源并配备用源；非 PDC 域控全部回归默认层级跟随 PDC，不做”每台都指公网”这种画蛇添足。改完用 <code>w32tm /resync /force</code> 验证，偏差回落到毫秒级。</p>
 <p>坑在于 <strong>w32tm 的生效链很长</strong>：组策略、注册表、手动配置三层，手动配置会被组策略周期刷回。改完当场正常、几周后复发，基本都是策略里还压着旧值。查时间问题先跑 <code>w32tm /query /source</code> 和 <code>/query /configuration</code>，确认当前真实生效层，别一上来就调 syncfrom。</p>
-<h2 id="最大的坑：内网域名和官网域名同名"><a href="#最大的坑：内网域名和官网域名同名" class="headerlink" title="最大的坑：内网域名和官网域名同名"></a>最大的坑：内网域名和官网域名同名</h2><p>三个月里最花时间的问题，值得完整讲。</p>
-<p>AD 域名和官网主域名用了同一个字符串。这不是错误配置，当年建域时内外同名是常见做法，官网也在同一个品牌域下。麻烦在于：办公网的 DNS 查询全部走内网域控，裸域名解析回来的是三台域控的内网地址，浏览器打官网就撞在域控的 80/443 上——域控上没有 Web 服务，连接被拒。带 www 的记录指向公网，所以 www 正常、只有裸域炸。内部区里还残留历史时期手工加的 www 公网记录，与公网权威解析已经不一致，属于同一根因的次生问题。</p>
-<p>候选方案按侵入性排序：内网 DNS 做条件转发、客户端侧代理、或者域控直接转发。前两者分别动全局 DNS 和所有终端，被否。最终落地的是对域控侵入最小的一种：<strong>三台域控各加两条 Windows 原生 portproxy，把本机私网地址的 TCP 80/443 转发到官网 www 的公网端点</strong>，防火墙只放行办公网段到域控 80/443 且限定进程 svchost。请求经域控跳板后 301 到 www，后续流量直达公网，域控不终止 TLS、不经手证书链。</p>
+<h2 id="最大的坑：内网域名和官网域名同名"><a href="#最大的坑：内网域名和官网域名同名" class="headerlink" title="最大的坑：内网域名和官网域名同名"></a>最大的坑：内网域名和官网域名同名</h2><p>三个月里最花时间的问题。AD 域名和官网主域名用了同一个字符串——这不是错误配置，当年建域时内外同名是常见做法，官网也在同一个品牌域下。麻烦在于：办公网的 DNS 查询全部走内网域控，裸域名解析回来的是三台域控的内网地址，浏览器打官网就撞在域控的 80/443 上——域控上没有 Web 服务，连接被拒。带 www 的记录指向公网，所以 www 正常、只有裸域炸。内部区里还残留历史时期手工加的 www 公网记录，与公网权威解析已经不一致，属于同一根因的次生问题。</p>
+<p>候选方案按侵入性排序：内网 DNS 做条件转发、客户端侧代理、或者域控直接转发。前两者分别动全局 DNS 和所有终端，被否。最终落地对域控侵入最小的一种：<strong>三台域控各加两条 Windows 原生 portproxy，把本机私网地址的 TCP 80/443 转发到官网 www 的公网端点</strong>，防火墙只放行办公网段到域控 80/443 且限定进程 svchost。请求经域控跳板后 301 到 www，后续流量直达公网，域控不终止 TLS、不经手证书链。</p>
 <p>实施里踩的坑比方案本身更有教育意义：</p>
 <ol>
 <li><strong>转发目标不能用裸域名的解析结果</strong>。上游名称如果解析回域控自己，直接形成回环。部署前检查里必须确认上游解析出的是公网地址。</li>
@@ -632,7 +630,7 @@
 <li><strong>运维脚本本身也要过安全审查</strong>。续期脚本上机前跑过凭据关键词扫描，计划任务运行账户回读为 SYSTEM，凭据不落命令行。自动化脚本是新的攻击面，这个习惯值得固化。</li>
 <li><strong>远程执行链路的收尾</strong>。整个项目大量改动通过远程 PowerShell 完成，收尾时要清掉本次上传的脚本、临时 stdout、测试用的临时授权条目，并回读两端确认无残留进程与监听。长期配置和 known_hosts 不清空，也不为了重试降级主机密钥校验。</li>
 </ul>
-<h2 id="未闭环清单"><a href="#未闭环清单" class="headerlink" title="未闭环清单"></a>未闭环清单</h2><p>按诚实原则，把发稿时点仍未关闭的项集中列出来：</p>
+<h2 id="未闭环清单"><a href="#未闭环清单" class="headerlink" title="未闭环清单"></a>未闭环清单</h2><p>发稿时点仍未关闭的项：</p>
 <table>
 <thead>
 <tr>
@@ -1139,7 +1137,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">43.1k</span>&nbsp;字
+                class="white-color">38.9k</span>&nbsp;字
             
             
             

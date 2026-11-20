@@ -5,8 +5,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Win10封装, 系统部署, 批量部署, 镜像制作, NTlite, Dism++, 系统优化">
-    <meta name="description" content="企业 IT 运维中常要重复面对同一件事：给不同部门批量装机，而每个部门的定制软件、环境变量、本地策略都不完全一样。逐台手工配置的时间成本随终端数量线性增长，且难以保证一致性。
-系统封装的思路是把标准软件、环境配置、系统变量与本地策略预先配置">
+    <meta name="description" content="企业批量装机，各部门的定制软件、环境变量、本地策略不完全一样，逐台手工配置的时间成本随终端数量线性增长，且难以保证一致性。
+系统封装的思路是把标准软件、环境配置、系统变量与本地策略预先配置好，连同系统状态一并打包成可分发的 ISO，装机时只">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -14,7 +14,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/09/08/win10%E5%B0%81%E8%A3%85/&#34;},&#34;headline&#34;:&#34;Windows 10 系统封装详细教程&#34;,&#34;description&#34;:&#34;企业 IT 运维中常要重复面对同一件事：给不同部门批量装机，而每个部门的定制软件、环境变量、本地策略都不完全一样。逐台手工配置的时间成本随终端数量线性增长，且难以保证一致性。\n系统封装的思路是把标准软件、环境配置、系统变量与本地策略预先配置&#34;,&#34;datePublished&#34;:&#34;2023-09-08T07:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T07:30:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/09/08/win10%E5%B0%81%E8%A3%85/&#34;},&#34;headline&#34;:&#34;Windows 10 系统封装详细教程&#34;,&#34;description&#34;:&#34;企业批量装机，各部门的定制软件、环境变量、本地策略不完全一样，逐台手工配置的时间成本随终端数量线性增长，且难以保证一致性。\n系统封装的思路是把标准软件、环境配置、系统变量与本地策略预先配置好，连同系统状态一并打包成可分发的 ISO，装机时只&#34;,&#34;datePublished&#34;:&#34;2023-09-08T07:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -23,8 +23,8 @@
     <meta property="og:title" content="Windows 10 系统封装详细教程 | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2023/09/08/win10%E5%B0%81%E8%A3%85/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="企业 IT 运维中常要重复面对同一件事：给不同部门批量装机，而每个部门的定制软件、环境变量、本地策略都不完全一样。逐台手工配置的时间成本随终端数量线性增长，且难以保证一致性。
-系统封装的思路是把标准软件、环境配置、系统变量与本地策略预先配置">
+    <meta property="og:description" content="企业批量装机，各部门的定制软件、环境变量、本地策略不完全一样，逐台手工配置的时间成本随终端数量线性增长，且难以保证一致性。
+系统封装的思路是把标准软件、环境配置、系统变量与本地策略预先配置好，连同系统状态一并打包成可分发的 ISO，装机时只">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/3.jpg">
     
@@ -32,7 +32,7 @@
     <meta property="article:published_time" content="2023-09-08T07:00:00.000Z">
     
     
-    <meta property="article:modified_time" content="2026-11-19T07:30:00.000Z">
+    <meta property="article:modified_time" content="2026-11-20T04:00:00.000Z">
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
@@ -492,14 +492,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2026-11-19
+                    2026-11-20
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.7k
+                    1.6k
                 </div>
                 
 
@@ -526,7 +526,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>企业 IT 运维中常要重复面对同一件事：给不同部门批量装机，而每个部门的定制软件、环境变量、本地策略都不完全一样。逐台手工配置的时间成本随终端数量线性增长，且难以保证一致性。</p>
+                <p>企业批量装机，各部门的定制软件、环境变量、本地策略不完全一样，逐台手工配置的时间成本随终端数量线性增长，且难以保证一致性。</p>
 <p>系统封装的思路是把标准软件、环境配置、系统变量与本地策略预先配置好，连同系统状态一并打包成可分发的 ISO，装机时只做一次镜像写入。下文按虚拟机准备、系统与账户配置、策略与优化、清理备份、ISO 打包的顺序记录完整过程。</p>
 <h2 id="事前准备"><a href="#事前准备" class="headerlink" title="事前准备"></a>事前准备</h2><table>
 <thead>
@@ -572,10 +572,10 @@
 </blockquote>
 <h2 id="系统安装过程"><a href="#系统安装过程" class="headerlink" title="系统安装过程"></a>系统安装过程</h2><h3 id="1-部署虚拟机环境"><a href="#1-部署虚拟机环境" class="headerlink" title="1. 部署虚拟机环境"></a>1. 部署虚拟机环境</h3><p>新建一台专用虚拟机作为封装工位，避免在实体机上封装引入驱动残留：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081513580.png" alt="虚拟机创建" title="创建虚拟机" decoding="async" loading="lazy"></p>
-<h3 id="2-安装-Windows-10-系统"><a href="#2-安装-Windows-10-系统" class="headerlink" title="2. 安装 Windows 10 系统"></a>2. 安装 Windows 10 系统</h3><p>挂载 ISO 执行安装，下图分别是安装入口与分区设置界面：</p>
+<h3 id="2-安装-Windows-10-系统"><a href="#2-安装-Windows-10-系统" class="headerlink" title="2. 安装 Windows 10 系统"></a>2. 安装 Windows 10 系统</h3><p>挂载 ISO 执行安装：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081513034.png" alt="系统安装界面1" title="系统安装界面" decoding="async" loading="lazy"></p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081513216.png" alt="系统安装界面2" title="分区设置" decoding="async" loading="lazy"></p>
-<h3 id="3-OOBE-设置"><a href="#3-OOBE-设置" class="headerlink" title="3. OOBE 设置"></a>3. OOBE 设置</h3><p>完成初始设置向导（Out of Box Experience）：</p>
+<h3 id="3-OOBE-设置"><a href="#3-OOBE-设置" class="headerlink" title="3. OOBE 设置"></a>3. OOBE 设置</h3><p>完成 OOBE（Out of Box Experience，初始设置向导）：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514271.png" alt="OOBE设置" title="初始设置向导" decoding="async" loading="lazy"></p>
 <h3 id="4-用户账户配置"><a href="#4-用户账户配置" class="headerlink" title="4. 用户账户配置"></a>4. 用户账户配置</h3><p>删除 OOBE 过程中创建的普通用户账户，改用内置 Administrator 完成后续封装，避免用户配置目录被写进镜像：</p>
 <blockquote>
@@ -595,11 +595,11 @@
 
 <p>下图为命令执行结果：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514835.png" alt="启用卓越性能命令" title="命令执行" decoding="async" loading="lazy"></p>
-<p>再到控制面板 → 电源选项激活该计划：</p>
+<p>再到控制面板 → 电源选项激活：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514681.png" alt="电源计划设置" title="电源计划配置" decoding="async" loading="lazy"></p>
-<h3 id="2-个性化设置"><a href="#2-个性化设置" class="headerlink" title="2. 个性化设置"></a>2. 个性化设置</h3><p>按企业基线设定桌面外观，包括主题、桌面图标与任务栏样式（桌面右键 → 个性化）：</p>
+<h3 id="2-个性化设置"><a href="#2-个性化设置" class="headerlink" title="2. 个性化设置"></a>2. 个性化设置</h3><p>按企业基线设定桌面外观（主题、桌面图标、任务栏样式；桌面右键 → 个性化）：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514582.png" alt="个性化设置" title="个性化配置" decoding="async" loading="lazy"></p>
-<h3 id="3-Edge-浏览器插件安装"><a href="#3-Edge-浏览器插件安装" class="headerlink" title="3. Edge 浏览器插件安装"></a>3. Edge 浏览器插件安装</h3><p>按实际需要安装浏览器扩展，本例安装两个：</p>
+<h3 id="3-Edge-浏览器插件安装"><a href="#3-Edge-浏览器插件安装" class="headerlink" title="3. Edge 浏览器插件安装"></a>3. Edge 浏览器插件安装</h3><p>按需安装两个扩展：</p>
 <ul>
 <li><strong>Adblock Plus</strong>：广告拦截</li>
 <li><strong>百度药丸</strong>：站内搜索体验增强，不承担广告拦截</li>
@@ -608,7 +608,7 @@
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514234.png" alt="百度药丸安装" title="百度药丸" decoding="async" loading="lazy"></p>
 <h3 id="4-环境功能安装"><a href="#4-环境功能安装" class="headerlink" title="4. 环境功能安装"></a>4. 环境功能安装</h3><p>按下图在「启用或关闭 Windows 功能」中勾选业务所需组件，具体项由目标场景决定：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514895.png" alt="功能安装" title="功能组件安装" decoding="async" loading="lazy"></p>
-<h3 id="5-功能与本地策略设置"><a href="#5-功能与本地策略设置" class="headerlink" title="5. 功能与本地策略设置"></a>5. 功能与本地策略设置</h3><p>推荐开启存储感知以控制磁盘占用。本地策略与系统设置两处需保持一致：</p>
+<h3 id="5-功能与本地策略设置"><a href="#5-功能与本地策略设置" class="headerlink" title="5. 功能与本地策略设置"></a>5. 功能与本地策略设置</h3><p>开启存储感知控制磁盘占用，本地策略与系统设置两处保持一致：</p>
 <ul>
 <li>开启存储感知，执行频率设为每天</li>
 <li>存储感知子项全部开启，临时文件保留阈值设为 1 天</li>
@@ -616,7 +616,7 @@
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514146.png" alt="存储感知策略设置" title="组策略配置" decoding="async" loading="lazy"></p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514301.png" alt="存储感知设置" title="存储感知配置" decoding="async" loading="lazy"></p>
 <h2 id="系统清理与优化"><a href="#系统清理与优化" class="headerlink" title="系统清理与优化"></a>系统清理与优化</h2><p>封装前用 Dism++ 做一次清理，减少镜像体积与首启后的无效残留。清理项按界面提供的勾选项按需选择，不确定的项目保持默认不勾选，避免误删运行库导致定制软件无法运行。</p>
-<h2 id="系统封装"><a href="#系统封装" class="headerlink" title="系统封装"></a>系统封装</h2><p>清理完成后，用 Dism++ 的系统备份功能导出系统镜像。该功能支持增量备份，多个版本可共用一个镜像文件，节省存放空间：</p>
+<h2 id="系统封装"><a href="#系统封装" class="headerlink" title="系统封装"></a>系统封装</h2><p>用 Dism++ 的系统备份功能导出系统镜像，支持增量备份，多个版本可共用一个镜像文件，节省空间：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081514056.png" alt="Dism++系统备份" title="系统备份功能" decoding="async" loading="lazy"></p>
 <h2 id="封装内容小结"><a href="#封装内容小结" class="headerlink" title="封装内容小结"></a>封装内容小结</h2><p>这份镜像相对原版 ISO 的实际改动只有五处，逐项列出是为了下次改版时能对得上账：</p>
 <ol>
@@ -663,7 +663,7 @@
 <li><strong>先验证再分发</strong>：批量下发前在真机验证驱动、加域、定制软件与账户策略是否符合预期</li>
 </ol>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>流程主线是：虚拟机内装系统 → 用 Administrator 完成软件与策略预配置 → Dism++ 清理并备份 → 用 NTlite 替换 <code>install.esd</code> 重打包 ISO。终端越多，省下的重复装机时间越可观。</p>
-<p>不过封出来的镜像不是做完就一劳永逸。累积补丁会把镜像越拉越旧，新机型也会缺驱动，所以每个镜像版本都要留下「基于哪个 ISO、打了哪批补丁、在哪些真机上验证过驱动/加域/软件」的记录，否则半年后没人说得清手上这份镜像到底处于什么状态，只能从头再封一次。</p>
+<p>不过镜像不是做完就一劳永逸：累积补丁会把镜像越拉越旧，新机型也会缺驱动。每个镜像版本都要留下「基于哪个 ISO、打了哪批补丁、在哪些真机验证过驱动/加域/软件」的记录，否则半年后没人说得清手上这份镜像处于什么状态，只能从头再封一次。</p>
 
                 
             </div>
@@ -815,9 +815,9 @@
                 <a href="/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/">
                     <div class="card-image">
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Jump server单节点无外置数据库部署" decoding="async" loading="lazy">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="JumpServer 单节点无外置数据库部署" decoding="async" loading="lazy">
                         
-                        <span class="card-title">Jump server单节点无外置数据库部署</span>
+                        <span class="card-title">JumpServer 单节点无外置数据库部署</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1108,7 +1108,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">43.1k</span>&nbsp;字
+                class="white-color">38.9k</span>&nbsp;字
             
             
             

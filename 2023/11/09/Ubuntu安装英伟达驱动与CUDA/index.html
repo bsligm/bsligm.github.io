@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Ubuntu, 英伟达驱动, CUDA, GPU, Linux 驱动安装">
-    <meta name="description" content="在 Ubuntu 上启用 NVIDIA GPU 的并行计算能力，需依次安装专有驱动与 CUDA 工具包：驱动决定可用的最高 CUDA 版本，CUDA 提供编译器与运行库。本文适用于带独立 NVIDIA GPU 的 Ubuntu 主机，覆盖驱">
+    <meta name="keywords" content="Ubuntu, 英伟达驱动, CUDA, runfile 安装, DKMS, nouveau, Secure Boot">
+    <meta name="description" content="NVIDIA GPU 在 Ubuntu 上要跑起来分两步：先装专有驱动（决定可用的最高 CUDA 版本），再装 CUDA 工具包（编译器与运行库）。这篇覆盖 runfile 安装全过程与常见失败排查；操作会改内核模块和系统级配置，建议先在测">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/11/09/Ubuntu%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E9%A9%B1%E5%8A%A8%E4%B8%8ECUDA/&#34;},&#34;headline&#34;:&#34;Ubuntu 安装英伟达驱动与 CUDA&#34;,&#34;description&#34;:&#34;在 Ubuntu 上启用 NVIDIA GPU 的并行计算能力，需依次安装专有驱动与 CUDA 工具包：驱动决定可用的最高 CUDA 版本，CUDA 提供编译器与运行库。本文适用于带独立 NVIDIA GPU 的 Ubuntu 主机，覆盖驱&#34;,&#34;datePublished&#34;:&#34;2023-11-09T03:40:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T07:30:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/11/09/Ubuntu%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E9%A9%B1%E5%8A%A8%E4%B8%8ECUDA/&#34;},&#34;headline&#34;:&#34;Ubuntu 安装英伟达驱动与 CUDA&#34;,&#34;description&#34;:&#34;NVIDIA GPU 在 Ubuntu 上要跑起来分两步：先装专有驱动（决定可用的最高 CUDA 版本），再装 CUDA 工具包（编译器与运行库）。这篇覆盖 runfile 安装全过程与常见失败排查；操作会改内核模块和系统级配置，建议先在测&#34;,&#34;datePublished&#34;:&#34;2023-11-09T03:40:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -22,7 +22,7 @@
     <meta property="og:title" content="Ubuntu 安装英伟达驱动与 CUDA | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2023/11/09/Ubuntu%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E9%A9%B1%E5%8A%A8%E4%B8%8ECUDA/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="在 Ubuntu 上启用 NVIDIA GPU 的并行计算能力，需依次安装专有驱动与 CUDA 工具包：驱动决定可用的最高 CUDA 版本，CUDA 提供编译器与运行库。本文适用于带独立 NVIDIA GPU 的 Ubuntu 主机，覆盖驱">
+    <meta property="og:description" content="NVIDIA GPU 在 Ubuntu 上要跑起来分两步：先装专有驱动（决定可用的最高 CUDA 版本），再装 CUDA 工具包（编译器与运行库）。这篇覆盖 runfile 安装全过程与常见失败排查；操作会改内核模块和系统级配置，建议先在测">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/2.jpg">
     
@@ -30,7 +30,7 @@
     <meta property="article:published_time" content="2023-11-09T03:40:00.000Z">
     
     
-    <meta property="article:modified_time" content="2026-11-19T07:30:00.000Z">
+    <meta property="article:modified_time" content="2026-11-20T04:00:00.000Z">
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
@@ -482,21 +482,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2026-11-19
+                    2026-11-20
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.6k
+                    1.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    6 分
+                    4 分
                 </div>
                 
 
@@ -516,84 +516,79 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>在 Ubuntu 上启用 NVIDIA GPU 的并行计算能力，需依次安装专有驱动与 CUDA 工具包：驱动决定可用的最高 CUDA 版本，CUDA 提供编译器与运行库。本文适用于带独立 NVIDIA GPU 的 Ubuntu 主机，覆盖驱动安装、CUDA 安装、环境变量配置与常见失败排查；操作会修改内核模块与系统级配置，建议先在测试机验证。</p>
-<h2 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h2><h3 id="1-确认硬件兼容性"><a href="#1-确认硬件兼容性" class="headerlink" title="1. 确认硬件兼容性"></a>1. 确认硬件兼容性</h3><p>访问英伟达官网确认您的 GPU 型号支持的驱动版本：<br><a target="_blank" rel="noopener" href="https://www.nvidia.cn/Download/index.aspx?lang=cn">NVIDIA 驱动下载页面</a></p>
-<h3 id="2-检查系统依赖"><a href="#2-检查系统依赖" class="headerlink" title="2. 检查系统依赖"></a>2. 检查系统依赖</h3><p>确保 Ubuntu 系统已安装必要的编译工具：</p>
+                <p>NVIDIA GPU 在 Ubuntu 上要跑起来分两步：先装专有驱动（决定可用的最高 CUDA 版本），再装 CUDA 工具包（编译器与运行库）。这篇覆盖 runfile 安装全过程与常见失败排查；操作会改内核模块和系统级配置，建议先在测试机验证。</p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><ol>
+<li>按 GPU 型号在<a target="_blank" rel="noopener" href="https://www.nvidia.cn/Download/index.aspx?lang=cn">NVIDIA 驱动下载页</a>确认支持的驱动版本并下载 <code>.run</code> 文件。</li>
+</ol>
+<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091122261.png" alt="NVIDIA 驱动下载页面示例" title="NVIDIA驱动下载页面示例" decoding="async" loading="lazy"></p>
+<ol start="2">
+<li>装编译工具（runfile 现场编译内核模块）：</li>
+</ol>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install gcc g++ make</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-下载驱动文件"><a href="#3-下载驱动文件" class="headerlink" title="3. 下载驱动文件"></a>3. 下载驱动文件</h3><p>从英伟达官网下载适用于您 GPU 型号的驱动程序文件。</p>
-<p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091122261.png" alt="NVIDIA 驱动下载页面示例" title="NVIDIA驱动下载页面示例" decoding="async" loading="lazy"></p>
-<h2 id="安装英伟达驱动"><a href="#安装英伟达驱动" class="headerlink" title="安装英伟达驱动"></a>安装英伟达驱动</h2><h3 id="1-上传驱动文件"><a href="#1-上传驱动文件" class="headerlink" title="1. 上传驱动文件"></a>1. 上传驱动文件</h3><p>将下载的驱动文件上传到 Ubuntu 系统中。</p>
-<h3 id="2-添加执行权限"><a href="#2-添加执行权限" class="headerlink" title="2. 添加执行权限"></a>2. 添加执行权限</h3><p>为驱动文件添加执行权限：</p>
+<h2 id="安装驱动"><a href="#安装驱动" class="headerlink" title="安装驱动"></a>安装驱动</h2><p>把 <code>.run</code> 文件上传到目标机后：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x NVIDIA-Linux-*.run</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-执行驱动安装"><a href="#3-执行驱动安装" class="headerlink" title="3. 执行驱动安装"></a>3. 执行驱动安装</h3><p>安装 <code>.run</code> 前需先停止图形界面并切到纯文本控制台，否则安装器会因显示服务占用 GPU 而失败（按实际显示管理器替换服务名）：</p>
+<p>安装前必须停图形界面、切纯文本控制台，否则显示服务占着 GPU，安装器直接失败（按实际显示管理器替换服务名）：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl stop gdm      <span class="comment"># 或 lightdm / sddm</span></span><br><span class="line"><span class="built_in">sudo</span> init 3                  <span class="comment"># 切换至多用户文本模式</span></span><br></pre></td></tr></table></figure>
 
-<p>再运行驱动安装程序：</p>
+<p>再运行安装程序：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ./NVIDIA-Linux-*.run</span><br></pre></td></tr></table></figure>
 
-<p>安装器的交互界面里，真正需要做的取舍只有三处：</p>
+<p>交互界面里真正要做的取舍只有三处，其余保持默认：</p>
 <ul>
-<li><strong>是否勾选 “Install NVIDIA’s 32-bit compatibility libraries”</strong>。不装 32 位兼容库的话，Steam/Wine 等 32 位程序调用 GPU 会失败；纯计算服务器可以不装。</li>
-<li><strong>是否自动更新 X 配置</strong>。Docker、调度器或容器里使用 GPU 时不要动 <code>xorg.conf</code>，选 No，否则容器内 <code>nvidia-container-runtime</code> 与宿主的设备映射可能不一致。</li>
-<li><strong>是否注册 DKMS</strong>。选 Yes 后内核升级会自动重编译驱动模块；选 No 就要自己在每次内核升级后重跑安装程序，这是生产机驱动突然失联的常见原因。</li>
+<li><strong>32-bit compatibility libraries</strong>：不装的话 Steam/Wine 等 32 位程序调 GPU 会失败；纯计算服务器可以不装。</li>
+<li><strong>是否自动更新 X 配置</strong>：Docker/调度器/容器里用 GPU 时选 No，不要动 <code>xorg.conf</code>，否则 <code>nvidia-container-runtime</code> 与宿主的设备映射可能不一致。</li>
+<li><strong>是否注册 DKMS</strong>：选 Yes，内核升级自动重编译驱动模块；选 No 就要每次内核升级后手动重跑安装程序——这是生产机驱动突然失联的常见原因。</li>
 </ul>
-<p>其余选项（安装路径、32 位库路径等）保持默认即可。</p>
-<h3 id="4-验证安装结果"><a href="#4-验证安装结果" class="headerlink" title="4. 验证安装结果"></a>4. 验证安装结果</h3><p>重启系统后，验证驱动是否安装成功：</p>
+<p>重启后验证：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvidia-smi</span><br></pre></td></tr></table></figure>
 
-<p>如果安装成功，将显示 GPU 信息和驱动版本：</p>
+<p>正常出表、显示 GPU 与驱动版本即为成功：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091238068.png" alt="nvidia-smi 命令输出示例" title="nvidia-smi命令输出示例" decoding="async" loading="lazy"></p>
-<h2 id="安装-CUDA-工具包"><a href="#安装-CUDA-工具包" class="headerlink" title="安装 CUDA 工具包"></a>安装 CUDA 工具包</h2><p>CUDA 是英伟达提供的并行计算平台和编程模型，用于开发 GPU 加速应用程序。</p>
-<h3 id="1-确认-CUDA-版本兼容性"><a href="#1-确认-CUDA-版本兼容性" class="headerlink" title="1. 确认 CUDA 版本兼容性"></a>1. 确认 CUDA 版本兼容性</h3><p>通过<code>nvidia-smi</code>命令确认支持的 CUDA 版本：</p>
+<h2 id="安装-CUDA-工具包"><a href="#安装-CUDA-工具包" class="headerlink" title="安装 CUDA 工具包"></a>安装 CUDA 工具包</h2><p>先看 <code>nvidia-smi</code> 右上角的 <code>CUDA Version</code>——这是<strong>驱动支持的上限</strong>，装的工具包版本不能高于它：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091241712.png" alt="CUDA 版本兼容性检查" title="CUDA版本兼容性检查" decoding="async" loading="lazy"></p>
-<h3 id="2-下载-CUDA-安装包"><a href="#2-下载-CUDA-安装包" class="headerlink" title="2. 下载 CUDA 安装包"></a>2. 下载 CUDA 安装包</h3><p>访问 CUDA 官方归档页面选择合适的版本：<br><a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-toolkit-archive">CUDA Toolkit Archive</a></p>
+<p>到<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-toolkit-archive">CUDA Toolkit Archive</a>选版本：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091241098.png" alt="CUDA 版本选择页面" title="CUDA版本选择页面" decoding="async" loading="lazy"></p>
-<h3 id="3-下载并安装-CUDA"><a href="#3-下载并安装-CUDA" class="headerlink" title="3. 下载并安装 CUDA"></a>3. 下载并安装 CUDA</h3><p>使用 runfile 方式安装 CUDA。下文 <code>12.2.2</code> 与 <code>535.104.05</code> 为示例版本，runfile 文件名含具体版本号，实际以 CUDA Toolkit Archive 页面选择结果为准：</p>
+<p>runfile 方式安装，下文 <code>12.2.2</code> 与 <code>535.104.05</code> 为示例版本，以实际选择为准：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载run文件</span></span><br><span class="line">wget https://developer.download.nvidia.com/compute/cuda/12.2.2/local_installers/cuda_12.2.2_535.104.05_linux.run</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行安装程序</span></span><br><span class="line"><span class="built_in">sudo</span> sh cuda_12.2.2_535.104.05_linux.run</span><br></pre></td></tr></table></figure>
 
-<p>安装过程中注意：</p>
-<ul>
-<li>取消驱动程序的安装（如果已安装最新驱动）</li>
-<li>选择需要的组件进行安装</li>
-</ul>
+<p>安装时两处注意：驱动已装好就<strong>取消勾选驱动</strong>，避免覆盖；只选需要的组件。</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091258885.png" alt="CUDA 安装界面示例" title="CUDA安装界面示例" decoding="async" loading="lazy"></p>
-<h3 id="4-配置环境变量"><a href="#4-配置环境变量" class="headerlink" title="4. 配置环境变量"></a>4. 配置环境变量</h3><p>编辑 bash 配置文件：</p>
+<p>配置环境变量：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vim ~/.bashrc</span><br></pre></td></tr></table></figure>
 
-<p>在文件末尾添加以下环境变量（路径根据实际安装情况调整）：</p>
+<p>文件末尾添加（路径按实际安装情况调整）：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># CUDA环境变量配置（请根据实际安装路径调整）</span></span><br><span class="line"><span class="built_in">export</span> CUDA_HOME=/usr/local/cuda-12.2</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$CUDA_HOME</span>/bin<span class="variable">$&#123;PATH:+:<span class="variable">$&#123;PATH&#125;</span>&#125;</span></span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=<span class="variable">$CUDA_HOME</span>/lib64<span class="variable">$&#123;LD_LIBRARY_PATH:+:<span class="variable">$&#123;LD_LIBRARY_PATH&#125;</span>&#125;</span></span><br></pre></td></tr></table></figure>
 
-<p>使配置生效：</p>
+<p>生效并让动态链接器收录运行库目录：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br><span class="line"><span class="comment"># 让动态链接器收录 CUDA 运行库目录</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;/usr/local/cuda-12.2/lib64&quot;</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/ld.so.conf.d/cuda.conf</span><br><span class="line"><span class="built_in">sudo</span> ldconfig</span><br></pre></td></tr></table></figure>
 
-<h3 id="5-验证-CUDA-安装"><a href="#5-验证-CUDA-安装" class="headerlink" title="5. 验证 CUDA 安装"></a>5. 验证 CUDA 安装</h3><p>检查 CUDA 编译器版本：</p>
+<p>验证：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc -V</span><br></pre></td></tr></table></figure>
 
-<p>成功安装后将显示 CUDA 编译器版本信息：</p>
+<p>出版本信息即成功：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091305908.png" alt="nvcc 命令输出示例" title="nvcc命令输出示例" decoding="async" loading="lazy"></p>
-<h2 id="常见问题及解决方案"><a href="#常见问题及解决方案" class="headerlink" title="常见问题及解决方案"></a>常见问题及解决方案</h2><h3 id="1-驱动安装失败"><a href="#1-驱动安装失败" class="headerlink" title="1. 驱动安装失败"></a>1. 驱动安装失败</h3><p>如果驱动安装失败，常见原因有两类：</p>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="1-驱动安装失败"><a href="#1-驱动安装失败" class="headerlink" title="1. 驱动安装失败"></a>1. 驱动安装失败</h3><p>两类常见原因：</p>
 <ul>
-<li>Secure Boot 启用：未签名的内核模块会被拒绝加载。可在 BIOS 中禁用 Secure Boot，或按安装器提示登记 MOK（Machine Owner Key）后重启完成签名。</li>
-<li>内核模块冲突：开源 nouveau 驱动与 NVIDIA 专有驱动冲突，需先屏蔽 nouveau。</li>
+<li><strong>Secure Boot 启用</strong>：未签名的内核模块被拒绝加载。BIOS 里禁用 Secure Boot，或按安装器提示登记 MOK（Machine Owner Key）后重启完成签名。</li>
+<li><strong>nouveau 冲突</strong>：开源 nouveau 与专有驱动不能共存，先屏蔽 nouveau。</li>
 </ul>
-<p>屏蔽 nouveau 驱动（注意：屏蔽开源 nouveau 与卸载 NVIDIA 专有驱动是两件事，此处需要的是前者）：</p>
+<p>屏蔽 nouveau（注意与”卸载 NVIDIA 专有驱动”是两件事，此处只要前者）：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 若此前装过 NVIDIA 官方驱动，先彻底卸载</span></span><br><span class="line"><span class="built_in">sudo</span> apt remove --purge <span class="string">&#x27;nvidia-*&#x27;</span></span><br><span class="line"><span class="built_in">sudo</span> apt autoremove</span><br><span class="line"><span class="built_in">sudo</span> apt autoclean</span><br><span class="line"></span><br><span class="line"><span class="comment"># 屏蔽 nouveau 并重建 initramfs，随后重启生效</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;blacklist nouveau\noptions nouveau modeset=0&quot;</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/modprobe.d/blacklist-nouveau.conf</span><br><span class="line"><span class="built_in">sudo</span> update-initramfs -u</span><br><span class="line"><span class="built_in">sudo</span> reboot</span><br></pre></td></tr></table></figure>
 
-<p>重启后确认 nouveau 已不再加载、Secure Boot 状态符合预期：</p>
+<p>重启后确认：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lsmod | grep nouveau   <span class="comment"># 无输出即为已屏蔽</span></span><br><span class="line">mokutil --sb-state     <span class="comment"># 确认 Secure Boot 状态</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="2-CUDA-版本不匹配"><a href="#2-CUDA-版本不匹配" class="headerlink" title="2. CUDA 版本不匹配"></a>2. CUDA 版本不匹配</h3><p><code>nvidia-smi</code> 输出的 <code>CUDA Version</code> 表示驱动支持的最高 CUDA 版本，安装更高的 CUDA 工具包会导致运行时不可用。需保证 CUDA 工具包版本不高于该值，否则升级驱动或降级 CUDA。</p>
-<h3 id="3-安装后命令找不到"><a href="#3-安装后命令找不到" class="headerlink" title="3. 安装后命令找不到"></a>3. 安装后命令找不到</h3><p><code>nvcc: command not found</code> 通常是环境变量未生效或路径未收录：先执行 <code>source ~/.bashrc</code> 并确认 <code>echo $CUDA_HOME</code> 指向实际安装目录；若依赖动态链接器收录，确认 <code>/etc/ld.so.conf.d/cuda.conf</code> 存在后重新执行 <code>sudo ldconfig</code>，可用 <code>ldconfig -p | grep cudart</code> 验证。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>驱动和 CUDA 是分两步落地的：先有能加载的内核模块，再谈工具包版本。<code>nvidia-smi</code> 正常出表是第一步的验收线，<code>nvcc -V</code> 能出版本是第二步的验收线，两条都过了才算环境可用。</p>
-<p>版本关系上只有一个硬约束：CUDA 工具包版本不能高于 <code>nvidia-smi</code> 报出的 <code>CUDA Version</code>。那一项是驱动支持的上限，不是机器上已装的版本，这是新装环境最常见的翻车点——先装高版本 CUDA 再回头升驱动，比反过来代价大。</p>
-<p>安装之后仍要留意的三件事：</p>
-<ol>
-<li><strong>内核升级</strong>。<code>apt upgrade</code> 换内核后驱动模块需要重新编译，用 <code>.run</code> 方式安装的驱动在这一步容易失联。生产机建议锁定内核小版本，或改用 DKMS / 发行版仓库里的 <code>nvidia-driver-*</code> 包。</li>
-<li><strong><code>CUDA_HOME</code> 写死版本号</strong>。多版本共存时 <code>/usr/local/cuda</code> 这个符号链接才是切换开关，直接写 <code>cuda-12.2</code> 会让切版本变成改 <code>.bashrc</code>。</li>
-<li><strong>临时环境不继承变量</strong>。<code>sudo -i</code>、cron、systemd 服务和 CI runner 都不读 <code>~/.bashrc</code>，脚本里显式引用绝对路径或 <code>/etc/profile.d/</code> 更可靠。</li>
-</ol>
+<h3 id="2-CUDA-版本不匹配"><a href="#2-CUDA-版本不匹配" class="headerlink" title="2. CUDA 版本不匹配"></a>2. CUDA 版本不匹配</h3><p><code>nvidia-smi</code> 的 <code>CUDA Version</code> 是驱动支持的最高版本，工具包装得比它高就运行时不可用。要么升驱动，要么降 CUDA。</p>
+<h3 id="3-安装后-nvcc-找不到"><a href="#3-安装后-nvcc-找不到" class="headerlink" title="3. 安装后 nvcc 找不到"></a>3. 安装后 <code>nvcc</code> 找不到</h3><p>通常是环境变量未生效或路径未收录：<code>source ~/.bashrc</code> 后确认 <code>echo $CUDA_HOME</code> 指向实际安装目录；依赖动态链接器的话确认 <code>/etc/ld.so.conf.d/cuda.conf</code> 存在、重跑 <code>sudo ldconfig</code>，用 <code>ldconfig -p | grep cudart</code> 验证。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>两条验收线：<code>nvidia-smi</code> 正常出表（驱动能加载），<code>nvcc -V</code> 能出版本（工具包可用），都过了环境才算可用。</p>
+<ul>
+<li><strong>版本硬约束只有一个</strong>：CUDA 工具包版本 ≤ <code>nvidia-smi</code> 报的 <code>CUDA Version</code>。那项是驱动支持的上限，不是已装版本——先装高版本 CUDA 再回头升驱动，比反过来代价大。</li>
+<li><strong>内核升级会让 <code>.run</code> 装的驱动失联</strong>，模块要重编译。生产机锁内核小版本，或改用 DKMS / 发行版仓库的 <code>nvidia-driver-*</code> 包。</li>
+<li><strong><code>CUDA_HOME</code> 别写死版本号</strong>：多版本共存时 <code>/usr/local/cuda</code> 符号链接才是切换开关，写死 <code>cuda-12.2</code> 会让切版本变成改 <code>.bashrc</code>。</li>
+<li><strong>临时环境不继承变量</strong>：<code>sudo -i</code>、cron、systemd 服务、CI runner 都不读 <code>~/.bashrc</code>，脚本里显式用绝对路径或走 <code>/etc/profile.d/</code>。</li>
+</ul>
 
                 
             </div>
@@ -809,9 +804,9 @@
                 <a href="/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/">
                     <div class="card-image">
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Jump server单节点无外置数据库部署" decoding="async" loading="lazy">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="JumpServer 单节点无外置数据库部署" decoding="async" loading="lazy">
                         
-                        <span class="card-title">Jump server单节点无外置数据库部署</span>
+                        <span class="card-title">JumpServer 单节点无外置数据库部署</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1038,7 +1033,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">43.1k</span>&nbsp;字
+                class="white-color">38.9k</span>&nbsp;字
             
             
             

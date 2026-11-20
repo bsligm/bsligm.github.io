@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="macOS, App损坏, Gatekeeper, spctl, xattr, 隔离属性, 隐私与安全性">
-    <meta name="description" content="在 macOS 上安装软件时，可能出现「XXXX 已损坏，无法打开。你应该将它移到废纸篓。」的提示，应用被直接拒绝启动。这是 Gatekeeper 与隔离属性（quarantine）机制的共同结果，本意是阻止未公证来源的可执行文件运行，但也">
+    <meta name="description" content="在 macOS 上安装或打开应用时，可能出现「XXXX 已损坏，无法打开。你应该将它移到废纸篓。」的提示，应用被直接拒绝启动。这是 Gatekeeper 与隔离属性（quarantine）机制的共同结果：本意是阻止未公证来源的可执行文件运行">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2021/04/29/mac%20app%E6%8D%9F%E5%9D%8F/&#34;},&#34;headline&#34;:&#34;macOS 提示\&#34;App 已损坏，无法打开\&#34;的多种解决方法&#34;,&#34;description&#34;:&#34;在 macOS 上安装软件时，可能出现「XXXX 已损坏，无法打开。你应该将它移到废纸篓。」的提示，应用被直接拒绝启动。这是 Gatekeeper 与隔离属性（quarantine）机制的共同结果，本意是阻止未公证来源的可执行文件运行，但也&#34;,&#34;datePublished&#34;:&#34;2021-04-29T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T07:30:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2021/04/29/mac%20app%E6%8D%9F%E5%9D%8F/&#34;},&#34;headline&#34;:&#34;macOS 提示\&#34;App 已损坏，无法打开\&#34;的多种解决方法&#34;,&#34;description&#34;:&#34;在 macOS 上安装或打开应用时，可能出现「XXXX 已损坏，无法打开。你应该将它移到废纸篓。」的提示，应用被直接拒绝启动。这是 Gatekeeper 与隔离属性（quarantine）机制的共同结果：本意是阻止未公证来源的可执行文件运行&#34;,&#34;datePublished&#34;:&#34;2021-04-29T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -22,7 +22,7 @@
     <meta property="og:title" content="macOS 提示&#34;App 已损坏，无法打开&#34;的多种解决方法 | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2021/04/29/mac%20app%E6%8D%9F%E5%9D%8F/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="在 macOS 上安装软件时，可能出现「XXXX 已损坏，无法打开。你应该将它移到废纸篓。」的提示，应用被直接拒绝启动。这是 Gatekeeper 与隔离属性（quarantine）机制的共同结果，本意是阻止未公证来源的可执行文件运行，但也">
+    <meta property="og:description" content="在 macOS 上安装或打开应用时，可能出现「XXXX 已损坏，无法打开。你应该将它移到废纸篓。」的提示，应用被直接拒绝启动。这是 Gatekeeper 与隔离属性（quarantine）机制的共同结果：本意是阻止未公证来源的可执行文件运行">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/8.jpg">
     
@@ -30,7 +30,7 @@
     <meta property="article:published_time" content="2021-04-29T03:00:00.000Z">
     
     
-    <meta property="article:modified_time" content="2026-11-19T07:30:00.000Z">
+    <meta property="article:modified_time" content="2026-11-20T04:00:00.000Z">
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
@@ -490,14 +490,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2026-11-19
+                    2026-11-20
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.5k
+                    1.4k
                 </div>
                 
 
@@ -524,7 +524,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>在 macOS 上安装软件时，可能出现「XXXX 已损坏，无法打开。你应该将它移到废纸篓。」的提示，应用被直接拒绝启动。这是 Gatekeeper 与隔离属性（quarantine）机制的共同结果，本意是阻止未公证来源的可执行文件运行，但也会拦住来源可信的合法软件。</p>
+                <p>在 macOS 上安装或打开应用时，可能出现「XXXX 已损坏，无法打开。你应该将它移到废纸篓。」的提示，应用被直接拒绝启动。这是 Gatekeeper 与隔离属性（quarantine）机制的共同结果：本意是阻止未公证来源的可执行文件运行，也会拦住来源可信的合法软件。</p>
 <p>先说明结论：绝大多数此类报错并非文件真的损坏，而是 Gatekeeper 拦截。优先用方法三（只处理单个应用），只在确有需要时临时放开全局设置。</p>
 <h2 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h2><p>常见触发条件：</p>
 <ol>
@@ -547,36 +547,36 @@
 <blockquote>
 <p>自 macOS 10.12 Sierra 起，「任何来源」默认隐藏，界面上看不到该选项属正常行为，需先用方法二的命令显式开启。新版 macOS 中该选项的展示位置与文案可能调整，若按上述路径找不到，以系统设置内搜索「任何来源」的结果为准。</p>
 </blockquote>
-<h3 id="方法二：用终端命令显示「任何来源」"><a href="#方法二：用终端命令显示「任何来源」" class="headerlink" title="方法二：用终端命令显示「任何来源」"></a>方法二：用终端命令显示「任何来源」</h3><p>在终端（<code>Command + 空格</code> 唤起 Spotlight，输入「终端」回车）执行：</p>
+<h3 id="方法二：用终端命令显示「任何来源」"><a href="#方法二：用终端命令显示「任何来源」" class="headerlink" title="方法二：用终端命令显示「任何来源」"></a>方法二：用终端命令显示「任何来源」</h3><p>在终端执行：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> spctl --master-disable</span><br></pre></td></tr></table></figure>
 
-<p>输入当前用户密码后执行。用下面命令确认状态，输出 <code>assessments disabled</code> 表示 Gatekeeper 评估已关闭：</p>
+<p>用下面命令确认状态，输出 <code>assessments disabled</code> 表示 Gatekeeper 评估已关闭：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spctl --status</span><br></pre></td></tr></table></figure>
 
-<p>该命令改变的是整机安全评估策略，作用范围大，安装完成后建议恢复：</p>
+<p>改变的是整机安全评估策略，作用范围大，安装完成后恢复：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> spctl --master-enable</span><br></pre></td></tr></table></figure>
 
-<h3 id="方法三：只处理单个应用"><a href="#方法三：只处理单个应用" class="headerlink" title="方法三：只处理单个应用"></a>方法三：只处理单个应用</h3><p>不想放开全局设置时，仅对目标应用移除隔离属性：</p>
+<h3 id="方法三：只处理单个应用"><a href="#方法三：只处理单个应用" class="headerlink" title="方法三：只处理单个应用"></a>方法三：只处理单个应用</h3><p>仅对目标应用移除隔离属性：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> xattr -rd com.apple.quarantine /Applications/应用名称.app</span><br></pre></td></tr></table></figure>
 
-<p>把「应用名称」替换为实际名称（路径含空格需用引号包裹）。若执行后仍提示损坏，说明拦截点不只在顶层包：检查 App 内部可执行文件是否带有独立的隔离属性，并确认代码签名状态：</p>
+<p>把「应用名称」替换为实际名称（路径含空格需引号包裹）。执行后仍提示损坏，说明拦截点不止顶层包：检查内部可执行文件是否带有独立隔离属性，并确认代码签名状态：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">codesign --verify --deep --strict --verbose=2 /Applications/应用名称.app</span><br><span class="line">xattr -lr /Applications/应用名称.app</span><br></pre></td></tr></table></figure>
 
-<p>也可以不改任何设置，直接在 Finder 中右键应用图标 →「打开」→ 在确认对话框中再次点击「打开」，由用户显式放行这一次。</p>
-<h3 id="方法四：重新获取安装包"><a href="#方法四：重新获取安装包" class="headerlink" title="方法四：重新获取安装包"></a>方法四：重新获取安装包</h3><p>若上述方法均无效，才考虑文件本体损坏：从官方渠道重新下载，确保传输过程完整，并校验官方发布的校验值后再安装。</p>
+<p>也可以不改任何设置：Finder 中右键应用 →「打开」→ 确认对话框中再点「打开」，由用户显式放行这一次。</p>
+<h3 id="方法四：重新获取安装包"><a href="#方法四：重新获取安装包" class="headerlink" title="方法四：重新获取安装包"></a>方法四：重新获取安装包</h3><p>上述方法均无效时，才考虑文件本体损坏：从官方渠道重新下载，校验官方发布的校验值后再安装。</p>
 <h2 id="不同-macOS-版本的差异"><a href="#不同-macOS-版本的差异" class="headerlink" title="不同 macOS 版本的差异"></a>不同 macOS 版本的差异</h2><blockquote>
-<p>以下差异基于 macOS 10.15 Catalina 时代的实际行为整理，截至撰写时。Apple 在后续版本中持续收紧 Gatekeeper 并调整设置界面文案，新版上的具体开关位置与生效方式存在变化可能，实操以当前系统的实际界面为准。</p>
+<p>以下差异基于 macOS 10.15 Catalina 时代的实际行为整理。Apple 在后续版本中持续收紧 Gatekeeper 并调整设置界面文案，实操以当前系统的实际界面为准。</p>
 </blockquote>
 <ul>
 <li><strong>macOS 10.15 Catalina 及更高</strong>：仅默认放行已签名且已公证的应用；「任何来源」需显式开启；对未公证应用的拦截更严格</li>
 <li><strong>macOS 10.14 Mojave 及更早</strong>：「任何来源」默认可见，安全评估相对宽松</li>
 </ul>
-<h2 id="放行之前先确认拦截原因"><a href="#放行之前先确认拦截原因" class="headerlink" title="放行之前先确认拦截原因"></a>放行之前先确认拦截原因</h2><p>上面几种方法都在绕过判定，动手前值得先花一分钟看清 Gatekeeper 到底拒了什么，不同原因的处理方式完全不同：</p>
+<h2 id="放行之前先确认拦截原因"><a href="#放行之前先确认拦截原因" class="headerlink" title="放行之前先确认拦截原因"></a>放行之前先确认拦截原因</h2><p>上面几种方法都在绕过判定，动手前先花一分钟看清 Gatekeeper 到底拒了什么，不同原因的处理方式完全不同：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spctl -a -vvv -t execute /Applications/应用名称.app</span><br><span class="line">codesign -dv --verbose=4 /Applications/应用名称.app 2&gt;&amp;1 | <span class="built_in">head</span> -20</span><br></pre></td></tr></table></figure>
 
 <p><code>spctl -a</code> 返回 <code>rejected</code> 时看后面的原因：涉及 <code>signature</code> 的拒绝说明包本身没有可用签名，走公证流程无望，只能显式放行或换版本；涉及公证（notarization）的拒绝说明签名有效但 Apple 没为这个版本做过公证，通常是开发者发布时漏了提交。</p>
-<p><code>codesign</code> 用来判断绕过是否安全：签名有效且 TeamIdentifier 是开发者官方团队 ID 时，移除隔离属性的风险可控；若输出显示签名无效、<code>code object is not signed at all</code>，或只有 ad-hoc 签名，那这条报错就不是误拦，不该放行。</p>
-<p>需要系统侧的判定记录时，Gatekeeper 的判定过程记在 <code>syspolicyd</code> 的 <code>gk</code> 类别下：</p>
+<p><code>codesign</code> 判断绕过是否安全：签名有效且 TeamIdentifier 是开发者官方团队 ID 时，移除隔离属性风险可控；签名无效、<code>code object is not signed at all</code> 或只有 ad-hoc 签名，这条报错就不是误拦，不该放行。</p>
+<p>系统侧的判定记录在 <code>syspolicyd</code> 的 <code>gk</code> 类别下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">log</span> show --last 10m --style compact \</span><br><span class="line">  --predicate <span class="string">&#x27;process == &quot;syspolicyd&quot; AND category == &quot;gk&quot;&#x27;</span></span><br></pre></td></tr></table></figure>
 
 <p>被拦时会看到 <code>rejecting due to lack of matching active rule</code> 这类行，放行则是 <code>rule N applies - allow=1</code>。比在「控制台」里翻筛更快，也留下可复制的证据。</p>
@@ -1029,7 +1029,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">43.1k</span>&nbsp;字
+                class="white-color">38.9k</span>&nbsp;字
             
             
             

@@ -494,7 +494,7 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                接手一套混合云的 Windows 身份基础设施：本地机房一台 PVE 上跑两台域控，云上一台 ECS 做第三台域控，外加证书服务器和一台远程桌面网关。从第一次基线审计到现在三个多月，主线之外的坑比主线还长。这篇按部署顺序把三台域控的落地过程
+                                本地机房一台 PVE 跑两台域控，云上一台 ECS 做第三台，外加证书服务器和远程桌面网关。三个多月下来，主线之外的坑比主线还长。这篇按部署顺序记三台域控的落地过程，公司相关的地址、主机名、域名、凭据一律不带；只有历史记录、没有复测的结论单
                             
                         </div>
                         <div class="publish-info">
@@ -624,7 +624,7 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                入手一台 DGX Spark 的主要目的不是折腾硬件，而是把手上几个 AI 编码 Agent 从按 token 计费的订阅 API 挪回内网。两个动机：一是长上下文任务（一次上下文压缩就吞掉二十万 token）在云端成本压不住；二是历史会话
+                                买一台 DGX Spark 的目标很直接：把手上几个 AI 编码 Agent 从按 token 计费的订阅 API 挪回内网，长上下文的成本和会话数据都不再出境。跑了八周，最花时间的不是 vLLM 本身，而是让四个协议、思考档位语义和工具调
                             
                         </div>
                         <div class="publish-info">
@@ -754,7 +754,7 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                在 Ubuntu 上启用 NVIDIA GPU 的并行计算能力，需依次安装专有驱动与 CUDA 工具包：驱动决定可用的最高 CUDA 版本，CUDA 提供编译器与运行库。本文适用于带独立 NVIDIA GPU 的 Ubuntu 主机，覆盖驱
+                                NVIDIA GPU 在 Ubuntu 上要跑起来分两步：先装专有驱动（决定可用的最高 CUDA 版本），再装 CUDA 工具包（编译器与运行库）。这篇覆盖 runfile 安装全过程与常见失败排查；操作会改内核模块和系统级配置，建议先在测
                             
                         </div>
                         <div class="publish-info">
@@ -795,16 +795,15 @@
                     <a href="/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/">
                         <div class="card-image tag-image">
                             
-                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Jump server单节点无外置数据库部署" decoding="async" loading="lazy">
+                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="JumpServer 单节点无外置数据库部署" decoding="async" loading="lazy">
                             
-                            <span class="card-title">Jump server单节点无外置数据库部署</span>
+                            <span class="card-title">JumpServer 单节点无外置数据库部署</span>
                         </div>
                     </a>
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                JumpServer 是开源的运维安全审计系统（堡垒机），提供身份认证、账号管理、授权控制与操作审计四类能力。
-本文记录单节点 + 内置数据库的离线部署方式：不引入外置 MySQL/Redis，由安装器自带容器承担持久化，适合运维规模有限、
+                                JumpServer 是开源堡垒机，提供身份认证、账号管理、授权控制与操作审计四类能力。这篇记录单节点 + 内置数据库的离线部署：不引入外置 MySQL/Redis，持久化由安装器自带容器承担，适合依赖要少的中小型环境；要高可用或大容量录像
                             
                         </div>
                         <div class="publish-info">
@@ -861,8 +860,8 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                企业 IT 运维中常要重复面对同一件事：给不同部门批量装机，而每个部门的定制软件、环境变量、本地策略都不完全一样。逐台手工配置的时间成本随终端数量线性增长，且难以保证一致性。
-系统封装的思路是把标准软件、环境配置、系统变量与本地策略预先配置
+                                企业批量装机，各部门的定制软件、环境变量、本地策略不完全一样，逐台手工配置的时间成本随终端数量线性增长，且难以保证一致性。
+系统封装的思路是把标准软件、环境配置、系统变量与本地策略预先配置好，连同系统状态一并打包成可分发的 ISO，装机时只
                             
                         </div>
                         <div class="publish-info">
@@ -928,7 +927,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">43.1k</span>&nbsp;字
+                class="white-color">38.9k</span>&nbsp;字
             
             
             

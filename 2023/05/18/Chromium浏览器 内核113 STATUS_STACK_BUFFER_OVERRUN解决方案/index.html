@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Chromium, Chrome, Edge, STATUS_STACK_BUFFER_OVERRUN, Exploit Protection, 硬件强制堆栈保护, 组策略">
-    <meta name="description" content="2023 年 5 月 Chromium 内核升级到 v113 后，部分终端上的 Chrome/Edge 无法启动，页面或进程直接返回「喔唷，崩溃了」与 STATUS_STACK_BUFFER_OVERRUN。该问题在域内环境中会批量出现，直">
+    <meta name="description" content="2023 年 5 月 Chromium 内核升级 v113 后，部分终端的 Chrome/Edge 无法启动：标签页提示「喔唷，崩溃了，此网页出现问题」，进程异常终止，错误码 STATUS_STACK_BUFFER_OVERRUN。域内环境">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/05/18/Chromium%E6%B5%8F%E8%A7%88%E5%99%A8%20%E5%86%85%E6%A0%B8113%20STATUS_STACK_BUFFER_OVERRUN%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/&#34;},&#34;headline&#34;:&#34;Chromium 内核 113 STATUS_STACK_BUFFER_OVERRUN 解决方案&#34;,&#34;description&#34;:&#34;2023 年 5 月 Chromium 内核升级到 v113 后，部分终端上的 Chrome/Edge 无法启动，页面或进程直接返回「喔唷，崩溃了」与 STATUS_STACK_BUFFER_OVERRUN。该问题在域内环境中会批量出现，直&#34;,&#34;datePublished&#34;:&#34;2023-05-18T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T07:30:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/05/18/Chromium%E6%B5%8F%E8%A7%88%E5%99%A8%20%E5%86%85%E6%A0%B8113%20STATUS_STACK_BUFFER_OVERRUN%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/&#34;},&#34;headline&#34;:&#34;Chromium 内核 113 STATUS_STACK_BUFFER_OVERRUN 解决方案&#34;,&#34;description&#34;:&#34;2023 年 5 月 Chromium 内核升级 v113 后，部分终端的 Chrome/Edge 无法启动：标签页提示「喔唷，崩溃了，此网页出现问题」，进程异常终止，错误码 STATUS_STACK_BUFFER_OVERRUN。域内环境&#34;,&#34;datePublished&#34;:&#34;2023-05-18T03:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -22,7 +22,7 @@
     <meta property="og:title" content="Chromium 内核 113 STATUS_STACK_BUFFER_OVERRUN 解决方案 | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2023/05/18/Chromium%E6%B5%8F%E8%A7%88%E5%99%A8%20%E5%86%85%E6%A0%B8113%20STATUS_STACK_BUFFER_OVERRUN%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="2023 年 5 月 Chromium 内核升级到 v113 后，部分终端上的 Chrome/Edge 无法启动，页面或进程直接返回「喔唷，崩溃了」与 STATUS_STACK_BUFFER_OVERRUN。该问题在域内环境中会批量出现，直">
+    <meta property="og:description" content="2023 年 5 月 Chromium 内核升级 v113 后，部分终端的 Chrome/Edge 无法启动：标签页提示「喔唷，崩溃了，此网页出现问题」，进程异常终止，错误码 STATUS_STACK_BUFFER_OVERRUN。域内环境">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/3.jpg">
     
@@ -30,7 +30,7 @@
     <meta property="article:published_time" content="2023-05-18T03:00:00.000Z">
     
     
-    <meta property="article:modified_time" content="2026-11-19T07:30:00.000Z">
+    <meta property="article:modified_time" content="2026-11-20T04:00:00.000Z">
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
@@ -498,14 +498,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2026-11-19
+                    2026-11-20
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.3k
+                    1.2k
                 </div>
                 
 
@@ -532,13 +532,8 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>2023 年 5 月 Chromium 内核升级到 v113 后，部分终端上的 Chrome/Edge 无法启动，页面或进程直接返回「喔唷，崩溃了」与 <code>STATUS_STACK_BUFFER_OVERRUN</code>。该问题在域内环境中会批量出现，直接阻断依赖浏览器的业务系统入口。</p>
-<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>崩溃时的两类表现：</p>
-<ul>
-<li>标签页提示「喔唷，崩溃了，此网页出现问题」</li>
-<li>进程异常终止，错误码 <code>STATUS_STACK_BUFFER_OVERRUN</code></li>
-</ul>
-<p>微软社区讨论中把它描述为「堆栈溢出」，但 <code>STATUS_STACK_BUFFER_OVERRUN</code>（<code>0xC0000409</code>）实际是 Windows 在<strong>控制流防护 CFG 与硬件强制堆栈保护等 exploit 防护机制命中时的快速失败（fast-fail）</strong>，由系统主动终止进程，并非传统意义上写穿栈边界导致的栈溢出。论坛说法描述的是表象，处置手段正是针对这套防护机制。</p>
+                <p>2023 年 5 月 Chromium 内核升级 v113 后，部分终端的 Chrome/Edge 无法启动：标签页提示「喔唷，崩溃了，此网页出现问题」，进程异常终止，错误码 <code>STATUS_STACK_BUFFER_OVERRUN</code>。域内环境会批量出现，直接阻断依赖浏览器的业务系统入口。</p>
+<p>微软社区把它描述为「堆栈溢出」，但 <code>STATUS_STACK_BUFFER_OVERRUN</code>（<code>0xC0000409</code>）实际是 <strong>Windows 在控制流防护 CFG 与硬件强制堆栈保护等 exploit 防护机制命中时的快速失败（fast-fail）</strong>，由系统主动终止进程，并非写穿栈边界的传统栈溢出。论坛说法是表象，处置针对的正是这套防护机制。</p>
 <p>参考：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-hans/answers/questions/8007f833-2959-419a-8408-e0cc0bfcbd5d/microsoft?forum=microsoftedge-all&referrer=answers">微软社区 — Edge 浏览器崩溃讨论</a></p>
 <h2 id="单机解决方案"><a href="#单机解决方案" class="headerlink" title="单机解决方案"></a>单机解决方案</h2><p>在 Windows 安全中心为该浏览器映像单独放宽硬件强制堆栈保护，使其从「命中即终止」降级为「仅记录」。</p>
 <h3 id="1-在-Exploit-Protection-中添加目标程序"><a href="#1-在-Exploit-Protection-中添加目标程序" class="headerlink" title="1. 在 Exploit Protection 中添加目标程序"></a>1. 在 Exploit Protection 中添加目标程序</h3><ol>
@@ -552,13 +547,13 @@
 <li>展开 <strong>硬件强制实施的堆栈保护</strong></li>
 <li>勾选 <strong>替代系统设置</strong>，选择 <strong>仅审核</strong></li>
 </ol>
-<p>「仅审核」表示防护命中时只产生事件而不终止进程，因此浏览器可正常启动，同时在事件日志中保留命中记录，便于后续确认根因。</p>
+<p>「仅审核」表示防护命中时只产生事件不终止进程：浏览器可正常启动，事件日志保留命中记录便于确认根因。</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230607114706037.png" alt="Windows安全中心配置步骤1" title="添加Chrome程序到保护列表" decoding="async" loading="lazy"></p>
 <p>上图确认已添加目标程序，下图确认「硬件强制实施的堆栈保护」已改为替代系统设置并置为仅审核：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230607114725430.png" alt="Windows安全中心配置步骤2" title="配置硬件强制堆栈保护" decoding="async" loading="lazy"></p>
 <p>需要同时使用 Chrome 和 Edge 时，两个映像要<strong>分别添加、分别配置</strong>：Exploit Protection 与下文的 IFEO 缓解策略都按可执行文件名匹配，对 <code>chrome.exe</code> 的配置不会影响 <code>msedge.exe</code>。</p>
 <p>配置完成后重启浏览器验证。</p>
-<h2 id="批量解决方案"><a href="#批量解决方案" class="headerlink" title="批量解决方案"></a>批量解决方案</h2><p>域内出现大面积同类报错时，逐台配置 Exploit Protection 不可持续。可把等效设置落到注册表的 IFEO（Image File Execution Options）缓解策略键上，通过 AD 组策略按映像统一下发。</p>
+<h2 id="批量解决方案"><a href="#批量解决方案" class="headerlink" title="批量解决方案"></a>批量解决方案</h2><p>域内大面积同类报错时，逐台配置不可持续。把等效设置落到注册表 IFEO（Image File Execution Options）缓解策略键，通过 AD 组策略按映像统一下发。</p>
 <h3 id="1-创建并链接组策略对象"><a href="#1-创建并链接组策略对象" class="headerlink" title="1. 创建并链接组策略对象"></a>1. 创建并链接组策略对象</h3><ol>
 <li>打开「组策略管理」控制台（<code>gpmc.msc</code>）</li>
 <li>右键需要应用策略的组织单位（OU）</li>
@@ -597,21 +592,23 @@
 <li>数值数据：<code>000000000000000000000000000000100000000000000000</code></li>
 </ul>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/image-20230607115944451.png" alt="配置MitigationOptions注册表项" title="配置MitigationOptions注册表项" decoding="async" loading="lazy"></p>
-<p>两个键都是同一布局的缓解策略位图，分工不同：<code>MitigationOptions</code> 决定策略是否对该映像<strong>强制生效</strong>，<code>MitigationAuditOptions</code> 决定策略在<strong>未强制时是否仅记录审计事件</strong>。两者是相互独立的值，位图结构一致，因此示例中取相同数值，且需分别创建。位图中具体某一位对应哪种缓解机制由 Windows 版本定义，微软未给出稳定公开映射，<strong>不建议手工修改数值本身</strong>。</p>
+<p>两个键都是同一布局的缓解策略位图，分工不同：<code>MitigationOptions</code> 决定策略是否对该映像<strong>强制生效</strong>，<code>MitigationAuditOptions</code> 决定策略<strong>未强制时是否仅记录审计事件</strong>。两者相互独立、位图结构一致，故示例取相同数值且需分别创建。位图中某位对应哪种缓解机制由 Windows 版本定义，微软未给出稳定公开映射，<strong>不建议手工修改数值本身</strong>。</p>
 <p>Edge 终端需按同样方式再建一组，只把键路径末段换成 <code>msedge.exe</code>。</p>
 <h3 id="3-应用并验证策略"><a href="#3-应用并验证策略" class="headerlink" title="3. 应用并验证策略"></a>3. 应用并验证策略</h3><p>保存 GPO 后，在客户端执行以下命令强制刷新：</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpupdate /force</span><br></pre></td></tr></table></figure>
 
 <p>随后确认注册表三个值已落地，并重启浏览器验证是否还会崩溃。若策略未生效，用 <code>gpresult /r</code> 核查 GPO 链接与作用范围。</p>
-<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
-<li>上述配置会削弱目标浏览器进程的堆栈保护强度，属于临时可用性处置，不建议长期保留在生产终端</li>
-<li>生产环境批量下发前，先在测试 OU 验证</li>
-<li>分批次 rollout，控制单次影响面</li>
-<li>确保客户端能正常联系域控制器取得策略，否则配置不会生效</li>
-<li>定期复查该 GPO 的适用性：一旦上游版本修复，应及时撤销而不是长期压制防护</li>
-</ol>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>STATUS_STACK_BUFFER_OVERRUN</code> 是 exploit 防护命中后的快速失败，不是真正的栈溢出。单机在 Exploit Protection 中把目标映像的「硬件强制实施的堆栈保护」改为仅审核即可恢复；企业环境把等效的 IFEO 缓解策略通过 GPO 按映像下发，<code>chrome.exe</code> 与 <code>msedge.exe</code> 需分别配置。</p>
-<p>这是绕开防护触发的临时手段，应跟踪 Chromium 与微软的后续版本，在上游修复后撤销配置并恢复默认防护。</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
+<li>配置削弱目标浏览器进程的堆栈保护强度，属临时可用性处置，不建议长期保留在生产终端</li>
+<li>批量下发前先在测试 OU 验证，再分批 rollout 控制影响面</li>
+<li>客户端须能正常联系域控制器取得策略，否则不生效</li>
+<li>定期复查 GPO 适用性：上游版本修复后及时撤销，不长期压制防护</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li><code>STATUS_STACK_BUFFER_OVERRUN</code> 是 exploit 防护命中后的快速失败，不是真正的栈溢出；</li>
+<li>单机：Exploit Protection 中把目标映像「硬件强制实施的堆栈保护」改为仅审核；企业：等效 IFEO 缓解策略经 GPO 按映像下发，<code>chrome.exe</code> 与 <code>msedge.exe</code> 分别配置；</li>
+<li>临时处置，跟踪 Chromium 与微软后续版本，上游修复后撤销 GPO、恢复默认防护。</li>
+</ul>
 
                 
             </div>
@@ -1052,7 +1049,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">43.1k</span>&nbsp;字
+                class="white-color">38.9k</span>&nbsp;字
             
             
             

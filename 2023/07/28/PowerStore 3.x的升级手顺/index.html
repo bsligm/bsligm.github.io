@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="PowerStore, 升级, 存储, DELL EMC, 企业存储">
-    <meta name="description" content="本手顺适用于 DELL EMC PowerStore 3.x 群集，覆盖三类操作：驱动器固件升级、PowerStoreOS 无中断软件升级（NDU）与 PowerStore T 型号群集升级。升级期间群集的配置变更及 vVol 等管理任务不">
+    <meta name="keywords" content="PowerStore, 驱动器固件升级, PowerStoreOS, NDU, 维护窗口">
+    <meta name="description" content="DELL EMC PowerStore 3.x 群集的升级分三步：驱动器固件、PowerStoreOS 无中断升级（NDU）、PowerStore T 型号群集升级。顺序不能颠倒——先固件后系统，新 PowerStoreOS 对盘面固件有兼">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/07/28/PowerStore%203.x%E7%9A%84%E5%8D%87%E7%BA%A7%E6%89%8B%E9%A1%BA/&#34;},&#34;headline&#34;:&#34;PowerStore 3.x 的升级手顺&#34;,&#34;description&#34;:&#34;本手顺适用于 DELL EMC PowerStore 3.x 群集，覆盖三类操作：驱动器固件升级、PowerStoreOS 无中断软件升级（NDU）与 PowerStore T 型号群集升级。升级期间群集的配置变更及 vVol 等管理任务不&#34;,&#34;datePublished&#34;:&#34;2023-07-28T01:40:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-19T07:30:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/07/28/PowerStore%203.x%E7%9A%84%E5%8D%87%E7%BA%A7%E6%89%8B%E9%A1%BA/&#34;},&#34;headline&#34;:&#34;PowerStore 3.x 的升级手顺&#34;,&#34;description&#34;:&#34;DELL EMC PowerStore 3.x 群集的升级分三步：驱动器固件、PowerStoreOS 无中断升级（NDU）、PowerStore T 型号群集升级。顺序不能颠倒——先固件后系统，新 PowerStoreOS 对盘面固件有兼&#34;,&#34;datePublished&#34;:&#34;2023-07-28T01:40:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -22,7 +22,7 @@
     <meta property="og:title" content="PowerStore 3.x 的升级手顺 | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2023/07/28/PowerStore%203.x%E7%9A%84%E5%8D%87%E7%BA%A7%E6%89%8B%E9%A1%BA/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="本手顺适用于 DELL EMC PowerStore 3.x 群集，覆盖三类操作：驱动器固件升级、PowerStoreOS 无中断软件升级（NDU）与 PowerStore T 型号群集升级。升级期间群集的配置变更及 vVol 等管理任务不">
+    <meta property="og:description" content="DELL EMC PowerStore 3.x 群集的升级分三步：驱动器固件、PowerStoreOS 无中断升级（NDU）、PowerStore T 型号群集升级。顺序不能颠倒——先固件后系统，新 PowerStoreOS 对盘面固件有兼">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/1.jpg">
     
@@ -30,7 +30,7 @@
     <meta property="article:published_time" content="2023-07-28T01:40:00.000Z">
     
     
-    <meta property="article:modified_time" content="2026-11-19T07:30:00.000Z">
+    <meta property="article:modified_time" content="2026-11-20T04:00:00.000Z">
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
@@ -482,21 +482,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2026-11-19
+                    2026-11-20
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.2k
+                    1.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    7 分
+                    4 分
                 </div>
                 
 
@@ -516,108 +516,79 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>本手顺适用于 DELL EMC PowerStore 3.x 群集，覆盖三类操作：驱动器固件升级、PowerStoreOS 无中断软件升级（NDU）与 PowerStore T 型号群集升级。升级期间群集的配置变更及 vVol 等管理任务不可用，需预留维护窗口并提前完成健康检查；建议先升级驱动器固件，再做软件升级。</p>
-<p>控制台入口路径本文统一写作 <strong>Settings → Cluster → Upgrades</strong>，装了中文语言包的环境对应「设置 → 群集 → 升级」，是同一入口，下文不再重复标注。</p>
-<h2 id="驱动器固件升级"><a href="#驱动器固件升级" class="headerlink" title="驱动器固件升级"></a>驱动器固件升级</h2><p>先升驱动器固件再升 PowerStoreOS。新版 PowerStoreOS 对盘面固件有兼容性要求，反过来的顺序会让已升级的节点运行在不受支持的固件组合上，此时的告警与回退都比先升固件麻烦。</p>
-<h3 id="1-禁用-Call-Home-通知"><a href="#1-禁用-Call-Home-通知" class="headerlink" title="1. 禁用 Call Home 通知"></a>1. 禁用 Call Home 通知</h3><p>手动禁用通知，以防止在软件升级期间向支持部门发送 Call Home 警报。</p>
-<p><strong>操作步骤：</strong></p>
+                <p>DELL EMC PowerStore 3.x 群集的升级分三步：驱动器固件、PowerStoreOS 无中断升级（NDU）、PowerStore T 型号群集升级。顺序不能颠倒——先固件后系统，新 PowerStoreOS 对盘面固件有兼容性要求，反着做会把已升级的节点留在不受支持的组合上。升级期间配置变更与 vVol 等管理任务不可用，需预留维护窗口并完成健康检查。</p>
+<p>控制台入口统一写作 <strong>Settings → Cluster → Upgrades</strong>，中文语言包环境是「设置 → 群集 → 升级」，同一入口，下文不再重复。</p>
+<h2 id="驱动器固件升级"><a href="#驱动器固件升级" class="headerlink" title="驱动器固件升级"></a>驱动器固件升级</h2><h3 id="1-禁用-Call-Home-通知"><a href="#1-禁用-Call-Home-通知" class="headerlink" title="1. 禁用 Call Home 通知"></a>1. 禁用 Call Home 通知</h3><p>防止升级期间向支持部门发 Call Home 警报：</p>
 <ol>
-<li>进入 <strong>Settings → Support</strong>，选择「禁用支持通知」</li>
-<li>选择要为其暂停通知的设备，然后单击「修改」</li>
-<li>在修改维护模式滑出面板中：<ul>
-<li>选中「启用维护模式」选项</li>
-<li>在「维护窗口持续时间」字段中指定小时数（对于 PowerStore T 型号群集，指定 2 小时）</li>
-</ul>
-</li>
-<li>单击「应用」</li>
-<li>对群集中的任何其他设备重复此过程</li>
+<li><strong>Settings → Support</strong> →「禁用支持通知」</li>
+<li>选中要暂停通知的设备，点「修改」</li>
+<li>在维护模式面板里勾选「启用维护模式」，指定维护窗口小时数（PowerStore T 型号群集指定 2 小时）</li>
+<li>点「应用」，对群集中其他设备重复</li>
 </ol>
-<h3 id="2-更新驱动器固件"><a href="#2-更新驱动器固件" class="headerlink" title="2. 更新驱动器固件"></a>2. 更新驱动器固件</h3><p><strong>准备工作：</strong><br>从 DELL 支持网站下载最新的驱动器固件更新包。驱动器固件更新包包含 PowerStore 群集中驱动器的固件更新。</p>
-<p><strong>升级步骤：</strong></p>
+<h3 id="2-更新驱动器固件"><a href="#2-更新驱动器固件" class="headerlink" title="2. 更新驱动器固件"></a>2. 更新驱动器固件</h3><p>从 DELL 支持网站下载最新的驱动器固件更新包，然后：</p>
 <ol>
-<li>进入 <strong>Settings → Cluster → Upgrades</strong></li>
-<li>选择「上传程序包」</li>
-<li>在文件选择对话框中选中驱动器固件更新程序包，然后选择「打开」</li>
-<li>驱动器固件更新程序包将上传并显示在软件包表中</li>
-<li>在软件包表中选择驱动器固件更新程序包，然后选择「升级」</li>
+<li>进入 <strong>Settings → Cluster → Upgrades</strong> →「上传程序包」，选中固件包上传，包会显示在软件包表中</li>
+<li>在软件包表中选中该包，点「升级」</li>
 </ol>
-<p>上传入口与文件选择界面分别如下，注意确认页面右上角的群集上下文后再上传：</p>
+<p>上传前先确认页面右上角的群集上下文，传错群集等于白升：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202307280941821.png" alt="上传程序包" title="上传程序包按钮" decoding="async" loading="lazy"></p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202307280941330.png" alt="选择文件" title="选择文件对话框" decoding="async" loading="lazy"></p>
-<p><strong>验证方法：</strong></p>
-<p>可以通过以下方式验证驱动器固件版本：</p>
+<p><strong>验证固件版本</strong>，四种方式任选：</p>
 <ol>
-<li><p>运行 REST API 调用（口令以 <code>admin:&lt;password&gt;</code> 形式给出，写在命令行会进入 shell history，建议改用交互式输入或凭据文件）：</p>
+<li><p>REST API（口令写在命令行会进 shell history，建议交互式输入或凭据文件）：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -kv --user admin:&lt;password&gt; -X GET https://&lt;appliance IP&gt;:443/api/rest/software_package?<span class="keyword">select</span>=* | python -mjson.tool</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>运行 CLI 命令（<code>&lt;password&gt;</code> 同样会进入 shell history，可在 <code>-p</code> 后留空交互式输入）：</p>
+<li><p>CLI（<code>-p</code> 后留空可交互式输入）：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pstcli -d xx.xx.xx.xx -u &lt;user&gt; -p &lt;password&gt; software_package show-output nvp | grep -E <span class="string">&quot;name|software_package_type|release_version&quot;</span></span><br></pre></td></tr></table></figure>
 </li>
-<li><p>在 PowerStore Manager 中查看：<br>硬件 &gt; 设备 &gt; appliance &gt; 组件 &gt; 驱动器页面</p>
+<li><p>PowerStore Manager：硬件 &gt; 设备 &gt; appliance &gt; 组件 &gt; 驱动器页面</p>
 </li>
-<li><p>运行服务命令（<code>svc_diag</code> 需使用 service 账户，<code>admin</code> 与 <code>&lt;user&gt;</code> 均无权限执行）：</p>
+<li><p>服务命令（<code>svc_diag</code> 需 service 账户，<code>admin</code> 与 <code>&lt;user&gt;</code> 均无权限）：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">svc_diag list --show_drives</span><br></pre></td></tr></table></figure></li>
 </ol>
-<h2 id="PowerStore-无中断软件升级"><a href="#PowerStore-无中断软件升级" class="headerlink" title="PowerStore 无中断软件升级"></a>PowerStore 无中断软件升级</h2><p>PowerStore 支持无中断软件升级（NDU），可以在不影响业务的情况下完成系统升级。</p>
-<h3 id="1-升级准备"><a href="#1-升级准备" class="headerlink" title="1. 升级准备"></a>1. 升级准备</h3><p>在开始升级之前，请完成以下准备工作：</p>
-<ol>
-<li>获取最新 PowerStoreOS 并将其上传到系统（如果未启用自动下载）</li>
+<h2 id="PowerStoreOS-无中断升级"><a href="#PowerStoreOS-无中断升级" class="headerlink" title="PowerStoreOS 无中断升级"></a>PowerStoreOS 无中断升级</h2><h3 id="1-升级准备"><a href="#1-升级准备" class="headerlink" title="1. 升级准备"></a>1. 升级准备</h3><ol>
+<li>上传最新 PowerStoreOS（未启用自动下载时）</li>
 <li>查看发行说明</li>
-<li>运行升级前运行状况检查和其他必要的系统运行状况检查工具</li>
-<li>确保两个节点的主机连接都有备用连接</li>
-<li>在升级之前完成配置更改或管理操作，因为在进行升级时这些更改或管理操作不可用<ul>
-<li>这些管理操作包括 vVol 虚拟机任务，例如创建虚拟机、重新启动虚拟机、将虚拟机迁移到其他 ESXi 主机以及创建虚拟机快照</li>
-</ul>
-</li>
+<li>跑升级前运行状况检查与其他必要检查</li>
+<li>确认两个节点的主机连接都有备用连接</li>
+<li>升级前完成所有配置变更与管理操作——升级期间它们不可用，包括 vVol 虚拟机任务：创建、重启、迁移到其他 ESXi 主机、打快照</li>
 </ol>
-<h3 id="2-自动下载升级程序包"><a href="#2-自动下载升级程序包" class="headerlink" title="2. 自动下载升级程序包"></a>2. 自动下载升级程序包</h3><p>已启用支持连接（SupportConnect）的群集可以从支持网站的安全隧道自动拉取更新包，覆盖软件更新包、驱动器固件更新包、语言包和配套的运行状况检查包。有新包时 PowerStore Manager 会发告警通知。</p>
-<p>启用方式：<strong>Settings → Cluster → Upgrades</strong> → 打开 Auto Download。</p>
+<h3 id="2-自动下载"><a href="#2-自动下载" class="headerlink" title="2. 自动下载"></a>2. 自动下载</h3><p>启用 SupportConnect 的群集可从支持网站安全隧道自动拉取更新包（软件包、固件包、语言包、配套检查包），有新包时 Manager 发告警。启用方式：<strong>Settings → Cluster → Upgrades</strong> → 打开 Auto Download。</p>
 <p>两点必须清楚：</p>
 <ul>
-<li><strong>自动下载只下载、不安装</strong>。包落到系统上后仍需手动选中并点 Upgrade 才会执行，别把它当成「已经更新了」。</li>
-<li><strong>新包会覆盖旧包</strong>。同一类型出现更高兼容版本时，之前在升级页准备好但未安装的包会被替换。如果维护窗口是按某个特定版本评估的，下载后先确认包版本再动手，不要等到执行当天才发现被换过。</li>
+<li><strong>自动下载只下载、不安装</strong>，包落下后仍需手动选中点 Upgrade。</li>
+<li><strong>新包会覆盖旧包</strong>：同类型出现更高兼容版本时，已上传未安装的包会被替换。维护窗口按特定版本评估过的，下载后先确认包版本再动手，别等到执行当天发现被换过。</li>
 </ul>
-<h2 id="PowerStore-T-软件升级"><a href="#PowerStore-T-软件升级" class="headerlink" title="PowerStore T 软件升级"></a>PowerStore T 软件升级</h2><p>PowerStore T 型号的软件升级需要特别注意升级顺序和时间安排。</p>
-<h3 id="1-升级准备-1"><a href="#1-升级准备-1" class="headerlink" title="1. 升级准备"></a>1. 升级准备</h3><p><strong>准备工作：</strong></p>
-<ol>
-<li>手动关闭通知，以防止在软件升级期间向支持部门发送 Call Home 警报</li>
+<h2 id="PowerStore-T-型号群集升级"><a href="#PowerStore-T-型号群集升级" class="headerlink" title="PowerStore T 型号群集升级"></a>PowerStore T 型号群集升级</h2><h3 id="1-准备与上传"><a href="#1-准备与上传" class="headerlink" title="1. 准备与上传"></a>1. 准备与上传</h3><ol>
+<li>按上文禁用 Call Home 通知</li>
 <li>从支持网站下载最新的 PowerStore T 升级程序包</li>
-<li>将软件升级包上传到 PowerStore Manager</li>
+<li><strong>Settings → Cluster → Upgrades</strong> →「上传程序包」，选中包上传</li>
 </ol>
-<p><strong>上传步骤：</strong></p>
-<ol>
-<li>在 PowerStore Manager 中进入 <strong>Settings → Cluster → Upgrades</strong></li>
-<li>选择「上传程序包」，选中 PowerStore T 型号升级程序包后点「打开」</li>
-</ol>
-<h3 id="2-执行升级"><a href="#2-执行升级" class="headerlink" title="2. 执行升级"></a>2. 执行升级</h3><p>在升级 PowerStore T 型号群集之前，请仔细查看并执行知识库文章 000183630《如何准备 PowerStore 无中断升级(NDU)》中的步骤；该编号可在 Dell Support 站点（<a target="_blank" rel="noopener" href="https://www.dell.com/support%EF%BC%89%E7%9B%B4%E6%8E%A5%E6%90%9C%E7%B4%A2%E8%8E%B7%E5%8F%96%E3%80%82">https://www.dell.com/support）直接搜索获取。</a></p>
-<p><strong>升级步骤：</strong></p>
-<ol>
-<li>按下一节《升级 PowerStore T 型号群集上的软件》操作步骤执行，升级耗时与升级后的会话处理以该节为准</li>
-<li>成功升级 PowerStoreOS 软件后，请在新固件捆绑包可用时升级驱动器固件</li>
+<p>执行前完整走一遍知识库文章 000183630《如何准备 PowerStore 无中断升级(NDU)》（Dell Support 站点 <a target="_blank" rel="noopener" href="https://www.dell.com/support">https://www.dell.com/support</a> 可按编号搜索）。</p>
+<h3 id="2-执行"><a href="#2-执行" class="headerlink" title="2. 执行"></a>2. 执行</h3><ol>
+<li>按下一节的单设备操作步骤执行，耗时与会话处理以该节为准</li>
+<li>PowerStoreOS 升级成功后，在新固件捆绑包可用时升级驱动器固件</li>
 </ol>
 <blockquote>
-<p><strong>注意：</strong> 如果软件升级过程失败，请查看并解决群集上的所有关键警报，然后重试升级。</p>
+<p>升级失败时，先解决群集上的所有关键警报再重试。</p>
 </blockquote>
-<h2 id="升级-PowerStore-T-型号群集上的软件"><a href="#升级-PowerStore-T-型号群集上的软件" class="headerlink" title="升级 PowerStore T 型号群集上的软件"></a>升级 PowerStore T 型号群集上的软件</h2><p>使用 PowerStore Manager 升级 PowerStore T 型号群集上的节点固件和 PowerStoreOS。单个设备的升级约需 1 小时至 1.5 小时，规划维护窗口时按设备数量累加。</p>
-<h3 id="1-操作步骤"><a href="#1-操作步骤" class="headerlink" title="1. 操作步骤"></a>1. 操作步骤</h3><ol>
-<li>打开 PowerStore Manager</li>
-<li>进入 <strong>Settings → Cluster → Upgrades</strong></li>
-<li>如果尚未将 PowerStore T 型号软件升级程序包上传到 PowerStore Manager：<ul>
-<li>选择上传程序包</li>
-<li>选择要上传的 PowerStore T 型号软件升级程序包，然后选择打开</li>
-<li>PowerStore T 型号软件升级程序包会上传到 PowerStore Manager 并显示在软件包表中</li>
-</ul>
-</li>
-<li>在软件包表中选择 PowerStore T 型号软件升级程序包，然后选择升级</li>
-<li>等待升级完成，期间页面可能返回登录屏幕</li>
-<li>返回登录屏幕后，关闭浏览器会话并打开新会话，然后再次登录以刷新 UI</li>
+<h3 id="3-单设备操作步骤"><a href="#3-单设备操作步骤" class="headerlink" title="3. 单设备操作步骤"></a>3. 单设备操作步骤</h3><p>单设备升级约 1–1.5 小时，维护窗口按设备数量累加：</p>
+<ol>
+<li>打开 PowerStore Manager，进入 <strong>Settings → Cluster → Upgrades</strong></li>
+<li>包未上传过就先上传（步骤同上）</li>
+<li>在软件包表中选中 PowerStore T 升级包，点「升级」</li>
+<li>等待完成，期间页面可能返回登录屏幕</li>
+<li>跳回登录屏后，<strong>关掉旧浏览器会话、开新会话重新登录</strong>刷新 UI</li>
 </ol>
-<h3 id="2-升级结果"><a href="#2-升级结果" class="headerlink" title="2. 升级结果"></a>2. 升级结果</h3><p>升级过程中主设备的主节点会故障切换到辅助节点，管理会话随之断开，PowerStore Manager 需要等故障切换完成后重新登录。期间主机 I/O 由 NDU 保证不中断，受影响的是管理面而非数据面——这也是为什么升级窗口内不要安排配置变更和 vVol 任务。</p>
-<p>界面自定义不随升级保留：PowerStore Manager 各列表的列布局在装上新版 PowerStoreOS 后重置为默认。如果运维团队依赖自定义列（比如按容量使用率排序的视图），提前告知，升级后需重新配置。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这条升级链路的顺序不能颠倒：先禁 Call Home 通知并开维护模式，再升驱动器固件，最后才做 PowerStoreOS 的无中断升级。固件先行的原因是新系统对盘面兼容性有新要求，反过来做会把已升级的节点留在不受支持的组合上。</p>
-<p>维护窗口的长度由设备数量决定：单台设备约 1 至 1.5 小时，群集按台数累加，不能按「一次升级」估时。期间主设备主节点会故障切换到辅助节点，管理会话会被断开，页面跳回登录屏属于正常过程而非升级失败；升级完成后必须关掉旧浏览器会话重新登录，否则 UI 仍是旧版本缓存。</p>
-<p>三件容易踩空的事：升级期间 vVol 相关的虚拟机任务（创建、迁移、打快照）全部不可用，需提前与虚拟化团队错开时间；PowerStore Manager 的列布局设置在升级后会被重置为默认，有人依赖自定义视图的话提前说明；自动下载只负责把程序包取到系统上，不会自行安装，别把它当成已更新。</p>
-<p>若升级失败，先处理群集上的所有关键警报再重试，不要在警报未清的情况下反复提交升级。</p>
+<h3 id="4-升级过程发生了什么"><a href="#4-升级过程发生了什么" class="headerlink" title="4. 升级过程发生了什么"></a>4. 升级过程发生了什么</h3><p>主设备的主节点会故障切换到辅助节点，管理会话随之断开，Manager 要等故障切换完成才能重新登录。主机 I/O 由 NDU 保证不中断，受影响的是管理面不是数据面——这也是升级窗口内不排配置变更和 vVol 任务的原因。</p>
+<p>界面自定义不随升级保留：各列表的列布局装上新版 PowerStoreOS 后重置为默认。依赖自定义列（如按容量使用率排序的视图）的，提前告知，升级后重新配置。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li><strong>顺序</strong>：禁 Call Home 开维护模式 → 驱动器固件 → PowerStoreOS，颠倒则节点落在不受支持的固件组合上。</li>
+<li><strong>估时</strong>：单台 1–1.5 小时按台数累加，不按”一次升级”估。</li>
+<li><strong>登录屏跳回是正常过程</strong>不是升级失败；完成后必须换新会话登录，否则 UI 还是旧版缓存。</li>
+<li><strong>vVol 虚拟机任务（创建/迁移/打快照）升级期间全不可用</strong>，提前与虚拟化团队错开。</li>
+<li><strong>自动下载只取包不安装</strong>；升级失败先清关键警报再重试，别在警报未清时反复提交。</li>
+</ul>
 
                 
             </div>
@@ -1066,7 +1037,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">43.1k</span>&nbsp;字
+                class="white-color">38.9k</span>&nbsp;字
             
             
             
