@@ -499,7 +499,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.5k
+                    1.6k
                 </div>
                 
 
@@ -552,10 +552,11 @@
 <li>名称：<code>RendererCodeIntegrityEnabled</code></li>
 <li>数值数据：<code>0</code></li>
 </ul>
-<p>该值关闭 Edge 的渲染器代码完整性检查。明确两点代价：</p>
+<p>该值关闭 Edge 的渲染器代码完整性检查。明确三点代价：</p>
 <ul>
 <li>这是绕过校验，不是消除注入源。若诱因是第三方安全软件，仍应同步排查其注入规则</li>
 <li>Edge 后续版本升级可能重置该策略或让问题重新出现，升级后需复验</li>
+<li>该策略自 Edge 119 起被标记为 OBSOLETE（官方注明 119 起移除、设置即被忽略，生效区间 78–118）。本修复针对的就是这个版本带；在更新的 Edge 上长期使用，需先确认该策略是否仍生效</li>
 </ul>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202509081511347.png" alt="注册表编辑器配置" title="注册表项设置" decoding="async" loading="lazy"></p>
 <h3 id="4-重启浏览器"><a href="#4-重启浏览器" class="headerlink" title="4. 重启浏览器"></a>4. 重启浏览器</h3><p>完全退出 Edge（确认系统托盘中的后台运行进程一并结束）再启动，验证页面能否正常加载。</p>
@@ -1045,7 +1046,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">49.7k</span>&nbsp;字
+                class="white-color">49.8k</span>&nbsp;字
             
             
             

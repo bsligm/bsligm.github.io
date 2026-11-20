@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Atlas800, 银河麒麟, iBMC, NPU 驱动, CANN, aarch64">
-    <meta name="description" content="计算与存储主题的三篇老文是算力层的起点，这篇是国产算力路径的一篇：华为 Atlas 800 推理服务器（8×Ascend 910，aarch64）装银河麒麟，再装 NPU 驱动、芯片固件与 CANN。全程走 iBMC 带外管理装系统，不用现">
+    <meta name="description" content="计算与存储主题的三篇老文是算力层的起点，这篇是国产算力路径的一篇：华为 Atlas 800 服务器（8×Ascend 910，aarch64）装银河麒麟，再装 NPU 驱动、芯片固件与 CANN。全程走 iBMC 带外管理装系统，不用现场接">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/08/07/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/&#34;},&#34;headline&#34;:&#34;华为 Atlas800 服务器安装银河麒麟&#34;,&#34;description&#34;:&#34;计算与存储主题的三篇老文是算力层的起点，这篇是国产算力路径的一篇：华为 Atlas 800 推理服务器（8×Ascend 910，aarch64）装银河麒麟，再装 NPU 驱动、芯片固件与 CANN。全程走 iBMC 带外管理装系统，不用现&#34;,&#34;datePublished&#34;:&#34;2023-08-07T08:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
+    <script type="application/ld+json">{&#34;@context&#34;:&#34;https://schema.org&#34;,&#34;@type&#34;:&#34;BlogPosting&#34;,&#34;mainEntityOfPage&#34;:{&#34;@type&#34;:&#34;WebPage&#34;,&#34;@id&#34;:&#34;https://bsligm.zone/2023/08/07/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/&#34;},&#34;headline&#34;:&#34;华为 Atlas800 服务器安装银河麒麟&#34;,&#34;description&#34;:&#34;计算与存储主题的三篇老文是算力层的起点，这篇是国产算力路径的一篇：华为 Atlas 800 服务器（8×Ascend 910，aarch64）装银河麒麟，再装 NPU 驱动、芯片固件与 CANN。全程走 iBMC 带外管理装系统，不用现场接&#34;,&#34;datePublished&#34;:&#34;2023-08-07T08:00:00.000Z&#34;,&#34;dateModified&#34;:&#34;2026-11-20T04:00:00.000Z&#34;,&#34;author&#34;:{&#34;@type&#34;:&#34;Person&#34;,&#34;name&#34;:&#34;李广明&#34;},&#34;publisher&#34;:{&#34;@type&#34;:&#34;Organization&#34;,&#34;name&#34;:&#34;李广明&#34;,&#34;logo&#34;:{&#34;@type&#34;:&#34;ImageObject&#34;,&#34;url&#34;:&#34;https://bsligm.zone/medias/logo.png&#34;}}}</script>
     
     
     
@@ -22,7 +22,7 @@
     <meta property="og:title" content="华为 Atlas800 服务器安装银河麒麟 | 李广明的技术博客">
     <meta property="og:url" content="https://bsligm.zone/2023/08/07/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/">
     <meta property="og:site_name" content="李广明的技术博客">
-    <meta property="og:description" content="计算与存储主题的三篇老文是算力层的起点，这篇是国产算力路径的一篇：华为 Atlas 800 推理服务器（8×Ascend 910，aarch64）装银河麒麟，再装 NPU 驱动、芯片固件与 CANN。全程走 iBMC 带外管理装系统，不用现">
+    <meta property="og:description" content="计算与存储主题的三篇老文是算力层的起点，这篇是国产算力路径的一篇：华为 Atlas 800 服务器（8×Ascend 910，aarch64）装银河麒麟，再装 NPU 驱动、芯片固件与 CANN。全程走 iBMC 带外管理装系统，不用现场接">
     
     <meta property="og:image" content="https://bsligm.zone/medias/featureimages/2.jpg">
     
@@ -528,7 +528,8 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>计算与存储主题的三篇老文是算力层的起点，这篇是国产算力路径的一篇：华为 Atlas 800 推理服务器（8×Ascend 910，aarch64）装银河麒麟，再装 NPU 驱动、芯片固件与 CANN。全程走 iBMC 带外管理装系统，不用现场接键盘显示器。</p>
+                <p>计算与存储主题的三篇老文是算力层的起点，这篇是国产算力路径的一篇：华为 Atlas 800 服务器（8×Ascend 910，aarch64）装银河麒麟，再装 NPU 驱动、芯片固件与 CANN。全程走 iBMC 带外管理装系统，不用现场接键盘显示器。</p>
+<p>注意 910 是<strong>训练级</strong> NPU，与官方「Atlas 800 推理服务器（型号 3000/3010）」对应的 310/310P 不是一回事，选型和驱动包别混。</p>
 <p>这条线和 NVIDIA 栈的差别在生态不在流程：驱动、固件、CANN 的版本三元组必须按华为适配表互相匹配，混版就是 NPU 不可用；CANN 是 C++ 与算子层的生态位，和 CUDA 的差距体现在算子覆盖与第三方框架适配，不在安装手顺上。</p>
 <h2 id="通过-iBMC-安装银河麒麟"><a href="#通过-iBMC-安装银河麒麟" class="headerlink" title="通过 iBMC 安装银河麒麟"></a>通过 iBMC 安装银河麒麟</h2><p>iBMC（integrated Baseboard Management Controller）是华为服务器的基板管理控制器，远程装系统全靠它。</p>
 <h3 id="1-出厂默认配置"><a href="#1-出厂默认配置" class="headerlink" title="1. 出厂默认配置"></a>1. 出厂默认配置</h3><table>
@@ -1065,7 +1066,7 @@ CANN nnae 包本身不含 PyTorch，<code>python3 -c &quot;import torch&quot;</c
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">49.7k</span>&nbsp;字
+                class="white-color">49.8k</span>&nbsp;字
             
             
             

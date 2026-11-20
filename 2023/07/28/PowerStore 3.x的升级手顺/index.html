@@ -587,7 +587,7 @@
 <p>界面自定义不随升级保留：各列表的列布局装上新版 PowerStoreOS 后重置为默认。依赖自定义列（如按容量使用率排序的视图）的，提前告知，升级后重新配置。</p>
 <h2 id="关键设计决策"><a href="#关键设计决策" class="headerlink" title="关键设计决策"></a>关键设计决策</h2><p><strong>三层升级顺序：微码/固件 → PowerStoreOS → 应用层（含 vVol 任务）。</strong> 驱动器固件对宿主 OS 版本有兼容要求，先升 OS 再把固件留在旧版，中间任何一步失败，群集停在不受支持的组合上。应用层排在数据面稳定之后，因为升级期间 vVol 的创建/迁移/打快照全不可用，业务侧变更不能和升级同窗口。</p>
 <p><strong>回滚窗口在第一次故障切换之前。</strong> NDU 是节点级滚动升级：主设备主节点故障切换到辅助节点后，旧版 PowerStoreOS 仍在辅节点上。第一台设备的升级完成前出问题时，回滚成本最低；多台设备滚动推进之后，回滚要逐台反向操作，窗口要按设备数量重新算。</p>
-<p><strong>PowerStore T 与标准型的差异：窗口和流程不同。</strong> T 型号（PowerStore T10/T20/T30）单台升级 1–1.5 小时，维护窗口按设备数量累加；标准型（PowerStore 1000/2000/3000）走 NDU 流程，窗口按节点滚动估算。两者共用 Settings → Cluster → Upgrades 入口，但升级包类型、失败重试条件和回滚路径都不同，执行前确认群集型号再取对应手顺。</p>
+<p><strong>PowerStore T 与标准型的差异：窗口和流程不同。</strong> T 系列（型号后缀 T，TLC 盘，如 1000T/3000T/9000T，从 500T 到 9200T）单台升级 1–1.5 小时，维护窗口按设备数量累加；标准型号走 NDU 流程，窗口按节点滚动估算。两者共用 Settings → Cluster → Upgrades 入口，但升级包类型、失败重试条件和回滚路径都不同，执行前确认群集型号再取对应手顺。</p>
 <p><strong>自动下载只下载不安装，且新包会覆盖旧包。</strong> 包被换过而维护窗口仍按旧版本评估过，执行当天才发现就要重新排期。所以下载后先确认包版本再动手，这条比”自动下载方便”更值钱。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
 <li><strong>顺序</strong>：禁 Call Home 开维护模式 → 驱动器固件 → PowerStoreOS，颠倒则节点落在不受支持的固件组合上。</li>
@@ -1044,7 +1044,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">49.7k</span>&nbsp;字
+                class="white-color">49.8k</span>&nbsp;字
             
             
             

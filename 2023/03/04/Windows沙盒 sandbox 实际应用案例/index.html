@@ -529,7 +529,7 @@
 <h2 id="关键设计决策"><a href="#关键设计决策" class="headerlink" title="关键设计决策"></a>关键设计决策</h2><ul>
 <li><strong>映射目录设只读，脚本绕道网络共享取安装包</strong>：<code>ReadOnly</code> 让沙盒对主机目录只有读权，暴露面最小；代价是安装包不能直接放进映射目录，脚本要先 <code>net use</code> 连共享、把文件取到沙盒内可写的 <code>Downloads</code> 目录再装。脚本里因此带了一份明文凭据——换成专用只读账号，用完撤销。</li>
 <li><strong><code>LogonCommand</code> 自动执行安装</strong>：沙盒启动即装完 Flash，使用者双击 <code>.wsb</code> 就能干活，不需要会操作的人。代价是这条命令无人值守执行，<code>xcopy</code> 缺一个抑制交互的开关都会挂起在提问上。</li>
-<li><strong>隔离边界按「什么没被隔开」验收</strong>：沙盒基于动态 AppContainer 令牌隔离注册表、文件系统访问与桌面，关窗即销毁；但它<strong>不隔离网络</strong>（默认直通，无 VPN/802.1X 区分，本案例正好依赖它访问打印机后台），身份上默认用户是本地 <code>WDAGUtilityAccount</code> 而非域会话——<code>net use</code> 存的是域账号的真实凭据，网络会话以那个域账号建立。把它当虚拟机用会高估隔离强度，把它当一次性干净环境用正合适。</li>
+<li><strong>隔离边界按「什么没被隔开」验收</strong>：沙盒是轻量虚拟化环境（独立于宿主内核运行，隔离注册表、文件系统与桌面），关窗即销毁；网络<strong>默认开放</strong>（<code>.wsb</code> 配置文件里 <code>Networking</code> 节设为 <code>Disable</code> 可关，默认情况下无 VPN/802.1X 区分，本案例正好依赖它访问打印机后台），身份上默认用户是本地 <code>WDAGUtilityAccount</code> 而非域会话——<code>net use</code> 存的是域账号的真实凭据，网络会话以那个域账号建立。把它当虚拟机用会高估隔离强度，把它当一次性干净环境用正合适。</li>
 </ul>
 <h2 id="Windows-沙盒简介"><a href="#Windows-沙盒简介" class="headerlink" title="Windows 沙盒简介"></a>Windows 沙盒简介</h2><p>Windows 沙盒是 Windows 10/11 Pro/Enterprise 内置的轻量虚拟化环境：每次启动都是全新实例，关闭后本次会话的全部改动（含临时安装的 Flash Player）随之消失，不残留到主机。</p>
 <p>沙盒内程序默认无法访问主机文件系统，唯一例外是 <code>MappedFolders</code> 显式映射的目录，本案例靠它把安装脚本送进沙盒。</p>
@@ -1032,7 +1032,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">49.7k</span>&nbsp;字
+                class="white-color">49.8k</span>&nbsp;字
             
             
             

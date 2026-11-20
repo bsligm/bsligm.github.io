@@ -571,7 +571,7 @@
 <p>出版本信息即成功：</p>
 <p><img src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202311091305908.png" alt="nvcc 命令输出示例" title="nvcc命令输出示例" decoding="async" loading="lazy"></p>
 <h2 id="关键设计决策"><a href="#关键设计决策" class="headerlink" title="关键设计决策"></a>关键设计决策</h2><p><strong>为什么用 runfile 而不是 apt 包。</strong> apt 路线（<code>nvidia-driver-*</code>）版本滞后且不可选版本；runfile 现场编译内核模块，能精确指定版本。代价是内核升级要重编译——这就是安装器里 DKMS 必须选 Yes 的原因，否则就得锁内核。</p>
-<p><strong>专有驱动 vs 开源内核模块。</strong> 2023 年对当时的卡，专有驱动是稳妥选择。这个选项在新一代架构上变成关键项：vGPU、MIG 依赖开源内核模块（<code>-m=kernel-open</code>），Blackwell 系卡在 PVE 上的实测也都建立在开源模块上——后面 GPU 切分篇的黑名单 <code>nouveau</code> 报 <code>unknown chipset</code> 就是这个背景。</p>
+<p><strong>专有驱动 vs 开源内核模块。</strong> 2023 年对当时的卡，专有驱动是稳妥选择。这个选项在新一代架构上变成关键项：部分新特性要求开源内核模块（<code>-m=kernel-open</code>），Blackwell 系卡在 PVE 上的实测也全部建立在开源模块上——后面 GPU 切分篇的黑名单 <code>nouveau</code> 报 <code>unknown chipset</code> 就是这个背景。</p>
 <p><strong>nouveau 为什么必须禁。</strong> nouveau 与专有驱动争抢同一块 GPU，modeset 冲突会让安装器直接失败。屏蔽只处理模块加载，和”卸载 NVIDIA 驱动”是两件事。</p>
 <p><strong>版本兼容矩阵怎么查。</strong> 硬约束只有一条：工具包版本 ≤ <code>nvidia-smi</code> 显示的 <code>CUDA Version</code>——那是驱动支持的上限，不是已装的工具包版本。反查方向从 CUDA 版本找对应驱动，用 CUDA Toolkit Release Notes / 驱动 release notes，别凭记忆。</p>
 <h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="1-驱动安装失败"><a href="#1-驱动安装失败" class="headerlink" title="1. 驱动安装失败"></a>1. 驱动安装失败</h3><p>两类常见原因：</p>
@@ -1038,7 +1038,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">49.7k</span>&nbsp;字
+                class="white-color">49.8k</span>&nbsp;字
             
             
             
