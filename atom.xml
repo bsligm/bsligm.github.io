@@ -203,7 +203,7 @@
     <link href="https://bsligm.zone/2023/07/28/PowerStore%203.x%E7%9A%84%E5%8D%87%E7%BA%A7%E6%89%8B%E9%A1%BA/"/>
     <published>2023-07-28T01:40:00.000Z</published>
     <summary>PowerStore 3.x 升级手顺：先固件后 PowerStoreOS 的顺序约束、Call Home 维护窗口、NDU 期间 vVol 任务不可用的边界、自动下载只下载不安装的坑，维护窗口按设备数量累加（单台 1–1.5 小时）。</summary>
-    <title>PowerStore 3.x 的升级手顺</title>
+    <title>PowerStore 3.x 升级实录：先固件后系统的顺序约束与维护窗口</title>
     <updated>2026-11-20T04:00:00.000Z</updated>
   </entry>
   <entry>
