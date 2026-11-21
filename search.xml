@@ -1097,7 +1097,7 @@ hardware_validated
 
 小结三堵墙都是上游破的，本项目实际做的是验收对齐：遥操电池、63 条案例、存储硬断言。真正花时间的仍是文档不写的部分：Deck 只读 rootfs 逼着构建远端化、logind 的 cgroup 回收让 setsid nohup 失效、60fps 开关不生效还不报错。这也是”AI Agent 参与游戏工程”的样本：Agent 做源码审计、案例生成、遥操编排、归因；人把三关——目标（准原生）、纪律（Deck 轻拿轻放）、验收（读数字不读心跳）。
 只留一条经验：验收读运行时数字，不读进程活着。
-项目代码：总仓 opsbsligm/nativedeck（证据链与验收纪律所在），两款游戏移植仓 opsbsligm/totk-native、opsbsligm/astral-native。
+项目代码：总仓 opsbsligm/nativedeck（证据链与验收纪律所在；战神 3 的 ultratears 移植落在 ports/ultratears-linux）。三款里唯一独立成仓的是异界锁链：opsbsligm/astral-native；血源走上游 bbport、以验收对齐为主，未单拆仓。
 
 游戏名为专有名词保留；内网节点名、IP 与凭据引用均已脱敏；帧率与帧时取自当时遥操会话的现场记录，仅作口径参考。
 ]]></content>
