@@ -990,10 +990,11 @@ shell 语法坑。 变量名:low 在 zsh 里会被当变量修饰符吞掉，必
       </tags>
   </entry>
   <entry>
-    <title>Steam Deck 原生移植三部曲：异界锁链、战神 3 与血源诅咒的 AOT 重编译</title>
-    <url>/2026/11/06/SteamDeck%E5%8E%9F%E7%94%9F%E4%B8%89%E9%83%A8%E6%9B%B2Switch%E6%B8%B8%E6%88%8F%E7%9A%84AOT%E7%A7%BB%E6%A4%8D%E4%B9%8B%E8%B7%AF/</url>
+    <title>Steam Deck 原生移植三部曲：一款 Switch 两款 PS4 的准原生之路</title>
+    <url>/2026/11/06/SteamDeck%E5%8E%9F%E7%94%9F%E7%A7%BB%E6%A4%8D%E4%B8%89%E9%83%A8%E6%9B%B2%E5%BC%82%E7%95%8C%E9%94%81%E9%93%BE%E6%88%98%E7%A5%9E3%E4%B8%8E%E8%A1%80%E6%BA%90/</url>
     <content><![CDATA[想在 Steam Deck 上原生玩 Switch 游戏，不用模拟器、不靠运行时模拟，怎么做到？路线只有三条：模拟器（Ryujinx 这类，快但兼容性看天）、兼容层（转译，稳但每帧交税）、真·原生——AOT 移植，把 AArch64 代码静态重编译成本机 x86-64 原生码，慢但体验上限最高。
-我押第三条：把三款游戏的 PC 重编译项目搬上 Deck——异界锁链 [Switch]、战神 3 Remastered [PS4]、血源诅咒 [PS4]。目标是厂商原生移植的水准，不是”能跑就行”。定位先写死：个人使用，不分发游戏资产。
+我押第三条：把三款游戏的 PC 移植项目搬上 Deck——异界锁链 [Switch]、战神 3 Remastered [PS4]、血源诅咒 [PS4]。目标是厂商原生移植的水准，不是”能跑就行”。定位先写死：个人使用，不分发游戏资产。
+技术口径先说清，避免标题党：AOT 重编译只发生在 Switch 那一关——AArch64 指令集不同，必须静态重译成 x86-64。两款 PS4 Remastered 本来就是 x86-64，CPU 关天然成立，它们的战场在 GPU 渲染与平台集成（Vulkan 后端 + Deck 适配），不经过重编译器。所以”准原生”对三款是三条不同的路，本文的 AOT 管线（LLVM lift、SPIR-V 转译）主要写给异界锁链，PS4 两作的部分偏验收与集成。
 三堵墙：挡的是架构差，不是单点难度Switch 是 AArch64 + Maxwell GPU + Horizon 系统服务（Switch 的系统服务层，音频/输入/NFC 都走它），Deck 是 x86-64 + Vulkan（AMD 开源驱动 RADV），直接搬有三堵墙：
 
 
