@@ -327,6 +327,27 @@ CPU 兼容。 CPU 类型按宿主能力与迁移需求选择。是否需要 NUMA
 来宾状态正常以后，还要回头看宿主。防火墙、备份保留策略、管理身份和故障域都纳入验收。两台域控如果落在同一个宿主机上，宿主宕机仍会同时影响它们。
 虚机快照只记录虚拟机当时的状态。设计域恢复时，另外准备受支持的域控系统状态备份和隔离恢复场景，演练里要能定位恢复点并确认目录、SYSVOL 和 DNS 一起恢复。云上第三台能提供另一份在线副本，也会接收复制过来的变更，所以备份和副本各有用途。微软的系统状态备份说明
 基线复查从 77% 到 89%，改了哪一层上线初期我按当时的检查项给首台域控做了审计。重启复验后，同一份清单的通过比例从 77% 提高到 89%。这两个数只用于比较变更前后。为了让后面两台复用这套配置，我把每项都记到可以复读的层次里，包括服务监听、策略值和从预定网络发起的实际访问。
+旧记录保留了两次比例，公开材料没有逐项清单和分母。我不从两个百分比倒推通过项数量，也不把首台的复查结果套到另外两台。下面三类检查可以复用，复用的是判据，结果需要各机分别记录。
+
+
+
+审计项
+复查时同时看什么
+
+
+
+旧协议与监听
+系统还有没有监听，允许来源和拒绝来源的真实访问结果是否符合预期
+
+
+目录访问策略
+生效策略是什么，代表性客户端能否按预期绑定和查询
+
+
+文件访问基线
+实际协商的协议、签名和加密状态，依赖方能否完成读取
+
+
 NetBIOS 的 139 端口关不干净。 逐网卡把注册表 NetBT\Parameters\Interfaces\...\NetbiosOptions 设为 2 并重启，端口仍在监听——承载者是内核（PID 4），sc stop 无从下手。最终接受的做法是注册表禁用加防火墙在 Public profile 上对 137/138/139 加阻止规则兜底：监听仍在内网地址上，只是外部不可达。这个行为微软社区讨论多年，结论基本就是防火墙兜底为正解。
 WinRM 的 HTTP 监听绑在 IPv6 全接口。 用 netsh http show servicestate 才看到通配监听，而 WinRM 的 IPv4 防火墙规则对 v6 监听完全不生效。给 5985 补限段规则（只允许管理与办公网段）后收口；RDP 3389 同理补限段，公网面由上游防火墙负责。
 LDAP 签名。 现场要区分配置值、最终生效的组策略和旧客户端的实际绑定行为。先盘点未签名客户端，再按目标版本的策略要求部署，最后验证依赖 LDAP 的业务和域服务。微软的 LDAP 签名组策略说明
@@ -829,10 +850,11 @@ shell 语法坑。 变量名:low 在 zsh 里会被当变量修饰符吞掉，必
       </tags>
   </entry>
   <entry>
-    <title>Steam Deck 三作适配记录：异界锁链、战神 3 与血源</title>
+    <title>Steam Deck 兼容性研究：三作适配路线与一套实机验收方法</title>
     <url>/2026/11/06/SteamDeck%E5%8E%9F%E7%94%9F%E7%A7%BB%E6%A4%8D%E4%B8%89%E9%83%A8%E6%9B%B2%E5%BC%82%E7%95%8C%E9%94%81%E9%93%BE%E6%88%98%E7%A5%9E3%E4%B8%8E%E8%A1%80%E6%BA%90/</url>
     <content><![CDATA[想把几款主机游戏搬到 Steam Deck，最先碰到的区别在 CPU。异界锁链的 Switch 版用 AArch64，Deck 用 x86-64。战神 3 Remastered 和血源诅咒的 PS4 版都是 x86-64，CPU 架构相同，图形接口和系统服务仍要适配。我把三款放在一起做的是路线调研和验收设计。有自己提交的异界锁链适配，也有只记录上游和待复测问题的两款 PS4 项目。
 这次最想回答的是项目能不能被别人接手验证。上游说能跑、我把工程接到 Linux、某个场景在 Deck 上过了，三件事要各自留证。我的主要工作是建立前两者之间的适配入口，再把后两者之间的间隔缩短。每个测试要能说出用什么构建、进了哪个场景、动了哪些设定、退出后数据是否还完整。否则一次成功只对当时打开那扇窗口的人有说服力。
+本文有三组证据。战神 3 与血源主要对照上游报告及已知问题，异界锁链对应我整理的独立适配工程。展示如何跑实机验收的样本来自另一款游戏《王国之泪》，它证明的是工具能识别哪些结果，三款调研对象仍要各自验收。
 三款游戏，三条不同的验证路线
 
 
@@ -949,26 +971,18 @@ NativeDeck 收录工具和研究记录。独立适配项目有 异界锁链、�
       </tags>
   </entry>
   <entry>
-    <title>为串流开发重构 Moonlight：macOS 增强版的八周记录</title>
+    <title>Moonlight macOS 增强实录：设备列表的异步竞态怎么修</title>
     <url>/2026/10/19/Moonlight%E7%9A%84macOS%E5%A2%9E%E5%BC%BA%E7%89%88%E4%B8%BA%E4%B8%B2%E6%B5%81%E5%BC%80%E5%8F%91%E8%80%8C%E9%87%8D%E6%9E%84/</url>
-    <content><![CDATA[我在 Mac 上调试游戏串流。有些参数改一次就得翻一次 plist，设备偶尔掉线时，列表还会留着上一轮的结果。手工改配置能解决一次问题，第二天换设备重测又得从头核对。我保留台式机端的 Sunshine 服务，花了八周改 Moonlight macOS 客户端，先把常调的参数搬进设置页，再加上能回看的设备和会话诊断。
+    <content><![CDATA[我在 Mac 上调串流时，遇到过一个不容易重现的现象。设备已经拔掉，切回设置页却还能看到它。列表再刷一次又对了。这样的故障多拔插几次未必能说明问题，关键要看扫描期间页面状态何时变了，回调为什么还能更新界面。我保留台式机端的 Sunshine 服务，从客户端设备页追这条时序。当时也在做原生设置和发行，所以得把同一处改动带过配置回读、实机诊断和打包。
 Sunshine 在台式机上捕获和编码画面，Mac 上的 Moonlight 接收、解码并显示，再把键盘和手柄输入送回去。改客户端设置时，得分清哪些选项会在开始串流时与主机协商，哪些只会改变 Mac 本机的显示或输入行为。比如提高客户端的目标帧率，需要主机实际按相应速率出帧，Mac 本地的设备列表则由 macOS 枚举。
-我接手的是已有客户端，不能为了重做设置页让旧配置失效，也没有改 Sunshine 协议来迁就客户端。我的改动沿着三条具体路径落下去。第一条是从设置控件到保存、再到下次回读。第二条是从本机设备扫描到界面，以及主机配对状态改变时如何更新诊断。第三条是从构建后的 App 到用户下载的 DMG。它们用三套不同的证据核对。设置要看行为能否跨启动保留，设备页要看旧结果有没有回写，发行则要看包内版本和公开附件。
-先改每天都要用的地方动手前先把”增强”落到一张可勾选的清单上，每一项有明确的验收方式：
-
-设置页收拢串流、视频、音频、输入、应用和设备六组设置。本文涉及的常调参数可以直接在界面修改。
-视频页集中显示编解码、分辨率、帧率和色彩选项。可用组合由客户端与串流主机共同决定。
-USB 诊断页刷新本机设备列表，拔插后按新一轮扫描更新。USB 重定向仍处于冻结状态。
-会话诊断在运行中写入近期状态，下次启动可回看已写入的记录。
-
-我把验收拆成能从记录里读出的状态与必须上机操作的场景。设备列表可以检查扫描结果，画面和输入则需要实际串流。缺第二台机器的记录，就把该机型留在待验列表里。
-会话摘要按低频事件写入，出了问题可以回看已经写下的状态。异常退出可能留下一条不完整的尾记录，回读时只采用能解析的事件。诊断信息分享前需要脱敏。
-设备扫描最容易在切页时出错。下面用简化代码说明时序，省略了后台扫描和界面数据的细节：
+为什么设备已经拔了，列表还能回到旧状态设备扫描最容易在切页时出错。下面用简化代码说明时序，省略了后台扫描和界面数据的细节：
 private func scanBus() &#123;  guard MLUSBScanShouldStart(busScanInFlight, !pageIsVisible, true, false,                            0, busScanGeneration, 0, 0) else &#123; return &#125;  busScanInFlight = true  let generation = busScanGeneration  DispatchQueue.global(qos: .utility).async &#123;    var status = MLUSBBusSnapshotStatus.busUnreadable    let devices = MLUSBBusSnapshotCopyDeviceIdentities(&amp;status)    DispatchQueue.main.async &#123;      busScanInFlight = false      guard MLUSBScanMayPublish(!pageIsVisible, generation, busScanGeneration, true) else &#123;        if pageIsVisible &#123; scanBus() &#125;   // 切走又切回：旧结果丢弃，立即补扫        return      &#125;      rows = panel.acceptBusSnapshot(devices, status: status, hostIsPaired: hostIsPaired)      panelRevision += 1    &#125;  &#125;&#125;
 
 这里的 generation 是页面当前这轮扫描的编号。设想第一次扫描后台还在跑，用户拔了设备、切到别页又切回来。第一次扫描晚到的结果如果直接覆盖界面，就会把旧设备重新画回来。主线程回调先核对页面状态和编号，过期结果丢弃。页面仍可见时再补扫，让界面从新的总线快照生成。VID/PID 代表厂商和产品类型，可用于匹配规则，同型号设备的唯一身份还得看单独的标识。实际实现见 设备页扫描。
 设备页其实收两种异步结果。总线扫描读的是这台 Mac 的设备。远端主机检查读的是当前选中主机的状态。切主机时，本机 USB 枚举的意义没变，旧主机的检查结果却已经不能用。所以代码分别保存 busScanGeneration 和 hostCheckGeneration，发布主机结果前另外核对还是不是同一台主机。回归时我把场景拆成拔插、切页和切主机，分别观察设备行是否消失、旧扫描会不会覆盖新列表、上一个主机的诊断状态会不会串过来。 主机检查的发布条件
-持久化配置和界面顺序分开这部分改动主要在 macOS 的设置页和诊断页。分区枚举有一处容易被当成笔误的编号：
+验证时可以把旧扫描的结果故意放到切页之后再返回。若它被丢弃，界面仍可见时应等一次补扫，以新快照为准。切主机则看两件事：远端诊断随主机变，本机 USB 行仍来自本机快照。这样两条路径可以分别追问到代码。它们属于设备诊断，主机侧实际接管 USB 的重定向仍处于冻结状态。
+当串流断开要回头排查时，会话摘要按低频事件保留已写入的状态。异常退出可能只留下不完整的末条记录，回读采用能解析的事件。分享诊断材料前还需要单独脱敏。
+持久化配置和界面顺序分开设备页是六个原生设置分区之一，其余是串流、视频、音频、输入和应用。常调参数可以直接在界面修改，视频页集中显示编解码、分辨率、帧率和色彩，可用组合由客户端和串流主机共同决定。分区枚举有一处容易被当成笔误的编号：
 enum SettingsPaneType: Int, CaseIterable &#123;  case stream = 0  case video = 1  case audio = 5  case input = 2  case app = 3  case legacy = 4  case devices = 6  static var allCases: [SettingsPaneType] &#123;    [.stream, .video, .audio, .input, .app, .devices]  &#125;&#125;
 
 0/1/5/2/3/6 不是笔误：选中项会持久化到用户 defaults，重排编号等于把老用户”上次打开的页”挪到别的分区；新增”设备”分区取下一个空闲值 6，allCases 显式列展示顺序——存储值与展示顺序解耦。
@@ -1010,10 +1024,11 @@ audit:python:  stage: lint  tags: [macos]  timeout: 60 minutesworkflow:  rules: 
       </tags>
   </entry>
   <entry>
-    <title>把 P100 直通给 NAS：顺手做了一个超分插帧的飞牛 App</title>
+    <title>飞牛 NAS 视频增强实录：P100 直通、任务续跑与成品验收</title>
     <url>/2026/10/15/P100%E7%9B%B4%E9%80%9A%E7%BB%99NAS%E4%B8%8E%E9%A3%9E%E7%89%9B%E8%B6%85%E5%88%86%E6%8F%92%E5%B8%A7App/</url>
     <content><![CDATA[给 NAS 里的老片做插帧，最烦的是跑完才发现结果写不进去。我原来用脚本处理，后来给飞牛做了应用界面，直接选片源、看成品路径，失败的任务也能回到明确状态。算力来自一张 Tesla P100 16 GB。飞牛本来就跑在 Hyper-V 虚拟机里，我把这张卡直接分配给它。
 我把这件事按一个能留在 NAS 上长期用的应用来做。源片由现有共享目录管理，视频任务可长达数小时，机器还承担其他服务。我的工作从 GPU 直通走到应用入口、任务调度、续跑和成品核验。能运行模型只是最前面的一步。真正影响日常体验的是目录权限变化后能及时停下来、服务重启后知道从哪里续，以及最后打开的是一份正常的视频。
+先说实际交付。P100 真机上跑通了从选片、提交到生成并回读成品的路径。一段 1080p24 修复样片输出 48 帧、耗时 162.8 秒，保持 1920×1080、24 fps，逐帧解码通过。另有一次 4K 长片重启后能续跑，计数继续增长，但当时还没拿到最终成品。这两个样本分别验证输出和恢复，不能推导出 4K 实时处理能力。 1080p24 样片验收记录
 为什么选 Hyper-V DDADiscrete Device Assignment（DDA）把整块 PCIe 设备交给指定 Hyper-V 虚拟机。Linux 宿主用 vfio-pci 是另一条部署路线。维持现有 Hyper-V 宿主意味着不用为这张卡迁移 NAS，也不用改来宾的启动参数。宿主失去对这张卡的使用权，之后的视频处理和嵌入负载都由来宾侧安排。
 验收按三步走。先确认来宾枚举到设备并绑定 NVIDIA 驱动，再从来宾查驱动与显存，最后进入推理运行环境验证 CUDA 实际可用。后两项是切换后补齐的。部署前的硬件资格、虚拟机配置和设备位置路径以 Microsoft 的 DDA 文档 为准。
 App 设计：把推理容器包成飞牛应用最初只做超分、插帧和串联处理。应用从飞牛获取登录与目录授权，Web 界面负责选片和看进度，后端拆为任务网关、推理 worker 和 GPU 准入策略。公开版后来加了去噪等处理路径。仓库列出的兼容范围是 fnOS x86 + Tesla P100，输入范围为 SDR/CFR。
@@ -1029,7 +1044,8 @@ def check_output_write(uid, output):    root = matching_root(output, authorized_
 def scheduler():    global CURRENT    while not STOP.wait(3):        with db() as c:            items = c.execute(                &quot;SELECT * FROM jobs WHERE state IN (&#x27;queued&#x27;,&#x27;held&#x27;) &quot;                &quot;ORDER BY created&quot;).fetchall()        for row in items:            with LOCK:                state = db().execute(&#x27;SELECT state FROM jobs WHERE id=?&#x27;,                                     (row[&#x27;id&#x27;],)).fetchone()[&#x27;state&#x27;]                if state not in (&#x27;queued&#x27;, &#x27;held&#x27;):                    continue                CURRENT = (row[&#x27;id&#x27;], subprocess.Popen(argv, ...))                update(row[&#x27;id&#x27;], &#x27;running&#x27;, &#x27;正在执行&#x27;)            # ... 等进程结束（每 2 秒复查权限与 guard.require_gpu）...            break
 
 同一张卡还会被嵌入服务使用，应用内单并发只约束视频任务。外部负载交给 GPU 准入规则处理，资源不足时可以保留任务，等下一轮重新检查。任务状态持久化在 jobs 表，视频分片能否续跑另由检查点决定。调度器和资源判断分别见 server.py 与 guard.py。
-长片分片编码。每片先用解包计数核对包数，再检查尺寸和帧率，通过后写入 SHA-256。续跑时重新核对已提交的分片。整片封装完成后，再逐帧解码检查成品。这两处检查分别防止复用错误的中间产物，以及把损坏的最终文件标为完成。下面是检查过程的节选：
+长片分片编码。每片先用解包计数核对包数，再检查尺寸和帧率，通过后写入 SHA-256。续跑时重新核对已提交的分片。整片封装完成后，再逐帧解码检查成品。这两处检查分别防止复用错误的中间产物，以及把损坏的最终文件标为完成。
+加最后一层检查是因为早期插帧样片的元数据都对，重新封装后却报 H.264 码流解析错误。我把模型移出复现，只保留 FFmpeg 重封装，确认问题仍在，才去修码流格式转换。原任务改记失败。后来的样片需要逐帧解码无错才能算通过。下面是检查过程的节选：
 # 续跑前：逐分片 SHA 重算，任一不符即拒绝续跑    for i, p in enumerate(data.get(&#x27;parts&#x27;, [])):        if p[&#x27;name&#x27;] != f&#x27;part-&#123;i:06d&#125;.mkv&#x27; or p[&#x27;start&#x27;] != done:            raise ValueError(&#x27;检查点分片顺序非法&#x27;)        if store.sha(p[&#x27;name&#x27;]) != p[&#x27;sha256&#x27;]:            raise ValueError(&#x27;已完成分片校验和变化；拒绝续跑&#x27;)# 封装后：全量实际解码验收        final = decoded(finalfd)        fv = next(x for x in final[&#x27;streams&#x27;] if x[&#x27;codec_type&#x27;] == &#x27;video&#x27;)        if abs(float(final[&#x27;format&#x27;][&#x27;duration&#x27;]) - expected_duration) &gt; .25:            raise RuntimeError(&#x27;最终时长校验失败&#x27;)        if int(fv.get(&#x27;nb_read_frames&#x27;, 0)) != total or fv[&#x27;width&#x27;] != out_width \                or fv[&#x27;height&#x27;] != out_height \                or abs(float(Fraction(fv[&#x27;avg_frame_rate&#x27;]) - target)) &gt; .02:            raise RuntimeError(&#x27;最终实际解码/帧数/尺寸/帧率验收失败&#x27;)
 
 分片哈希用来判断中间产物能否复用。最后一次解码核对的是成品的时长、帧数、尺寸与实际帧率，音轨及字幕则按任务预期检查。分片检查点和成品检查分别见 worker.py 的分片校验 与 成品回读。
@@ -1091,6 +1107,7 @@ DGX Spark
 把排队超时单独处理有个用处：一个满队列不会把同一批请求再复制到其他机器。后端熔断或上下文预算不足才沿候选顺序换池。
 熔断还有恢复条件。旧实现把连续失败的后端暂时摘掉，冷却结束后用业务请求试探，成功才清失败状态。人工摘流单独处理：这时候机器是拿去干别的，不能等冷却过去就自行放流量。配置里写着可用、健康接口能回包、实际能接推理请求，也是三个不同状态。
 第一次是 P100 显存争用视频任务加载模型后，P100 上的嵌入请求开始超时。路由在约两分钟内摘流，后续嵌入交给 Mac mini。那次 WeKnora 的解析变慢了，观察窗口内没看到请求失败。这个结果只覆盖现场流量，Mac mini 能在 24 小时内接完全部积压仍是设计目标，没做过满载演练。
+约两分钟说的是争用发生后主池切出的时间。公开记录没有完整观察时长、调用方请求总数和回退前后的解析延迟样本，没有足够的数据计算失败率或比较尾延迟。以后再做一次，我会把第一条超时、主池摘流、备用池首个成功和观察结束分别记下来。跟调用方对账时，以逻辑请求计分母，把重试和后端超时作为尝试层记录。另外单列仍在等的请求，避免把观察结束时尚无结果的请求当作成功。
 P100 只有 16 GB 显存。两套模型同时常驻会挤到同一片余量，当时优先保高频嵌入，视频模型按需装载，代价是视频任务多等十几秒加载。这个数字来自当时那套任务，和模型或分辨率一起变。应用侧队列和验收细节单独写在飞牛超分插帧 App一文。
 第二次是我主动把台式机摘掉台式机改做串流测试时，我先从路由摘掉对应后端，再停推理、确认显卡腾出来。这段时间它不承担知识库请求。那次观察窗口内，WeKnora 同样没有出现请求失败。这里靠的是事先切走流量，熔断器没有替我作这个资源分配决定。
 以后要接回，顺序反过来：先启动模型，用真实请求确认能生成结果，再恢复路由。端口监听和健康接口只能说明服务起来了，提前挂回容易把还在加载的后端交给真实流量。大上下文服务的部署和协议接入另见 DGX Spark 实录。
@@ -1216,6 +1233,7 @@ Agent 平时把探活失败的服务列出来，带上对应的系统层状态�
 下面是 Zabbix 这次的脱敏记录示意。把最初症状、下一步的证据和处置后复测分开，交给别人时可以直接从最后一个已确认状态接着查。
 component: monitoringfirst_check: api version requestfirst_result: timeoutsystem_observation: database and monitoring jobs waitingrepeat_result: api responded after queue unblockedseparate_check: recent metrics still need verification
 
+以后遇到同样的故障，我会从受影响的主机选一个固定间隔采集的监控项，记下恢复操作前最后一个样本时间，等一个完整采集周期加预留延迟，再查历史里是否出现晚于处置结束的新样本。如果看到了新数据，还要确认值符合预期且监控项没有进入不支持状态。若没有新样本，沿采集器、队列和入库状态往下查。原笔记可以证实版本请求恢复，没有可对账的采集样本，因此不能把约 67 分钟写成监控数据也恢复的用时。
 同一表格用到 GitLab 或知识库时，探活字段仍然便宜，深查字段则换成对应服务能回答的那一个问题。读取得到权限拒绝就按拒绝记录，写操作涉及权限或公网入口则走人工审批。这样巡检不用携带一份能管理所有服务的凭据，也不会把一条绿色 API 结果误抄成整项服务健康。
 ]]></content>
       <categories>
@@ -1270,6 +1288,27 @@ OS 版本、Supervisor 管理的应用状态、关键实体的最近更新时间
 我在现场先拿本次备份的标识，再用两次间隔约 8 秒的大小采样判断要不要继续等。这个采样只是提示写入可能结束，归档传回后还做了结构检查。换成通用流程时，应以平台可读回的备份状态和归档检验判断备份是否完成；旧备份的轮转也应看本次是否已有可用副本，别把用户手动备份算进去。
 最后我留下了三类可以接着用的检查：从实体告警追到容器证据，按占用来源归因磁盘水位，升级时保留前后版本和应用状态。这里真正增加的一道工序是验证新上报，尤其是状态原本就长期不变的实体，单看界面那个值很容易读到旧数据。要选会出新事件的对象，或者单独做受控验证。
 归档结构读回通过是这一轮的最后一项备份证据。升级仍由人工确认，升级失败后的恢复演练还没有完成；如果要进一步放开自动升级，先补一个能实际装回配置、验证关键实体再上报的独立恢复环境。
+公开材料里也没有一条带时间戳的实体恢复原始记录。留下这类时间线时，我会用同一个脱敏实体代号，把下面三项对齐到同一时区，再判断它缺了哪层证据。尤其最后一项要等到处置之后的新消息，旧状态还能读到并不满足条件。
+
+
+
+顺序
+该记哪条证据
+
+
+
+应用侧发现异常
+第一次读到不可用的时间、最后一次有效上报时间
+
+
+系统侧定位
+相关进程的状态变更时间、退出状态和同一时窗的日志
+
+
+回到应用侧验证
+新上报的时间和有效状态，连同本次操作完成时间
+
+
 文档：HAOS 升级、备份与恢复、OpenSSH scp 手册、Docker 容器退出状态。
 ]]></content>
       <categories>
@@ -1321,6 +1360,9 @@ OS 版本、Supervisor 管理的应用状态、关键实体的最近更新时间
 
 
 这也解决了降级重试的一类风险。若请求已经发出但回包超时，先检查目标状态和任务记录，再决定是否重试。只有确认主通道在执行前不可用，才切到 SSH 跑同样的操作。
+以只读清点虚拟机为例，我倾向让调用端记下下面这些字段。值是检查项示意，未引用实际主机和执行结果。一个容易漏掉的情况是返回了可解析的空列表。脚本层可以成功退出，清点仍需按任务预期判断是否读到了需要的对象。
+task: vm_inventoryoperation: read_onlychannel: record_actual_transportengine_version: read_from_remote_sessionexit_code: record_remote_exit_statusresponse_check: parse_inventory_and_compare_expected_scopefinal_status: evaluate_exit_code_and_response_together
+
 SSH 实际顶住了哪一次补丁窗口里有一台域控的 WinRM 延迟启动，主机已经起来，常规巡检暂时连不上。那一轮用 SSH 完成了巡检，在结果上标记了实际走的是备选通道。它覆盖的是一个维护窗口，不代表所有 SSH 降级和故障情况都演练过。
 这套方案当时只在受控管理网段运行，未部署 TLS 端点和 Kerberos。跨网使用前要重新评估传输和认证，凭据按主机角色和任务权限配置。域控和虚拟化宿主分开授权，例行读状态无需获得系统管理权限。
 ]]></content>
@@ -1337,71 +1379,52 @@ SSH 实际顶住了哪一次补丁窗口里有一台域控的 WinRM 延迟启动
       </tags>
   </entry>
   <entry>
-    <title>macOS 26 测试版 CrossOver Preview GPTK3 一键更新脚本</title>
+    <title>CrossOver Preview 更新复盘：GPTK 3 Beta 的备份与失败恢复</title>
     <url>/2025/09/09/macOS-26-CrossOver-GPTK3%E4%B8%80%E9%94%AE%E6%9B%B4%E6%96%B0%E8%84%9A%E6%9C%AC/</url>
-    <content><![CDATA[macOS 上跑 Windows 应用有两条路线：虚拟机（重、独占 GPU）与 Wine 兼容层（轻、共享 GPU）。CrossOver 是后者的商业发行版，而 Apple 给开发者的 Game Porting Toolkit（GPTK）把 Metal 上跑 Windows 游戏所需的 DirectX 翻译、FXAA/DLSS 替代品（MetalFX）封装成一套 redist 库——CrossOver 应用包里内置了一份旧版 GPTK 组件（apple_gptk 目录）。
-CrossOver Preview 在 macOS 26 测试版上还没跟上 GPTK3，解法是手工把 GPTK 3.0 beta 3 的文件替换进 CrossOver 应用包，再给目标容器补上 nvngx（DLSS）→nvngx-on-metalfx 的映射。crossover-gptk3.sh 把这条路径自动化：校验环境、带时间戳备份、替换库文件、MD5 校验、失败回滚，随后按需把 DLL 复制进指定容器。这篇的价值在预研性质：它验证了「macOS + Wine 系 + 官方移植工具」这条路在公司 VDI/PXVDI 终端方案里的可行性，脚本本身是一次性交付物，升级后重跑即可。
-保护机制都能事后核验：external 与 wine 先 mv 成 *.backup.&lt;时间戳&gt; 再复制新文件，任一改名失败即退出（两者按先后顺序改名，失败时可能只有一个已改名）。复制失败、或复制后这两个目录缺失，脚本立即用备份还原；MD5 校验失败不自动还原，只汇总失败数并询问是否继续。全部操作追加写入 /tmp/crossover-gptk3-&lt;时间戳&gt;.log，出问题以日志和备份目录为准。
-适用范围：macOS 26 测试版 + CrossOver Preview + GPTK 3.0 beta 3。脚本修改 CrossOver 应用包内文件，属非官方改动，CrossOver 升级后需重新执行。
-关键设计决策
-为什么是脚本而不是 GUI。 这套操作要动的是应用包内 /Applications/CrossOver.app/Contents/SharedSupport 下的受保护目录，GUI 工具（甚至 Finder）在权限、隐藏文件、批量 MD5 三件事上都不顺手。脚本换来回的是可重复：备份、复制、校验、回滚每一步都能从日志重放，出错时不用靠记忆判断「刚才改到哪了」。代价是脚本绑定目录结构与文件清单，CrossOver 或 GPTK 升级后要先重核再跑。
-版本锁定：为什么死绑 GPTK 3.0 beta 3。 脚本按卷名前缀（Evaluation environment for Windows games）匹配挂载点，按 redist/lib 的文件清单做 MD5 校验。Apple 的 GPTK 是 beta 节奏，版本间文件清单会增减。锁定版本的代价是时效——Apple 发新版后脚本会因找不到镜像或校验不过而中止，这是故意的：宁可失败也不要静默复制一份清单对不上的文件进应用包。
-备份策略：先 mv 再复制，不原地覆盖。 应用包目录是「一个文件都丢不起」的状态：CrossOver 升级能还原，手工改坏不能。改名备份（而非复制备份）保证任意时刻磁盘上只有两份状态（原状或新状），中间态不存在；代价是备份和应用包同卷，同盘故障两者一起丢，脚本层面接受这个风险。
-提权最小化：能不用 sudo 就不用。 脚本先测目录可写性再询问提权，且提权只作用于应用包内文件操作，容器目录（用户目录）始终不提权。MDM 管的机器上这条决定脚本能不能非交互跑——提权范围越窄，审批越容易过。
-
-脚本使用指南前置条件
-确保已安装 CrossOver Preview 版本
-从Apple 开发者网站下载 Game Porting Toolkit 安装包
-挂载下载的安装包镜像
-再次挂载 Evaluation environment for Windows games 3.0 beta 3.dmg 镜像
-
-前置条件中的版本号与本脚本验证过的 GPTK 3.0 beta 3 绑定：脚本按卷名前缀匹配挂载点，Apple 后续版本若变更卷名或 redist/lib 文件清单，需重核后再用。
-脚本执行步骤# 1. 创建脚本文件并复制以下完整脚本内容touch crossover-gptk3.shvim crossover-gptk3.sh#粘贴下面脚本内容到脚本# 2. 添加执行权限chmod +x crossover-gptk3.sh# 3. 运行脚本./crossover-gptk3.sh
-
-交互式配置过程脚本运行时的交互：
-
-权限确认：根据需要确认是否使用 sudo 权限
-容器选择：
-自动搜索并选择容器（推荐）
-手动输入容器名称
-手动输入完整路径
-跳过容器配置
+    <content><![CDATA[2025 年 9 月，我在 macOS 26 测试版上做 Windows 游戏兼容性预研。CrossOver 是一套基于 Wine 的兼容工具。Apple 的 Game Porting Toolkit（GPTK）则面向移植与评估，能在 Apple 芯片上对 Windows 游戏的画面、兼容性和性能做基线检查。我当时想确认，在那版 CrossOver Preview 的应用包与用户容器里更换对应组件后，能否继续做后面的图形兼容性评估。今天回看，这次实验更有价值的部分是一次更新失败后如何认清磁盘现场。
+本文只复盘当时的 macOS 26 测试版 + CrossOver Preview + GPTK 3.0 beta 3 组合。后续版本的安装结构、授权范围与签名要求需要按各自的官方资料核对。这里没有给其他版本或受管终端做过等价验收。 Apple Game Porting Toolkit
+当时为什么写脚本手工操作分散在应用包及用户容器两处。应用包里的组件影响该安装实例，容器可理解为独立的 Windows 环境，里面有自己的一套文件和设置。只记录“升级了 GPTK”容易忘记动过哪一层。我的脚本把发现评估环境、备份旧目录、复制、检查，以及后续容器选择分别记下来。核心目录用时间戳关联到同一次操作，容器修改留在用户选中的范围。
+脚本会根据卷名前缀和预期目录寻找评估环境，也会探测目标位置是否存在及可写。卷名匹配只帮它找到输入，不能证明版本就是 beta 3，更不能确认来源。实际应用包里哪些库能配合工作，得同时核对软件版本、文件清单和实际启动。那轮实验做的是固定组合的预研，版本探测本身没有封住误选新版的可能。
+代码如何区分几类失败原实现的核心过程可以读成下面这段状态记录。它用于解释现场，省略实际文件操作。
+找到评估环境、定位应用包    依次备份两个旧目录        任一改名报错 → 立即退出    复制新库、检查两个目录是否在位        复制报错或目录缺失 → 尝试还原备份，退出    比对选定扩展名文件的源和目标摘要        摘要不符 → 统计失败数并询问，退出不会自动恢复    后续步骤可涉及图形组件和一个选定容器
 
 
 
-脚本详细解析系统兼容性处理# 颜色定义GREEN=&#x27;\033[0;32m&#x27;   # 成功YELLOW=&#x27;\033[1;33m&#x27;  # 提示/警告RED=&#x27;\033[0;31m&#x27;     # 错误NC=&#x27;\033[0m&#x27;         # 重置颜色
 
-按主版本号分支提示：26 为目标验证环境；15 提示部分游戏功能可能不可用；高于 26 或未识别的版本提示兼容性未测试；低于 15 提示 GPTK3 支持可能不完整。
-文件操作安全机制# 备份时间戳BACKUP_TIMESTAMP=$(date +%Y%m%d_%H%M%S)# 备份原有文件$SUDO mv external &quot;external.backup.$&#123;BACKUP_TIMESTAMP&#125;&quot;$SUDO mv wine &quot;wine.backup.$&#123;BACKUP_TIMESTAMP&#125;&quot;
+故障点
+当时的代码行为
+停下时应如何理解
 
-完整性验证逐个比对源与目标文件的摘要，优先 md5 -q，没有则回退 md5sum：
-if command -v md5 &gt;/dev/null 2&gt;&amp;1; then    source_md5=$(md5 -q &quot;$source_file&quot; 2&gt;/dev/null)    target_md5=$(md5 -q &quot;$target_file&quot; 2&gt;/dev/null)elif command -v md5sum &gt;/dev/null 2&gt;&amp;1; then    source_md5=$(md5sum &quot;$source_file&quot; 2&gt;/dev/null | cut -d&#x27; &#x27; -f1)    target_md5=$(md5sum &quot;$target_file&quot; 2&gt;/dev/null | cut -d&#x27; &#x27; -f1)
 
-两个工具都不存在时只打印「MD5 工具不可用，跳过校验」并继续。跑完没报错不等于校验过——确认完整性要在日志里搜这一行有没有出现。
-MetalFX 配置MetalFX 相关文件自动重命名：
-# MetalFX文件列表metalfx_files=(    &quot;$&#123;CROSSOVER_WINE_UNIX_DIR&#125;/nvngx-on-metalfx.so:$&#123;CROSSOVER_WINE_UNIX_DIR&#125;/nvngx.so:Unix&quot;    &quot;$&#123;CROSSOVER_WINE_WIN_DIR&#125;/nvngx-on-metalfx.dll:$&#123;CROSSOVER_WINE_WIN_DIR&#125;/nvngx.dll:Windows&quot;)
 
-使用建议与注意事项权限管理先测目录可写性再决定提权：[ ! -w &quot;${CROSSOVER_GPTK_DIR}&quot; ] 成立才询问是否用 sudo，选 N 直接退出。CrossOver 由当前用户安装到 /Applications 时通常不需要提权，被 MDM 或安装器改过属主才会走到这一支。提权只作用于应用包内文件操作，容器目录（用户目录下）始终不提权。
-版本时效本脚本按 GPTK 3.0 beta 3 的卷名与文件清单编写。Apple 更新后挂载卷名、redist/lib 结构或文件名可能变化，脚本会因找不到评估环境或校验不过而中止，需按新版本重核。CrossOver 升级会还原应用包内文件，升级后需重新运行。
-日志记录日志路径形如 /tmp/crossover-gptk3-&lt;时间戳&gt;.log，由 log_operation 用 tee -a 同时输出到屏幕和文件。文件在 /tmp 下，重启或定期清理后会丢失，留档先拷走。
-备份恢复恢复备份：
-# 恢复备份示例mv external.backup.$&#123;BACKUP_TIMESTAMP&#125; externalmv wine.backup.$&#123;BACKUP_TIMESTAMP&#125; wine
+第二个旧目录改名失败
+第一个目录已经处理就不会自动撤回
+可能出现部分备份，两个目录的改名不是一次原子操作
 
-故障排除容器列表为空。 判定依据是 drive_c/windows/system32 目录是否存在，只建了容器还没装任何 Windows 程序时该目录尚未生成，不会被列出；用手动输入完整路径绕过，或先在容器里装一次目标程序。
-同一容器出现两个同名条目。 除 ~/Library/Application Support/CrossOver/Bottles 外还会搜旧版路径 ~/.cxoffice，旧版条目显示名附加「 (旧版)」后缀。判重按容器路径而非显示名，新旧同名容器都会列出——按游戏实际所在的那个选，选错的那个不会得到更新但也不会被破坏。
-提示未找到 CrossOver 安装目录。 报错会打印预期路径，非默认安装位置需改脚本顶部的 CROSSOVER_GPTK_DIR。
-MD5 校验失败。 发生在复制完成之后，脚本不自动还原，只汇总失败数并询问是否继续。选继续意味着应用包里留着摘要不符的文件，CrossOver 能否启动取决于具体是哪个文件；稳妥做法是选退出，按备份时间戳手工移回 external.backup.&lt;时间戳&gt; 与 wine.backup.&lt;时间戳&gt;，重新挂载评估环境镜像后重跑。
-复制本身失败（ditto 报错或复制后目录缺失）走另一条路径：脚本自己把备份移回去并退出，不需要手工恢复，排查镜像挂载后重跑即可。
-完整脚本代码#!/bin/bash# 颜色定义GREEN=&#x27;\033[0;32m&#x27;   # 成功YELLOW=&#x27;\033[1;33m&#x27;  # 提示/警告RED=&#x27;\033[0;31m&#x27;     # 错误NC=&#x27;\033[0m&#x27;         # 重置颜色# 日志配置LOG_FILE=&quot;/tmp/crossover-gptk3-$(date +%Y%m%d_%H%M%S).log&quot;# 日志记录函数log_operation() &#123;    local message=&quot;$1&quot;    local timestamp=&quot;[$(date &#x27;+%Y-%m-%d %H:%M:%S&#x27;)]&quot;    echo &quot;$timestamp $message&quot; | tee -a &quot;$LOG_FILE&quot;&#125;# 系统兼容性检查check_system_compatibility() &#123;    local macos_version=$(sw_vers -productVersion 2&gt;/dev/null)    if [[ -n &quot;$macos_version&quot; ]]; then        local major_version=$(echo &quot;$macos_version&quot; | cut -d. -f1)        if [[ &quot;$major_version&quot; == &quot;26&quot; ]]; then            # macOS 26（本文目标测试环境）            log_operation &quot;✅ 检测到 macOS 26，为本脚本目标测试环境&quot;            echo -e &quot;$&#123;GREEN&#125;✅ 检测到 macOS 26，为本脚本目标测试环境$&#123;NC&#125;&quot;        elif [[ &quot;$major_version&quot; == &quot;15&quot; ]]; then            # macOS 15 Sequoia (内核版本24.x)            log_operation &quot;⚠️ 检测到macOS 15 Sequoia，某些游戏功能可能不可用&quot;            echo -e &quot;$&#123;YELLOW&#125;⚠️ 检测到macOS 15 Sequoia，某些游戏功能可能不可用$&#123;NC&#125;&quot;        elif [[ &quot;$major_version&quot; -ge &quot;15&quot; ]]; then            # macOS 15 以上、且非本文验证过的 26            log_operation &quot;⚠️ 检测到未经验证的macOS版本 ($macos_version)，兼容性未测试&quot;            echo -e &quot;$&#123;YELLOW&#125;⚠️ 检测到未经验证的macOS版本 ($macos_version)，兼容性未测试$&#123;NC&#125;&quot;        else            log_operation &quot;⚠️ macOS版本 ($macos_version) 低于 macOS 15，GPTK3 支持不完整&quot;            echo -e &quot;$&#123;YELLOW&#125;⚠️ macOS ($macos_version) 低于 macOS 15，GPTK3 支持可能不完整$&#123;NC&#125;&quot;        fi    else        log_operation &quot;⚠️ 无法检测macOS版本，可能运行在非macOS系统上&quot;        echo -e &quot;$&#123;YELLOW&#125;⚠️ 无法检测macOS版本，可能运行在非macOS系统上$&#123;NC&#125;&quot;    fi&#125;# 网络连接检测check_network_connectivity() &#123;    log_operation &quot;🌐 检查网络连接状态...&quot;    if ! ping -c 1 -t 3 8.8.8.8 &gt;/dev/null 2&gt;&amp;1; then        log_operation &quot;⚠️ 网络连接异常，某些功能可能受影响&quot;        echo -e &quot;$&#123;YELLOW&#125;⚠️ 网络连接异常，某些功能可能受影响$&#123;NC&#125;&quot;        return 1    else        log_operation &quot;✅ 网络连接正常&quot;        return 0    fi&#125;# 基础配置CROSSOVER_GPTK_DIR=&quot;/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/lib64/apple_gptk&quot;# 自动检测评估环境挂载路径（卷名匹配按本脚本验证过的 3.0 beta 3，后续 GPTK 版本需重核卷名与文件清单）SOURCE_LIB_DIR=&quot;&quot;for possible_path in &quot;/Volumes/Evaluation environment for Windows games&quot;*&quot;/redist/lib&quot; &quot;/Volumes/Game evaluation&quot;*&quot;/redist/lib&quot;; do    if [ -d &quot;$possible_path&quot; ]; then        SOURCE_LIB_DIR=&quot;$possible_path&quot;        break    fidoneCROSSOVER_WINE_UNIX_DIR=&quot;$&#123;CROSSOVER_GPTK_DIR&#125;/wine/x86_64-unix&quot;CROSSOVER_WINE_WIN_DIR=&quot;$&#123;CROSSOVER_GPTK_DIR&#125;/wine/x86_64-windows&quot;DEFAULT_BOTTLES_DIR=&quot;$&#123;HOME&#125;/Library/Application Support/CrossOver/Bottles&quot;BACKUP_TIMESTAMP=$(date +%Y%m%d_%H%M%S)# 显示欢迎信息log_operation &quot;=== CrossOver 游戏评估环境更新工具 ===&quot;log_operation &quot;=== 支持 MetalFX 集成与容器选择 ===&quot;echo -e &quot;$&#123;YELLOW&#125;=== CrossOver 游戏评估环境更新工具 ===$&#123;NC&#125;&quot;echo -e &quot;$&#123;YELLOW&#125;=== 支持 MetalFX 集成与容器选择 ===$&#123;NC&#125;\n&quot;echo -e &quot;$&#123;YELLOW&#125;📝 日志文件：$&#123;LOG_FILE&#125;$&#123;NC&#125;\n&quot;# 系统兼容性检查check_system_compatibility# 网络连接检查check_network_connectivityecho# 先确认安装目录存在，再判断是否需要提权（目录不存在时不可写，会误判为权限不足）if [ ! -d &quot;$&#123;CROSSOVER_GPTK_DIR&#125;&quot; ]; then    log_operation &quot;❌ 未找到CrossOver安装目录: $&#123;CROSSOVER_GPTK_DIR&#125;&quot;    echo -e &quot;$&#123;RED&#125;错误：未找到CrossOver安装目录$&#123;NC&#125;&quot;    echo -e &quot;$&#123;RED&#125;预期路径：$&#123;CROSSOVER_GPTK_DIR&#125;$&#123;NC&#125;&quot;    exit 1filog_operation &quot;✅ CrossOver安装目录验证成功&quot;# 检查文件写入权限（优先避免使用sudo）SUDO=&quot;&quot;if [ ! -w &quot;$&#123;CROSSOVER_GPTK_DIR&#125;&quot; ]; then    echo -e &quot;$&#123;YELLOW&#125;提示：需要管理员权限进行CrossOver文件操作$&#123;NC&#125;&quot;    echo -e &quot;$&#123;YELLOW&#125;建议：请确保当前用户对CrossOver应用有写入权限$&#123;NC&#125;&quot;    read -p &quot;是否使用sudo权限继续？(y/N): &quot; use_sudo    if [[ &quot;$use_sudo&quot; =~ ^[Yy]$ ]]; then        SUDO=&quot;sudo&quot;    else        echo -e &quot;$&#123;RED&#125;操作已取消$&#123;NC&#125;&quot;        exit 1    fifi# 检查评估环境镜像if [ -z &quot;$&#123;SOURCE_LIB_DIR&#125;&quot; ] || [ ! -d &quot;$&#123;SOURCE_LIB_DIR&#125;&quot; ]; then    log_operation &quot;❌ 未找到评估环境镜像&quot;    echo -e &quot;$&#123;RED&#125;错误：未找到评估环境镜像$&#123;NC&#125;&quot;    echo -e &quot;$&#123;YELLOW&#125;请先挂载以下任一镜像：$&#123;NC&#125;&quot;    echo &quot;  - Evaluation environment for Windows games 3.0 beta 3&quot;    echo &quot;  - 其他类似的游戏评估环境镜像&quot;    echo -e &quot;$&#123;YELLOW&#125;当前搜索的路径：$&#123;NC&#125;&quot;    ls -d /Volumes/*&quot;game&quot;* /Volumes/*&quot;Game&quot;* /Volumes/*&quot;evaluation&quot;* /Volumes/*&quot;Evaluation&quot;* 2&gt;/dev/null || echo &quot;  未找到相关挂载点&quot;    exit 1else    log_operation &quot;✅ 找到评估环境: $&#123;SOURCE_LIB_DIR&#125;&quot;    echo -e &quot;$&#123;GREEN&#125;找到评估环境：$&#123;SOURCE_LIB_DIR&#125;$&#123;NC&#125;&quot;fi# 更新核心库文件log_operation &quot;🔄 开始更新核心库文件&quot;echo -e &quot;\n$&#123;GREEN&#125;--- 1. 更新核心库文件 ---$&#123;NC&#125;&quot;cd &quot;$&#123;CROSSOVER_GPTK_DIR&#125;&quot; || &#123;    echo -e &quot;$&#123;RED&#125;无法进入目录：$&#123;CROSSOVER_GPTK_DIR&#125;$&#123;NC&#125;&quot;    exit 1&#125;# 备份旧文件（使用时间戳避免覆盖）echo -e &quot;$&#123;YELLOW&#125;备份原有文件...$&#123;NC&#125;&quot;if [ -d &quot;external&quot; ]; then    $SUDO mv external &quot;external.backup.$&#123;BACKUP_TIMESTAMP&#125;&quot; || &#123;        echo -e &quot;$&#123;RED&#125;external目录备份失败$&#123;NC&#125;&quot;        exit 1    &#125;    echo -e &quot;$&#123;GREEN&#125;✅ external目录已备份为 external.backup.$&#123;BACKUP_TIMESTAMP&#125;$&#123;NC&#125;&quot;fiif [ -d &quot;wine&quot; ]; then    $SUDO mv wine &quot;wine.backup.$&#123;BACKUP_TIMESTAMP&#125;&quot; || &#123;        echo -e &quot;$&#123;RED&#125;wine目录备份失败$&#123;NC&#125;&quot;        exit 1    &#125;    echo -e &quot;$&#123;GREEN&#125;✅ wine目录已备份为 wine.backup.$&#123;BACKUP_TIMESTAMP&#125;$&#123;NC&#125;&quot;fi# 复制新文件echo -e &quot;$&#123;YELLOW&#125;复制新库文件...$&#123;NC&#125;&quot;$SUDO ditto &quot;$&#123;SOURCE_LIB_DIR&#125;/&quot; . || &#123;    echo -e &quot;$&#123;RED&#125;文件复制失败，正在恢复备份...$&#123;NC&#125;&quot;    [ -d &quot;external.backup.$&#123;BACKUP_TIMESTAMP&#125;&quot; ] &amp;&amp; $SUDO mv &quot;external.backup.$&#123;BACKUP_TIMESTAMP&#125;&quot; external    [ -d &quot;wine.backup.$&#123;BACKUP_TIMESTAMP&#125;&quot; ] &amp;&amp; $SUDO mv &quot;wine.backup.$&#123;BACKUP_TIMESTAMP&#125;&quot; wine    exit 1&#125;# 验证复制结果if [ ! -d &quot;external&quot; ] || [ ! -d &quot;wine&quot; ]; then    echo -e &quot;$&#123;RED&#125;复制验证失败，正在恢复备份...$&#123;NC&#125;&quot;    [ -d &quot;external.backup.$&#123;BACKUP_TIMESTAMP&#125;&quot; ] &amp;&amp; $SUDO mv &quot;external.backup.$&#123;BACKUP_TIMESTAMP&#125;&quot; external    [ -d &quot;wine.backup.$&#123;BACKUP_TIMESTAMP&#125;&quot; ] &amp;&amp; $SUDO mv &quot;wine.backup.$&#123;BACKUP_TIMESTAMP&#125;&quot; wine    exit 1fi# MD5完整性验证echo -e &quot;$&#123;YELLOW&#125;🔍 正在验证所有复制文件的完整性...$&#123;NC&#125;&quot;verify_success=trueverified_count=0failed_count=0# 验证函数verify_file_integrity() &#123;    local source_file=&quot;$1&quot;    local target_file=&quot;$2&quot;    local relative_path=&quot;$3&quot;    if [ -f &quot;$source_file&quot; ] &amp;&amp; [ -f &quot;$target_file&quot; ]; then        if command -v md5 &gt;/dev/null 2&gt;&amp;1; then            source_md5=$(md5 -q &quot;$source_file&quot; 2&gt;/dev/null)            target_md5=$(md5 -q &quot;$target_file&quot; 2&gt;/dev/null)        elif command -v md5sum &gt;/dev/null 2&gt;&amp;1; then            source_md5=$(md5sum &quot;$source_file&quot; 2&gt;/dev/null | cut -d&#x27; &#x27; -f1)            target_md5=$(md5sum &quot;$target_file&quot; 2&gt;/dev/null | cut -d&#x27; &#x27; -f1)        else            echo -e &quot;$&#123;YELLOW&#125;⚠️ MD5工具不可用，跳过校验$&#123;NC&#125;&quot;            return 0        fi        if [ &quot;$source_md5&quot; = &quot;$target_md5&quot; ] &amp;&amp; [ -n &quot;$source_md5&quot; ]; then            echo -e &quot;$&#123;GREEN&#125;  ✅ $&#123;relative_path&#125;$&#123;NC&#125;&quot;            ((verified_count++))            return 0        else            echo -e &quot;$&#123;RED&#125;  ❌ $&#123;relative_path&#125; - MD5校验失败$&#123;NC&#125;&quot;            echo -e &quot;$&#123;RED&#125;     源文件: $&#123;source_md5&#125;$&#123;NC&#125;&quot;            echo -e &quot;$&#123;RED&#125;     目标文件: $&#123;target_md5&#125;$&#123;NC&#125;&quot;            ((failed_count++))            return 1        fi    fi    return 0&#125;# 验证关键文件echo -e &quot;$&#123;YELLOW&#125;验证关键库文件...$&#123;NC&#125;&quot;key_files=(    &quot;wine/x86_64-windows/nvngx.dll&quot;    &quot;wine/x86_64-windows/nvapi64.dll&quot;    &quot;wine/x86_64-windows/d3d12.dll&quot;    &quot;wine/x86_64-unix/nvngx.so&quot;    &quot;external/lib/libMoltenVK.dylib&quot;)for key_file in &quot;$&#123;key_files[@]&#125;&quot;; do    source_file=&quot;$&#123;SOURCE_LIB_DIR&#125;/$&#123;key_file&#125;&quot;    target_file=&quot;$&#123;CROSSOVER_GPTK_DIR&#125;/$&#123;key_file&#125;&quot;    if [ -f &quot;$source_file&quot; ]; then        if ! verify_file_integrity &quot;$source_file&quot; &quot;$target_file&quot; &quot;$key_file&quot;; then            verify_success=false        fi    fidone# 验证所有.dll和.so文件echo -e &quot;$&#123;YELLOW&#125;验证所有动态库文件...$&#123;NC&#125;&quot;while IFS= read -r -d &#x27;&#x27; source_file; do    relative_path=&quot;$&#123;source_file#$&#123;SOURCE_LIB_DIR&#125;/&#125;&quot;    target_file=&quot;$&#123;CROSSOVER_GPTK_DIR&#125;/$&#123;relative_path&#125;&quot;    if ! verify_file_integrity &quot;$source_file&quot; &quot;$target_file&quot; &quot;$relative_path&quot;; then        verify_success=false    fidone &lt; &lt;(find &quot;$&#123;SOURCE_LIB_DIR&#125;&quot; -type f \( -name &quot;*.dll&quot; -o -name &quot;*.so&quot; -o -name &quot;*.dylib&quot; \) -print0 2&gt;/dev/null)# 显示验证结果echo -e &quot;$&#123;YELLOW&#125;📊 文件完整性验证结果：$&#123;NC&#125;&quot;echo -e &quot;$&#123;GREEN&#125;  ✅ 验证通过: $&#123;verified_count&#125; 个文件$&#123;NC&#125;&quot;if [ &quot;$failed_count&quot; -gt 0 ]; then    echo -e &quot;$&#123;RED&#125;  ❌ 验证失败: $&#123;failed_count&#125; 个文件$&#123;NC&#125;&quot;fiif $verify_success; then    echo -e &quot;$&#123;GREEN&#125;🎉 所有文件MD5校验通过，更新完整性已确认$&#123;NC&#125;&quot;else    echo -e &quot;$&#123;RED&#125;⚠️ 部分文件校验失败，建议重新运行脚本$&#123;NC&#125;&quot;    read -p &quot;是否继续执行？(y/N): &quot; continue_anyway    if [[ ! &quot;$continue_anyway&quot; =~ ^[Yy]$ ]]; then        echo -e &quot;$&#123;RED&#125;操作已取消$&#123;NC&#125;&quot;        exit 1    fifiecho -e &quot;$&#123;GREEN&#125;✅ 核心库文件更新完成$&#123;NC&#125;&quot;# 重命名MetalFX文件log_operation &quot;🔧 开始配置MetalFX支持&quot;echo -e &quot;\n$&#123;GREEN&#125;--- 2. 配置MetalFX支持 ---$&#123;NC&#125;&quot;# 处理MetalFX文件列表metalfx_files=(    &quot;$&#123;CROSSOVER_WINE_UNIX_DIR&#125;/nvngx-on-metalfx.so:$&#123;CROSSOVER_WINE_UNIX_DIR&#125;/nvngx.so:Unix&quot;    &quot;$&#123;CROSSOVER_WINE_WIN_DIR&#125;/nvngx-on-metalfx.dll:$&#123;CROSSOVER_WINE_WIN_DIR&#125;/nvngx.dll:Windows&quot;)# 批量处理MetalFX文件for metalfx_info in &quot;$&#123;metalfx_files[@]&#125;&quot;; do    source_file=&quot;$&#123;metalfx_info%%:*&#125;&quot;    temp=&quot;$&#123;metalfx_info#*:&#125;&quot;    target_file=&quot;$&#123;temp%%:*&#125;&quot;    file_type=&quot;$&#123;metalfx_info##*:&#125;&quot;    if [ -f &quot;$source_file&quot; ]; then        log_operation &quot;🔄 重命名$&#123;file_type&#125;端MetalFX文件: $(basename &quot;$source_file&quot;)&quot;        echo -e &quot;$&#123;YELLOW&#125;重命名$&#123;file_type&#125;端MetalFX文件...$&#123;NC&#125;&quot;        $SUDO mv &quot;$source_file&quot; &quot;$target_file&quot; || &#123;            log_operation &quot;❌ $&#123;file_type&#125;端MetalFX文件重命名失败&quot;            echo -e &quot;$&#123;RED&#125;错误：$&#123;file_type&#125;端MetalFX文件重命名失败$&#123;NC&#125;&quot;            exit 1        &#125;    elif [ -f &quot;$target_file&quot; ]; then        log_operation &quot;✅ $&#123;file_type&#125;端MetalFX文件已配置&quot;        echo -e &quot;$&#123;YELLOW&#125;$&#123;file_type&#125;端MetalFX文件已配置$&#123;NC&#125;&quot;    else        log_operation &quot;❌ 未找到$&#123;file_type&#125;端MetalFX文件&quot;        echo -e &quot;$&#123;RED&#125;错误：未找到$&#123;file_type&#125;端MetalFX文件$&#123;NC&#125;&quot;        exit 1    fidonelog_operation &quot;✅ MetalFX配置完成&quot;echo -e &quot;$&#123;GREEN&#125;✅ MetalFX配置完成$&#123;NC&#125;&quot;# 容器选择与智能检测log_operation &quot;🎮 开始配置游戏容器&quot;echo -e &quot;\n$&#123;GREEN&#125;--- 3. 配置游戏容器 ---$&#123;NC&#125;&quot;echo -e &quot;$&#123;YELLOW&#125;请选择你要配置的游戏容器（Bottle）$&#123;NC&#125;&quot;echo &quot;1. 自动搜索并选择容器（推荐）&quot;echo &quot;2. 手动输入容器名称&quot;echo &quot;3. 手动输入完整路径&quot;echo &quot;4. 跳过此步骤&quot;read -p &quot;请选择(1-4，默认1): &quot; bottle_choicebottle_choice=$&#123;bottle_choice:-1&#125;WINE_PREFIX_DRIVEC=&quot;&quot;# 改进的自动检测函数auto_search_and_select_bottles() &#123;    echo -e &quot;$&#123;YELLOW&#125;🔍 正在搜索CrossOver容器...$&#123;NC&#125;&quot;    local detected_bottles=()    local detected_paths=()    # 搜索默认目录中的容器    if [ -d &quot;$&#123;DEFAULT_BOTTLES_DIR&#125;&quot; ]; then        for bottle_dir in &quot;$&#123;DEFAULT_BOTTLES_DIR&#125;&quot;/*; do            if [ -d &quot;$&#123;bottle_dir&#125;/drive_c/windows/system32&quot; ]; then                local bottle_name=$(basename &quot;$bottle_dir&quot;)                detected_bottles+=(&quot;$bottle_name&quot;)                detected_paths+=(&quot;$&#123;bottle_dir&#125;/drive_c&quot;)            fi        done    fi    # 也搜索旧版路径    if [ -d &quot;$&#123;HOME&#125;/.cxoffice&quot; ]; then        for bottle_dir in &quot;$&#123;HOME&#125;/.cxoffice&quot;/*; do            if [ -d &quot;$&#123;bottle_dir&#125;/drive_c/windows/system32&quot; ]; then                local bottle_name=$(basename &quot;$bottle_dir&quot;)                # 用容器路径判重：显示名会附加“ (旧版)”后缀，按名字比对会漏判新旧同名容器                local bottle_path=&quot;$&#123;bottle_dir&#125;/drive_c&quot;                local is_dup=false                for known_path in &quot;$&#123;detected_paths[@]&#125;&quot;; do                    if [ &quot;$known_path&quot; = &quot;$bottle_path&quot; ]; then                        is_dup=true                        break                    fi                done                if [ &quot;$is_dup&quot; = false ]; then                    detected_bottles+=(&quot;$bottle_name (旧版)&quot;)                    detected_paths+=(&quot;$bottle_path&quot;)                fi            fi        done    fi    if [ $&#123;#detected_bottles[@]&#125; -eq 0 ]; then        echo -e &quot;$&#123;YELLOW&#125;⚠️ 未检测到有效的CrossOver容器$&#123;NC&#125;&quot;        echo -e &quot;$&#123;YELLOW&#125;请确保CrossOver已安装并创建了游戏容器$&#123;NC&#125;&quot;        return 1    fi    echo -e &quot;$&#123;GREEN&#125;📋 找到以下容器：$&#123;NC&#125;&quot;    echo -e &quot;  $&#123;YELLOW&#125;0.$&#123;NC&#125; 跳过容器配置&quot;    for i in &quot;$&#123;!detected_bottles[@]&#125;&quot;; do        echo -e &quot;  $&#123;GREEN&#125;$((i+1)).$&#123;NC&#125; $&#123;detected_bottles[i]&#125;&quot;    done    while true; do        read -p &quot;请输入容器编号 (0-$&#123;#detected_bottles[@]&#125;): &quot; bottle_num        if [[ &quot;$bottle_num&quot; == &quot;0&quot; ]]; then            echo -e &quot;$&#123;YELLOW&#125;已跳过容器配置$&#123;NC&#125;&quot;            return 1        elif [[ &quot;$bottle_num&quot; =~ ^[1-9][0-9]*$ ]] &amp;&amp; [ &quot;$bottle_num&quot; -le $&#123;#detected_bottles[@]&#125; ]; then            local selected_bottle=&quot;$&#123;detected_bottles[$((bottle_num-1))]&#125;&quot;            WINE_PREFIX_DRIVEC=&quot;$&#123;detected_paths[$((bottle_num-1))]&#125;&quot;            log_operation &quot;✅ 用户选择容器: $&#123;selected_bottle&#125;&quot;            log_operation &quot;📁 容器路径: $&#123;WINE_PREFIX_DRIVEC&#125;&quot;            echo -e &quot;$&#123;GREEN&#125;✅ 已选择容器：$&#123;selected_bottle&#125;$&#123;NC&#125;&quot;            echo -e &quot;$&#123;GREEN&#125;📁 容器路径：$&#123;WINE_PREFIX_DRIVEC&#125;$&#123;NC&#125;&quot;            return 0        else            echo -e &quot;$&#123;RED&#125;❌ 无效的编号！$&#123;NC&#125;&quot;            echo -e &quot;$&#123;YELLOW&#125;💡 有效选项：$&#123;NC&#125;&quot;            echo -e &quot;$&#123;YELLOW&#125;   0 - 跳过容器配置$&#123;NC&#125;&quot;            for i in &quot;$&#123;!detected_bottles[@]&#125;&quot;; do                echo -e &quot;$&#123;YELLOW&#125;   $((i+1)) - $&#123;detected_bottles[i]&#125;$&#123;NC&#125;&quot;            done        fi    done&#125;case $bottle_choice in    1)        # 自动搜索并选择容器        auto_search_and_select_bottles        ;;    2)        # 手动输入容器名称        read -p &quot;请输入容器名称：&quot; bottle_name        if [ -z &quot;$bottle_name&quot; ]; then            echo -e &quot;$&#123;RED&#125;错误：容器名称不能为空$&#123;NC&#125;&quot;        else            # 搜索可能的容器路径            possible_paths=(                &quot;$&#123;DEFAULT_BOTTLES_DIR&#125;/$&#123;bottle_name&#125;/drive_c&quot;                &quot;$&#123;HOME&#125;/.cxoffice/$&#123;bottle_name&#125;/drive_c&quot;                &quot;$&#123;HOME&#125;/Library/Application Support/CrossOver/$&#123;bottle_name&#125;/drive_c&quot;            )            for path in &quot;$&#123;possible_paths[@]&#125;&quot;; do                if [ -d &quot;$&#123;path&#125;/windows/system32&quot; ]; then                    WINE_PREFIX_DRIVEC=&quot;$path&quot;                    echo -e &quot;$&#123;GREEN&#125;✅ 找到容器：$&#123;bottle_name&#125;$&#123;NC&#125;&quot;                    echo -e &quot;$&#123;GREEN&#125;📁 容器路径：$&#123;WINE_PREFIX_DRIVEC&#125;$&#123;NC&#125;&quot;                    break                fi            done            if [ -z &quot;$WINE_PREFIX_DRIVEC&quot; ]; then                echo -e &quot;$&#123;RED&#125;❌ 未找到容器「$&#123;bottle_name&#125;」$&#123;NC&#125;&quot;                echo -e &quot;$&#123;YELLOW&#125;💡 建议使用选项1自动搜索容器$&#123;NC&#125;&quot;            fi        fi        ;;    3)        # 手动输入路径        read -p &quot;请输入容器的drive_c完整路径：&quot; manual_path        if [ -n &quot;$manual_path&quot; ] &amp;&amp; [ -d &quot;$&#123;manual_path&#125;/windows/system32&quot; ]; then            WINE_PREFIX_DRIVEC=&quot;$manual_path&quot;            echo -e &quot;$&#123;GREEN&#125;✅ 容器路径已设置$&#123;NC&#125;&quot;            echo -e &quot;$&#123;GREEN&#125;📁 容器路径：$&#123;WINE_PREFIX_DRIVEC&#125;$&#123;NC&#125;&quot;        else            echo -e &quot;$&#123;RED&#125;❌ 无效的容器路径，请确保路径包含 windows/system32 目录$&#123;NC&#125;&quot;        fi        ;;    4)        # 跳过        echo -e &quot;$&#123;YELLOW&#125;⏭️ 已跳过容器配置$&#123;NC&#125;&quot;        ;;    *)        echo -e &quot;$&#123;RED&#125;❌ 无效选择，已跳过容器配置$&#123;NC&#125;&quot;        ;;esac# 复制DLL文件（如果路径有效）if [ -n &quot;$WINE_PREFIX_DRIVEC&quot; ] &amp;&amp; [ -d &quot;$&#123;WINE_PREFIX_DRIVEC&#125;/windows/system32&quot; ]; then    log_operation &quot;💾 开始DLL文件复制到容器&quot;    echo -e &quot;\n$&#123;YELLOW&#125;正在复制DLL文件到容器...$&#123;NC&#125;&quot;    # DLL文件列表    dll_list=(        &quot;nvngx.dll:NVIDIA DLSS支持库&quot;        &quot;nvapi64.dll:NVIDIA API库&quot;    )    copy_success=true    for dll_info in &quot;$&#123;dll_list[@]&#125;&quot;; do        dll_name=&quot;$&#123;dll_info%:*&#125;&quot;        description=&quot;$&#123;dll_info#*:&#125;&quot;        source_file=&quot;$&#123;CROSSOVER_WINE_WIN_DIR&#125;/$&#123;dll_name&#125;&quot;        target_file=&quot;$&#123;WINE_PREFIX_DRIVEC&#125;/windows/system32/$&#123;dll_name&#125;&quot;        if [ -f &quot;$source_file&quot; ]; then            if $SUDO cp &quot;$source_file&quot; &quot;$target_file&quot; 2&gt;/dev/null; then                log_operation &quot;✅ $&#123;description&#125; ($&#123;dll_name&#125;) 复制成功&quot;                echo -e &quot;$&#123;GREEN&#125;✅ $&#123;description&#125; ($&#123;dll_name&#125;) 复制成功$&#123;NC&#125;&quot;                echo -e &quot;$&#123;YELLOW&#125;   📋 源文件已在核心库更新时通过MD5校验$&#123;NC&#125;&quot;            else                log_operation &quot;❌ $&#123;description&#125; ($&#123;dll_name&#125;) 复制失败&quot;                echo -e &quot;$&#123;RED&#125;❌ $&#123;description&#125; ($&#123;dll_name&#125;) 复制失败$&#123;NC&#125;&quot;                copy_success=false            fi        else            log_operation &quot;⚠️ $&#123;description&#125; ($&#123;dll_name&#125;) 源文件不存在&quot;            echo -e &quot;$&#123;YELLOW&#125;⚠️ $&#123;description&#125; ($&#123;dll_name&#125;) 源文件不存在$&#123;NC&#125;&quot;        fi    done    if $copy_success; then        log_operation &quot;🎉 所有DLL文件复制完成&quot;        echo -e &quot;$&#123;GREEN&#125;🎉 所有DLL文件复制完成$&#123;NC&#125;&quot;    else        log_operation &quot;⚠️ 部分DLL文件复制失败&quot;        echo -e &quot;$&#123;YELLOW&#125;⚠️ 部分DLL文件复制失败，可能影响功能$&#123;NC&#125;&quot;    fielse    log_operation &quot;⏭️ 未配置容器，跳过DLL文件复制&quot;    echo -e &quot;\n$&#123;YELLOW&#125;未配置容器，已跳过DLL文件复制$&#123;NC&#125;&quot;fi# 操作完成提示log_operation &quot;🎉 CrossOver GPTK3更新全部完成&quot;echo -e &quot;\n$&#123;GREEN&#125;===========================================$&#123;NC&#125;&quot;echo -e &quot;$&#123;GREEN&#125;   ✅ CrossOver GPTK3 更新完成！   $&#123;NC&#125;&quot;echo -e &quot;$&#123;GREEN&#125;===========================================$&#123;NC&#125;&quot;echo -e &quot;\n$&#123;YELLOW&#125;📝 使用指南：$&#123;NC&#125;&quot;echo &quot;$&#123;GREEN&#125;1.$&#123;NC&#125; 启动CrossOver，确保游戏容器已启用D3DMetal&quot;echo &quot;$&#123;GREEN&#125;2.$&#123;NC&#125; 游戏启动时可添加环境变量：&quot;echo &quot;   $&#123;YELLOW&#125;MTL_CAPTURE_ENABLED=1 D3DM_ENABLE_METALFX=1$&#123;NC&#125;&quot;echo &quot;$&#123;GREEN&#125;3.$&#123;NC&#125; 遇到着色器问题时，可清除缓存：&quot;echo &quot;   $&#123;YELLOW&#125;cd \$(getconf DARWIN_USER_CACHE_DIR)/d3dm/[游戏名] &amp;&amp; rm -rf shaders.cache$&#123;NC&#125;&quot;echo -e &quot;\n$&#123;YELLOW&#125;🔧 故障排查：$&#123;NC&#125;&quot;echo &quot;$&#123;GREEN&#125;•$&#123;NC&#125; 如果游戏无法启动，请检查CrossOver容器配置&quot;echo &quot;$&#123;GREEN&#125;•$&#123;NC&#125; 如果性能不佳，请确认MetalFX支持已正确配置&quot;echo &quot;$&#123;GREEN&#125;•$&#123;NC&#125; 遇到问题可恢复备份：&quot;echo &quot;   $&#123;YELLOW&#125;mv external.backup.$&#123;BACKUP_TIMESTAMP&#125; external$&#123;NC&#125;&quot;echo &quot;   $&#123;YELLOW&#125;mv wine.backup.$&#123;BACKUP_TIMESTAMP&#125; wine$&#123;NC&#125;&quot;echo -e &quot;\n$&#123;YELLOW&#125;📋 日志信息：$&#123;NC&#125;&quot;echo &quot;$&#123;GREEN&#125;•$&#123;NC&#125; 详细操作日志已保存到：$&#123;YELLOW&#125;$&#123;LOG_FILE&#125;$&#123;NC&#125;&quot;echo &quot;$&#123;GREEN&#125;•$&#123;NC&#125; 查看日志命令：$&#123;YELLOW&#125;cat $&#123;LOG_FILE&#125;$&#123;NC&#125;&quot;
 
-总结crossover-gptk3.sh 把 GPTK3 文件替换从多步手工操作收敛为一次执行，内置带时间戳备份、MD5 完整性校验、失败回滚与全量日志，出错时可据日志与备份恢复到改动前状态。
-使用前确认三项前置条件均已满足（CrossOver Preview 已安装、GPTK 安装包与评估环境镜像均已挂载），并留意容器选择环节：DLL 只复制到所选容器，选错容器不影响文件替换本身，但目标游戏不会获得更新。
-免责：脚本涉及系统文件操作，使用前了解其功能并做好数据备份，作者不对使用造成的任何损失负责。
-待人工确认
-CrossOver 后续版本若原生支持 GPTK3（或官方更新 apple_gptk 目录结构），本脚本整套作废，届时确认替代路径；
-ditto 复制后逐文件 MD5 校验的是内容一致性，不含权限/签名位：应用包内文件被改后 Code Signing 是否仍被 Gatekeeper/MDM 接受（尤其 com.apple.security.cs. 相关 entitlement 校验），在 MDM 环境下需实测一次冷启动确认；
-脚本对 macOS 主版本的分支只区分 15 / 26 / 其他，macOS 15.5 之后的小版本对 GPTK3 的支持边界未逐一验证。
+复制报错或目标目录缺失
+走恢复分支，尝试将时间戳备份移回
+只能说明发起过恢复。若目标已部分存在，目录移动的结果仍需逐项核对
 
+
+复制后摘要不一致
+汇总失败数并询问是否继续
+即使选择退出，新文件也可能留在应用包，脚本没有自动回滚
+
+
+找不到摘要工具
+警告并跳过校验
+流程即使走到结尾，也没有完整性证据
+
+
+后段图形组件改名失败
+退出
+先前已成功的步骤可能保留，后段也未采用整轮事务
+
+
+当时的 MD5 比对针对 DLL、SO 和 dylib 一类文件，用于发现两份副本的意外差异。它不覆盖许可、权限、签名、嵌套代码完整性，也不能证明镜像可信。容器里的文件变更另有影响范围。旧版本还会在选目录时遇到不同位置的同名容器，仅凭显示名不够识别目标。
+我现在会怎么设计这类更新当时把每个操作写进日志，已经能区分“哪一步失败”和“恢复有没有被触发”。但把两个目录逐个改名后再往应用包复制，不能承诺失败后还能直接启动。换成今天的设计，我会先认清支持的源版本和目标版本，再在独立暂存位置核对完整文件清单、权限和签名状态。切换动作要有清晰的恢复点。发布前通过更换前后读回、冷启动和最小功能测试确认，发生失败时还要能让原版本真正工作。
+如果交给同事复核，我会给他们看四份记录：输入版本、备份的实际内容、发生失败的阶段、恢复后一遍完整的冷启动。只看更新脚本的退出码，无法判断应用包和用户容器是不是还处在同一个可用版本。历史实验没有验证受管终端的策略、Gatekeeper 接受情况或新版升级路径，因此这里的成果是把更新过程和失败状态说明白。
 ]]></content>
       <categories>
         <category>系统运维</category>
@@ -1418,8 +1441,8 @@ ditto 复制后逐文件 MD5 校验的是内容一致性，不含权限/签名�
   <entry>
     <title>Ubuntu 安装英伟达驱动与 CUDA</title>
     <url>/2023/11/09/Ubuntu%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E9%A9%B1%E5%8A%A8%E4%B8%8ECUDA/</url>
-    <content><![CDATA[计算与存储主题的三篇老文是算力层的起点，这篇是最底层的一篇：先装专有驱动（决定可用的最高 CUDA 版本），再装 CUDA 工具包（编译器与运行库）。后来的 DGX Spark 部署、PVE GPU 切分、vLLM 环境，全部落回这两步。当时没展开的点——驱动版本怎么选、驱动与 CUDA 的兼容矩阵、ECC、nvidia-persistenced——正是后面踩坑最多的地方。
-这篇覆盖 runfile 安装全过程与常见失败排查；操作会改内核模块和系统级配置，建议先在测试机验证。
+    <content><![CDATA[这是 2023 年用独立安装包部署 NVIDIA 驱动与 CUDA Toolkit 的记录。驱动负责设备和内核接口，Toolkit 提供编译器、开发工具与库。服务进程还可能从容器或框架发行包加载运行时，所以三者要分别定位。
+当时用 runfile 是为了固定版本。复用这份经验时，先按目标 GPU、发行版、内核和负载核对支持范围，再选镜像、包管理器或 runfile。后来的 DGX Spark 推理环境 与 PVE GPU 虚拟化 还要核对容器架构或宿主与来宾驱动，不能直接套这里的命令。
 准备
 按 GPU 型号在NVIDIA 驱动下载页确认支持的驱动版本并下载 .run 文件。
 
@@ -1449,7 +1472,7 @@ nvidia-smi
 
 正常出表、显示 GPU 与驱动版本即为成功：
 
-安装 CUDA 工具包先看 nvidia-smi 右上角的 CUDA Version——这是驱动支持的上限，装的工具包版本不能高于它：
+安装 CUDA 工具包先用 nvidia-smi 读驱动版本，再按要运行的 CUDA 应用或框架查最低驱动要求。界面上的 CUDA Version 是驱动报告的支持版本，不代表已装 Toolkit，也不能替代 NVIDIA 的次版本兼容规则。
 
 到CUDA Toolkit Archive选版本：
 
@@ -1472,13 +1495,13 @@ nvcc -V
 
 出版本信息即成功：
 
-关键设计决策为什么用 runfile 而不是 apt 包。 apt 路线（nvidia-driver-*）版本滞后且不可选版本；runfile 现场编译内核模块，能精确指定版本。代价是内核升级要重编译——这就是安装器里 DKMS 必须选 Yes 的原因，否则就得锁内核。
+关键设计决策安装渠道。 当时为了锁定指定版本，选的是 runfile。发行版软件仓库提供的分支、版本和内核适配要按当前发行版核对。选定一种管理方式后，尽量在同一渠道升级和卸载。内核更新前核对目标内核的模块构建与签名，支持 DKMS 的组合也要在重启后读回实际模块状态。
 专有驱动 vs 开源内核模块。 2023 年对当时的卡，专有驱动是稳妥选择。这个选项在新一代架构上变成关键项：部分新特性要求开源内核模块（-m=kernel-open），Blackwell 系卡在 PVE 上的实测也全部建立在开源模块上——后面 GPU 切分篇的黑名单 nouveau 报 unknown chipset 就是这个背景。
 nouveau 为什么必须禁。 nouveau 与专有驱动争抢同一块 GPU，modeset 冲突会让安装器直接失败。屏蔽只处理模块加载，和”卸载 NVIDIA 驱动”是两件事。
-版本兼容矩阵怎么查。 硬约束只有一条：工具包版本 ≤ nvidia-smi 显示的 CUDA Version——那是驱动支持的上限，不是已装的工具包版本。反查方向从 CUDA 版本找对应驱动，用 CUDA Toolkit Release Notes / 驱动 release notes，别凭记忆。
+版本兼容怎么查。 先用目标 Toolkit 或应用版本定位官方兼容表，再核对驱动、架构和功能限制。CUDA 11 起，同一主版本内存在带限制的次版本兼容。依赖新驱动功能或 PTX 即时编译的应用需要单独验证，不能看到版本数字接近就签字。
 常见问题1. 驱动安装失败两类常见原因：
 
-Secure Boot 启用：未签名的内核模块被拒绝加载。BIOS 里禁用 Secure Boot，或按安装器提示登记 MOK（Machine Owner Key）后重启完成签名。
+Secure Boot 启用：未签名或签名不受信的模块可能被拒绝。按组织基线使用发行版支持的签名模块或受控的 MOK 签名与登记流程，重启后核对模块确实加载。
 nouveau 冲突：开源 nouveau 与专有驱动不能共存，先屏蔽 nouveau。
 
 屏蔽 nouveau（注意与”卸载 NVIDIA 专有驱动”是两件事，此处只要前者）：
@@ -1487,11 +1510,10 @@ nouveau 冲突：开源 nouveau 与专有驱动不能共存，先屏蔽 nouveau�
 重启后确认：
 lsmod | grep nouveau   # 无输出即为已屏蔽mokutil --sb-state     # 确认 Secure Boot 状态
 
-2. CUDA 版本不匹配nvidia-smi 的 CUDA Version 是驱动支持的最高版本，工具包装得比它高就运行时不可用。要么升驱动，要么降 CUDA。
+2. CUDA 版本不匹配先对照兼容矩阵、应用实际加载的运行时以及首次失败的错误，再决定调整驱动或运行时。容器里的 CUDA 库版本与宿主 nvcc -V 可能不同，两边都要读回。
 3. 安装后 nvcc 找不到通常是环境变量未生效或路径未收录：source ~/.bashrc 后确认 echo $CUDA_HOME 指向实际安装目录；依赖动态链接器的话确认 /etc/ld.so.conf.d/cuda.conf 存在、重跑 sudo ldconfig，用 ldconfig -p | grep cudart 验证。
-总结两条验收线：nvidia-smi 正常出表（驱动能加载），nvcc -V 能出版本（工具包可用），都过了环境才算可用。
+总结我把验收分三层：nvidia-smi 用来读设备与驱动，nvcc -V 用来定位实际调用的编译器，最后在目标用户和运行环境下跑最小 CUDA 算例。前两层通过也可能在第三层遇到动态库或容器设备透传错误。本文保留的是安装与版本检查过程，未附原始算例结果。
 
-版本硬约束只有一个：CUDA 工具包版本 ≤ nvidia-smi 报的 CUDA Version。那项是驱动支持的上限，不是已装版本——先装高版本 CUDA 再回头升驱动，比反过来代价大。
 内核升级会让 .run 装的驱动失联，模块要重编译。生产机锁内核小版本，或改用 DKMS / 发行版仓库的 nvidia-driver-* 包。
 CUDA_HOME 别写死版本号：多版本共存时 /usr/local/cuda 符号链接才是切换开关，写死 cuda-12.2 会让切版本变成改 .bashrc。
 临时环境不继承变量：sudo -i、cron、systemd 服务、CI runner 都不读 ~/.bashrc，脚本里显式用绝对路径或走 /etc/profile.d/。
@@ -1508,9 +1530,8 @@ CUDA_HOME 别写死版本号：多版本共存时 /usr/local/cuda 符号链接�
   <entry>
     <title>JumpServer 单节点无外置数据库部署</title>
     <url>/2023/10/18/Jump%20server%E5%8D%95%E8%8A%82%E7%82%B9%E6%97%A0%E5%A4%96%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/</url>
-    <content><![CDATA[JumpServer 是开源堡垒机，四类能力：身份认证、账号管理、授权控制、操作审计。这篇记录单节点 + 内置数据库的离线部署形态：不引入外置 MySQL/Redis，持久化由安装器自带的 PostgreSQL/Redis 容器承担。
-选这个形态的逻辑很直接：部署期依赖少、备份点集中（一个 VOLUME_DIR 收口全部状态）、卸载干净。代价也明确——数据库、录像、配置同盘同故障域，没有高可用，宿主机挂等于运维通道全断。适合依赖要少的中小环境和离线环境；要高可用或大容量录像，改外置数据库方案，那是另一套参数。
-这套形态在公司跑了三年，2026 年在企业版上补了一整套健壮性工程（原子备份、分钟级巡检、Agent API 通道），见《JumpServer 企业版部署与健壮性工程》。这篇保留当时的部署决策与配置取舍，两个版本对照着看能看出演进路径。
+    <content><![CDATA[这是 2023 年 JumpServer v3.7.2 系列的单节点离线部署记录。目标是用较少的外部依赖，把登录、资产授权和会话审计放到同一个入口。安装器自带数据库与 Redis 容器，因此部署可以在同一台主机完成。下面的安装包、组件和界面只对应当时版本。
+单节点让第一次交付和排障更集中，也把数据库、录像和服务绑在同一故障域。数据库放到外部只能解除其中一项依赖。若要求宿主机故障后仍可建立会话，还需要分别设计应用入口、连接组件、录像存储和恢复验收。后来我把几个环节拆开处理，见 JumpServer 企业版部署与健壮性工程。
 基础设施要求
 
 
@@ -1563,9 +1584,9 @@ config-example.txt 只是安装期模板，安装器据此生成实际生效的 
 关键配置项# JumpServer configuration file example.## 如果不了解用途可以跳过修改此配置文件, 系统会自动填入# 完整参数文档 https://docs.jumpserver.org/zh/master/admin-guide/env/################################## 镜像配置 ##################################### 国内连接 docker.io 会超时或下载速度较慢, 开启此选项使用华为云镜像加速# DOCKER_IMAGE_MIRROR=1################################## 安装配置 ##################################### JumpServer 数据库持久化目录, 默认情况下录像、任务日志都在此目录# 请根据实际情况修改, 升级时备份的数据库文件(.sql)和配置文件也会保存到该目录#VOLUME_DIR=/data/jumpserver# 加密密钥, 迁移请保证 SECRET_KEY 与旧环境一致, 请勿使用特殊字符串# (*) Warning: Keep this value secret.# (*) 勿向任何人泄露 SECRET_KEY#SECRET_KEY=# 组件向 core 注册使用的 token, 迁移请保持 BOOTSTRAP_TOKEN 与旧环境一致,# 请勿使用特殊字符串# (*) Warning: Keep this value secret.# (*) 勿向任何人泄露 BOOTSTRAP_TOKEN#BOOTSTRAP_TOKEN=# 日志等级 INFO, WARN, ERROR#LOG_LEVEL=ERROR# JumpServer 容器使用的网段, 请勿与现有的网络冲突, 根据实际情况自行修改#DOCKER_SUBNET=192.168.250.0/24################################## 访问配置 #################################### 对外提供服务端口, 如果与现有服务冲突请自行修改#HTTP_PORT=80SSH_PORT=2222MAGNUS_MYSQL_PORT=33061MAGNUS_MARIADB_PORT=33062MAGNUS_REDIS_PORT=63790
 
 关键设计决策
-VOLUME_DIR 是唯一状态目录。数据库、录像、任务日志、升级备份全落这一个路径，备份策略因此退化成「盯住一个目录」；单节点形态下它和系统盘同故障域，这是后文安全建议里备份要单独做、要实际演练恢复的原因。
+VOLUME_DIR 是本次部署主要的持久化入口。 我用它盘点数据库、录像和任务日志的增长，再按实际挂载核对配置和备份的归处。目录集中便于盘点，在线复制目录无法证明数据库一致。
 DOCKER_SUBNET 独立成段。容器内部网段与业务网段、宿主网段都不重叠，排障时 ip route 一眼分清内外。选 192.168.250.0/24 只是默认值不冲突，换环境按实际网段规划改，改完装之前定死——装完再改要重建容器网络。
-SECRET_KEY 是加密根。纳管资产里保存的系统账号密码全部用它加密落库，迁移、升级、整机搬迁必须沿用旧值，换新值则既有密文全部解不开，只能逐台重录凭据。它和数据库 dump 是配套的，单独备份数据库没有恢复价值。
+SECRET_KEY 与数据库恢复配套。 原环境里的密文需要原加密配置来解密。迁移时按对应版本官方说明保留和验证，副本单独放在受控存储中，按恢复工单授权取用。JumpServer 升级说明
 内置 vs 外置数据库。选内置（安装时外置数据库/Redis 全选 n）换的是部署简单和备份集中；代价是数据库和 Web、Koko 等业务容器同机同盘，任一组件把盘写满会连累数据库。外置方案把数据库独立出来，但多一套需要单独运维的 MySQL/PostgreSQL，中小环境不划算。
 
 4. 执行安装交互向导会依次问是否用外置数据库、外置 Redis 等，本方案全部选 n（全用自带内置容器）；误选 y 会转而要外部连接地址与凭据，与本方案不符。
@@ -1578,7 +1599,7 @@ cd &quot;$JMS_DIR&quot;   # 上文解压得到的实际目录名# 启动./jmsctl
 
 
 
-admin/admin 是出厂默认账户，仅首次登录有效，登录后强制改密。日常运维改用专用管理员账户并开启 MFA。
+初始管理员身份以该版本的安装文档和实际初始化流程为准。完成初始配置后，改用按人分配的管理员账号，按组织策略启用 MFA。
 
 系统配置接住运维流量前按顺序配四件事：LDAP 认证 → 资产纳管 → 用户与用户组 → 资产授权。顺序不是习惯：用户来源先固定，才谈得上按组授权；资产先纳管，授权才有引用对象。组与资产文件夹这两层搭好后再写规则，后续扩容只往组与文件夹里加成员，规则不用改。
 1. LDAP 对接对接企业 AD 域做统一认证，不在堡垒机内维护一套独立账号：
@@ -1614,15 +1635,15 @@ admin/admin 是出厂默认账户，仅首次登录有效，登录后强制改�
 
 安全建议三条必须单独盯住的：
 
-SECRET_KEY 与 BOOTSTRAP_TOKEN 一致性。纳管账号的凭据由 SECRET_KEY 加密落库，容器重建、升级、整机迁移都必须沿用旧值，换新则既有密文全部解不开，只能逐台重录；BOOTSTRAP_TOKEN 不一致表现为组件注册不上。两者要离线留存一份并与数据库备份放在一起，否则单独备份数据库没有恢复价值。
-VOLUME_DIR 的备份与恢复。该目录（示例 /data/jumpserver）同时承载数据库、任务日志与录像，单节点形态下与系统数据同故障域。按审计保留期倒推容量、单独备份，实际做过一次恢复而不是只确认备份文件存在；录像缺失等于审计能力缺失。
+访问边界。客户端入口启用 HTTPS，管理入口只提供给授权人员。组件注册用的 token 和数据库记录解密用的密钥是不同用途，配置另入受控备份。
+分层恢复。数据库使用与版本匹配的一致性备份和恢复流程，录像按实际挂载和保留期核对，配置与密钥另行受控保存。在隔离环境先查目录登录及资产权限，再用批准的测试会话验证可连接、可回放。原始记录没有完整的恢复演练证据，此处是后续验收要求。
 特权账号收敛。堡垒机的价值在把 root/Administrator 从人手里收走；授权规则仍长期授予这些账号，追责能力与纳管前没区别。按「独立账号优先、特权账号按需申请且带有效期」收敛，定期复查长期未使用的授权规则。
 
 常见问题1. 端口冲突改实际生效的 /opt/jumpserver/config/config.txt 中对应端口项（HTTP_PORT、SSH_PORT、MAGNUS_*_PORT）后重启服务；只改 config-example.txt 不生效。
 2. 启动失败先确认 Docker 正常（systemctl status docker、docker ps -a），对异常容器 docker logs &lt;容器名&gt; 看报错。常见原因：端口占用、DOCKER_SUBNET 与现有网段冲突、磁盘空间不足。
 3. LDAP 同步失败依次核对：主机到 LDAP 的网络与端口连通性、绑定账户的搜索权限、Base DN 与过滤条件是否匹配。测试连接通过但同步不到人，通常是过滤条件或 Base DN 范围问题，不是凭据问题。
 总结
-形态取舍：依赖少、部署快、备份点集中；代价是数据库与录像同盘同容器，无高可用。
+形态取舍：依赖少、部署快、备份点集中；代价是数据库与录像同宿主故障域，无高可用。
 单机内能收口的两件事：HTTP 换 HTTPS；/data/jumpserver 备份并实际做一次恢复演练——没演练过不算有可用性。
 单机收口不了的：主机故障即全员失去运维通道，要么把可接受的恢复时间写出来由使用方认可，要么改外置数据库与高可用方案。
 特权账号收敛不是一次性动作，按安全建议第 3 条定期复查。
@@ -1641,12 +1662,14 @@ VOLUME_DIR 的备份与恢复。该目录（示例 /data/jumpserver）同时承�
   <entry>
     <title>Windows 10 系统封装详细教程</title>
     <url>/2023/09/08/win10%E5%B0%81%E8%A3%85/</url>
-    <content><![CDATA[终端与应用层要解决的核心问题是交付物一致性：100 台机器和 1 台行为一样。封装把标准软件、环境配置与本地策略压进一个镜像，批量交付不再靠人肉装系统，一致性由镜像保证，装机只做一次写入。
-这篇记录一份 Windows 10 基线镜像的完整制作流程：虚拟机当工位、装系统配账户、装标准软件、清理备份、用 NTlite 替换 install.esd 重打包 ISO。下面按原流程走一遍，每个环节为什么这么选、代价是什么，集中在「关键设计决策」一节。
+    <content><![CDATA[这是 2023 年 Windows 10 批量装机前做基线镜像的记录。配置原本由人在每台电脑上重复点一遍，我试着把系统版本、驱动、标准软件和策略变成可核对的一份交付物。下面保留虚拟机工位、镜像备份和重打包 ISO 的过程，重点是每一次修改怎样追溯和验收。
+
+适用范围：Windows 10 Home/Pro 常规支持已于 2025 年 10 月结束。LTSC 等版本应按各自生命周期核对，使用扩展安全更新的环境还要单独核实资格与期限。本文保留历史过程，微软生命周期公告 和当前受支持的系统版本决定新项目选型。
+
 关键设计决策
-镜像替换 vs sysprep 离线捕获。 这份镜像走的是替换 ISO 内 install.esd 的路线，部署时仍是一次完整安装，OOBE 照常走。好处是制作简单、不碰 sysprep 的边界；代价是累积补丁会让镜像漂移（末节展开），且流程里没有显式泛化步骤——各台部署出来的 SID 是否一致，进 AD 域前需按实际行为确认（见「待人工确认」）。
+捕获和重打包是两步。 历史流程最后替换 ISO 的 install.esd，却没有留下 Sysprep /generalize 的执行证据。包能启动并进入 OOBE 只说明安装路径通了，不能据此把捕获镜像交给不同目标机。跨机器部署前按 Microsoft Sysprep 说明 对参考安装做通用化，再捕获。
 Dism++ 增量备份。 多个镜像版本共用一个文件、只存差异，省空间。链条是相互依赖的：回滚到旧版本需要前面所有链文件都在，断一环就不能独立回退。
-账户策略。 OOBE 默认建的普通用户会删掉，改用内置 Administrator 完成封装，镜像里不带业务用户的 profile 目录。Administrator 自己的 profile 留在镜像里，部署出的机器首次开箱就是 Administrator 身份——这条要写进基线文档。
+制作用账户和交付身份分开。 原做法用内置管理员制作镜像，版本记录缺少目标机账户状态的验收。重做时不在可分发镜像留持久化管理员凭据或个人配置，终端管理员与用户身份由首启、注册和组织策略交付。
 电源方案带回退。 卓越性能只在部分平台（工作站/HEDT）可见，装机按「卓越性能 → 高性能」顺序探测回退，避免笔记本上硬编码一个方案。
 最小镜像原则。 改动越少，镜像适用面越广、维护越轻。「封装内容小结」把实际改动逐项列出，改版时能对账，也是验收时的决策标准。
 
@@ -1699,16 +1722,7 @@ Hyper-V / VMware
 
 3. OOBE 设置完成 OOBE（Out of Box Experience，初始设置向导）：
 
-4. 用户账户配置删除 OOBE 过程中创建的普通用户账户，改用内置 Administrator 完成后续封装，避免用户配置目录被写进镜像：
-
-重要：务必先启用 Administrator 账户再删除当前账户，否则可能把自己锁在系统之外。
-
-依次操作：删除 OOBE 创建的默认用户 → 在「本地用户和组」中启用 Administrator（下图依次为删除默认用户、取消账户已禁用、账户列表确认状态）：
-
-
-
-5. 登录 Administrator 账户注销当前会话，改用 Administrator 登录：
-
+4. 参考机账户原流程曾在参考虚拟机里使用内置管理员完成设置。这个账户属于制作过程，不能把它的密码、登录状态或专用配置带给目标电脑。正式交付前检查镜像里只留下批准的默认配置，由部署工具在首启发放各台设备所需的身份。历史账户设置截图不再引用。
 标准软件安装与环境配置1. 电源计划优化以管理员身份打开命令提示符，导入「卓越性能」计划：
 powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
 
@@ -1768,28 +1782,16 @@ ISO 镜像打包1. 准备工作
 
 
 
-使用说明产出的 ISO 可用于：
-
-物理机全新安装
-虚拟机部署（VMware、Hyper-V 等）
-集成到批量部署工具链
-
-
-注意：封装镜像只适用于全新安装，不能用于在已有系统上做版本升级。
-
-装机建议配合优起通 PE 与万能驱动使用，先写镜像再补驱动，可覆盖大部分异构机型。
+怎样验一个可分发的包重打包后的 ISO 先在干净虚拟机中测试启动和首启，再选不同目标机型复验存储、网络、补丁和驱动。使用源自完整参考系统的镜像时，在捕获前核对通用化成功，发布前回读设备身份与管理员状态，最后再进入正式设备注册或加域流程。AD 部署记录 交代了加域以后的 DNS、登录和组策略验证。旧流程没有留下跨机型验收矩阵，不能把一个虚拟机装通扩大到异构终端普遍可用。
 安全与合规提醒
 授权合规：确认 Windows 镜像与激活方式具备合法授权
 软件许可：预装软件需符合其许可协议，商业软件注意批量授权与序列号处理方式
 企业策略：封装内容遵循本单位安全基线与合规要求
 先验证再分发：批量下发前在真机验证驱动、加域、定制软件与账户策略是否符合预期
 
-总结流程主线是：虚拟机内装系统 → 用 Administrator 完成软件与策略预配置 → Dism++ 清理并备份 → 用 NTlite 替换 install.esd 重打包 ISO。终端越多，省下的重复装机时间越可观。
+总结原流程留下了参考机配置、Dism++ 备份和 NTlite 重打包三个检查点。对批量装机最有用的是能追溯每个检查点用的源镜像和改动清单。
 不过镜像不是做完就一劳永逸：累积补丁会把镜像越拉越旧，新机型也会缺驱动。每个镜像版本都要留下「基于哪个 ISO、打了哪批补丁、在哪些真机验证过驱动/加域/软件」的记录，否则半年后没人说得清手上这份镜像处于什么状态，只能从头再封一次。
-待人工确认
-封装流程未显式调用 sysprep /generalize：各台部署出来的机器 SID 是否一致、进 AD 域前是否需要手动泛化，按所用 Dism++ 版本的实际行为确认；
-「百度药丸」（Baidu Capsule，武汉小梵猫科技的社区扩展，非百度官方出品）已从 Edge 商店下架（2025 年），且存在同名仿品；如需引用，标注版本与社区扩展属性。
-
+历史证据边界原文未附通用化日志，也没有逐机型发布记录。浏览器扩展清单只保留为当时镜像的变更记录，后续部署按组织扩展清单、发布者和维护状态另行确认。
 ]]></content>
       <categories>
         <category>系统运维</category>
@@ -1804,36 +1806,12 @@ ISO 镜像打包1. 准备工作
   <entry>
     <title>华为 Atlas800 服务器安装银河麒麟</title>
     <url>/2023/08/07/%E5%8D%8E%E4%B8%BAAtlas800%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85%E9%93%B6%E6%B2%B3%E9%BA%92%E9%BA%9F/</url>
-    <content><![CDATA[计算与存储主题的三篇老文是算力层的起点，这篇是国产算力路径的一篇：华为 Atlas 800 服务器（8×Ascend 910，aarch64）装银河麒麟，再装 NPU 驱动、芯片固件与 CANN。全程走 iBMC 带外管理装系统，不用现场接键盘显示器。
-注意 910 是训练级 NPU，与官方「Atlas 800 推理服务器（型号 3000/3010）」对应的 310/310P 不是一回事，选型和驱动包别混。
-这条线和 NVIDIA 栈的差别在生态不在流程：驱动、固件、CANN 的版本三元组必须按华为适配表互相匹配，混版就是 NPU 不可用；CANN 是 C++ 与算子层的生态位，和 CUDA 的差距体现在算子覆盖与第三方框架适配，不在安装手顺上。
+    <content><![CDATA[这是 2023 年一台 Atlas 800 训练服务器的首次装机记录。机器搭载 Ascend 910，宿主是 aarch64，操作系统选银河麒麟。我的工作是从 iBMC 带外装机开始，把内核、驱动、固件和 CANN 按同一套兼容表对齐，交付给后续使用这台机器的人。
+Atlas 800 有训练和推理等不同型号，不能只凭系列名下载软件包。动手前要确认完整机型、NPU 型号、OS 与内核、驱动和固件包、CANN 及所需框架版本。下文顺序限定于当时首次安装。已装设备的覆盖安装和升级要另看目标版本发布说明，例如 昇腾安装指南 对部分设备区分首次安装的驱动优先与覆盖安装的固件优先。
+这篇与 Ubuntu CUDA 驱动环境 可以对照着读。工具链不同，但设备被枚举、算子能运行、目标业务可交付始终是不同的检查点。
 通过 iBMC 安装银河麒麟iBMC（integrated Baseboard Management Controller）是华为服务器的基板管理控制器，远程装系统全靠它。
-1. 出厂默认配置
-
-
-项
-值
-
-
-
-IP
-192.168.2.100
-
-
-子网掩码
-255.255.255.0
-
-
-用户名
-Administrator
-
-
-密码
-出厂默认，首次登录立即修改
-
-
-均为出厂默认值，实际以设备随机服务标签、随箱文档及对应机型 iBMC 版本的官方文档为准。
-2. 安装步骤步骤 1：浏览器访问 iBMC 默认地址登录。
+通过授权的带外管理入口和设备文档确认访问条件，在操作系统安装前先回读远程控制台。原环境地址与账户信息不作为模板。
+安装步骤步骤 1：按该机型的运维文档，从受控管理面访问 iBMC，并确认远程控制台能够工作。
 
 步骤 2：按实际网络环境配置 iBMC 网络参数。
 
@@ -1859,7 +1837,7 @@ Ascend-hdk-910-npu-firmware_XXXXXX.run（固件）
 
 
 
-驱动包与固件包必须是同一版本，跨版本混装后面会付代价。
+驱动包与固件包必须是厂商兼容矩阵认可的组合，不能只看版本字符串是否相同。
 
 2. 传输与建用户两个 .run 包通过 iBMC、SCP 或任意共享路径传到系统里。
 驱动以 HwHiAIUser 身份运行，先建用户再装：
@@ -1868,7 +1846,7 @@ Ascend-hdk-910-npu-firmware_XXXXXX.run（固件）
 3. 装驱动，再装固件$path 指 .run 包所在目录，按实际位置定义（本文示例 /opt/ascend/pkg）：
 export path=/opt/ascend/pkg# 进入驱动与固件目录cd $path# 为驱动和固件文件添加可执行权限（XXXXXX 替换为下载包的实际版本号）chmod +x Ascend-hdk-910-npu-driver_XXXXXX.runchmod +x Ascend-hdk-910-npu-firmware_XXXXXX.run# 执行驱动完整安装./Ascend-hdk-910-npu-driver_XXXXXX.run --FULL# 安装完成后重启系统sudo reboot# 验证驱动安装是否成功npu-smi info# 执行固件安装./Ascend-hdk-910-npu-firmware_XXXXXX.run --FULL# 再次重启系统sudo reboot
 
-先驱动后固件：驱动刚装完时固件还是旧版，npu-smi info 报版本不匹配属预期，不代表驱动装败。固件装完再重启，提示应消失；仍存在再核对两个包是否同版本。
+这是首次安装当时的中间状态。如果出现版本不匹配告警，先按目标版本指南判断是否允许继续，并在固件更新后核对设备数、健康状态与实际版本。
 CANN 框架CANN（Compute Architecture for Neural Networks）是昇腾的 AI 计算架构，工具链与官方算例都在里面，版本同样要与驱动、固件匹配。
 
 从官方页面下载 CANN 安装包，放入 $path（与驱动包同目录即可）。
@@ -1886,21 +1864,21 @@ CANN 框架CANN（Compute Architecture for Neural Networks）是昇腾的 AI 计
 设备在位。npu-smi info 列出全部 NPU，卡数与 lspci | grep -i ascend 的计数一致；不足说明驱动或固件没加载对。
 CANN 工具链可用。加载安装生成的 set_env.sh（自定义路径以实际为准），确认环境变量注入、工具链目录非空：source /usr/local/Ascend/ascend-toolkit/set_env.shenv | grep -i ascend
 CANN nnae 包本身不含 PyTorch，python3 -c &quot;import torch&quot; 成不成功都与 CANN 无关，不能当验证手段；要 PyTorch 推理/训练另装昇腾适配层。
-算例跑通。用与当前 CANN 版本配套的官方 sample 跑一次最小算子编译与执行（样例包按版本号在华为支持站点另行下载）。这层过了才算业务可用。
+算例跑通。用与当前 CANN 版本配套的官方 sample 跑一次最小算子编译与执行（样例包按版本号在华为支持站点另行下载）。这层通过只能证明基础工具链具备执行能力。业务验收还要用目标框架、模型和输入再跑一轮。本文未附实际算例日志。
 
 注意事项
 版本三元组先核对。驱动、固件、CANN 按华为适配表配对；装前用 npu-smi info 记录当前固件版本，装完对比，避免升完驱动才发现固件不匹配。
 HwHiAIUser 先建再装。安装属主由执行身份决定，事后补用户不会修正已落盘的目录权限。
 装前做系统备份或快照。驱动与固件动的是内核模块和板载固件，失败回退成本高；iBMC 挂虚拟介质做镜像备份是最省事的路径。
-三次重启窗口预先申请。驱动、固件、CANN 各一次，每次重启后都确认 NPU 在位，卡数少于物理数量说明没加载对。
+为所用版本预留重启窗口。这次记录安排了三次重启。其他组合按各包安装说明规划，先确认带外控制台和失败回退方式。
 
 关键设计决策aarch64 决定内核与驱动的耦合。 910 NPU 驱动只发布到特定内核版本，驱动与银河麒麟发行版自带的内核版本是硬绑定，OS 与驱动包版本错配时 --FULL 安装直接报内核不兼容。先装 OS 定死内核版本，再按内核版本反查驱动包，顺序反了要重装。
 装完 OS 先验证 iBMC 再装驱动。 iBMC 是唯一的带外管理通道，后面驱动与固件各要重启一次，iBMC 不通就得现场插键鼠。装完系统第一件事用新 IP 登录 iBMC 确认网络与虚拟控制台正常，再动驱动。
-先驱动后固件、中间那次重启不能省。 驱动装完固件还是旧版，npu-smi info 的版本不匹配告警是预期状态；固件装完重启后告警才应消失。把两次重启合成一次能省时间，但中间状态对不上时说不清是驱动问题还是固件问题。
-验证分三层，每层对应不同故障面。 npu-smi info 只证明驱动与固件加载成功；工具链 set_env.sh 加载后目录非空只证明 CANN 落盘完整；业务可用要等官方算例跑通。跳过第三层等于交付一台”能看卡但没验证过能算”的机器。
-总结交付顺序固定：iBMC 挂镜像装银河麒麟 → 建 HwHiAIUser → 驱动 → 固件 → CANN → npu-smi info、CANN 工具链、官方算例三层验证。
+分步骤记录生效状态。 首次安装按当次版本要求分别检查驱动、固件与重启后的状态。覆盖安装或升级切换到对应流程，不沿用本文的重启次数。
+验证分三层，每层对应不同故障面。 npu-smi info 只证明驱动与固件加载成功；工具链 set_env.sh 加载后目录非空只证明 CANN 落盘完整；官方算例做最小执行验证，目标模型单独验收。
+总结这台机器的首次装机顺序是：iBMC 挂镜像装银河麒麟 → 建 HwHiAIUser → 驱动 → 固件 → CANN → npu-smi info、CANN 工具链、官方算例三层验证。
 
-停机窗口按三次重启算，别按一次算。
+逐项确认是否要重启，维护窗口按具体安装路径和回退准备估算。
 跨版本混装的典型症状是 npu-smi 正常但算子报错，排查成本远高于一次装对。
 aarch64 软件源包名与 x86 不同，Python/pip 按源内实际包名确认，别照搬 x86 手册。
 npu-smi 出表只证明驱动与固件加载成功，业务能不能跑得用目标模型跑一轮完整推理/训练才算数。
@@ -1995,6 +1973,31 @@ PowerStoreOS 升级后
 三个容易误判的结果旧维护记录提到，管理界面在切换期间可能回到登录页。先用新会话重新读取升级任务和节点状态，同时让主机侧观察同一个代表性数据存储。任务继续走、主机仍有路径且 I/O 正常，可以继续观察。出现路径全部丢失或 I/O 错误时，按业务故障处理，并保留发生时间和两侧告警，避免在原任务状态不明时重复提交升级。
 盘固件的验收我会拿升级前后的逐盘版本清单对照。有目标盘没变化，就按盘型、目标包和当前 PowerStoreOS 版本往回查。升级状态为成功但没有目标版本变化，应记录为未证实写入。Dell 在部分 3.x 版本上记录过这种情况，不能用一个绿灯替代清单。
 最后交接给虚拟化与备份同事三份记录。阵列版本及告警、主机路径及 I/O、代表性业务验证的时间和结果。只有前两份记录时，最多能说明存储侧恢复，维护窗口还应留到业务验证结束。
+旧笔记没有留下一条能把三侧结果串起来的业务回验记录。下面是按这次分工整理的回执样式，字段和判据可以复用，表里没有填现场结果。
+
+
+
+记录人
+回执里留什么
+怎样才算通过
+
+
+
+存储侧
+目标节点与适用驱动器的前后版本、任务状态、告警
+逐项对照目标清单，阻断告警已处理
+
+
+主机侧
+同一数据存储的前后路径状态、窗口内 I/O 错误
+路径恢复到该主机的预期基线，未发现新增 I/O 错误
+
+
+业务侧
+预定验证对象、开始及结束时间、验证结果
+用代表性工作负载完成验证，例如读取已知测试对象，再由业务负责人确认
+
+
 后来做虚拟化迁移、备份调整或模型数据服务时，我沿用了这个拆法。谁在看设备，谁在看主机，谁能确认一条真实业务完成，要在变更前分好。这样遇到版本绿灯、页面掉线或任务重试，值班人都有下一步可以核对。
 ]]></content>
       <categories>
@@ -2006,95 +2009,43 @@ PowerStoreOS 升级后
       </tags>
   </entry>
   <entry>
-    <title>Chromium 内核 113 STATUS_STACK_BUFFER_OVERRUN 解决方案</title>
+    <title>Chromium 113 启动崩溃复盘：错误码、根因和版本回退</title>
     <url>/2023/05/18/Chromium%E6%B5%8F%E8%A7%88%E5%99%A8%20%E5%86%85%E6%A0%B8113%20STATUS_STACK_BUFFER_OVERRUN%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</url>
-    <content><![CDATA[终端与应用层的交付物一致性里有一类最难处理的故障：同一台装法、同一批镜像的机器，某个内核版本升级后浏览器整批起不来。2023 年 5 月 Chromium 内核到 v113 后，部分终端的 Chrome/Edge 启动即崩，错误码 STATUS_STACK_BUFFER_OVERRUN，域内批量出现，依赖浏览器的业务入口直接断。这篇是浏览器内核级故障定位的实战样本：从表象的错误码，到根因落在 Windows 的哪一层防护，再按单机/企业两条路径处置。
-先纠正一个常见的误读。微软社区把它描述为「堆栈溢出」，但 STATUS_STACK_BUFFER_OVERRUN（0xC0000429）不是写穿栈边界的传统溢出，而是 硬件强制堆栈保护（CET 影子栈）与 CFG 等 exploit 防护命中时的快速失败（fast-fail），由系统主动终止进程。（另一个常一起出现的 0xC0000409 是 STATUS_FATAL_APP_EXCEPTION，泛指 fail-fast，两者不是一回事。）论坛说法是表象，处置针对的正是这套防护机制。
-参考：微软社区 — Edge 浏览器崩溃讨论
-关键设计决策
-崩在哪个进程，怎么判断。 Chromium 是多进程模型：浏览器主进程、GPU、网络、每个标签页一个渲染进程。渲染进程崩了是「Aw, Snap」单标签页重启；这篇的症状是浏览器本体起不来，崩的是被系统防护 kill 的主程序映像。定位手段就是看终止码落在哪个进程——终止码是 fail-fast，说明杀进程的是 Windows 自己的防护层，而不是浏览器自己写穿内存，排查方向从浏览器翻到系统侧。
-为什么回滚内核版本能解决。 硬件强制堆栈保护（HSP）在 Windows 11 22H2 起随内存完整性默认开启；Chromium 113 开始启用 CET 影子栈支持，HSP 的强制范围随之覆盖浏览器进程树。只要有一枚未带 CET 支持编译的驱动或模块挂在进程里，命中即 fast-fail。回滚浏览器内核等于把影子栈支持退回上一代基线，所以有效——但代价是整台机器的浏览器行为退回旧版本，影响面远大于「只对浏览器放宽」。这也是本文选按映像放宽防护（Exploit Protection / IFEO）而不是回滚内核的原因：把代价圈在 chrome.exe/msedge.exe 两个映像里。
-为什么「仅审核」而不是「关」。 审核模式下防护命中只记事件不终止进程，浏览器能起来，事件日志留痕——根因（哪个模块命中）还能查。直接关闭防护则连证据都没有，之后要恢复默认时也无法证明哪些模块本来就有问题。代价是审核期间防护实际不拦，属临时可用性处置，不是长期方案。
-为什么用 IFEO 组策略而不是浏览器命令行开关。 命令行参数（如 --no-sandbox）需要改启动方式，域内已部署的机器启动入口不受控；Exploit Protection 的 GUI 逐台点又不规模化。IFEO 缓解位图经注册表 GPO 按映像名下发，开机即生效、逐机可回读验证（gpresult /r + 注册表三值），是唯一能批量且可审计的路径。
+    <content><![CDATA[
+版本说明：这是 2023 年 5 月 Chromium 113 的现场记录。系统、浏览器和终端组件的组合会影响结果，不能据此推断今天的产品版本。
 
-单机解决方案在 Windows 安全中心为该浏览器映像单独放宽硬件强制堆栈保护，使其从「命中即终止」降级为「仅记录」。
-1. 在 Exploit Protection 中添加目标程序
-打开 Windows 安全中心 → 应用和浏览器控制
-进入 Exploit Protection，切换到 程序设置
-点击 添加程序 → 选择要自定义的程序，指向浏览器主程序：
-Chrome：C:\Program Files\Google\Chrome\Application\chrome.exe
-Edge：C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+浏览器内核更新后，部分办公终端启动 Chrome 或 Edge 就退出，依赖浏览器的业务入口一起受影响。报错写着 STATUS_STACK_BUFFER_OVERRUN。同样装过浏览器的一批终端里仍有正常设备，因此我先按终端和版本圈范围，再决定是先帮业务恢复访问，还是需要暂缓扩大更新。
+先把异常码和根因拆开在用户态，微软文档把 0xC0000409 用作快速失败（fail-fast）的异常报告，首个异常参数提供更细的失败码。看见这个名字只能确认程序走了异常终止路径，必须结合子码、故障进程、模块和转储才能追原因。旧记录曾怀疑堆栈保护与第三方组件的交互，保留证据能确认的是升级后在部分设备复现，以及采取历史恢复措施后可用，具体根因仍缺完整证据。微软 fast-fail 说明
+故障机、同版本正常机和升级前版本各留一个样本。用同一个批准的业务入口比较，记录 Windows 和浏览器版本、补丁时间、终端软件和策略。端点软件也可能在同一批次更新，时间上重叠时要把两条版本链分别列出来，免得看到一次回退成功，就把所有差异都归给某一项保护。
+只读收集一次故障时间窗下面是从应用日志定位时间窗的示意。输出只选了时间、事件号和来源。对应的故障进程、模块与转储在授权环境内另行核对，公开文章不携带原始日志。
+$windowStart = (Get-Date).AddHours(-2)$events = @&#123;  LogName   = &#x27;Application&#x27;  Id        = 1000, 1001  StartTime = $windowStart&#125;Get-WinEvent -FilterHashtable $events -MaxEvents 40 |  Select-Object TimeCreated, Id, ProviderName
 
 
-展开 硬件强制实施的堆栈保护
-勾选 替代系统设置，选择 仅审核
-
-「仅审核」表示防护命中时只产生事件不终止进程：浏览器可正常启动，事件日志保留命中记录便于确认根因。
-
-上图确认已添加目标程序，下图确认「硬件强制实施的堆栈保护」已改为替代系统设置并置为仅审核：
-
-需要同时使用 Chrome 和 Edge 时，两个映像要分别添加、分别配置：Exploit Protection 与下文的 IFEO 缓解策略都按可执行文件名匹配，对 chrome.exe 的配置不会影响 msedge.exe。
-配置完成后重启浏览器验证。
-批量解决方案域内大面积同类报错时，逐台配置不可持续。把等效设置落到注册表 IFEO（Image File Execution Options）缓解策略键，通过 AD 组策略按映像统一下发。
-1. 创建并链接组策略对象
-打开「组策略管理」控制台（gpmc.msc）
-右键需要应用策略的组织单位（OU）
-选择「在这个域中创建 GPO 并在此处链接」
-按用途命名，例如 Chrome_Edge_内核113_崩溃缓解
 
 
-2. 配置注册表设置编辑该 GPO，导航到 计算机配置 → 首选项 → Windows设置 → 注册表，依次新建下列三项。
-EAFModules
-
-操作：新建
-Hive：HKEY_LOCAL_MACHINE
-键路径：SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\chrome.exe
-值名称：EAFModules
-值类型：REG_SZ
-数值数据：留空
+现场现象
+下一份要看的证据
 
 
-MitigationAuditOptions
 
-操作：新建
-Hive：HKEY_LOCAL_MACHINE
-键路径：SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\chrome.exe
-值名称：MitigationAuditOptions
-值类型：REG_BINARY
-数值数据：000000000000000000000000000000100000000000000000
+浏览器启动即退出
+时间匹配的应用事件、故障进程和版本
 
 
-MitigationOptions
-
-操作：新建
-Hive：HKEY_LOCAL_MACHINE
-键路径：SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\chrome.exe
-值名称：MitigationOptions
-值类型：REG_BINARY
-数值数据：000000000000000000000000000000100000000000000000
+同版只有一部分机器失败
+受影响设备共同的系统补丁、终端组件和策略
 
 
-两个键都是同一布局的缓解策略位图，分工不同：MitigationOptions 决定策略是否对该映像强制生效，MitigationAuditOptions 决定策略未强制时是否仅记录审计事件。两者相互独立、位图结构一致，故示例取相同数值且需分别创建。位图中某位对应哪种缓解机制由 Windows 版本定义，微软未给出稳定公开映射，不建议手工修改数值本身。
-Edge 终端需按同样方式再建一组，只把键路径末段换成 msedge.exe。
-3. 应用并验证策略保存 GPO 后，在客户端执行以下命令强制刷新：
-gpupdate /force
+旧版能够打开页面
+同一测试用户和原业务路径是否都通过
 
-随后确认注册表三个值已落地，并重启浏览器验证是否还会崩溃。若策略未生效，用 gpresult /r 核查 GPO 链接与作用范围。
-注意事项
-配置削弱目标浏览器进程的堆栈保护强度，属临时可用性处置，不建议长期保留在生产终端
-批量下发前先在测试 OU 验证，再分批 rollout 控制影响面
-客户端须能正常联系域控制器取得策略，否则不生效
-定期复查 GPO 适用性：上游版本修复后及时撤销，不长期压制防护
 
-总结
-STATUS_STACK_BUFFER_OVERRUN 是 exploit 防护命中后的快速失败，不是真正的栈溢出；
-单机：Exploit Protection 中把目标映像「硬件强制实施的堆栈保护」改为仅审核；企业：等效 IFEO 缓解策略经 GPO 按映像下发，chrome.exe 与 msedge.exe 分别配置；
-临时处置，跟踪 Chromium 与微软后续版本，上游修复后撤销 GPO、恢复默认防护。
+单台修好但批量仍失败
+目标批次的实际版本、策略结果与启动行为
 
-待人工确认
-本次崩溃对应的是哪个 Windows 版本/更新的 HSP 默认开启变化（22H2 内核 22621 起默认内存完整性+HSP），当时域内机器的实际系统版本需对照事件日志确认；
-位图值 …0010…（第 16 字节，0 起算 byte 15 置 0x10）正是微软文档中 CFG 启用（EnableCfg）的标准位图；EAFModules 置空值表示按模块全量审计。位定义随 Windows 版本有增补，数值照抄本文示例即可，恢复默认前建议用 Get-ProcessMitigation -Name chrome.exe 读回当前实际值留档。
 
+先恢复少量用户，再评估下一批当时有用版本回退临时恢复访问的记录。回退只解决恢复阶段最急的问题。交接单还应写受影响范围、已恢复版本、回退截止时间以及何时能替换为受支持的修复。到期前拿同样的样本验证新版本。如果样本换了用户、机器或入口，结论要按新范围记。
+批量时先圈少量设备，核策略确实落地，再按原路完成一次业务回验。出现新失败要停在当前批，保留正常和异常对照，避免把临时设置写进覆盖全域的默认策略。和 早年的 Edge 网页兼容复盘 一样，这次最有用的是把错误表象、版本对照和真正的业务结果分开。
 ]]></content>
       <categories>
         <category>基础设施</category>
@@ -2109,64 +2060,46 @@ STATUS_STACK_BUFFER_OVERRUN 是 exploit 防护命中后的快速失败，不是�
       </tags>
   </entry>
   <entry>
-    <title>Windows沙盒 sandbox 实际应用案例</title>
+    <title>Windows Sandbox 实录：隔离遗留管理工具时，要核哪几条边界</title>
     <url>/2023/03/04/Windows%E6%B2%99%E7%9B%92%20sandbox%20%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B/</url>
-    <content><![CDATA[终端管理里有一类需求靠账号体系压不住：某个仍在使用的管理系统只兼容过时的浏览器与插件，而这些组件本身已不适合装在办公机上。本案例即属此类：打印机联机认证使用理光的格兰林系统，删除已注册 IC 卡时必须在 IE 中访问其后台，后台依赖 Flash Player 插件——Flash 已全面停止支持，存在已知安全风险且历史上捆绑软件较多，不应装在物理机上。账号权限控制的是「谁能进」，控制不了「进了会装什么」，隔离边界得挪到运行时。
-思路是把「不安全的运行环境」与「主机」彻底分开：用 Windows 自带沙盒临时安装运行所需组件，用完即销毁。落地方式：沙盒配置文件（.wsb）+ MappedFolders 映射脚本目录 + LogonCommand 自动执行安装，双击即得装好 Flash Player 的干净环境。
-关键设计决策
-映射目录设只读，脚本绕道网络共享取安装包：ReadOnly 让沙盒对主机目录只有读权，暴露面最小；代价是安装包不能直接放进映射目录，脚本要先 net use 连共享、把文件取到沙盒内可写的 Downloads 目录再装。脚本里因此带了一份明文凭据——换成专用只读账号，用完撤销。
-LogonCommand 自动执行安装：沙盒启动即装完 Flash，使用者双击 .wsb 就能干活，不需要会操作的人。代价是这条命令无人值守执行，xcopy 缺一个抑制交互的开关都会挂起在提问上。
-隔离边界按「什么没被隔开」验收：沙盒是轻量虚拟化环境（独立于宿主内核运行，隔离注册表、文件系统与桌面），关窗即销毁；网络默认开放（.wsb 配置文件里 Networking 节设为 Disable 可关，默认情况下无 VPN/802.1X 区分，本案例正好依赖它访问打印机后台），身份上默认用户是本地 WDAGUtilityAccount 而非域会话——net use 存的是域账号的真实凭据，网络会话以那个域账号建立。把它当虚拟机用会高估隔离强度，把它当一次性干净环境用正合适。
+    <content><![CDATA[旧打印机的后台依赖当时的浏览器和插件。终端支持有一次 IC 卡维护，但让过时的组件长期装在办公机上，会把本来一次性的兼容需求变成长期维护负担。于是把那次操作放进临时 Windows Sandbox 会话，日常浏览和工作仍留在宿主。本文是 2023 年遗留环境的记录。长期应采用厂商支持的管理入口。
 
-Windows 沙盒简介Windows 沙盒是 Windows 10/11 Pro/Enterprise 内置的轻量虚拟化环境：每次启动都是全新实例，关闭后本次会话的全部改动（含临时安装的 Flash Player）随之消失，不残留到主机。
-沙盒内程序默认无法访问主机文件系统，唯一例外是 MappedFolders 显式映射的目录，本案例靠它把安装脚本送进沙盒。
-映射目录是真实的读写通道（可设为只读），范围保持最小：只映射安装脚本目录，绝不映射用户主目录或含凭据的路径。
-官方文档参考：Windows 沙盒配置指南 | Microsoft Learn
-
-解决方案实施1. 启用 Windows 沙盒功能确保 Windows 沙盒功能已启用：
-
-打开「控制面板」→「程序」→「启用或关闭 Windows 功能」
-勾选「Windows 沙盒」选项
-点击「确定」并重启计算机
-
-2. 编写批处理脚本批处理脚本在沙盒内自动完成「连接共享 → 取安装包 → 静默安装」：
-@echo offREM 连接网络共享路径net use &quot;\\UNC路径&quot; &quot;&lt;口令&gt;&quot; /user:&quot;&lt;域&gt;\&lt;账号&gt;&quot;REM 复制Flash Player安装文件到沙盒下载目录xcopy &quot;\\UNC路径\flashplayer.exe&quot; &quot;C:\Users\WDAGUtilityAccount\Downloads\&quot; /i /Y /QREM 静默安装Flash PlayerC:\Users\WDAGUtilityAccount\Downloads\flashplayer.exe /verysilent /suppressmsgboxes
-
-三处要点：
-
-凭据占位：&lt;口令&gt; 与 &lt;域&gt;\&lt;账号&gt; 为占位符，实际使用时替换为专用只读账户。该脚本会被映射进沙盒，不要把域管理员凭据写入其中。
-xcopy 必须带 /i /Y /Q：LogonCommand 是无人值守执行的，若目标目录不存在或需要覆盖确认，xcopy 会停在交互提问上，导致安装流程整体挂起。/i 在目标不存在且源为文件时按文件创建，/Y 抑制覆盖确认，/Q 关闭文件回显。
-路径统一为 C:\Users\...：Windows 路径不区分大小写，但脚本与配置文件中的大小写混用会增加阅读与检索成本，统一写法更便于比对。
-
-批处理文件保存在 C:\SandboxScripts 目录下：
-
-3. 编写沙盒配置文件创建 .wsb 配置文件定义沙盒环境：
-&lt;Configuration&gt;  &lt;!-- 映射文件夹，将主机文件夹映射到沙盒环境 --&gt;  &lt;MappedFolders&gt;    &lt;MappedFolder&gt;      &lt;HostFolder&gt;C:\SandboxScripts&lt;/HostFolder&gt;      &lt;SandboxFolder&gt;C:\Users\WDAGUtilityAccount\Downloads\sandbox&lt;/SandboxFolder&gt;      &lt;ReadOnly&gt;true&lt;/ReadOnly&gt;    &lt;/MappedFolder&gt;  &lt;/MappedFolders&gt;  &lt;!-- 登录后自动执行的命令 --&gt;  &lt;LogonCommand&gt;    &lt;Command&gt;C:\Users\WDAGUtilityAccount\Downloads\sandbox\flashplayer.bat&lt;/Command&gt;  &lt;/LogonCommand&gt;&lt;/Configuration&gt;
-
-保存为 flashplayer.wsb：
-
-上文脚本之所以绕道网络共享取安装包，是因为 MappedFolders 映射源被设为 &lt;ReadOnly&gt;true&lt;/ReadOnly&gt;：映射目录在沙盒内不可写，无法把文件暂存过去，因此改为先把安装包取到沙盒自身可写的 Downloads 目录再执行（LogonCommand 直接执行只读目录中的 .bat 没有问题，执行只需要读权限）。如果不希望脚本携带共享凭据，可以去掉 ReadOnly 并由映射目录直接提供安装包，代价是沙盒对该主机目录获得写入面。
+沙盒关窗会销毁什么Windows Sandbox 提供临时桌面。会话结束后，沙盒里安装的应用和内部临时状态被清理。宿主共享文件夹则仍然在宿主上，可写映射中的改动不会随关窗回滚。同样需要单独检查网络、剪贴板和设备重定向。它们是为兼容任务按需打开的通道，各自需要验收。微软 Windows Sandbox 配置说明
+旧现场用专用目录给沙盒提供安装材料。任务还要访问设备管理后台，网络就成了额外的约束。需要联网时，先在受管网络真实核可达范围。没有办法限定访问边界时，可以换成接入专用隔离网络的测试虚拟机，保留网络审计和明确的维护责任。
 
 
-4. 运行沙盒环境双击 flashplayer.wsb 启动沙盒，系统自动：
 
-启动沙盒环境
-映射指定文件夹
-执行登录命令安装 Flash Player
+通道
+决定开放前问什么
+结果怎么验
 
 
-安全注意事项使用时的安全事项：
 
-数据隔离：沙盒与主机隔离，沙盒内的软件与配置不会写回主机系统。
-临时性：沙盒关闭后本次会话产生的数据全部丢弃，因此每次启动都需重新安装 Flash Player；若某次会话产生了需要保留的输出（如导出的配置、截图），必须在关闭前主动取出，否则不可恢复。
-映射即通道：MappedFolders 是沙盒访问主机文件的唯一显式通道，应保持只读且范围最小；不要映射用户主目录、桌面或任何含凭据的路径。
-网络访问：沙盒默认可访问网络。本案例需要访问共享与打印机管理后台，如需收紧可在主机侧通过防火墙/网络策略限制沙盒可达范围。
-凭据暴露面：映射进沙盒的脚本若含明文凭据，等同于把凭据交给沙盒内运行的所有代码。优先使用共享侧的最小权限账户，并在用完后撤销临时授权。
+目录映射
+是只读投递，还是确实要向宿主导出结果？
+宿主只暴露专用目录，写入应按策略拒绝
 
-总结这个需求最终没有靠「在办公机上装 Flash」解决，而是靠 .wsb 文件把它压成了双击一下：MappedFolders 把安装脚本送进沙盒，LogonCommand 在登录时自动执行，关窗即销毁，主机始终不留 Flash Player。
-这个方案的成本结构要算清楚。它省掉了虚拟机的镜像维护，但每次启动都要重跑一遍安装，因此只适合「一年点几次」的低频操作；如果某个遗留后台需要每天使用，把凭据和共享路径长期写死在 .wsb 里，反而不如一台受控的隔离虚拟机好管。
-边界也很清楚：沙盒与主机之间唯一的数据通道就是映射目录，ReadOnly 设与不设直接决定沙盒对主机目录有没有写入权，脚本里带不带共享明文凭据决定了暴露面有多大。这三项配置在保存 .wsb 时就该按最小权限定死，而不是等用起来再调。
-恶意软件初筛、来源不明文档查看、一次性维护工具验证这类需求可以复用同一套模板，只把 LogonCommand 换成对应的启动动作。
+
+网络
+是否只需离线，或者有明确目标？
+离线关闭网络；联网只走批准范围
+
+
+剪贴板与设备
+是否需要跨环境携带任何内容？
+分别测是否可跨会话复制或重定向
+
+
+关窗
+哪些运行结果应销毁，哪些要交接？
+重启后查沙盒状态；宿主目录和外部服务另核
+
+
+验一份离线只读配置下面是单独准备的离线示例。宿主准备一个仅含普通样例文件的 C:\SandboxInput。在沙盒的 C:\Input 检查文件可读，尝试创建新的演示文件时则应收到拒绝。用这两个结果验映射与写权限。
+&lt;Configuration&gt;  &lt;Networking&gt;Disable&lt;/Networking&gt;  &lt;ClipboardRedirection&gt;Disable&lt;/ClipboardRedirection&gt;  &lt;PrinterRedirection&gt;Disable&lt;/PrinterRedirection&gt;  &lt;MappedFolders&gt;    &lt;MappedFolder&gt;      &lt;HostFolder&gt;C:\SandboxInput&lt;/HostFolder&gt;      &lt;SandboxFolder&gt;C:\Input&lt;/SandboxFolder&gt;      &lt;ReadOnly&gt;true&lt;/ReadOnly&gt;    &lt;/MappedFolder&gt;  &lt;/MappedFolders&gt;&lt;/Configuration&gt;
+
+先看环境是否执行了所选的规则，再看工具行为。配置文件被打开与所有策略都按预期生效是两件事。目标 Windows 版本、管理员策略和硬件都会影响功能，实际跑过的现象要写到验收记录。
+当时验证了哪一步历史现场验证了旧后台可访问，工具能完成那次维护。持续运行则要考虑软件支持、网络访问记录以及失败时谁接手。之后我做 远程运维通道 时，也按这个思路判断：连接成功、操作权限和业务结果各留一条证据。
 ]]></content>
       <categories>
         <category>基础设施</category>
@@ -2181,112 +2114,74 @@ xcopy 必须带 /i /Y /Q：LogonCommand 是无人值守执行的，若目标目�
   <entry>
     <title>Windows域环境下批量部署BitLocker</title>
     <url>/2023/02/22/%E6%89%B9%E9%87%8F%E9%83%A8%E7%BD%B2BitLocker/</url>
-    <content><![CDATA[BitLocker 补上设备侧的一环：账号在域上，密码会泄露，盘里的数据不能只靠登录密码守着。域环境里靠组策略完成策略下发、批量启用与恢复密钥集中备份，不用逐台操作。这篇给出一套已验证的落地方案：域控制器组件准备 → 客户端脚本 → 组策略配置 → 实施与验证。
-关键设计决策
-仅 TPM 解锁，不叠加启动 PIN：办公机放人看得到、锁得住的物理位置，TPM 密封的启动密钥已能防拆盘偷读；叠加 PIN 换来的是每次开机多一步交互，批量环境里摩擦成本不成比例。TPM 1.2 与无 TPM 设备策略完全不同（启动密钥/USB 起始盘），单独设计，不共用同一 GPO。
-恢复密钥集中托管给域（AD Recovery）：密钥落在计算机对象的 msFVE-RecoveryInformation 子对象下，随 AD 复制与备份走，运维不用维护第二份清单；脚本里的共享文本重定向是旁路兜底，不是主渠道。
-关机脚本触发而非启动脚本：下班关机是批量窗口，加密耗时与「关机变慢」的体感绑定在一起，用户接受度好于开机等加密；代价是组策略脚本有默认超时，超时被强杀会留下「半程加密」，需在测试 OU 实测后决定是否调整（策略名与默认值随版本不同，以本机编辑器为准）。
+    <content><![CDATA[这篇记的是 2023 年用域策略对办公机批量部署 BitLocker 的过程。当时想把两件事从手工操作里拿掉：按设备组统一启用系统盘加密，以及在设备进入恢复状态时能从目录定位对应的恢复信息。域控安装记录交代了这套身份与策略底座。
 
-前置条件
+版本说明：文中保留当时的部署选择和已经暴露的问题。新的部署以 Microsoft BitLocker 策略文档 和现有设备管理平台为准。
 
-客户端已入域，域控制器承担 DNS 角色。
-客户端具备 TPM 2.0。本方案按「仅 TPM 解锁」路径设计，不含 TPM 1.2 与无 TPM 设备：这类设备需要启动 PIN、启动密钥或 USB 起始盘，加密策略与交互流程都不同，应单独设计，不共用同一 GPO。
-已有一个供客户端写恢复密钥的网络共享，计算机账户对其有写权限。
+当时怎么划灰度范围先选一组受控办公机放进测试 OU。确认设备可联系域控、TPM 处于可用状态，随后检查组策略的实际应用结果。启动保护器的选择要看威胁模型：设备在可控物理环境且业务需要无人值守启动，可以评估仅 TPM；有较高的未授权物理接触风险时，应按安全基线评估 TPM 加启动 PIN。对不具备同样硬件条件的设备单独设计，不复制同一条策略。
+当时用关机脚本触发，主要考虑避开白天操作。关机阶段的网络连通性和脚本运行窗口却更难保证。现在重做，我会先把策略应用、恢复信息托管和加密进度拆开观测，外层再由批准的终端管理方式触发。这样一台机器失败时，可以停住该批次，把它从下一批名单里单独拿出来。
+加密进度和保护状态要分开读旧脚本从卷列表里搜索 Off。接入第二块磁盘，或者系统盘已经加密但临时暂停保护时，这个搜索就可能匹配到错误状态。现在可先用只读查询把三个信号拆开：
+Get-BitLockerVolume -MountPoint $env:SystemDrive |    Select-Object MountPoint, VolumeStatus, ProtectionStatus, EncryptionPercentage
 
-
-磁盘加密接近不可逆且耗时长，务必先在测试 OU 验证、确认恢复密钥备份链路可用后再扩大范围。
-
-域控制器配置在服务器管理器里添加 BitLocker 相关功能：
-
-「管理」→「添加角色和功能」
-功能选择中勾选「BitLocker 驱动器加密」和「BitLocker 网络解锁」
-完成安装向导
-
-两者属于功能而非角色，在不同 Windows Server 版本里分组位置可能略有差异，以本机向导的功能列表为准。下图为当时操作界面：
-
-脚本组策略启动/关机脚本虽以 SYSTEM 身份运行，但直接下发 .ps1 受执行策略与调用方式差异影响，所以采用「批处理包 PowerShell」：同一个 .bat 内含 PowerShell 主体，批处理部分只负责提取并调用，分发只需一个文件。
-1. 批处理脚本逻辑：定位 :ps1 标记行 → 导出其后内容为临时 .ps1 → 判断系统盘状态 → 从未加密则启用 BitLocker 并输出恢复密钥。
-@echo offREM 定位 :ps1 标记所在行号for /f &quot;delims=:&quot; %%i in (&#x27;findstr /n &quot;^:ps1$&quot; &quot;%~f0&quot;&#x27;) do set &quot;PS1START=%%i&quot;REM 按行号截取 PowerShell 主体。REM 不用 more +行号：more 会按控制台宽度硬折行并改写换行符，REM 脚本较长或含中文时导出的 .ps1 会被静默破坏powershell -NoProfile -Command &quot;Get-Content -LiteralPath &#x27;%~f0&#x27; | Select-Object -Skip %PS1START% | Set-Content -LiteralPath (Join-Path $env:TEMP &#x27;bitlocker.ps1&#x27;) -Encoding UTF8&quot;powershell -NoProfile -ExecutionPolicy remotesigned -File &quot;%TEMP%\bitlocker.ps1&quot;goto :eof:ps1# 仅检查系统盘，避免多数据盘场景误判$vol = Get-BitLockerVolume -MountPoint &#x27;C:&#x27;# ProtectionStatus = Off 只说明「保护未开启」，已加密但暂停保护的设备同样是 Off；# 叠加判断 EncryptionStatus，才能区分「从未加密」与「已加密/暂停保护」if ($vol.ProtectionStatus -eq &#x27;Off&#x27; -and $vol.EncryptionStatus -eq &#x27;Off&#x27;) &#123;    # 若已给「Domain Computers」授予共享写权限，关机脚本以 SYSTEM 运行可直接写入，无需本行    net use &quot;\\服务器\共享&quot; &quot;&lt;口令&gt;&quot; /user:&quot;&lt;域&gt;\&lt;账号&gt;&quot;    # 启用加密，并将输出追加到以计算机名命名的文本文件    manage-bde -on C: -RecoveryPassword &gt;&gt; &quot;\\服务器\共享\$env:COMPUTERNAME.txt&quot;&#125;
-
-
-判定条件为什么是两个字段：旧写法 get-bitlockervolume | find &quot;Off&quot; 后接 if ($? -eq $true)，$? 反映的是 find 是否命中而非加密状态；多盘时任一卷含 Off 就误触发，「已加密但暂停保护」同样命中 Off，会对已加密卷重复发起操作。现改为 ProtectionStatus 与 EncryptionStatus 联合判定。验证：(Get-BitLockerVolume -MountPoint &#39;C:&#39;).ProtectionStatus。
-
-
-凭据处理：net use 只是保底写法，会把明文凭据写进分发到 SYSVOL 的脚本。更稳妥的是在共享 ACL 给「Domain Computers」修改权限，由计算机账户直接写入，脚本里不出现账号口令。
-
-
-可选简化：不想依赖行号截取，就拆成 .bat 与 .ps1 两个文件一同分发，批处理只调用同目录的 .ps1。
-
-2. 执行流程
-读系统盘的保护状态与加密状态。
-仅「从未加密」时继续。
-启用 C 盘加密，manage-bde 输出落盘到网络共享。
-
-
-恢复密钥两种存放方式的定位：&gt;&gt; 重定向写入的是 manage-bde 的控制台输出文本（含 48 位恢复密钥段落），不是 .vrk 密钥容器，两者不能互相替代。本方案双写：AD 备份是运维查询与恢复的主用渠道（「Active Directory 用户和计算机」里可按恢复密码对象检索）；共享文本是旁路兜底，用于 AD 备份失败或脱机归档。不双写就只留 AD 备份并删掉脚本里的重定向。
-
-组策略配置1. 创建 BitLocker GPO「组策略管理编辑器」里新建 GPO 用于 BitLocker 配置：
-
-2. 恢复信息存储计算机配置 → 策略 → 管理模板 → Windows组件 → BitLocker驱动器加密：
-「将 BitLocker 恢复信息存储在 Active Directory 域服务中」设为已启用。
-3. 操作系统驱动器加密策略同目录下 操作系统驱动器：
-「选择如何才能恢复受 BitLocker 保护的操作系统驱动器」设为已启用，选项勾选「允许 BitLocker 在没有附加用户认证的情况下启动」与「将恢复密码存储在 Active Directory 中」——不勾前者，客户端可能因策略要求附加认证而无法自动解锁。
-
-4. 关机脚本另建一个 GPO 下发脚本：
-
-新建 GPO。
-计算机配置 → Windows 设置 → 脚本(启动/关机) → 关机。
-添加上文的批处理脚本。
+VolumeStatus 说明卷处于未加密、转换或完全加密等状态，ProtectionStatus 说明保护器是否有效。完全加密但保护关闭的卷，应核对保护为什么暂停，不能把它当成未加密的设备重新跑部署。
+我会按下面的分类收集验收结果。这样扩围时可以看到多少机器处于转换中、多少机器需要人工判定，从终端上报的信息里也不需要收集恢复密码。
 
 
 
-超时风险已在设计决策里说明。触发方式定之前先在测试 OU 实测关机耗时；如果实测不超时且希望更稳，可改启动脚本触发或改用运维工具批量下发。
-
-实施
-链接 GPO：两条 GPO 链接到要开 BitLocker 的 OU。
-更新组策略：客户端 gpupdate /force。
-重启：触发加密。
-验证部署：
-客户端 manage-bde -status，确认「转换状态」从「加密百分比」推进到「完全加密」。
-共享下存在以计算机名命名的文本文件，且含 48 位恢复密钥段落。
+系统盘读数
+本轮的处理
 
 
 
+未加密
+检查策略、TPM 与托管前置条件，进入本批次候选
 
 
-验证 AD 备份：「Active Directory 用户和计算机」里给目标计算机账户开「查看器功能」，确认其下已生成 BitLocker Recovery Password 对象。
+正在加密或解密
+记录进度与时间，避免重复触发
 
 
-安全建议
-TPM：目标设备须 TPM 2.0；TPM 1.2 与无 TPM 设备单独设计启动认证。
-共享安全：恢复密钥文件等同明文口令，共享限最小可访问范围，启用 SMB 加密与访问审计。
-备份：定期备份 AD 中的 BitLocker 恢复信息，验证可检索、可导出。
-双通道留存：AD 备份与共享文本至少保一条可用链路；重装或脱域后 AD 对象可能丢，脱机归档更稳。
-用户告知：提前说明加密期间性能下降、不要强制断电、恢复密钥怎么取。
-监控告警：加密状态与密钥备份失败都要有监控，避免「已加密但无密钥」。
+完全加密，保护开启
+核对 AD DS 是否保留了本机当前保护器对应的恢复信息
 
-故障排除1. 脚本执行失败
-PowerShell 执行策略与脚本编码（含中文建议 UTF-8 with BOM）。
-共享写权限：关机脚本以 SYSTEM 运行，确认计算机账户或脚本内凭据可写。
-%TEMP% 下 bitlocker.ps1 是否生成且内容与 :ps1 之后一致（截取失败时文件可能为空）。
 
-2. BitLocker 启用失败
-客户端 Get-Tpm，确认 TpmPresent 与 TpmReady 均为 True。
-系统是否满足 BitLocker 要求（UEFI/BIOS 与安全启动配置、遗留恢复分区异常）。
-事件日志 Application and Services Logs → Microsoft → Windows → BitLocker-API。
+完全加密，保护关闭
+查变更记录和暂停原因，单独判定
 
-3. 恢复密钥未保存
-gpresult /r 或 gpresult /h report.html 验证组策略生效。
-关机时网络连通性（关机阶段网络栈可能已降级，可启用「关闭前等待网络」相关策略）。
-AD 侧权限：计算机账户需能在自身对象下创建 msFVE-RecoveryInformation 子对象（默认满足，被自定义 ACL 收紧时复查）。
 
-总结方案的价值不在脚本本身，而在挂在 OU 上：新计算机对象落进该 OU 就自动纳入加密范围，不用人登录终端执行。恢复密钥走 AD 的 msFVE-RecoveryInformation 子对象，兜底再落一份共享文本，管理动作全部收敛在组策略一侧。
+状态读不到
+留失败证据，暂停该设备进入下一批
 
-测试 OU 先跑通「加密完成 → AD 检索到密钥 → 真用这串密钥解锁一次」。只确认加密启动不够：密钥备份失败在客户端往往静默，等硬盘真要恢复发现 AD 里没对象，就晚了。
-降级路径按最坏成本划：manage-bde -off C: 解密耗时与加密同量级，推下去就很难快速撤回，灰度范围按这个成本定。
-提前和用户打招呼：启用当天关机明显变慢，加密期间强制断电触发完整性重新校验——这部分沟通成本比技术实施更高。
-加密状态与密钥备份失败要有监控，否则整套设计的可恢复性只存在于「没人出事」的假设里。
 
+恢复信息先入库，再扩围对 AD 域加入的系统盘，在“选择如何才能恢复受 BitLocker 保护的操作系统驱动器”的策略中，按组织要求配置恢复密码或密钥包，并启用 恢复信息存入 AD DS 之前不启用 BitLocker。恢复信息保存在目标计算机对象下，由获授权的恢复人员按设备与保护器标识核对。
+旧版有把控制台输出写到共享文本的做法。它扩大了恢复凭据的可读范围，也让目录对象以外多出一份难治理的副本，已从公开流程移除。公开版只记录设备范围、策略状态和验证结果。恢复密码、口令、导出记录与现场截图留在受控环境。
+若一台新设备一直没有出现恢复对象，先查实际生效的 GPO，再查域连接和写入目录的权限。测试 OU 中出现无法确认托管的设备时，暂停扩围。已有卷单独走受控补备或恢复核验，避免重新加密这一根本无关的动作。
+验证时要对来自终端的保护器标识与目录对象做匹配。设备重装或更换保护器后，目录里可能还保留旧条目。能查到同名计算机的历史记录，不能给当前系统盘签字。故障单只保留设备和核验结论，凭据按恢复流程单独取用。
+按一次真实恢复设计验收
+
+
+验收项
+通过条件
+
+
+
+策略
+测试 OU 命中预期 GPO，硬件和保护器符合基线
+
+
+托管
+授权恢复人员能按保护器标识在 AD DS 查到对应恢复信息
+
+
+转换
+系统盘转换和保护状态都符合预期，有异常时可阻止扩大批次
+
+
+恢复演练
+在批准的测试设备上实际解锁，留时间、验证结果和异常，不记恢复密码
+
+
+历史记录保留了批量部署和目录托管的做法，原文没有可回查的测试设备解锁记录，这一步保留为验收门槛。加密和解密都需要时间。若设备进入恢复状态，先完成身份、设备和工单核对，再由有权限的人处理恢复。
 ]]></content>
       <categories>
         <category>基础设施</category>
@@ -2302,8 +2197,8 @@ AD 侧权限：计算机账户需能在自身对象下创建 msFVE-RecoveryInfor
   <entry>
     <title>Windows Server安装以及AD域服务搭建</title>
     <url>/2021/05/06/AD%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[这是身份体系的起点。公司与家庭两套环境，各由一台 Windows Server 域控制器作身份底座：JumpServer 的 LDAP 同步、BitLocker 恢复密钥托管、终端封装的组策略、应用隔离的专用账号，全部挂在这套身份上。终端管理解决的是「机器和账号可信」——登录用哪个域账号、设备落在哪个计算机对象、拉取哪套策略，这一层立不住，上面各层都是临时的。日后 AI Agent 接入时用的无头身份与服务账号，也要先在 AD 里立户。
-本文记录从裸机安装 Windows Server 到完成域控制器（DC）部署的完整流程：安装方式选择 → 系统基础配置 → 添加 AD 角色 → 提升为域控制器 → 结果验证。适用于新建小型域环境，或为现有域增补域控的场景。执行前需具备 Windows Server 安装镜像，以及服务器物理访问权限或带外管理接口访问权限。
+    <content><![CDATA[这篇记的是 2021 年在 Windows Server 上建第一台域控制器的过程。目标是先让域账号、设备对象和组策略有统一的身份底座，供终端管理、BitLocker 恢复信息托管和 LDAP 应用接入。安装向导的界面对应当时版本，不把它当作新增域控或林恢复手册。
+首台 DC 交付后，真正能验的是客户端能否通过 DNS 找到它、加域后能否用测试账号登录、能否取到预期组策略。复制和站点切换要有第二台域控才能验证。跨场地后的问题见 三台域控部署实录。
 关键设计决策提升向导跑完之前要做的几个决策，代价一并列出：
 
 
@@ -2319,14 +2214,14 @@ AD 侧权限：计算机账户需能在自身对象下创建 msFVE-RecoveryInfor
 命名要一次想好体现机房、角色与序号；超 15 字符被 NetBIOS 截断
 
 
-网卡静态 IP、DNS 首选指向本机 127.0.0.1
-AD 与 DNS 同机共生是硬依赖：SRV 记录定位、客户端加域全靠它
-地址变更会让 _msdcs 区域记录失配，症状是间歇性登录变慢而非直接报错，排查成本高
+固定地址和可解析域区的 DNS
+SRV 记录决定客户端能否定位到 DC。首台 DNS 尚无同域伙伴时可以使用本机，增补域控时按现场域内 DNS 规划配置
+变更地址后回读 A、AAAA、SRV 记录和客户端 DC 定位，避免残留指向旧地址
 
 
-单台域控，SYSVOL 用默认 DFS 复制
-小型域环境一台够用；2008 R2 起默认 DFSR 替代旧 FRS，无需额外配置
-故障域是整个域：故障期间加域、域登录、组策略刷新全部不可用，System State 备份替代不了在线域控
+单台域控
+可以先验证小型域的加域、认证和策略
+没有复制伙伴。单点停机时无法提供新的域服务，部分客户端可能凭缓存凭据本地登录
 
 
 AD 数据库、日志、SYSVOL 保持系统盘默认
@@ -2407,7 +2302,7 @@ DNS 服务器、全局编录、只读域控制器
 
 4 其他选项
 启用回收站
-误删对象的恢复成本差别很大，建议开启。它要求林功能级别达到门槛才可选，且开启后不支持直接关闭
+误删对象的恢复成本差别很大。它是满足林功能级别条件后的独立操作，通常在部署后评估启用。启用后不可关闭
 
 
 5 目录服务还原模式密码
@@ -2417,7 +2312,7 @@ AD 数据库异常、域内无其他域控可登录时，这是唯一的本地�
 
 6 确认
 摘要页
-此页只是回放前几步的选择，值得逐行核一遍的是域名与功能级别，这两项后面改不了
+此页只是回放前几步的选择，值得逐行核一遍的是域名与功能级别，变更代价高，功能级别回退也受版本和特性约束
 
 
 7 预安装检查
@@ -2430,8 +2325,7 @@ AD 数据库异常、域内无其他域控可登录时，这是唯一的本地�
 校验通过即开始安装并自动重启，期间不要强制断电；重启完成后部署才算结束
 
 
-真正需要留档的只有三张：命名页是不可逆项、DSRM 密码页决定出事时能否进机器、预安装检查页决定这一趟会不会白跑。
-
+留档可以记录域命名、功能级别、预安装检查结果和 DSRM 凭据的受控保管位置。不要截取或保存含凭据的页面。
 
 
 向导其余各页的界面截图：
@@ -2452,14 +2346,14 @@ AD 数据库异常、域内无其他域控可登录时，这是唯一的本地�
 DNS 是硬依赖。域控制器同时承担 DNS 角色，网卡的 DNS 必须指向本机（或已有的域内 DNS），指向公网 DNS 会导致 SRV 记录解析不到、客户端加域失败。
 上游转发单独配。域内 DNS 接管后要在条件转发器或根提示里补上外部解析出口，否则内网解析正常、外网全断，容易被误判成域服务故障。
 静态 IP 不可协商。地址变更会让 _msdcs 区域记录与实际地址不一致，故障表现为间歇性登录变慢而非直接报错，排查成本很高。
-备份要含 System State。只备份文件卷无法还原 AD 数据库，域控备份必须走包含 System State 的方案，并确认备份窗口早于复制周期。
+备份要含 System State。只备份文件卷无法还原 AD 数据库，域控备份必须走包含 System State 的方案，并按组织恢复点目标、复制状态、备份保留期和恢复路径核对。
 
 总结这台域控制器的交付路径很短：装系统 → 改计算机名与静态 IP → 添加 AD DS（按需含 DHCP）角色 → 提升为域控制器并集成 DNS → 重启后以「服务器管理器通知无报错、ADUC 可见域结构、客户端成功加域」三步收口。
 链路里有两处事后很难补救：域名与 NetBIOS 域名上线后再变更代价极高，向导第 2 步就要按最终命名填写；DSRM 密码是 AD 数据库异常时唯一的本地登录通道，必须纳入密码保管流程，不能作为向导里一次性的过场。
 上面这套流程交付的只是一台能用的域控，距离敢把它交给别人用还差三件事，按顺序补：
 
-第二台域控制器。单台 DC 故障期间加域、域登录、组策略刷新全部不可用，System State 备份的权威副本也随之失效。
-还原演练。域控备份必须包含 System State，并且实际做过一次非授权还原；「备份任务成功」不等于具备恢复能力。
+第二台域控制器。把在线身份服务的单点与备份分开设计。单台 DC 故障会影响新的认证、加域和策略读取。仍应保留独立且可读的备份。
+还原演练。在隔离环境按实际故障场景确认 System State、AD DS 和 SYSVOL 的处理。林恢复首台可写 DC 与修复单台故障 DC 的要求不同。例如微软现行 林恢复指南 对首台可写 DC 区分 AD DS 非权威还原与 SYSVOL 权威还原。本文没有实际恢复报告。
 时间同步与站点规划。Kerberos 对时间偏差敏感，PDC Emulator 角色持有者要指向可靠的 NTP 源。多场地部署还需提前在「AD 站点和服务」登记子网，否则客户端会跨场地认证与复制。
 
 组织单位划分、组策略体系、账户生命周期属于域稳定后的持续治理，与本文的部署交付是两个阶段，不宜在同一窗口内一起改动。
@@ -2475,88 +2369,51 @@ DNS 是硬依赖。域控制器同时承担 DNS 角色，网卡的 DNS 必须指
       </tags>
   </entry>
   <entry>
-    <title>Edge 浏览器无法打开网页提示兼容性问题的解决方案</title>
+    <title>Edge 报网页兼容错误的历史复盘：从渲染器崩溃到定向恢复</title>
     <url>/2021/05/04/edge%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80/</url>
-    <content><![CDATA[域环境终端的默认浏览器是 Edge，它挂掉时所有走浏览器的业务入口一起断。这个故障与站点内容无关、影响整机 Edge 实例，在刚推送安全更新或部署了第三方安全软件的终端上更集中。「兼容性问题」的提示文案有误导性，真实触发点见下节。
-处置分两条路径：单机直接改注册表恢复；企业环境用独立 GPO 定向下发，落地后注册表回读验证。
+    <content><![CDATA[
+版本说明：这是 2021 年的故障记录。当时的渲染器代码完整性策略在 Edge 118 之后已经失效。现代环境先收集崩溃证据，按浏览器和相关终端软件的受支持版本查修复路径。微软 Edge 策略说明
 
-问题分析「兼容性问题」是表象，真实触发点是 Edge 渲染进程的代码完整性检查（Renderer Code Integrity）：渲染器代码未通过完整性校验时，进程走 Windows 快速失败（fast-fail）路径被强制终止，与字面意义的页面兼容性无关。
-常见诱因：
+这次报障看着像页面兼容问题，用户说某个地址打不开。换几个独立站点再试，才知道任意页面都失败。浏览器的外壳能打开，承载页面的渲染进程却没工作，这两条状态把排查方向从业务站点挪到了终端。
 
-第三方安全软件向渲染进程注入模块，导致完整性校验失败
-组策略配置冲突
-系统或浏览器更新不完整
-注册表策略项配置错误
+先做三组对照
+同一台终端换站点。 分别看普通页面和内部业务页面。多个无关站点同样失败时，先查终端共同依赖，再决定是否要查特定站点的配置。
+同一个业务入口换终端。 拿一台能正常访问的对照机，记下浏览器版本、系统补丁、管理策略和终端软件版本。现象仅限于一批相近设备时，就按这批设备缩小范围。
+进程状态与请求状态分开看。 错误页只代表用户看到什么。事件记录里的时间、故障进程和模块可以与工单对齐。要确认是代码完整性校验还是其他异常终止，还需要崩溃细节或厂商诊断。
 
-下文方案通过关闭渲染器代码完整性检查绕过该触发点，属于可用性恢复，而非根因修复。
-关键设计决策
-关掉的是 Renderer Code Integrity，不是页面「兼容模式」：报错文案把排查方向带向站点或浏览器兼容设置。关闭校验是绕过，不消除注入源——诱因若是第三方安全软件，注入规则要另行排查，Edge 升级后复验。
-写 HKEY_LOCAL_MACHINE，不写 HKCU：故障作用面是整机，策略值写在机器级键下对全部用户生效，与问题作用面一致；用户级键只覆盖单个用户配置。
-企业用独立 GPO 链接受影响 OU，不写 Default Domain Policy：默认域策略对全域生效，作用面远超本次故障范围，回滚时容易牵连其他安全基线；独立 GPO 整条摘除即回滚，路径干净。
-
-单机解决方案1. 打开注册表编辑器Win+R 输入 regedit 回车打开注册表编辑器。修改 HKEY_LOCAL_MACHINE 需要管理员权限，以管理员身份运行。
-2. 导航到指定路径依次打开以下路径，路径不存在时逐级新建对应项：
-HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge
-
-3. 创建注册表项在 Edge 项下新建一个 DWORD (32 位)值：
-
-名称：RendererCodeIntegrityEnabled
-数值数据：0
-
-该值关闭 Edge 的渲染器代码完整性检查。明确三点代价：
-
-这是绕过校验，不是消除注入源。若诱因是第三方安全软件，仍应同步排查其注入规则
-Edge 后续版本升级可能重置该策略或让问题重新出现，升级后需复验
-该策略自 Edge 119 起被标记为 OBSOLETE（官方注明 119 起移除、设置即被忽略，生效区间 78–118）。本修复针对的就是这个版本带；在更新的 Edge 上长期使用，需先确认该策略是否仍生效
+旧记录把触发点指向渲染器代码完整性检查。导致命中的组件还需要逐个核对。看到某个兼容处置后症状消失，能确认的是特定版本组合暂时恢复访问。持续修复要追到具体组件和版本。
+从单机恢复到批量交付当时的短期兼容处置先放在少量受影响设备上，保留同版本对照。域中使用单独的策略对象和目标组织单位（OU）记录范围、批准人和撤回条件。这套方法现在仍有价值，具体修复措施随产品版本变化。
 
 
-4. 重启浏览器完全退出 Edge（确认系统托盘中的后台运行进程一并结束）再启动，验证页面能否正常加载。
-企业批量部署解决方案终端多时逐台改注册表不可维护，改用域控组策略下发。
-1. 打开组策略管理编辑器在域控服务器运行 gpmc.msc 打开组策略管理编辑器，先确认目标 OU 结构：
 
-2. 选择应用范围
-风险提示：不要把该项写入 Default Domain Policy。默认域策略对全域计算机与用户生效，作用面远超本次故障范围，回滚时也容易牵连其他安全基线。推荐为受影响 OU 单独新建 GPO 并链接到该 OU。
-
-操作步骤：
-
-右键点击目标组织单位（OU）
-选择「在这个域中创建 GPO 并在此处链接」，按用途命名
-按注册表位置决定放在计算机配置还是用户配置。本例写入 HKEY_LOCAL_MACHINE，两者都能下发，但计算机配置对整机生效更稳定
-
-3. 配置组策略以用户配置为例，导航到 用户配置 → 首选项 → Windows设置 → 注册表，右键新建注册表项：
-
-操作：新建
-Hive：HKEY_LOCAL_MACHINE
-键路径：SOFTWARE\Policies\Microsoft\Edge
-值名称：RendererCodeIntegrityEnabled
-值类型：REG_DWORD
-数值数据：0
+阶段
+留下的检查项
+通过条件
 
 
-4. 部署和验证在客户端执行以下命令强制刷新策略：
-gpupdate /force
 
-随后核两件事：客户端 HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge 下已出现 RendererCodeIntegrityEnabled 且值为 0；Edge 重启后网页可正常打开。策略未落地时用 gpresult /r 核查 GPO 是否链接到客户端所在 OU、是否被安全筛选或 WMI 筛选排除。
-预防措施
-定期更新：保持系统与浏览器处于受支持版本
-策略审查：定期审查 Edge 相关组策略，避免多份策略写同一键值互相覆盖
-软件兼容性：第三方安全软件上线前完成浏览器兼容性验证，重点关注会向浏览器进程注入模块的产品
-变更留痕：记录该绕过策略的生效范围与撤销计划，避免长期遗留
+试点前
+设备组、浏览器版本、策略和失效页面
+目标设备现象可重复，对照组可以访问
 
-故障排除若上述操作后问题仍在，按顺序继续排查：
 
-重置 Edge 浏览器：打开 Edge 设置，选择「重置设置」 → 「将设置恢复到默认值」
-清除浏览器缓存：按 Ctrl+Shift+Delete 打开清除浏览数据界面，选择所有时间范围与全部数据类型后清除
-检查安全软件：临时禁用第三方安全软件，确认是否为注入拦截所致。这是定位手段，验证后需按企业策略恢复防护
+试点后
+终端实际策略、浏览器进程和事件
+目标收到预期变化，范围外的设备保持原样
 
-怀疑系统文件完整性异常时，以管理员身份执行：
-sfc /scannow
 
-总结
-把 HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge 下的 RendererCodeIntegrityEnabled 置为 0，关闭渲染器代码完整性检查，恢复「任意网页都提示兼容性问题」；
-绕过的是触发点，根因若是安全软件注入仍需处理注入源，Edge 升级后复验；
-企业用独立 GPO 定向下发到受影响 OU，不写默认域策略；gpupdate /force 加注册表回读确认生效，不只看 GPO 创建成功。
+业务回验
+原先失败的入口、测试身份和时间
+同一业务路径通过，观察窗内没有新增同类崩溃
 
+
+撤回
+独立策略、终端回读和可用版本
+临时状态撤除，业务仍可在受支持配置下使用
+
+
+发布与生效之间容易多走一步。管理控制台显示策略下发，只说明提交发生。对照机上用 edge://version、edge://policy 核版本和生效状态，再走原业务路径。这比把浏览器能启动写成整批恢复更可核对。微软 Edge 策略管理说明
+旧现场没留足提取模块根因所需的完整崩溃记录，适合回顾的是定向试点和可撤回的变更。后来做企业域策略时，我也保留了这种验收安排。跨站点域控与策略验收
 ]]></content>
       <categories>
         <category>桌面维护</category>
@@ -2569,77 +2426,49 @@ sfc /scannow
       </tags>
   </entry>
   <entry>
-    <title>macOS 提示&quot;App 已损坏，无法打开&quot;的多种解决方法</title>
+    <title>macOS 提示「App 已损坏」：怎么核对安装包、签名和来源</title>
     <url>/2021/04/29/mac%20app%E6%8D%9F%E5%9D%8F/</url>
-    <content><![CDATA[域环境统一管的是 Windows 终端，macOS 是用户自带设备的入口，mac 上的应用放行策略没人管，「App 已损坏」就成了桌面支持的高频工单。这个提示是 Gatekeeper 与隔离属性（quarantine）机制的共同结果：本意是阻止未公证来源的可执行文件运行，也会拦住来源可信的合法软件。
-绝大多数此类报错并非文件真的损坏，而是 Gatekeeper 拦截。优先用方法三（只处理单个应用），只在确有需要时临时放开全局设置。
-关键设计决策
-默认拦截未公证来源，放行按影响面从小到大选：右键「打开」→ 单应用 xattr 移除隔离属性 → 全局 spctl --master-disable。放行面越大，「哪个应用被放行了」越难追溯，全局开关用完必须恢复，且恢复前先 spctl --status 确认当前状态，别拿记忆当基线。
-放行前先跑 spctl -a 读拒绝原因：signature 类拒绝说明包没有可用签名，公证流程无望；notarization 类拒绝说明签名有效但开发者漏交公证。两类原因的处理方式不同，不读原因就放行等于把判断外包给运气。
-架构不匹配不当 Gatekeeper 问题处理：Intel 与 Apple 芯片的架构不匹配同样表现为启动失败，但报错文案不同（通常提示应用需要更新而非「已损坏」），先分清报错类别再动安全设置，避免把「应用不支持这代芯片」误修成「改了安全策略」。
+    <content><![CDATA[桌面支持里有人收到「App 已损坏，无法打开」。这种提示给人的第一反应是安装包坏了，或者要找一条能继续运行的命令。实际排查要先留住原始提示，一起记录下载渠道、应用版本、macOS 版本和架构。有了这些信息，才谈得上判断文件损坏、改包、版本不合适或平台的安全评估。
 
-问题原因常见触发条件：
+本篇最早是 2021 年的桌面支持记录。macOS 的设置界面和安全机制持续变化。遇到不同提示，把安装来源和平台实际评估放在一起核，不按老截图操作。Apple 关于安全打开 App 的说明
+从发布方开始追文件来源。 先看发布页上的产品名、版本和适用系统。正式版、预览包、第三方重新封装和自建构建是不同的发行渠道。拿到的是组织内发的应用时，向负责发行的人核版本和签名方。
+完整性。 官方发布页提供 SHA-256 时，比对实际下载文件。校验不一致就保留最小错误证据，再从发布方重取。只算出本地哈希不能证明文件可信，要比的是同一份发行物的官方记录。
+架构与组件。 应用支持的系统版本、CPU 架构和辅助服务分别确认。主窗口能打开时，仍可能存在插件或辅助组件不匹配。正式交付应按实际功能测试。
+下面的命令仅检查示例下载文件和应用签名，不改变设置。读者可替换为自己有权检查的路径。
+installer=&quot;$HOME/Downloads/Example.dmg&quot;app=&quot;/Applications/Example.app&quot;shasum -a 256 &quot;$installer&quot;codesign --verify --strict --verbose=2 &quot;$app&quot;
 
-软件来自未在 Apple 注册或未通过公证（Notarization）的开发者
-文件经浏览器、邮件或即时通讯工具下载，被写入 com.apple.quarantine 隔离属性
-软件包在下载或传输过程中确实损坏
-系统版本与软件架构不兼容（如新版 macOS 已停止支持 32 位应用）
+按提示选择下一步
 
 
-解决方案方法一：通过系统设置解决菜单名称随版本变化，先确认自己的路径：
-
-macOS 13 Ventura 及更高：苹果菜单 → 系统设置 → 隐私与安全性
-macOS 12 Monterey 及更早：苹果菜单 → 系统偏好设置 → 安全与隐私
-
-
-旧版系统需在「安全与隐私」左下角点击锁型按钮，输入当前用户密码解锁后再修改，改完重新锁定：
-
-在「允许从以下位置下载的应用」中选择任何来源，然后重新打开应用：
+看到的现象
+我的检查顺序
+合理的处理
 
 
-自 macOS 10.12 Sierra 起，「任何来源」默认隐藏，界面上看不到该选项属正常行为，需先用方法二的命令显式开启。新版 macOS 中该选项的展示位置与文案可能调整，若按上述路径找不到，以系统设置内搜索「任何来源」的结果为准。
 
-方法二：用终端命令显示「任何来源」在终端执行：
-sudo spctl --master-disable
-
-用下面命令确认状态，输出 assessments disabled 表示 Gatekeeper 评估已关闭：
-spctl --status
-
-改变的是整机安全评估策略，作用范围大，安装完成后恢复：
-sudo spctl --master-enable
-
-方法三：只处理单个应用仅对目标应用移除隔离属性：
-sudo xattr -rd com.apple.quarantine /Applications/应用名称.app
-
-把「应用名称」替换为实际名称（路径含空格需引号包裹）。执行后仍提示损坏，说明拦截点不止顶层包：检查内部可执行文件是否带有独立隔离属性，并确认代码签名状态：
-codesign --verify --deep --strict --verbose=2 /Applications/应用名称.appxattr -lr /Applications/应用名称.app
-
-也可以不改任何设置：Finder 中右键应用 →「打开」→ 确认对话框中再点「打开」，由用户显式放行这一次。
-方法四：重新获取安装包上述方法均无效时，才考虑文件本体损坏：从官方渠道重新下载，校验官方发布的校验值后再安装。
-不同 macOS 版本的差异
-以下差异基于 macOS 10.15 Catalina 时代的实际行为整理。Apple 在后续版本中持续收紧 Gatekeeper 并调整设置界面文案，实操以当前系统的实际界面为准。
+安装包摘要与发布页不一致
+版本、下载途径和是否传输完毕
+向正式发布方重新获取
 
 
-macOS 10.15 Catalina 及更高：仅默认放行已签名且已公证的应用；「任何来源」需显式开启；对未公证应用的拦截更严格
-macOS 10.14 Mojave 及更早：「任何来源」默认可见，安全评估相对宽松
+系统无法确认开发者或公证状态
+发行者、适用的版本与 Apple 给出的具体提示
+查找开发者的受支持版本；企业设备走受管流程
 
-放行之前先确认拦截原因上面几种方法都在绕过判定，动手前先花一分钟看清 Gatekeeper 到底拒了什么，不同原因的处理方式完全不同：
-spctl -a -vvv -t execute /Applications/应用名称.appcodesign -dv --verbose=4 /Applications/应用名称.app 2&gt;&amp;1 | head -20
 
-spctl -a 返回 rejected 时看后面的原因：涉及 signature 的拒绝说明包本身没有可用签名，走公证流程无望，只能显式放行或换版本；涉及公证（notarization）的拒绝说明签名有效但 Apple 没为这个版本做过公证，通常是开发者发布时漏了提交。
-codesign 判断绕过是否安全：签名有效且 TeamIdentifier 是开发者官方团队 ID 时，移除隔离属性风险可控；签名无效、code object is not signed at all 或只有 ad-hoc 签名，这条报错就不是误拦，不该放行。
-系统侧的判定记录在 syspolicyd 的 gk 类别下：
-log show --last 10m --style compact \  --predicate &#x27;process == &quot;syspolicyd&quot; AND category == &quot;gk&quot;&#x27;
+提示已损坏、已改动或存在恶意行为
+从可信源重取后是否仍报错，签名是否能核对
+停止尝试运行，保留报错给产品方或组织安全团队
 
-被拦时会看到 rejecting due to lack of matching active rule 这类行，放行则是 rule N applies - allow=1。比在「控制台」里翻筛更快，也留下可复制的证据。
-Intel 与 Apple 芯片的架构不匹配同样表现为启动失败，但报错文案不同（通常提示应用需要更新而非「已损坏」），不要混为一谈后再去动 Gatekeeper 设置。
-总结「App 已损坏，无法打开」在多数场景下是 Gatekeeper 与隔离属性的拦截提示，而非文件真损坏。按影响面从小到大选择处置方式：
 
-只装一次：右键「打开」显式放行
-单个应用反复被拦：sudo xattr -rd com.apple.quarantine 移除隔离属性
-需要频繁安装多来源软件：临时 sudo spctl --master-disable，完成后用 spctl --status 复核并恢复
+应用能打开，但部分功能不工作
+包内版本、辅助组件与实际系统权限
+对着发行文档逐项验功能，必要时用同版本干净包对比
 
-来源不明的软件不要用上述方法强行运行，绕过安全机制的风险由本机承担。
+
+签名可用只回答应用与签名内容的一致性。还要确认签名是谁做的、来源是不是准备安装的渠道。系统提示含义以 Apple 的分类为准，历史上改变整机安全评估的做法不适合作为通用排查手段。
+如果问题是自己的发行包引起的我通常从构建、签名和交付三个环节找差异。先读出包里真正的版本，再检查是否有在签名后才被写入的文件，最后把公开校验值和用户下载包对应起来。用户抱怨“已损坏”时，发布方能说清这具体是哪一份产物，才好查问题在构建现场、分发渠道还是安装端。
+后来写 Moonlight macOS 增强版的打包记录 时，我把包内版本和签名前后顺序写进验收，便于用户拿下载物直接对账。
 ]]></content>
       <categories>
         <category>桌面维护</category>
