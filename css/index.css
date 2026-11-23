@@ -2591,6 +2591,9 @@ figure.highlight pre .javascript .function {
   }
 }
 .layout > div:first-child {
+  -webkit-align-self: stretch;
+  align-self: stretch;
+  -ms-flex-item-align: stretch;
   width: 74%;
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;
@@ -4475,6 +4478,9 @@ figure.highlight pre .javascript .function {
   }
 }
 #aside-content {
+  -webkit-align-self: stretch;
+  align-self: stretch;
+  -ms-flex-item-align: stretch;
   width: 26%;
   min-width: 0;
   -webkit-transition: width 0.3s ease, opacity 0.3s ease, padding 0.3s ease, visibility 0.3s;
@@ -4485,6 +4491,13 @@ figure.highlight pre .javascript .function {
 }
 @media screen and (min-width: 900px) {
   #aside-content {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 110px;
+    max-height: calc(100vh - 130px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
     padding-left: 15px;
   }
 }
