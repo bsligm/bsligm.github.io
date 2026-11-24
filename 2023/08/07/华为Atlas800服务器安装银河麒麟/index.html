@@ -194,7 +194,7 @@
 <p>Atlas 800 有训练和推理等不同型号，不能只凭系列名下载软件包。动手前要确认完整机型、NPU 型号、OS 与内核、驱动和固件包、CANN 及所需框架版本。下文顺序限定于当时首次安装。已装设备的覆盖安装和升级要另看目标版本发布说明，例如 <a target="_blank" rel="noopener" href="https://www.hiascend.com/doc_center/source/zh/canncommercial/70RC1/envdeployment/instg/instg_0019.html">昇腾安装指南</a> 对部分设备区分首次安装的驱动优先与覆盖安装的固件优先。</p>
 <p>另一篇 <a href="/2023/11/09/Ubuntu%E5%AE%89%E8%A3%85%E8%8B%B1%E4%BC%9F%E8%BE%BE%E9%A9%B1%E5%8A%A8%E4%B8%8ECUDA/">Ubuntu CUDA 驱动环境</a> 用的是 NVIDIA。两台机器装完以后我都会先查设备，再跑算例，最后用实际模型试。</p>
 <h2 id="通过-iBMC-安装银河麒麟"><a href="#通过-iBMC-安装银河麒麟" class="headerlink" title="通过 iBMC 安装银河麒麟"></a>通过 iBMC 安装银河麒麟</h2><p>iBMC（integrated Baseboard Management Controller）是华为服务器的基板管理控制器，远程装系统全靠它。</p>
-<p>通过授权的带外管理入口和设备文档确认访问条件，在操作系统安装前先回读远程控制台。原环境地址与账户信息不作为模板。</p>
+<p>通过授权的带外管理入口和设备文档确认访问条件，装系统前先从远程控制台确认一遍可达。原环境的地址和账户信息不能当模板抄。</p>
 <h3 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h3><p><strong>步骤 1</strong>：按该机型的运维文档，从受控管理面访问 iBMC，并确认远程控制台能够工作。</p>
 <p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://picturebed99.oss-cn-shanghai.aliyuncs.com/img/202308071622732.png" alt="iBMC 登录界面" title="iBMC登录界面" decoding="async" loading="lazy"></p>
 <p><strong>步骤 2</strong>：按实际网络环境配置 iBMC 网络参数。</p>
@@ -248,7 +248,7 @@
 <li><strong>设备在位</strong>。<code>npu-smi info</code> 列出全部 NPU，卡数与 <code>lspci | grep -i ascend</code> 的计数一致；不足说明驱动或固件没加载对。</li>
 <li><strong>CANN 工具链可用</strong>。加载安装生成的 <code>set_env.sh</code>（自定义路径以实际为准），确认环境变量注入、工具链目录非空：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /usr/local/Ascend/ascend-toolkit/set_env.sh</span><br><span class="line"><span class="built_in">env</span> | grep -i ascend</span><br></pre></td></tr></table></figure>
 CANN nnae 包本身不含 PyTorch，<code>python3 -c &quot;import torch&quot;</code> 成不成功都与 CANN 无关，不能当验证手段；要 PyTorch 推理/训练另装昇腾适配层。</li>
-<li><strong>算例跑通</strong>。用与当前 CANN 版本配套的官方 sample 跑一次最小算子编译与执行（样例包按版本号在华为支持站点另行下载）。这层通过只能证明基础工具链具备执行能力。业务验收还要用目标框架、模型和输入再跑一轮。本文未附实际算例日志。</li>
+<li><strong>算例跑通</strong>。用与当前 CANN 版本配套的官方 sample 跑一次最小算子编译与执行（样例包按版本号在华为支持站点另行下载）。这层过了只说明基础工具链能跑，业务验收还得用目标框架、模型和输入再走一轮。算例日志我没留下来。</li>
 </ol>
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
 <li><strong>版本三元组先核对</strong>。驱动、固件、CANN 按华为适配表配对；装前用 <code>npu-smi info</code> 记录当前固件版本，装完对比，避免升完驱动才发现固件不匹配。</li>
@@ -258,8 +258,8 @@ CANN nnae 包本身不含 PyTorch，<code>python3 -c &quot;import torch&quot;</c
 </ol>
 <h2 id="关键设计决策"><a href="#关键设计决策" class="headerlink" title="关键设计决策"></a>关键设计决策</h2><p><strong>aarch64 决定内核与驱动的耦合。</strong> 910 NPU 驱动只发布到特定内核版本，驱动与银河麒麟发行版自带的内核版本是硬绑定，OS 与驱动包版本错配时 <code>--FULL</code> 安装直接报内核不兼容。先装 OS 定死内核版本，再按内核版本反查驱动包，顺序反了要重装。</p>
 <p><strong>装完 OS 先验证 iBMC 再装驱动。</strong> iBMC 是唯一的带外管理通道，后面驱动与固件各要重启一次，iBMC 不通就得现场插键鼠。装完系统第一件事用新 IP 登录 iBMC 确认网络与虚拟控制台正常，再动驱动。</p>
-<p><strong>分步骤记录生效状态。</strong> 首次安装按当次版本要求分别检查驱动、固件与重启后的状态。覆盖安装或升级切换到对应流程，不沿用本文的重启次数。</p>
-<p>设备、工具链和程序各查一次。<code>npu-smi info</code> 用来看设备与驱动。加载 <code>set_env.sh</code> 后查 CANN 工具链的位置。官方算例跑过了，再拿目标模型另测。</p>
+<p><strong>分步骤记录生效状态。</strong> 首次安装按当次版本要求逐层确认：驱动、固件、每次重启后的状态。覆盖安装或升级走对应流程，别套用本文的重启次数。</p>
+<p>设备、工具链和程序这三层，上一层通了才往下查：<code>npu-smi info</code> 看设备与驱动，加载 <code>set_env.sh</code> 后确认 CANN 工具链的位置，官方算例跑通了再拿目标模型另测。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这台机器的首次装机顺序是：iBMC 挂镜像装银河麒麟 → 建 <code>HwHiAIUser</code> → 驱动 → 固件 → CANN → <code>npu-smi info</code>、CANN 工具链、官方算例三层验证。</p>
 <ul>
 <li><strong>逐项确认是否要重启</strong>，维护窗口按具体安装路径和回退准备估算。</li>
